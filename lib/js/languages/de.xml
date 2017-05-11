@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="de">
+    <messages>
+        <msg id="msg.loaded">Locale de_DE geladen</msg> 
+        <msg id="msg.server_started">Server gestartet auf Port #</msg> 
+        <msg id="msg.server_reachable">Server erreichbar unter #</msg> 
+        <msg id="msg.not_found"># nicht gefunden</msg> 
+        <msg id="msg.compiling">Kompiliere ...</msg> 
+        <msg id="msg.done_compiling">Kompilation beendet</msg> 
+        <msg id="msg.error_compiling">Kompilation fehlgeschlagen</msg> 
+        <msg id="msg.file_overwrite"># existiert bereits! Soll die Datei überschrieben werden?</msg> 
+        <msg id="msg.cancel">Abbrechen</msg> 
+        <msg id="msg.open_standard_browser">Starte Standardbrowser</msg> 
+        <msg id="msg.give_browser">Browser eintragen</msg> 
+        <msg id="msg.no_browser_given">Es ist kein Browser angegeben!</msg> 
+        <msg id="msg.cant_open_standard_browser">Der Standardbrowser kann nicht geöffnet werden!</msg> 
+        <msg id="msg.no_board">Kein Board gefunden!</msg> 
+        <msg id="msg.board_found">Board gefunden: # an #</msg> 
+        <msg id="msg.select_board">Wähle ein Board aus</msg> 
+        <msg id="msg.open_config">Öffne Konfigurations-Dialog ...</msg>
+        <msg id="msg.generate_sketch">Generiere Sketch ...</msg>
+        <msg id="msg.code_generated">Code wurde fehlerfrei generiert ...</msg>
+        <msg id="msg.error_upload">Fehler beim Upload auf das Board!</msg>
+        <msg id="msg.drop_sketch">Der Sketch wurde nicht gespeichert.
+Wenn Du fortfährst gehen eventuell Änderungen verloren.
+Trotzdem fortfahren?</msg> 
+        <msg id="msg.click_to_continue">Klicken um fortzufahren</msg>
+        <msg id="msg.sketch_description">Ein abbozza! Sketch</msg>        
+        <msg id="msg.invalid_sketch"># nicht gefunden, nicht lesbar oder kein gültiger Sketch!</msg>
+    </messages>
+    <gui>
+        <msg id="gui.generate_button">Erzeuge Code</msg>
+        <msg id="gui.upload_button">Lade Code auf Arduino</msg>
+        <msg id="gui.new_button">Neuer Sketch</msg>
+        <msg id="gui.load_button">Lade Sketch</msg>
+        <msg id="gui.save_button">Speichere Sketch</msg>
+        <msg id="gui.serial_button">Serieller Monitor</msg>
+        <msg id="gui.connect_button">Verbinde zu Board</msg>
+        <msg id="gui.config_button">Einstellungen</msg>
+        <msg id="gui.info_button">Aufgaben und Informationen</msg>
+        <msg id="gui.language">Sprache</msg>         
+        <msg id="gui.start_directly">Starte abbozza! sofort</msg>         
+        <msg id="gui.start_browser">Den Browser beim Start öffnen</msg>         
+        <msg id="gui.browser_path">Pfad zum Browser</msg>         
+        <msg id="gui.server_port">Server Port</msg>         
+        <msg id="gui.server_and_browser">Server und Browser</msg>         
+        <msg id="gui.save">Speichern</msg>         
+        <msg id="gui.cancel">Abbrechen</msg>         
+        <msg id="gui.options">Optionen</msg>
+        <msg id="gui.blocks">Blöcke</msg>
+        <msg id="gui.code">Code</msg>         
+        <msg id="gui.misc">Sonstiges</msg>         
+        <msg id="gui.operations">Operationen</msg>         
+        <msg id="gui.local_variables">Lokale Variablen</msg>         
+        <msg id="gui.serial_communication">Serielle Kommunikation</msg>         
+        <msg id="gui.arrays">Felder/Reihungen</msg>         
+        <msg id="gui.no_arrays">Keine Felder/Reihungen</msg>         
+        <msg id="gui.lin_arrays">Eindimensionale Felder/Reihungen</msg>         
+        <msg id="gui.mult_arrays">Mehrdimensionale Felder/Reihungen</msg>         
+        <msg id="gui.devices">Geräte</msg>         
+        <msg id="gui.option_info">Einige Optionen werden erst wirksam, wenn die Seite neu geladen wird.</msg>         
+        <msg id="gui.update_option">Prüfe bei Start auf aktuelle Version</msg>         
+        <msg id="gui.update_url">URL für aktuelle Version</msg>         
+        <msg id="gui.update_button">Suche nach Update</msg>         
+        <msg id="gui.no_update">Kein Update gefunden!</msg>         
+        <msg id="gui.feature_title">Optionen und Features</msg>         
+        <msg id="gui.new_version">Soll die aktuellere Version # heruntergeladen werden?&#10;(Experimentelles Feature)&#10;&#10;Anschließend ist ein Neustart erforderlich.</msg>
+        <msg id="gui.new_version_title">Aktueller abbozza! Version gefunden</msg>
+        <msg id="gui.colorize">Blockfarben</msg>
+        <msg id="gui.color_default">Standardfärbung</msg>
+        <msg id="gui.color_category">Färbung nach Blockkategorie</msg>
+        <msg id="gui.color_type">Färbung nach Rückgabetyp</msg>
+        <msg id="gui.send">Senden</msg>
+        <msg id="gui.teacher">Blöcke für Lehrer</msg>
+        <msg id="gui.task">Aufgabe</msg>
+        <msg id="gui.tasks">Aufgaben</msg>
+        <msg id="gui.task_path">Aufgaben Verzeichnis</msg>        
+        <msg id="gui.go_to_task_path">Zum Aufgaben Verzeichnis</msg>        
+        <msg id="gui.go_to_sketchbook_path">Zum Sketchbook Verzeichnis</msg>        
+        <msg id="gui.load_from_web">Lade aus dem WWW</msg>        
+        <msg id="gui.tasks_editable">Aufgaben sind editierbar</msg>        
+        <msg id="gui.hint">Hinweis</msg>
+        <msg id="gui.edit">Editieren</msg>
+        <msg id="gui.saveoptions">Speichere Optionen in Sketch</msg>
+        <msg id="gui.saveundeletable">Schütze Blöcke vor dem Löschen</msg>
+        <msg id="gui.description">Beschreibung</msg>
+        <msg id="gui.protect_block">Schütze Block vor Löschen</msg>
+        <msg id="gui.unprotect_block">Erlaube das Löschen des Blocks</msg>
+        <msg id="gui.block_id">Setze Block ID</msg>
+        <msg id="gui.ask_for_id">ID des Blocks:</msg>
+        <msg id="gui.interrupts">Interrupts</msg>        
+        <msg id="gui.plugin_deactivated">Plugin # deaktiviert</msg>
+        <msg id="gui.unknown_block">Unbekannter Block</msg>
+        <msg id="gui.unknown_blocks">Unbekannte Blöcke!&#10;Sind alle notwendigen Plugins aktiviert?</msg>
+        <msg id="gui.use_long">Verwende lange Zahlen (32 Bit)</msg>
+        <msg id="gui.use_double">Verwende präzisere Dezimalzahlen (64 Bit)</msg>
+        <msg id="gui.usb">USB Kommunikation</msg>        
+        <msg id="gui.messages">Nachrichten</msg>
+    </gui>
+    <menu>
+        <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
+        <msg id="menu.collapse_block">Falte Block zusammen</msg>
+        <msg id="menu.add_comment">Kommentar hinzufügen</msg>		
+        <msg id="menu.delete_block">Block löschen</msg>
+        <msg id="menu.duplicate_block">Kopieren</msg>
+        <msg id="menu.expand_all">Entfalte Blöcke</msg>
+        <msg id="menu.block_expand">Block entfalten</msg>
+        <msg id="menu.help">Hilfe</msg>;
+        <msg id="menu.delete_x_blocks">Block # löschen</msg>
+        <msg id="menu.enable_block">Block aktivieren</msg>
+        <msg id="menu.disable_block">Block deaktivieren</msg>
+        <msg id="menu.external_inputs">Externe Eingänge</msg>
+        <msg id="menu.inline_inputs">Interne Eingänge</msg>
+        <msg id="menu.protect_block">Schütze Block vor Löschen</msg>
+    </menu>
+    <categories>
+        <msg id="cat.CTRL">Kontrolle</msg>
+        <msg id="cat.LOGIC">Logik</msg>
+        <msg id="cat.LOOPS">Schleifen</msg>
+        <msg id="cat.COND">Entscheidungen</msg>
+        <msg id="cat.INOUT">Ein- und Ausgabe</msg>
+        <msg id="cat.DEVIN">Sensoren</msg>
+        <msg id="cat.DEVOUT">Aktoren</msg>
+        <msg id="cat.MATH">Mathe</msg>
+        <msg id="cat.TEXT">Text</msg>
+        <msg id="cat.VAR">Variablen</msg>
+        <msg id="cat.FUNC">Operationen</msg>
+        <msg id="cat.DEVICES">Geräte</msg>
+        <msg id="cat.SERIAL">Kommunikation</msg>
+        <msg id="cat.SOUND">Töne</msg>
+        <msg id="cat.LCD">LCD</msg>
+        <msg id="cat.TEST">Testblöcke</msg>
+        <msg id="cat.MISC">Verschiedenes</msg>
+        <msg id="cat.INT">Interrupts</msg>
+        <msg id="cat.TEACHER">Lehrer</msg>
+        <msg id="cat.USB">USB Kommunikation</msg>        
+</categories>
+    <blocks>
+        <msg id="STRING">Text</msg>
+        <msg id="DECIMAL">Dezimalzahl</msg>
+        <msg id="NUMBER">Zahl</msg>
+        <msg id="BOOLEAN">Wahrheitswert</msg>
+        <msg id="VOID">void</msg>
+        <msg id="VOIDT">(nichts)</msg>
+
+        <msg id="var.SET">Setze # auf</msg>
+        <msg id="var.GLOBAL">global</msg>
+		
+        <msg id="txt.LETTERAT">Zeichen Nr. # aus</msg>
+        <msg id="txt.FROMNUMBER">Wandle # in Text um</msg>
+        <msg id="txt.TEXTFROMASCII">Zeichen mit ASCII-Code</msg>
+        <msg id="txt.ASCIIFROMTEXT">ASCII-Code von</msg>
+		
+        <msg id="math.MIN">Minimum</msg>
+        <msg id="math.MAX">Maximum</msg>
+        <msg id="math.ROUND">Runden</msg>
+        <msg id="math.FLOOR">Abrunden</msg>
+        <msg id="math.CEIL">Aufrunden</msg>
+        <msg id="math.ABS">Betrag von</msg>
+        <msg id="math.SQRT">Wurzel aus</msg>
+        <msg id="math.SIN">sin</msg>
+        <msg id="math.COS">cos</msg>
+        <msg id="math.TAN">tan</msg>
+        <msg id="math.RANDOM0">Zufallszahl zwischen 0 und</msg>
+        <msg id="math.RANDOM">Zufallszahl zwischen # und </msg>
+        <msg id="math.INITRAND">Initialisiere Zufallsgenerator mit</msg>
+        <msg id="math.CONSTRAIN">Beschränke # zwischen # und</msg>
+        <msg id="math.SCALE">Skaliere # von (#,#) auf (#,#)</msg>
+
+        <msg id="loop.ENDLESS">Wiederhole fortlaufend</msg>
+        <msg id="loop.WHILE">Wiederhole solange</msg>
+        <msg id="loop.ASLONG">solange</msg>
+        <msg id="loop.REPEAT">Wiederhole</msg>
+        <msg id="loop.FIXEDCOUNT">Wiederhole #-mal</msg>
+        <msg id="loop.BREAK">Breche Schleife ab</msg>
+        <msg id="loop.COUNT">Zähle # von # bis # mit Schrittweite</msg>
+        <msg id="loop.WAITFOR">Warte</msg>
+        <msg id="loop.WAITFOR_MS">ms</msg>
+        <msg id="loop.WAITFOR_MICROS">µs</msg>
+        <msg id="loop.ASCENDING">aufsteigend</msg>
+        <msg id="loop.DESCENDING">absteigend</msg>
+		
+        <msg id="logic.TRUE">wahr</msg>
+        <msg id="logic.FALSE">falsch</msg>
+        <msg id="logic.AND">und</msg>
+        <msg id="logic.OR">oder</msg>
+        <msg id="logic.NOT">nicht</msg>
+        <msg id="logic.EQUALS">==</msg>
+        <msg id="logic.INEQUAL">≠</msg>
+        <msg id="logic.LESS">&lt;</msg>
+        <msg id="logic.LESSEQ">≤</msg>
+        <msg id="logic.GREATER">&gt;</msg>
+        <msg id="logic.GREATEREQ">≥</msg>
+		
+        <msg id ="io.PINMODE">Setze Pin # als</msg>
+        <msg id ="io.INPUT">Eingang</msg>
+        <msg id ="io.OUTPUT">Ausgang</msg>
+        <msg id ="io.PIN">Pin</msg>
+        <msg id ="io.HIGH">hoch</msg>
+        <msg id ="io.LOW">tief</msg>
+        <msg id ="io.READDPIN">Digitaler Wert von Pin</msg>
+        <msg id ="io.SETDPIN">Setze Pin # auf digitalen Wert</msg>
+        <msg id ="io.READAPIN">Analoger Wert von Pin</msg>
+        <msg id ="io.SETAPIN">Setze Pin # auf analogen Wert</msg>
+		
+        <msg id ="serial.BEGINRATE">Starte Kommunikation mit dem Computer mit # baud</msg>
+        <msg id ="serial.BEGIN">Starte Kommunikation mit dem Computer</msg>
+        <msg id ="serial.END">Beende Kommunikation mit dem Computer</msg>
+        <msg id ="serial.WRITEINT">Sende Zahl # an den Computer</msg>
+        <msg id ="serial.WRITEBYTE">Sende # an den Computer</msg>
+        <msg id ="serial.PRINT">Schreibe # an den Computer (ohne Zeilenende)</msg>
+        <msg id ="serial.PRINTLN">Schreibe # an den Computer</msg>
+        <msg id ="serial.AVAILABLE">Zeichen vom Computer empfangen</msg>
+        <msg id ="serial.READLN">Lese Zeile vom Computer</msg>
+                
+        <msg id ="func.NAME">Name</msg>
+        <msg id ="func.CALL">Führe # aus</msg>
+        <msg id ="func.RETURNS">Antwort von #</msg>
+        <msg id ="func.RETURNTYPE">Rückgabetyp</msg>
+        <msg id ="func.PARAMETER">Parameter</msg>
+        <msg id ="func.RETURN">Antworte</msg>
+
+        <msg id ="cond.IF">Falls</msg>
+        <msg id ="cond.ELSE">Sonst</msg>
+		
+        <msg id="dev.DEVICE">Gerät</msg>
+        <msg id="dev.ON">an</msg>
+        <msg id="dev.OFF">aus</msg>
+        <msg id="dev.LED">LED</msg>
+        <msg id="dev.DIMLED">Dimmbare LED</msg>
+        <msg id="dev.SETDIMLED">Setze dimmbare LED # auf</msg>
+        <msg id="dev.RGBLED">RGB-LED</msg>
+        <msg id="dev.REDPIN">Pin für Rot</msg>
+        <msg id="dev.GREENPIN">Pin für Grün</msg>
+        <msg id="dev.BLUEPIN">Pin für Blau</msg>
+        <msg id="dev.RED">Rot</msg>
+        <msg id="dev.GREEN">Grün</msg>
+        <msg id="dev.BLUE">Blau</msg>
+        <msg id="dev.SETRGBLED">Setze RGB-LED # auf</msg>
+        <msg id="dev.COMMON_CATHODE">Gemeinsame Kathode(-)</msg>
+        <msg id="dev.COMMON_ANODE">Gemeinsame Anode(+)</msg>
+        <msg id="dev.AT">an Pin</msg>
+        <msg id="dev.BUTTON">Knopf</msg>
+        <msg id="dev.PRESSED">gedrückt</msg>
+        <msg id="dev.POTI">Potentiometer</msg>
+        <msg id="dev.VALUEOF">Wert von</msg>
+        <msg id="dev.SERVO">Servo</msg>
+        <msg id="dev.SET">Setze</msg>
+        <msg id="dev.TO">auf</msg>
+        <msg id="dev.IRDIST">Infrarot-Distanzsensor</msg>
+        <msg id="dev.DISTANCE">Abstand von # in</msg>
+        <msg id="dev.TYPE">Typ</msg>
+        <msg id="dev.FORMULA">Entfernung [in mm] = # / ( Sensorwert - # ) + </msg>
+        <msg id="dev.LCD">LCD # Spalten # Reihen</msg>
+        <msg id="dev.IRRECEIVER">Infrarot-Empfänger</msg>
+        <msg id="dev.SERIAL">Serielle Verbindung # Input Pin # Output Pin</msg>
+        <msg id="dev.WRITEBYTE">Schreibe Byte # auf</msg>
+        <msg id="dev.READFROMLINE">Lies Byte von</msg>
+        <msg id="dev.LINEAVAILABLE">Byte an # verfügbar</msg>
+        <msg id="dev.LINELISTENING">Verbindung # ist aktiv</msg>
+        <msg id="dev.LINELISTEN">Aktiviere</msg>
+        <msg id="dev.MOTOR">Motor # Richtung # Geschwindigkeit</msg>
+        <msg id="dev.MOTORDIR">Setze Richtung von Motor # auf</msg>
+        <msg id="dev.MOTORSPEED">Setze Geschwindigkeit von Motor # auf</msg>
+        <msg id="dev.FORWARD">vorwärts</msg>
+        <msg id="dev.BACKWARD">rückwärts</msg>
+        
+        <msg id="dev.SPEAKER">Lautsprecher</msg>
+        <msg id="dev.SPEAKER_MUTE">Lautsprecher # aus</msg>
+        <msg id="dev.SPEAKER_PLAY">Spiele auf # Frequenz</msg>
+        <msg id="dev.SPEAKER_PLAY_DUR">Spiele auf # Frequenz # Dauer (ms)</msg>
+        <msg id="dev.SPEAKER_NOTE">Spiele auf # Ton # Okatve </msg>
+        <msg id="dev.SPEAKER_NOTE_DUR">Spiele auf # Ton # Oktave # Dauer (ms)</msg>
+        <msg id="dev.SPEAKER_NOTE_INT">Ton # aus</msg>
+        <msg id="dev.OCTAVE_CONTRA">Kontra-Oktave (sehr tief)</msg>
+        <msg id="dev.OCTAVE_GREAT">großen Oktave (tiefer)</msg>
+        <msg id="dev.OCTAVE_SMALL">kleinen Oktave (tief)</msg>
+        <msg id="dev.OCTAVE_ONE_LINE">eingestrichenen Oktave (normal)</msg>
+        <msg id="dev.OCTAVE_TWO_LINE">zweigestrichenen Oktave (hoch)</msg>
+        <msg id="dev.OCTAVE_THREE_LINE">dreigestrichenen Oktave (höher)</msg>
+        <msg id="dev.OCTAVE_FOUR_LINE">viergestrichenen Oktave (sehr hoch)</msg>
+        
+        <msg id="AND">und</msg>
+        <msg id="MILLIS">Zeit in Millisekunden (ms)</msg>
+        <msg id="MICROS">Zeit in Mikroseconden (µs)</msg>
+			
+        <msg id="SETUP">Vorbereitung</msg>
+        <msg id="LOOP">Hauptschleife</msg>
+        <msg id="DEVICES">Geräte</msg>
+		
+        <msg id="LOCALVARS">Lokale Variablen</msg>
+        <msg id="GLOBALVARS">Globale Variablen</msg>
+        <msg id="TITLE">Titel</msg>
+        <msg id="VARIABLES">Variablen</msg>
+        <msg id="UPLOADING">Lade Sketch auf Arduino ...</msg>
+        <msg id="SERVERMSG">Server-Meldungen</msg>
+        <msg id="INFOMSG">Informationen</msg>
+        <msg id="MESSAGES">Meldungen</msg>
+        
+        <msg id="int.INTERRUPTS">Aktiviere Interrupts</msg>
+        <msg id="int.NOINTERRUPTS">Deaktiviere Interrupts</msg>
+        <msg id="int.ATTACH">Interrupt an Pin # führt # aus bei</msg>
+        <msg id="int.DETACH">Ignoriere Interrupt an Pin</msg>
+        <msg id="int.CHANGE">Änderung</msg>
+        <msg id="int.HIGH">1</msg>
+        <msg id="int.LOW">0</msg>
+        <msg id="int.RISING">Anstieg</msg>
+        <msg id="int.FALLING">Abfall</msg>
+        
+        <msg id="cat.PARSE">Nachrichten</msg>
+        <msg id="parse.EXECUTE_MSG">Prüfe Nachrichten</msg>
+        <msg id="parse.STD_CMD">Prüfe Standard Nachrichten</msg>
+        <msg id="parse.COMMAND">Falls # empfangen</msg>
+        <msg id="parse.COMMANDS">Nachrichten</msg>
+        <msg id="parse.CMD">Bei Nachricht # tue</msg>
+        <msg id="parse.NUMBER">Lese Zahl</msg>
+        <msg id="parse.DECIMAL">Lese Dezimalzahl</msg>
+        <msg id="parse.WORD">Lese Wort</msg>
+        <msg id="parse.STRING">Lese Text</msg>
+        <msg id="parse.SEND_RESPONSE">Sende Antwort</msg>
+    </blocks>
+    <errors>
+        <msg id="default.NAME">&lt;name&gt;</msg>
+        <msg id="err.DEVICE">Es existiert bereits ein Gerät mit diesem Namen</msg>
+        <msg id="PIN_ERROR">Ungültige Pin-Nummer</msg>
+        <msg id="err.EMPTYCODE">Block erzeugt keinen Code.</msg>
+        <msg id="err.EMPTYINPUT">Input enthält keinen Block!</msg>
+        <msg id="err.NOINPUT">Input fehlt!</msg>
+        <msg id="err.NOVALUE">Wert fehlt!</msg>
+        <msg id="err.EMPTYVALUE">Wert enthält keinen Block!</msg>
+        <msg id="err.NOVARIABLE">Keine Variable ausgewählt!</msg>
+        <msg id="err.UNKNOWNLANG">Unbekannter Spracheintrag: #1</msg>
+        <msg id="err.UNKNOWN_DEVICE">Unbekanntes Gerät</msg>
+        <msg id="err.ILLEGAL_PIN">Ungültiger Pin: #1</msg>
+        <msg id="err.DEFAULT_VALUE">Wert nicht gesetzt</msg>
+        <msg id="err.ILLEGAL_ANALOG_PIN">Kein analoger Pin!</msg>
+        <msg id="err.WRONG_SYSTEM">Der Sketch ist für # Systeme!</msg>
+        <msg id="err.WRONG_SYSTEM_TITLE">Falsches System!</msg>
+        <msg id="err.WRONG_NAME">Unbekannter Name</msg>
+    </errors>
+    <names>
+        <msg id="arduino">Arduino kompatible</msg>
+        <msg id="calliope">Calliope Mini und micro:bit kompatible</msg>
+    </names>
+</language>

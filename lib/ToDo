@@ -1,0 +1,143 @@
+[ ] Blockly.Trashcan images 
+
+---
+--- Coding
+---
+
+[ ] Conditionals
+    [X] if
+    [X] if-else
+    ( ) expandable if-elif-else
+    ( ) switch-case
+    
+[X] various loops
+    [X] while
+    [X] do-while
+    [X] counting loop
+    [X] fixed number of rounds
+    [X] endless
+    [X] break
+    
+[X] inputs & outputs
+    [X] digital
+    [X] analog
+
+[X] Serial Output
+[ ] Serial Input
+   
+[ ] String operations
+
+[X] Comments
+    [X] multiline comments
+    
+[ ] Devices
+    [X] LED
+    [X] Button
+    [X] Potentiometer
+    [ ] IR Sender
+    [ ] IR Receiver
+    [X] Servo
+    [ ] Continuous Servo
+    [X] IR Distance
+    [ ] US Distance
+    [ ] LCD
+    [ ] TFT    
+    [ ] Pin Check/Type digital, analog in, PWM
+    	[ ] analogIn can be used as digital in (A0 ...)
+    
+[ ] Misc
+    [ ] Timer microseconds
+    [ ] Timer milliseconds
+    [ ] delay milliceconds
+    [ ] delay microseconds   
+     
+---
+--- Frontend
+---
+
+[ ] Settings / Preferences
+	[ ] Tool Version Check
+    [X] Configuration Panel
+    [X] Frontend reads settings from server
+    [X] Cookies - deprecated
+	[X] Options
+    	[X] local variables
+    	[X] array versions
+    	[ ] include pinmode settings
+    	[X] operations
+    	[X] browser
+    	[X] server port
+    	[ ] locale
+    	[ ] colors
+    
+[X] Saves
+    [X] remember the last accessed sketch
+    [X] Register modifications
+    [X] Ask for saving ...
+        [X] ... when loading
+        [X] ... when initializing a new sketch
+	[X] Automatic addition of file extension
+        
+[ ] Arduino types
+	[X] Retrieve from tool at start
+	[X] Read settings from xml
+	[O] notification if board changes
+
+[ ] Installation
+    [X] Installer
+    [ ] Auto Update
+    [ ] Browser detection
+    [ ] Operating sytems check
+        [X] Linux
+        [X] Windows
+        [ ] Mac OsX
+        
+[ ] Web page        
+	[ ] Help pages
+
+[ ] Simplifiy Error messages
+    
+[X] Message Windows
+    [X] Types:
+        [X] Variables (abbozzaVarWin)
+        [X] Server Log (abbozzaSrvWin)
+        [X] Message (abbozzaMsgWin)
+    [X] Abbozza svg group: Blockly.createSvgElement('g',{},null)
+    [X] Window: Blockly.createSvGElement('path',{'class': 'blocklypath'}, svgGroup}
+    [X] Upload message
+	[X] Generation message
+
+
+[X] Open Serial Monitor Editor.handleSerial()
+    [X] Serial Monitor is moved to front
+    [ ] LCD Simulator as subclass of AbstractMonitor/SerialMonitor
+    [ ] TFT Simulator as subclass of AbstractMonitor/SerialMonitor
+    [X] Oszillospgraph / Plotter
+    
+[ ] Check neccessity
+    [ ] Dragger.js
+    [ ] GUI.js
+    [ ] gui/error.js
+    [ ] gui/errorIcon.js
+    
+[X] rework symbolDB
+    [X] known children
+    [X] loaded in advance
+
+[ ] Client-Server-Communication    
+	[X] client communicates with Server via HTTP requests
+	[ ] client is notified by server (permanent asynchronous request ?)
+
+[ ] Language system
+    [X] loadable XML
+    [ ] Namespaces/Groups
+    [ ] Editor
+    [ ] DTD ???
+    
+[ ] License and Copyright notes
+	[ ] Java
+	[ ] Js
+
+[ ] Split / Merge Files
+    [ ] Split abbozza.css
+    [ ] unified name system

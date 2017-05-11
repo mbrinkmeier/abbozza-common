@@ -1,0 +1,67 @@
+REV SYS 
+
+[ ] [ ] abbozza:
+[ ] [ ] Abbozza.js
+[X] [X] Boards.js
+[X] [X] boards.xml
+[X] [X] ColorMgr.js
+[X] [X] Configuration.js
+[X] [X] Connection.js
+[X] [X] DraggingManager.js
+[X] [X] DynamicMutator.js
+[X] [X] EditorOverlay.js (unused)
+[X] [X] ErrorMgr.js
+[ ] [ ] features.xml
+[ ] [ ] Generator.js
+[ ] [ ] options.xml
+[ ] [ ] SymbolDB.js
+[ ] [ ] TabMgr.js
+[X] [X] TaskWindow.js
+[ ] [ ] ToolboxMgr.js
+[X] [X] Validator.js
+
+[ ] [ ] abbozza/blocks:
+[ ] [ ] Conditionals.js
+[ ] [ ] Functions.js
+[ ] [ ] InOut.js
+[ ] [ ] Interrupts.js
+[ ] [ ] Logic.js
+[ ] [ ] Loops.js
+[ ] [ ] Math.js
+[ ] [ ] oldFunctions.js
+[ ] [ ] SetupAndLoop.js
+[ ] [ ] Teacher.js
+[ ] [ ] Text.js
+[ ] [ ] Tools.js
+[ ] [ ] VariableDecl.js
+[ ] [ ] Variable.js
+
+[ ] [ ] abbozza/blocks/devices:
+[ ] [ ] Button.js
+[ ] [ ] DeviceDB.js
+[ ] [ ] IRDistance.js
+[ ] [ ] IRReceiver.js
+[ ] [ ] LCD.js
+[ ] [ ] LED.js
+[ ] [ ] Motor.js
+[ ] [ ] Poti.js
+[ ] [ ] Servo.js
+[ ] [ ] SoftwareSerial.js
+
+[ ] [ ] abbozza/gui:
+[ ] [ ] field_devicedropdown.js
+[ ] [ ] field_devnameinput.js
+[ ] [ ] field_functiondropdown.js
+[ ] [ ] field_input.js
+[ ] [ ] field_lengthinput.js
+[ ] [ ] field_nameinput.js
+[ ] [ ] field_pindropdown.js
+[ ] [ ] field_slider.js
+[ ] [ ] field_variabledropdown.js
+[ ] [ ] InternalWindow.js
+
+[ ] [ ] languages:
+[ ] [ ] code.xml
+[ ] [ ] de_DE.xml
+[ ] [ ] en_EN.xml
+[ ] [ ] locales.xml

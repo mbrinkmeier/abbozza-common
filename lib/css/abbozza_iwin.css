@@ -1,0 +1,431 @@
+ .iwinHead {
+   background-color: #a0a0a0;
+   font-weight: bold;
+   color: white;
+   font-family: sans-serif;    
+   overflow: auto;
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;   
+ }
+
+.iwinButton {
+    float: right;
+    background-color: #a0a0a0;
+    width: 13px; 
+    height: 13px; 
+    border-color: white; 
+    border-radius: 3px; 
+    border-width: 1px; 
+    border-style: solid;
+    margin-bottom: 6px;
+    padding: 0px;
+    margin-left: 5px;
+    cursor: pointer;
+    padding: 1px;
+}
+
+
+.iwinContent {
+    margin: 0px;
+    padding: 5px;
+    border: 0px;
+    overflow: auto;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.iwinInner {
+    margin : 0px;
+}
+
+
+/**
+ * Variable Window
+ */
+
+#abbozzaVarWin {
+	background-color : #f0fff0;
+}
+
+/*
+#abbozzaVarWinCloser {
+    display: none;
+}
+*/
+
+/**
+ * Message Window
+ */
+
+
+#abbozzaMsgWin {
+	background-color : #f0f0ff;
+	padding: 5px;
+	vertical-align: top;
+	text-align : left;
+}
+
+/**
+ * Server Window
+ */
+
+#abbozzaSrvWin {
+	background-color : #fff0f0;
+	padding-top: 5pt;
+	padding-bottom: 10pt;
+}
+
+/**
+ * Error Icon
+ */
+
+.abbozzaError{
+	font-family: sans-serif;
+	stroke: black;
+}
+
+.abbozzaErrorIconShield{
+	fill: white;
+	stroke: red;
+}
+
+.abbozzaErrorIcon{
+	fill: white;
+	stroke: red;
+	font-size: 14px;
+}
+
+.blocklyDraggable {
+    z-index: 1;
+}
+
+
+.iwinEditorOverlay {        
+ 	width: 100%;
+	height: 100%;
+	background-color: rgba(255,255,255,0.8);
+	position: fixed;
+	top : 0px;
+	left: 0px;
+	z-index: 40;
+        text-align : center;
+        font-family : sans-serif;
+        font-size: 120%;
+        color: gray;
+}
+
+
+.iwinEditorTitle {
+    width: 90%;
+    height: 3%;
+    left: 5%;
+    top: 5%;
+    color: black;
+    position: fixed;
+    border: 2pt black solid;
+    background-color: #ffffff;
+}
+
+.iwinEditorContent {
+    width: 90%;
+    height: 77%;
+    left: 5%;
+    top: 11%;
+    color: black;
+    position: fixed;
+    border: 2pt black solid;
+    background-color: #ffffff;    
+}
+
+.iwinEditorButtons{
+    width: 90%;
+    height: 5%;
+    position: fixed;
+    left: 5%;
+    bottom: 5%;
+    padding: 0pt;
+    margin-top: 0pt;
+}
+
+.iwinEditorButton {
+    border: 2pt black solid;
+    margin-top: 0pt;
+    margin-left: 20pt;
+    margin-right: 0pt;
+    padding: 5pt;
+    float: right;
+    opacity: 1.25;
+    background-color: #dddddd;
+    color: black;
+    cursor: pointer;
+}
+
+.taskOverlay {
+    min-width: 300px;
+    min-height: 200px;
+    width: 600px;
+    height: 400px;
+    background-color: #d0d0d0;
+    position: fixed;
+    top : 60px;
+    right: 20px;
+    z-index: 40;
+    text-align : center;
+    font-family : sans-serif;
+    font-size: 120%;
+    color: gray;
+    border-bottom: 2px #a0a0a0 solid;
+    border-right: 2px #a0a0a0 solid;
+    border-top: 2px #f0f0f0 solid;
+    border-left: 2px #f0f0f0 solid;
+    border-radius: 5px;
+    padding: 0px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor:default;
+}
+
+.taskOverlayButton {
+    float: right;
+    margin-top: 3px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    width: 24px;
+    height: 24px;
+    border: 2px white solid;
+    border-radius: 5px;
+    background-color: #a0a0a0;
+    cursor: pointer;
+}
+
+.taskOverlayButton IMG {
+    padding:2px;
+    margin-left: 1px;
+    margin-top: 1px;
+}
+
+.taskOverlayTitle {
+   float: left;
+   font-size: 100%;
+   font-weight: bold;
+   text-align: left;
+   margin: 3px;
+   margin-left: 10px;
+   color: black;
+   opacity: 1;
+   border: 1px black solid;
+   overflow: hidden;
+   height: 24px;
+}
+
+.taskOverlayContent {
+    display: none;
+}
+
+.taskOverlayPage {
+    margin: 3px;
+    padding: 3px;
+    overflow: auto;
+    top: 30px;
+    bottom: 3px;
+    left: 3px;
+    right: 3px;
+    border-radius: 5px;
+    position: absolute;
+    background-color: white;
+    text-align: left;
+    font-size: 75%;
+    border-top: 2px #a0a0a0 solid;
+    border-left: 2px #a0a0a0 solid;
+    border-bottom: 2px #f0f0f0 solid;
+    border-right: 2px #f0f0f0 solid;    
+    cursor:default;
+    color: black;
+}
+
+.taskOverlayEditor {
+    margin: 3px;
+    padding: 3px;
+    overflow: auto;
+    top: 30px;
+    bottom: 3px;
+    left: 3px;
+    right: 3px;
+    width: auto;
+    border-radius: 5px;
+    position: absolute;
+    background-color: #ffe0e0;
+    text-align: left;
+    font-size: 75%;
+    border-top: 2px #a0a0a0 solid;
+    border-left: 2px #a0a0a0 solid;
+    border-bottom: 2px #f0f0f0 solid;
+    border-right: 2px #f0f0f0 solid;    
+    cursor: text;
+}
+
+.taskOverlayNav {
+    position: absolute;
+    margin: 0px;
+    bottom: 10px;
+    left: 3px;
+    right: 3px;
+    height: 20px;
+    cursor: default;
+    color: black;
+}
+
+.taskOverlayNavButton {
+    font-size: 100%;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: default;
+    color: black;
+}
+
+
+.editorOverlay {        
+ 	width: 100%;
+	height: 100%;
+	background-color: rgba(255,255,255,0.8);
+	position: fixed;
+	top : 0px;
+	left: 0px;
+	z-index: 40;
+        text-align : center;
+        font-family : sans-serif;
+        font-size: 120%;
+        color: gray;
+}
+
+
+.editorTitle {
+    width: 90%;
+    height: 3%;
+    left: 5%;
+    top: 5%;
+    color: black;
+    position: fixed;
+    border: 2pt black solid;
+    background-color: #ffffff;
+}
+
+.editorContent {
+    width: 90%;
+    height: 83%;
+    left: 5%;
+    top: 5%;
+    color: black;
+    position: fixed;
+    border: 2pt black solid;
+    background-color: #ffffff;    
+}
+
+.editorButtons{
+    width: 90%;
+    height: 5%;
+    position: fixed;
+    left: 5%;
+    bottom: 5%;
+    padding: 0pt;
+    margin-top: 0pt;
+}
+
+.editorButton {
+    border: 2pt black solid;
+    margin-top: 0pt;
+    margin-left: 20pt;
+    margin-right: 0pt;
+    padding: 5pt;
+    float: right;
+    opacity: 1.25;
+    background-color: #dddddd;
+    color: black;
+    cursor: pointer;
+}
+
+
+.taskHint {
+   z-index: 40;
+   background-color: #d0d0d0;
+   font-weight: bold;
+   color: white;
+   font-family: sans-serif;    
+   overflow: auto;
+   opacity: 0.9;
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;   
+ }
+
+.taskHintButton {
+    float: right;
+    background-color: #d0d0d0;
+    width: 13px; 
+    height: 13px; 
+    border-color: white; 
+    border-radius: 3px; 
+    border-width: 1px; 
+    border-style: solid;
+    margin-bottom: 6px;
+    padding: 0px;
+    margin-left: 5px;
+    cursor: pointer;
+    padding: 1px;
+}
+
+
+.taskHintContent {
+    margin: 0px;
+    padding: 5px;
+    border: 0px;
+    overflow: auto;
+    color: black;
+    background-color: #ffffff;
+    font-weight: normal;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.taskHintInner {
+    margin : 0px;
+}
+
+.taskHintHead {
+   background-color: #d0d0d0;
+   font-weight: bold;
+   color: white;
+   font-family: sans-serif;    
+   overflow: auto;
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;   
+ }
+
+ 
+ .taskHintContent {
+     font-family: sans-serif;
+ }

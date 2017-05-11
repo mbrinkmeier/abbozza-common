@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="code">
+    <blocks>
+        <msg id="STRING">String</msg>
+        <msg id="DECIMAL">double</msg>
+        <msg id="NUMBER">int</msg>
+        <msg id="BOOLEAN">boolean</msg>
+        <msg id="VOID">void</msg>
+        <msg id="VOIDT">void</msg>
+
+        <msg id="var.SET"># = </msg>
+        <msg id="var.GLOBAL">global</msg>
+		
+        <msg id="txt.LETTERAT">charAt</msg>
+		
+        <msg id="math.MIN">min</msg>
+        <msg id="math.MAX">max</msg>
+        <msg id="math.ROUND">round</msg>
+        <msg id="math.FLOOR">floor</msg>
+        <msg id="math.CEIL">ceil</msg>
+        <msg id="math.ABS">abs</msg>
+        <msg id="math.SQRT">sqrt</msg>
+        <msg id="math.SIN">sin</msg>
+        <msg id="math.COS">cos</msg>
+        <msg id="math.TAN">tan</msg>
+        <msg id="math.RANDOM0">random</msg>
+        <msg id="math.RANDOM">random #, #</msg>
+        <msg id="math.INITRAND">randomSeed</msg>
+
+        <msg id="loop.ENDLESS">while ( 1 == 1 )</msg>
+        <msg id="loop.WHILE">while</msg>
+        <msg id="loop.ASLONG">while</msg>
+        <msg id="loop.REPEAT">repeat</msg>
+        <msg id="loop.FIXEDCOUNT">repeat #-times</msg>
+        <msg id="loop.BREAK">break</msg>
+        <msg id="loop.COUNT">for ( # = # ; # <= # ; # = # + # )</msg>
+        <msg id="loop.WAITFOR">delay</msg>
+        <msg id="loop.WAITFOR_MS">ms</msg>
+		
+        <msg id="logic.TRUE">true</msg>
+        <msg id="logic.FALSE">false</msg>
+        <msg id="logic.AND">&&</msg>
+        <msg id="logic.OR">||</msg>
+        <msg id="logic.NOT">!</msg>
+        <msg id="logic.EQUALS">==</msg>
+        <msg id="logic.INEQUAL">!=</msg>
+        <msg id="logic.LESS">&lt;</msg>
+        <msg id="logic.LESSEQ">&lt;=</msg>
+        <msg id="logic.GREATER">&gt;</msg>
+        <msg id="logic.GREATEREQ">&gt;=</msg>
+		
+        <msg id ="io.PINMODE">pinMode # , </msg>
+        <msg id ="io.INPUT">INPUT</msg>
+        <msg id ="io.OUTPUT">OUTPUT</msg>
+        <msg id ="io.PIN">Pin</msg>
+        <msg id ="io.HIGH">HIGH</msg>
+        <msg id ="io.LOW">LOW</msg>
+        <msg id ="io.READDPIN">digitalRead</msg>
+        <msg id ="io.SETDPIN">digitalWrite # ,</msg>
+        <msg id ="io.READAPIN">analogRead</msg>
+        <msg id ="io.SETAPIN">analogWrite # ,</msg>
+		
+        <msg id ="serial.BEGINRATE">Starte Kommunikation mit dem Computer mit # baud</msg>
+        <msg id ="serial.BEGIN">Starte Kommunikation mit dem Computer</msg>
+        <msg id ="serial.END">Beende Kommunikation mit dem Computer</msg>
+        <msg id ="serial.WRITEINT">Sende Zahl # an den Computer</msg>
+        <msg id ="serial.WRITEBYTE">Sende # an den Computer</msg>
+        <msg id ="serial.PRINT">Schreibe # an den Computer (ohne Zeilenende)</msg>
+        <msg id ="serial.PRINTLN">Schreibe # an den Computer</msg>
+                
+        <msg id ="func.NAME">Name</msg>
+        <msg id ="func.CALL">Führe # aus</msg>
+        <msg id ="func.RETURNS">Antwort von #</msg>
+        <msg id ="func.RETURNTYPE">Rückgabetyp</msg>
+        <msg id ="func.PARAMETER">Parameter</msg>
+        <msg id ="func.RETURN">Antworte</msg>
+
+        <msg id ="cond.IF">Falls</msg>
+        <msg id ="cond.ELSE">Sonst</msg>
+		
+        <msg id="dev.ON">an</msg>
+        <msg id="dev.OFF">aus</msg>
+        <msg id="dev.LED">LED</msg>
+        <msg id="dev.AT">an Pin</msg>
+        <msg id="dev.BUTTON">Knopf</msg>
+        <msg id="dev.PRESSED">gedrückt</msg>
+        <msg id="dev.POTI">Potentiometer</msg>
+        <msg id="dev.VALUEOF">Wert von</msg>
+        <msg id="dev.SERVO">Servo</msg>
+        <msg id="dev.SET">Setze</msg>
+        <msg id="dev.TO">auf</msg>
+        <msg id="dev.IRDIST">Infrarot-Distanzsensor</msg>
+        <msg id="dev.DISTANCE">Abstand von # in</msg>
+        <msg id="dev.TYPE">Typ</msg>
+        <msg id="dev.FORMULA">Entfernung [in mm] = # / ( Sensorwert - # ) + </msg>
+        <msg id="dev.LCD">LCD # Spalten # Reihen</msg>
+        <msg id="dev.IRRECEIVER">Infrarot-Empfänger</msg>
+        <msg id="AND">und</msg>
+        <msg id="MILLIS">Zeit in ms</msg>
+			
+        <msg id="SETUP">Vorbereitung</msg>
+        <msg id="LOOP">Hauptschleife</msg>
+        <msg id="DEVICES">Geräte</msg>
+		
+        <msg id="LOCALVARS">Lokale Variablen</msg>
+        <msg id="GLOBALVARS">Globale Variablen</msg>
+        <msg id="TITLE">Titel</msg>
+        <msg id="VARIABLES">Variablen</msg>
+        <msg id="UPLOADING">Lade Sketch auf Arduino ...</msg>
+        <msg id="SERVERMSG">Server-Meldungen</msg>
+        <msg id="INFOMSG">Informationen</msg>
+        <msg id="MESSAGES">Meldungen</msg>
+        
+        <msg id="int.INTERRUPTS">Aktiviere Interrupts</msg>
+        <msg id="int.NOINTERRUPTS">Deaktiviere Interrupts</msg>
+        <msg id="int.ATTACH">Interrupt an Pin # bei</msg>
+        <msg id="int.CHANGE">Änderung</msg>
+        <msg id="int.HIGH">1</msg>
+        <msg id="int.LOW">0</msg>
+        <msg id="int.RISING">Anstieg</msg>
+        <msg id="int.FALLING">Abfall</msg>
+    </blocks>
+</language>
