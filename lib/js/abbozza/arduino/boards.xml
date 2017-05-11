@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abbozza>
+	<board id="uno">
+		<name>Arduino Uno</name>
+		<pins digital="14" analogin="6" analogout="0" led="13" />
+		<pwm>3,5,6,9,10,11</pwm>
+		<interrupts>3,2</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="yun">
+		<name>Arduino Yun</name>
+		<pins digital="20" analogin="12" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11,13</pwm>
+		<interrupts>3,2,0,1,7</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="diecimila">
+		<name>Arduino Duemilanove/Diecimila</name>
+		<pins digital="54" analogin="12" analogout="2" led="13"/>
+		<pwm>2,3,4,5,6,7,8,9,10,11,12,13</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0,19,17,15</rx>
+		<tx>1,18,16,14</tx>
+	</board>
+	<board id="nano">
+		<name>Arduino Nano</name>
+		<pins digital="14" analogin="8" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="mega">
+		<name>Arduino Mega/Mega 2560</name>
+		<pins digital="54" analogin="16" analogout="0" led="13"/>
+		<pwm>2,3,4,5,6,7,8,9,10,11,12,13,44,45,46</pwm>
+		<interrupts>2,3,18,19,20,21</interrupts>
+		<rx>0,19,17,15</rx>
+		<tx>1,18,16,14</tx>
+	</board>
+	<board id="megaADK">
+		<name>Arduino Mega ADK</name>
+		<pins digital="54" analogin="16" analogout="0" led="13"/>
+		<pwm>2,3,4,5,6,7,8,9,10,11,12,13,44,45,46</pwm>
+		<interrupts>2,3,18,19,20,21</interrupts>
+		<rx>0,19,17,15</rx>
+		<tx>1,18,16,14</tx>
+	</board>
+	<board id="leonardo">
+		<name>Arduino Leonardo</name>
+		<pins digital="20" analogin="12" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11,13</pwm>
+		<interrupts>3,2,0,1,7</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="micro">
+		<name>Arduino Micro</name>
+		<pins digital="20" analogin="12" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11,13</pwm>
+		<interrupts>3,2,0,1,7</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="esplora">
+		<name>Arduino Esplora</name>
+		<pins digital="14" analogin="6" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="mini">
+		<name>Arduino Mini</name>
+		<pins digital="14" analogin="8" analogout="0" led="0"/>
+		<pwm>3,5,6,9,10,11</pwm>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="ethernet">
+		<name>Arduino Ethernet</name>
+		<pins digital="14" analogin="6" analogout="0" led="9"/>
+		<pwm>3,5,6,9,10</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="fio">
+		<name>Arduino Fio</name>
+		<pins digital="14" analogin="8" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="bt">
+		<name>Arduino BT</name>
+		<pins digital="14" analogin="6" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="LilyPadUSB">
+		<name>LilyPad Arduino USB</name>
+		<pins digital="9" analogin="4" analogout="0" led="13"/>
+		<pwm>3,9,10,11,13</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="lilypad">
+		<name>LilyPad Arduino</name>
+		<pins digital="14" analogin="6" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="pro">
+		<name>Arduino Pro/Pro Min</name>
+		<pins digital="14" analogin="6" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="atmegang">
+		<name>Arduino NG</name>
+		<pins digital="54" analogin="16" analogout="0" led="13"/>
+		<pwm>2,3,4,5,6,7,8,9,10,11,12,13,44,45,46</pwm>
+		<interrupts>2,3,18,19,20,21</interrupts>
+		<rx>0,19,17,15</rx>
+		<tx>1,18,16,14</tx>
+	</board>
+	<board id="robotControl">
+		<name>Arduino Robot Control</name>
+		<pins digital="5" analogin="4" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="robotMotor">
+		<name>Arduino Robot Motor</name>
+		<pins digital="14" analogin="6" analogout="0" led="13"/>
+		<pwm>3,5,6,9,10,11</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+	<board id="gemma">
+		<name>Arduino Gemma</name>
+		<pins digital="3" analogin="1" analogout="0" led="1"/>
+		<pwm>0,1</pwm>
+		<interrupts>2,3</interrupts>
+		<rx>0</rx>
+		<tx>1</tx>
+	</board>
+        <board id="flora8">
+            <name>Adafruit Flora</name>
+            <pins digital="13" analogin="12" analogout="0" led="7"/>
+            <pwm>3,6,9,10</pwm>
+            <interrupts></interrupts>
+            <rx>0</rx>
+            <tx>1</tx>
+        </board>
+</abbozza>

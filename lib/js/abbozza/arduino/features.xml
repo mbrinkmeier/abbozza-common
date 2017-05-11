@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features>
+    <feature id="feat.BASE">
+        <category name="Entscheidungen" id="cat.COND">
+            <block type="cond_if"></block>
+            <block type="cond_if_else"></block>
+        </category>
+
+        <category name="Schleifen" id="cat.LOOPS">
+            <block type="loop_endless"></block>
+            <block type="loop_while"></block>
+            <block type="loop_do_while"></block>
+            <block type="loop_fixed"></block>
+            <block type="loop_count_dir">
+                <value name="FROM">
+                    <block type="math_number"><field name="VALUE">0</field></block>
+                </value>   
+                <value name="TO">
+                    <block type="math_number"><field name="VALUE">42</field></block>
+                </value>   
+            </block>
+            <block type="loop_count_dir_step">
+                <value name="FROM">
+                    <block type="math_number"><field name="VALUE">0</field></block>
+                </value>   
+                <value name="TO">
+                    <block type="math_number"><field name="VALUE">42</field></block>
+                </value>   
+                <value name="STEP">
+                    <block type="math_number"><field name="VALUE">1</field></block>
+                </value>   
+            </block>
+            <block type="loop_break"></block>
+            <block type="loop_delay">
+                <value name="TIME">
+                    <block type="math_number"><field name="VALUE">1000</field></block>
+                </value>
+            </block>            
+            <block type="loop_delay_micros">
+                <value name="TIME">
+                    <block type="math_number"><field name="VALUE">1000</field></block>
+                </value>
+            </block>            
+        </category>
+
+        <category id="cat.FUNC">
+        </category>
+        
+        <category name="Variablen" id="cat.VAR">
+            <block type="var_block"></block>
+            <block type="var_assign">
+                <value name="LEFT">
+                    <block type="var_block"></block>
+                </value>
+            </block>
+        </category>
+
+        <category name="Logik" id="cat.LOGIC">
+            <block type="logic_const"></block>
+            <block type="logic_op"></block>
+            <block type="logic_not"></block>
+            <block type="logic_compare"></block>
+        </category>
+	    
+        <category name="Mathe" id="cat.MATH">
+            <block type="math_number"></block>
+            <block type="math_decimal"></block>
+            <block type="math_calc"></block>
+            <!--block type="math_round"></block-->
+            <block type="math_unary"></block>
+            <block type="math_binary"></block>
+            <block type="math_random"></block>
+            <block type="math_random2"></block>
+            <block type="math_randomseed"></block>
+            <block type="math_millis"></block>
+            <block type="math_micros"></block>
+            <block type="math_constrain"></block>
+            <block type="math_scale"></block>
+        </category>
+	    
+        <category name="Text" id="cat.TEXT">
+            <block type="text_const"></block>
+            <block type="text_charat"></block>
+            <block type="text_concat"></block>
+            <block type="text_from_number"></block>
+            <block type="text_from_ascii"></block>
+            <block type="ascii_from_text"></block>
+        </category>
+
+        <category name="Ein- und Ausgabe" id="cat.INOUT">
+            <block type="inout_pin"></block>
+            <block type="inout_pinmode">
+                <value name="PIN">
+                    <block type="inout_pin"></block>
+                </value>
+            </block>
+            <block type="inout_level"></block>
+            <block type="inout_digital_read">
+                <value name="PIN">
+                    <block type="inout_pin"></block>
+                </value>
+            </block>
+            <block type="inout_digital_write">
+                <value name="PIN">
+                    <block type="inout_pin"></block>
+                </value>
+                <value name="LEVEL">
+                    <block type="inout_level"></block>
+                </value>
+            </block>
+            <block type="inout_analog_read">
+                <value name="PIN">
+                    <block type="inout_pin"></block>
+                </value>
+            </block>
+            <block type="inout_analog_write">
+                <value name="PIN">
+                    <block type="inout_pin"></block>
+                </value>
+                <value name="VALUE">
+                    <block type="math_number"></block>
+                </value>
+            </block>
+        </category>
+
+        <category name="Sensoren" id="cat.DEVIN">
+        </category>
+
+        <category name="Aktuatoren" id="cat.DEVOUT">
+        </category>
+	    
+        <category id="cat.SERIAL">
+        </category>
+        
+        <category name="Interrupts" id="cat.INT">
+        </category>
+                         
+        <!--category name="Test" id="cat.TEST">
+            <block type="test"></block>
+        </category-->
+    </feature>
+		
+    <feature id="feat.FUNC" option="operations">
+        <category id="cat.FUNC">
+            <block type="func_decl"></block>
+            <block type="func_call"></block>
+            <block type="func_return"></block>
+        </category>
+    </feature>
+	
+    <feature id="feat.USB" option="usb">
+        <category id="cat.USB">
+            <block type="serial_println"></block>
+            <block type="serial_readln"></block>
+            <block type="serial_available"></block>
+            <!--block type="serial_write_byte"></block -->
+            <block type="serial_table"></block>
+        </category>
+    </feature>
+        
+    <feature id="feat.MESSAGE" option="messages">
+        <category id ="cat.USB">
+            <block type="message_parse">
+                <value name="COMMANDS">
+                <block type="message_cmd_decl"></block>
+                </value>
+            </block>
+            <block type="message_cmd_decl"></block>
+            <block type="message_number"></block>
+            <block type="message_decimal"></block>
+            <block type="message_word"></block>
+            <block type="message_string"></block>
+            <block type="message_response"></block>
+        </category>
+    </feature>        
+    
+    
+    <feature id="feat.SERIAL" option="serial">
+        <category id="cat.SERIAL">
+            <block type="dev_serial"></block>
+            <block type="dev_serial_write">
+                <value name="VALUE">
+                    <block type="math_number"></block>
+                </value>
+            </block>
+            <block type="dev_serial_read"></block>
+            <block type="dev_serial_available"></block>
+            <block type="dev_serial_listen"></block>
+            <block type="dev_serial_listening"></block>
+        </category>
+    </feature>
+        
+    <feature id="feat.SERIALRATE">
+        <category id="cat.SERIAL">
+            <!-- block type="serial_begin_rate"></block -->
+        </category>
+    </feature>
+
+    <feature id="feat.MISC" option="lcd">
+        <category name="LCD" id="cat.LCD">
+            <block type="dev_lcd"></block>
+        </category>
+    </feature>
+                
+    <feature id="feat.DEVICES" option="devices">
+        <category name="Aktuatoren" id="cat.DEVOUT">
+            <block type="dev_led"></block>
+            <block type="dev_led_on"></block>
+            <block type="dev_led_dim"></block>
+            <block type="dev_led_dim_on"></block>
+            <block type="dev_rgb_led"></block>
+            <block type="dev_rgb_led_set_color"></block>
+            <block type="dev_rgb_led_set_color2"></block>
+            <block type="dev_servo"></block>
+            <block type="dev_servo_set">
+                <value name="VALUE">
+                    <block type="math_number"></block>
+                </value>
+            </block>
+        </category> 		
+        <category name="Sensoren" id="cat.DEVIN">
+            <block type="dev_button"></block>
+            <block type="dev_button_state"></block>
+            <block type="dev_poti"></block>
+            <block type="dev_poti_state"></block>
+            <block type="dev_servo_read"></block>
+            <block type="dev_irreceiver"></block>
+            <block type="dev_irreceiver_state"></block>
+            <block type="dev_ir_dist"></block>
+            <block type="dev_ir_read"></block>
+            <block type="dev_ir_read_dist"></block>
+        </category> 		
+        
+        <category name="Töne" id="cat.SOUND">
+            <block type="dev_speaker"></block>
+            <block type="dev_speaker_play"></block>
+            <block type="dev_speaker_play_dur"></block>
+            <!-- block type="dev_speaker_note"></block>
+            <block type="dev_speaker_note_dur"></block -->
+            <block type="dev_speaker_note_int"></block>
+            <block type="dev_speaker_mute"></block>
+        </category>
+    </feature>
+
+    <feature id ="feat.INT" option="interrupts">
+        <category name="Interrupts" id="cat.INT">
+            <block type="int_interrupts"></block>
+            <block type="int_no_interrupts"></block>
+            <block type="int_attach"></block>
+            <block type="int_detach"></block>
+            <block type="int_isr"></block>
+        </category>
+    </feature>        
+    
+
+</features>

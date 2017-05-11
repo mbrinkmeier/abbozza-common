@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <link rel="icon" type="image/png" href="img/abbozza_icon.png">
+
+        <link rel="stylesheet" type="text/css" href="css/abbozza.css">
+        <link rel="stylesheet" type="text/css" href="js/Magnifier/magnifier.css">
+
+        <title>abbozza!</title>
+        
+        <script src="js/polyfill/CustomElements.js"></script>
+        <script src="js/Event/Event.js"></script>
+        <script src="js/Magnifier/Magnifier.js"></script>
+        <script type="text/javascript">
+            var abbozzaEvent = new Event(),
+            abbozzaMagnifier = new Magnifier(abbozzaEvent);
+        </script>        
+        <script src="js/blockly/blockly_compressed_new.js"></script>
+
+        <!-- arduino specific classes -->
+        <script src="js/abbozza/Generator.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/GeneratorArduino.js" type="text/javascript"></script>
+
+        <!-- general classes -->
+        <script src="js/abbozza/ToolboxMgr.js" type="text/javascript"></script>        
+        <script src="js/abbozza/ColorMgr.js" type="text/javascript"></script>        
+        <script src="js/abbozza/Connection.js" type="text/javascript"></script>
+        <script src="js/abbozza/Validator.js" type="text/javascript"></script>  
+        <script src="js/abbozza/SymbolDB.js" type="text/javascript"></script>
+        <script src="js/abbozza/DeviceDB.js" type="text/javascript"></script>
+        
+        <script src="js/abbozza/gui/field_nameinput.js"></script>
+        <script src="js/abbozza/gui/field_devnameinput.js"></script>
+        <script src="js/abbozza/gui/field_lengthinput.js"></script>
+        <script src="js/abbozza/gui/field_variabledropdown.js"></script>
+        <script src="js/abbozza/gui/field_devicedropdown.js"></script>
+        <script src="js/abbozza/gui/field_functiondropdown.js"></script>
+        <script src="js/abbozza/gui/field_slider.js"></script>
+        <script src="js/abbozza/gui/field_pindropdown.js"></script>
+        <script src="js/abbozza/gui/InternalWindow.js" type="text/javascript"></script>	
+        <script src="js/abbozza/AbbozzaBubble.js" type="text/javascript"></script>	
+        <script src="js/abbozza/TaskHintIcon.js" type="text/javascript"></script>
+        <script src="js/abbozza/TaskWindow.js" type="text/javascript"></script>
+        <script src="js/abbozza/TaskHint.js" type="text/javascript"></script>
+        <script src="js/abbozza/Configuration.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/Boards.js" type="text/javascript"></script>
+        <script src="js/abbozza/ErrorMgr.js" type="text/javascript"></script>
+        <script src="js/abbozza/TabMgr.js" type="text/javascript"></script>
+        <script src="js/abbozza/DynamicMutator.js" type="text/javascript"></script>
+        <script src="js/abbozza/DraggingManager.js" type="text/javascript"></script>
+        <script src="js/abbozza/Abbozza.js" type="text/javascript"></script>
+        <script src="js/abbozza/Tools.js" type="text/javascript"></script>
+
+        <!-- the unknown block -->
+        <script src="js/abbozza/blocks/Unknown.js" type="text/javascript"></script>
+
+        <!-- arduino specific blocks -->
+        <script src="js/abbozza/arduino/blocks/Main.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/Variable.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/DeviceDecl.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/Math.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/Math2.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/Loops.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/Functions.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/Conditionals.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/Logic.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/Text.js" type="text/javascript"></script>        
+        <script src="js/abbozza/arduino/blocks/InOut.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/Interrupts.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/Messages.js" type="text/javascript"></script>
+
+        <!-- devices -->
+        <script src="js/abbozza/arduino/blocks/devices/LED.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/devices/RGB_LED.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/devices/Button.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/devices/Poti.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/devices/Servo.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/devices/IRDistance.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/devices/IRReceiver.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/devices/SoftwareSerial.js" type="text/javascript"></script>
+        <script src="js/abbozza/arduino/blocks/devices/Speaker.js" type="text/javascript"></script>
+        
+        <!-- Load the generated plugin javascript -->
+        <script src="js/abbozza/arduino/Code.js" type="text/javascript"></script>
+        <script src="/abbozza/plugins/plugins.js" type="text/javascript"></script>
+
+    </head>
+
+    
+    <body onload="Abbozza.init('arduino');">
+
+        <div id="overlay" onclick="Abbozza.overlayClicked(this, event)">
+            <div id="overlay_content">
+            </div>
+        </div>
+
+        <div id="workspace"></div>
+
+        <div class="topButton" id="generate" title="Generiere Code" onclick="Abbozza.generateSketch()"><img width=50 height=50  src="img/generate.png"></div>
+        <div class="topButton" id="upload" title="Lade Sketch auf Arduino" onclick="Abbozza.uploadSketch()"><img width=50 height=50  src="img/upload.png"></div>
+        <div class="topButton" id="new" title="Neuer Sketch" onclick="Abbozza.newSketch()"><img width=50 height=50  src="img/new.png"></div>
+        <div class="topButton" id="load" title="Lade Sketch" onclick="Abbozza.loadSketch()"><img width=50 height=50  src="img/load.png"></div>
+        <div class="topButton" id="save" title="Speichere Sketch" onclick="Abbozza.saveSketch()"><img width=50 height=50  src="img/save.png"></div>
+        <div class="topButton" id="tools" title="Werkzeuge">
+           <div class="toolButton" id="serial" onclick="Abbozza.serialMonitor()"><img src="img/serial.png"></div>
+        </div>
+        <div class="topButton" id="connect" title="Verbinde" onclick="Abbozza.selectBoard()"><img width=50 height=50  src="img/connect.png"></div>
+        <div class="topButton" id="config" title="Einstellungen" onclick="Abbozza.showConfiguration()"><img width=50 height=50  src="img/settings.png"></div>	
+        <div class="topButton" id="info" title="Informationen" onclick="Abbozza.openTaskWindow()"><img width=50 height=50  src="img/info.png"></div>
+
+        <div class="license_div">
+            Based on <a href="https://developers.google.com/blockly/">Blockly</a>, 
+            Icons and images designed by <a href="http://www.flaticon.com/authors/freepik">Freepik</a>
+            
+            <!-- form id ="reload_form" action="/" method="POST" onsubmit="Abbozza.reload()">
+                  <input id="sketch_input" type="hidden" name="sketch" value="">
+                  <button type="submit" >RELOAD</button>
+            </form -->
+        </div>
+
+    <xml id="startBlocks" style="display: none">
+        <block type="main" id="main" inline="false" x="100" y="20"></block>
+        <block type="devices" id="block_global_vars" inline="false" x="500" y="20"></block>
+    </xml>
+    <xml id="startBlocksWoDevices" style="display: none">
+        <block type="main" id="main" inline="false" x="100" y="20"></block>
+    </xml>
+</body>
+</html>
