@@ -6,6 +6,7 @@
 package de.uos.inf.did.abbozza.arduino;
 
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.install.InstallTool;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -34,11 +35,17 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
     private String abbozzaDir;
     public Properties prefs;
     private String sketchbookDir;
-
+    private InstallTool installTool;
+    private boolean isAdmin;
+    
     /**
      * Creates new form AbbozzaInstaller
      */
     public AbbozzaInstaller() {
+        // Get the correct install tool
+        installTool = InstallTool.getInstallTool();
+        isAdmin = installTool.isAdministrator();
+        
         // Read the arduino preferences
         prefs = getPreferences();
 
