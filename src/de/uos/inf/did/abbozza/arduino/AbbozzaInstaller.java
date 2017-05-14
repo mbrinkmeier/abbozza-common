@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -51,7 +53,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         prefs = getPreferences();
 
         if (prefs == null) {
-            JOptionPane.showMessageDialog(this, "Arduino IDE has to bes installed and\nstarted at least once before installing abbozza!", "abbozza! - Installation error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Arduino IDE has to be installed and\nstarted at least once before installing abbozza!", "abbozza! - Installation error", JOptionPane.ERROR_MESSAGE);
             this.setVisible(false);
             System.exit(1);
         }
@@ -122,8 +124,9 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             sketchbookDir = prefName + "/Documents/Arduino/";
             prefName = prefName + "/Library/Arduino/preferences.txt";
         } else if (osName.equals("Win")) {
-            sketchbookDir = prefName + "/Documents/Arduino/";
-            prefName = prefName + "/Documents/Arduino/preferences.txt";
+            sketchbookDir = prefName + "\\Documents\\Arduino\\";
+            prefName = prefName + "\\AppData\\Local\\Arduino15\\preferences.txt";
+            System.out.println(prefName);
         } else {
             sketchbookDir = prefName + "/AppData/Roaming/Arduino/";
             prefName = prefName + "/AppData/Roaming/Arduino/preferences.txt";
@@ -132,10 +135,14 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         Properties prefs = new Properties();
 
         try {
-            prefs.load(new FileInputStream(new File(prefName)));
+            File file = new File(prefName);
+            FileInputStream is = new FileInputStream(file);
+            
+            InputStreamReader r = new InputStreamReader(is, Charset.forName("UTF-8"));            
+            prefs.load(r);
         } catch (IOException e) {
             return null;
-        }
+        } catch (IllegalArgumentException ex) {}
 
         if ((prefs != null) && (prefs.getProperty("sketchbook.path") != null)) {
             sketchbookDir = (new File(prefs.getProperty("sketchbook.path"))).getAbsolutePath();
@@ -330,12 +337,13 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
                  * Backup previous version
                  */
                 File jar = new File(abbozzaDir + "abbozza-arduino.jar");
-                File backup = new File(abbozzaDir + "abbozza-arduino_" + System.currentTimeMillis() + ".jar_");
+                File backup = new File(abbozzaDir + "abbozza-arduino_" + System.currentTimeMillis() + ".jar");
                 try {
                     if (jar.exists()) {
                         Files.move(jar.toPath(), backup.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     }
                 } catch (IOException ex) {
+                    ex.printStackTrace(System.out);
                     int opt = JOptionPane.showConfirmDialog(this, "Could not backup previous version.\nContinue installation?", "abbozza! Fehler", JOptionPane.YES_NO_OPTION);
                     if (opt == JOptionPane.NO_OPTION) {
                         this.setVisible(false);
