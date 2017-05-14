@@ -192,22 +192,10 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     }
 
-    public void setPaths() {
-        // Sketchbook is in <user.home>
-        sketchbookPath = System.getProperty("user.home") + "/";
-        // Configuration can be found in <user.home>/.abbozza/<system>/abbozza.cfg
-        // configPath = System.getProperty("user.home") + "/.abbozza/" + system + "/abbozza.cfg";
-        // Local Jar file is found in the current directory
-        localJarPath = System.getProperty("user.dir");
-        URL url = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation();
-        int p = url.getPath().lastIndexOf("/");
-        globalJarPath = url.getPath().substring(0, p + 1);
-        // globalJarPath = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    public abstract void setPaths();
+    public abstract void registerSystemHandlers();
 
-        localPluginPath = localJarPath + "/plugins";
-        globalPluginPath = globalJarPath + "/plugins";
-    }
-
+    
     public String getSketchbookPath() {
         return sketchbookPath;
     }
@@ -244,8 +232,6 @@ public abstract class AbbozzaServer implements HttpHandler {
         jarHandler.addJar(globalJarPath + "/Abbozza.jar", "Global jar");
     }
 
-    // Must be overriden to register the system specific handlers
-    public abstract void registerSystemHandlers();
 
     public void registerHandlers() {
         registerSystemHandlers();
