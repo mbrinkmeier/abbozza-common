@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -37,7 +38,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
     private String sketchbookDir;
     private InstallTool installTool;
     private boolean isAdmin;
-    
+
     /**
      * Creates new form AbbozzaInstaller
      */
@@ -45,21 +46,28 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         // Get the correct install tool
         installTool = InstallTool.getInstallTool();
         isAdmin = installTool.isAdministrator();
-        
+
         // Read the arduino preferences
         prefs = getPreferences();
 
+        if (prefs == null) {
+            JOptionPane.showMessageDialog(this, "Arduino IDE has to bes installed and\nstarted at least once before installing abbozza!", "abbozza! - Installation error", JOptionPane.ERROR_MESSAGE);
+            this.setVisible(false);
+            System.exit(1);
+        }
+
         // Initialize the frame
         initComponents();
-        this.setTitle("abbozza! installer");
+        this.setTitle("abbozza! Arduino installer");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - getWidth()) / 2;
         int y = (screen.height - getHeight()) / 2;
         setLocation(x, y);
 
+        // Set default values for Mac
         String osname = System.getProperty("os.name").toLowerCase();
-        if (osname.contains("mac")) {
+        if (installTool.getSystem().equals("Mac")) {
             // OsX only requires the command 'open'
             browserField.setText("open");
             browserField.setEnabled(false);
@@ -79,11 +87,12 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
 
         if (aD.exists()) {
             int result = JOptionPane.showConfirmDialog(this,
-                    "abbozza! scheint bereits installiert zu sein.\n Mit der Installation fortfahren? \n (Version " + Abbozza.VERSION + ")",
-                    "abbozza! bereits installiert", JOptionPane.YES_NO_OPTION);
+                    "abbozza! seems to be installed already.\nContinue installation?\n (Version " + Abbozza.VERSION + ")",
+                    "abbozza! already installed", JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.NO_OPTION) {
                 System.exit(1);
             }
+
             // Write initial configuration file
             File prefFile = new File(System.getProperty("user.home") + "/.abbozza/arduino/abbozza.cfg");
             Properties config = new Properties();
@@ -95,19 +104,24 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Get the preferences of the installed arduino app
+     *
+     * @return
+     */
     public Properties getPreferences() {
 
-        String osName = System.getProperty("os.name");
-        String userDir = System.getProperty("user.home");
+        String osName = installTool.getSystem();
+        String userDir = installTool.getUserDir();
         String prefName = userDir;
 
-        if (osName.indexOf("Linux") != -1) {
+        if (osName.equals("Linux")) {
             sketchbookDir = prefName + "/Arduino/";
             prefName = prefName + "/.arduino15/preferences.txt";
-        } else if (osName.indexOf("Mac") != -1) {
+        } else if (osName.equals("Mac")) {
             sketchbookDir = prefName + "/Documents/Arduino/";
             prefName = prefName + "/Library/Arduino/preferences.txt";
-        } else if (osName.indexOf("Windows") != -1) {
+        } else if (osName.equals("Win")) {
             sketchbookDir = prefName + "/Documents/Arduino/";
             prefName = prefName + "/Documents/Arduino/preferences.txt";
         } else {
@@ -115,23 +129,17 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             prefName = prefName + "/AppData/Roaming/Arduino/preferences.txt";
         }
 
-        // System.out.println(prefName);
         Properties prefs = new Properties();
 
         try {
             prefs.load(new FileInputStream(new File(prefName)));
-//        } catch (FileNotFoundException e) {
-//            JOptionPane.showMessageDialog(null, "Arduino scheint nicht installiert zu sein.",
-//                    "abbozza! Installationsfehler ", JOptionPane.ERROR_MESSAGE);
         } catch (IOException e) {
-            // JOptionPane.showMessageDialog(null, prefName + " kann nicht gefunden werden.",
-            //        "abbozza! Installationsfehler ", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
 
         if ((prefs != null) && (prefs.getProperty("sketchbook.path") != null)) {
             sketchbookDir = (new File(prefs.getProperty("sketchbook.path"))).getAbsolutePath();
         }
-        // System.out.println(sketchbookDir);
 
         return prefs;
     }
@@ -292,59 +300,86 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void installButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installButtonActionPerformed
+        // Get the values in the dialog
         File sketchbookDir = new File(sketchbookField.getText());
         File browserFile = new File(browserField.getText());
+
         try {
             // Find jar used to install
             File file = new File(AbbozzaInstaller.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            // If file exists
+
+            // If file exists execute installation
             if (file.exists()) {
                 AbbozzaLogger.out("Jar found at " + file.getCanonicalPath(), AbbozzaLogger.DEBUG);
+
+                /**
+                 * 1st step: 
+                 * Find/create dir
+                 */
                 abbozzaDir = sketchbookDir.getAbsolutePath() + "/tools/Abbozza/tool/";
+
                 File abzDir = new File(abbozzaDir);
                 abzDir.mkdirs();
+                if (!abzDir.canWrite()) {
+                    JOptionPane.showMessageDialog(this, "Cannot write to " + abzDir.getCanonicalPath(), "abbozza! installation error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                /**
+                 * 2nd step: 
+                 * Backup previous version
+                 */
                 File jar = new File(abbozzaDir + "abbozza-arduino.jar");
-                File backup = new File(abbozzaDir + "Abbozza_" + System.currentTimeMillis() + ".jar_");
+                File backup = new File(abbozzaDir + "abbozza-arduino_" + System.currentTimeMillis() + ".jar_");
                 try {
                     if (jar.exists()) {
                         Files.move(jar.toPath(), backup.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     }
-                    jar.createNewFile();
-                    // JOptionPane.showMessageDialog(null, "Kopiere " + file.toPath() + " nach " + jar.toPath());
-                    Files.copy(file.toPath(), jar.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(this, "Konnte " + jar.toPath() + " nicht nach " + backup.toPath() + " sichern!", "abbozza! Fehler", JOptionPane.ERROR_MESSAGE);
-                    this.setVisible(false);
-                    System.exit(1);
+                    int opt = JOptionPane.showConfirmDialog(this, "Could not backup previous version.\nContinue installation?", "abbozza! Fehler", JOptionPane.YES_NO_OPTION);
+                    if (opt == JOptionPane.NO_OPTION) {
+                        this.setVisible(false);
+                        System.exit(1);
+                    }
                 }
-                
-                try {
-                    // Install libraries
-                    JarFile jarFile = new JarFile(jar);
-                    File libDir = new File(sketchbookDir + "/libraries/Abbozza/");
-                    libDir.mkdirs();
 
-                    JarEntry entry;
-                    Enumeration<JarEntry> entries = jarFile.entries();
-                    File dir = new File(sketchbookDir + "/libraries/Abbozza/");
-                    try {
-                        Files.createDirectory(dir.toPath());
-                    } catch (FileAlreadyExistsException ex) {}              
-                    while (entries.hasMoreElements()) {
-                        entry = entries.nextElement();
-                        if (entry.getName().startsWith("libraries/Abbozza/")) {
-                            String name = entry.getName().replace("libraries/Abbozza/", "");
-                            if ( name.length() > 0 ) {
-                                File target = new File(sketchbookDir + "/libraries/Abbozza/" + name);
-                                Files.copy(jarFile.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);            
-                            }
+                /**
+                 * 3rd step:
+                 * Copy abbozza-arduino.jar to target directory
+                 */
+                jar.createNewFile();
+                Files.copy(file.toPath(), jar.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                /**
+                 * 4th step:
+                 * Install libraries
+                 */
+                JarFile jarFile = new JarFile(jar);
+                File libDir = new File(sketchbookDir + "/libraries/Abbozza/");
+                libDir.mkdirs();
+
+                JarEntry entry;
+                Enumeration<JarEntry> entries = jarFile.entries();
+                File dir = new File(sketchbookDir + "/libraries/Abbozza/");
+                try {
+                    Files.createDirectory(dir.toPath());
+                } catch (FileAlreadyExistsException ex) {}
+                
+                while (entries.hasMoreElements()) {
+                    entry = entries.nextElement();
+                    if (entry.getName().startsWith("libraries/Abbozza/")) {
+                        String name = entry.getName().replace("libraries/Abbozza/", "");
+                        if (name.length() > 0) {
+                            File target = new File(sketchbookDir + "/libraries/Abbozza/" + name);
+                            Files.copy(jarFile.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
                         }
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace(System.err);
                 }
-                
-                // Create configuration file
+
+                /**
+                 * 5th step:
+                 * Create user configuration file
+                 */ 
                 try {
                     File prefFile = new File(System.getProperty("user.home") + "/.abbozza/arduino/abbozza.cfg");
                     prefFile.getParentFile().mkdirs();
@@ -356,27 +391,39 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
 
                     config.store(new FileOutputStream(prefFile), "abbozza! preferences");
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(this, System.getProperty("user.home") + "/.abbozza/arduino/abbozza.cfg konnte nicht angelegt werden!\n"
-                            + ex.getLocalizedMessage(), "abbozza! Fehler", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, System.getProperty("user.home") + "/.abbozza/arduino/abbozza.cfg could not be created!\n"
+                            + ex.getLocalizedMessage(), "abbozza! installation error", JOptionPane.ERROR_MESSAGE);
                     this.setVisible(false);
                     System.exit(1);
                 }
 
-                JOptionPane.showMessageDialog(this, "Die Installation war erfolgreich!", "abbozza! installiert", JOptionPane.INFORMATION_MESSAGE);
+                /**
+                 * 6th step:
+                 * Add start menu entry for ...
+                 * (For later use)
+                 */
+                
+                /**
+                 * 7th step:
+                 * Confirm successfull installation
+                 */
+                JOptionPane.showMessageDialog(this, "Installation successfull!", "abbozza! installed", JOptionPane.INFORMATION_MESSAGE);
                 this.setVisible(false);
                 System.exit(0);
+                
             } else {
-                JOptionPane.showMessageDialog(this, "Jar nicht gefunden!", "abbozza! Installationsfehler ",
+                JOptionPane.showMessageDialog(this, "abbozza-arduino.jar not found!", "abbozza! installation error",
                         JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
             }
         } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Jar nicht gefunden!", "abbozza! Installationsfehler ",
-                        JOptionPane.ERROR_MESSAGE);
-                System.exit(1);
+            JOptionPane.showMessageDialog(this, "abbozza-arduino.jar not found!", "abbozza! installation error",
+                    JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
         }
     }//GEN-LAST:event_installButtonActionPerformed
 
+    
     private void sketchbookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sketchbookButtonActionPerformed
         JFileChooser chooser = new JFileChooser(sketchbookField.getText());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
