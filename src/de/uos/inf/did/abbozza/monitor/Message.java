@@ -102,7 +102,7 @@ public class Message {
     }
     
     public boolean isTimedOut() {
-        return (System.currentTimeMillis() > _stoptime );
+        return ( System.currentTimeMillis() > _stoptime );
     }
 
     String getIdPostfix() {

@@ -12,12 +12,17 @@ package de.uos.inf.did.abbozza.install;
 public class InstallToolMac extends InstallTool {
 
     @Override
-    public void addAppToMenu(String name, String path, String icon, boolean global) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean isAdministrator() {
+        return false;
     }
 
     @Override
-    public boolean isAdministrator() {
+    public String getSystem() {
+        return "Mac";
+    }
+
+    @Override
+    public boolean addAppToMenu(String fileName, String name, String genName, String path, String icon, boolean global) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

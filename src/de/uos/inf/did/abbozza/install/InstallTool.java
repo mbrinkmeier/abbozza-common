@@ -9,6 +9,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,6 +42,7 @@ public abstract class InstallTool {
         String osName = System.getProperty("os.name");
         
         if (osName.indexOf("Linux") != -1) {
+            tool = new InstallToolLinux();
         } else if (osName.indexOf("Mac") != -1) {
             tool = new InstallToolMac();
         } else if (osName.indexOf("Windows") != -1) {
@@ -39,7 +52,14 @@ public abstract class InstallTool {
         return tool;
     }
 
+
+    /**
+     * 
+     * @return 
+     */
+    public abstract String getSystem();
     
+   
     /**
      * This operation writes the content of an InputStream to the given file.
      * 
@@ -63,12 +83,15 @@ public abstract class InstallTool {
      * This operation adds a given app to the start menu. It has to be
      * implemented in the OS-specific install tools.
      * 
+     * @param fileName
      * @param name Name of the menu entry.
+     * @param genName
      * @param path Path to the executable starting the app.
      * @param icon Path to the icon fpr the entry.
      * @param global If true, the menu entry should be installed for all users.
+     * @return 
      */
-    public abstract void addAppToMenu(String name, String path, String icon, boolean global);
+    public abstract boolean addAppToMenu(String fileName, String name, String genName, String path, String icon, boolean global);
     
     
     /**
@@ -85,7 +108,62 @@ public abstract class InstallTool {
      * 
      * @return the user directory.
      */
-    public String userDir() {
+    public String getUserDir() {
         return System.getProperty("user.home");
     }
+    
+    public File getInstallerJar() {
+        URI uri = null;
+        File installFile;
+        try {
+            uri = InstallTool.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+            installFile = new File(uri);
+        } catch (URISyntaxException ex) {
+            JOptionPane.showMessageDialog(null, "Unexpected error: Malformed URL " + uri.toString()
+                    + "Start installer from jar!", "abbozza! installation error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        return installFile;
+    }
+    
+    public boolean copyFromJar(ZipFile file, String fromEntry, String path) {
+        try {
+            ZipEntry entry = file.getEntry(fromEntry);
+            File target = new File(path);
+            Files.copy(file.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            if ( target.getAbsolutePath().endsWith(".sh") || target.getAbsolutePath().endsWith(".bat")) {
+                target.setExecutable(true);
+            }
+            return true;
+        } catch (IOException ex) {
+            ex.printStackTrace(System.out);
+            return false;
+        }
+    }
+    
+    public boolean copyDirFromJar(JarFile file, String fromEntry, String path) {
+        try {
+            Enumeration<JarEntry> entries = file.entries();
+            while ( entries.hasMoreElements() ) {
+                JarEntry entry = entries.nextElement();
+                if ( entry.getName().startsWith(fromEntry)) {
+                    String name = entry.getName().replace(fromEntry, "");
+                    File target = new File(path + name);
+                    if (entry.isDirectory()) {
+                        target.mkdir();
+                    } else {
+                        Files.copy(file.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        if ( target.getAbsolutePath().endsWith(".sh") || target.getAbsolutePath().endsWith(".bat")) {
+                            target.setExecutable(true);
+                        }
+                    }
+                }
+            }
+            return true;
+        } catch (IOException ex) {
+            ex.printStackTrace(System.out);
+            return false;
+        }
+    }
+
 }

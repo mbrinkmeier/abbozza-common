@@ -24,14 +24,11 @@ package de.uos.inf.did.abbozza;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
 import javax.xml.XMLConstants;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -41,8 +38,6 @@ public class AbbozzaLocale {
 
     private static String locale;
     private static Document localeXml;
-    // private static Hashtable entries;
-    // private static Properties entries;
 
     /**
      * Set the current locale and reads it from the xml-files
@@ -50,28 +45,42 @@ public class AbbozzaLocale {
      * @param loc 
      */
     public static void setLocale(String loc) {
-        // entries = new Properties();
         locale = loc;
         localeXml = buildLocale();
-        // entries = new Hashtable<String,String>();
         
         NodeList nodes = localeXml.getElementsByTagName("msg");
         for (int i = 0; i < nodes.getLength(); i++ ) {
             Element node = (Element) nodes.item(i);
             node.setIdAttribute("id", true);
-        }
-        
-        
-        // addLocaleXml("/js/languages/" + locale + ".xml");
-        // addLocaleXml("/js/abbozza/" +  AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");
-        // Document doc = AbbozzaServer.getPluginManager().getLocales(locale); 
-        // addLocaleXml(doc);
+        }        
     }
 
-        private static Document buildLocale() {
+    /**
+     * Build the locale from the given directory
+     * 
+     * @param loc The locale
+     * @param path The directory in wjhich the locale files are located.
+     */
+    public static void setLocale(String loc, JarFile jar, String path) {
+        locale = loc;
+        localeXml = buildLocale(jar,path);
+        
+        NodeList nodes = localeXml.getElementsByTagName("msg");
+        for (int i = 0; i < nodes.getLength(); i++ ) {
+            Element node = (Element) nodes.item(i);
+            node.setIdAttribute("id", true);
+        }        
+    }
+    
+    
+    /**
+     * Builds the locale from common, system specific and plugin locales
+     * 
+     * @return 
+     */
+    private static Document buildLocale() {
         try {
-            // Read the xml file for the global feature
-            
+            // Prepare internal locale
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema();
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -79,9 +88,9 @@ public class AbbozzaLocale {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document localeXml = builder.newDocument();
             Element root = localeXml.createElement("languages");
-            localeXml.appendChild(root);
-            
+            localeXml.appendChild(root);            
             String locale = AbbozzaLocale.locale;
+            
             Document globalLocale = fetchLocale("/js/languages/" + locale + ".xml");
                     
             Element foundElement = null;
@@ -130,6 +139,58 @@ public class AbbozzaLocale {
         }
     }
 
+    /**
+     * Builds the locale from the specified path
+     * 
+     * @return 
+     */
+    private static Document buildLocale(JarFile jar, String path) {
+        try {
+            // Prepare internal locale
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setSchema(schema);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document localeXml = builder.newDocument();
+            Element root = localeXml.createElement("languages");
+            localeXml.appendChild(root);            
+            String locale = AbbozzaLocale.locale;
+            
+            Document globalLocale = fetchLocale(jar, path + locale + ".xml");
+            
+            Element foundElement = null;
+            if ( globalLocale != null ) {
+                NodeList languages = globalLocale.getElementsByTagName("language");
+                for ( int i = 0; i < languages.getLength(); i++ ) {
+                    Element element = (Element) languages.item(i);
+                    if ( (foundElement == null) || (locale.equals(element.getAttribute("id"))) ) {
+                        foundElement = element;
+                    }
+                }
+                if ( foundElement != null ) {
+                    Element child = (Element) foundElement.cloneNode(true);
+                    localeXml.adoptNode(child);
+                    root.appendChild(child);
+                    child.setAttribute("id","global_" + locale);
+                }
+            }
+                        
+            return localeXml;
+        } catch (Exception ex) {
+            AbbozzaLogger.stackTrace(ex);
+            return null;
+        }
+    }
+
+
+
+    /**
+     * Loads the locale xml from the given path.
+     * 
+     * @param path
+     * @return 
+     */
     private static Document fetchLocale(String path) {
         Document localeXml = null;
 
@@ -139,6 +200,33 @@ public class AbbozzaLocale {
         try {
             AbbozzaLogger.out("LocaleHandler: Loading locale from " + path,AbbozzaLogger.INFO);
             InputStream stream = AbbozzaServer.getInstance().getJarHandler().getInputStream(path);
+            
+            builder = factory.newDocumentBuilder();
+            localeXml = builder.parse(stream);            
+        } catch (Exception ex) {
+            AbbozzaLogger.out("LocaleHandler: " + path + " not found");
+            localeXml = null;
+        }
+       
+        return localeXml;
+    }
+
+        /**
+     * Loads the locale xml from the given path.
+     * 
+     * @param path
+     * @return 
+     */
+    private static Document fetchLocale(JarFile jar, String path) {
+        Document localeXml = null;
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        
+        try {
+            AbbozzaLogger.out("LocaleHandler: Loading locale from " + path,AbbozzaLogger.INFO);
+            ZipEntry entry = jar.getEntry(path);
+            InputStream stream = jar.getInputStream(entry);
             
             builder = factory.newDocumentBuilder();
             localeXml = builder.parse(stream);            

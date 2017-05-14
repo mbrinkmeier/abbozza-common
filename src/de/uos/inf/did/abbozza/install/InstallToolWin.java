@@ -5,6 +5,10 @@
  */
 package de.uos.inf.did.abbozza.install;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  *
  * @author mbrinkmeier
@@ -12,13 +16,54 @@ package de.uos.inf.did.abbozza.install;
 public class InstallToolWin extends InstallTool {
 
     @Override
-    public void addAppToMenu(String name, String path, String icon, boolean global) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean isAdministrator() {
+        return false;
     }
 
     @Override
-    public boolean isAdministrator() {
-        return false;
+    public String getSystem() {
+        return "Win";
+    }
+
+    private String desktopEntry = 
+        "[Desktop Entry]\n" + 
+        "Type=Application\n" + 
+        "Name=##name##\n" +
+        "GenericName=##genname##\n" +
+        "Exec=##path##\n" + 
+        "Categories=Development;IDE;Education\n" +
+        "Icon=##icon##";
+
+    @Override
+    public boolean addAppToMenu(String fileName, String name, String genName, String path, String icon, boolean global) {
+        try {
+            String entry = desktopEntry;
+            entry = entry.replace("##name##",name);
+            entry = entry.replace("##genname##",genName);
+            entry = entry.replace("##path##",path);
+            entry = entry.replace("##icon##",icon);
+            
+            File file;
+            if ( global ) {
+                file = new File("C:/ProgramData/Microsoft/Windows/Start Menu/Programs/" + fileName + ".desktop");
+            } else {
+                file = new File( System.getenv("APPDATA") + "/Microsoft/Windows/Start Menu/Programs/" + fileName + ".desktop");
+            }
+
+            file.createNewFile();
+            
+            if ( file.exists() ) {
+                PrintWriter out = new PrintWriter(file);
+                out.print(entry);
+                out.close();
+            } else {
+                System.out.println(file.getAbsolutePath() + " existiert nicht");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace(System.out);
+            return false;
+        }
+        return true;
     }
     
 }
