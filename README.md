@@ -1,6 +1,6 @@
 # abbozza-common
 
-The project provides the common classes and files for the graphical and educational programming language abbozza!
+The project provides the common classes and files for the graphical and educational programming language [abbozza!](http://inf-didaktik.rz.uos.de/abbozza)
 
 ## About abbozza!
 
@@ -14,11 +14,16 @@ It allows graphical programming with [scratch-like blocks](http://scratch.mit.ed
 
 ![An example program](http://inf-didaktik.rz.uos.de/abbozza/img/binaer.png)
 
-abbozza! is being developed by the working group [Didactics of Computer Science](https://www.inf.uni-osnabrueck.de/arbeitsgruppen/didaktik.html) at the [University Osnabrück, Germany](https://uos.de).
+[abbozza!](http://inf-didaktik.rz.uos.de/abbozza) is being developed by the working group [Didactics of Computer Science](https://www.inf.uni-osnabrueck.de/arbeitsgruppen/didaktik.html) at the [University Osnabrück, Germany](https://uos.de).
+
+## How to use
+
+**abbozza-common** provides classes and files for the platform-specific IDEs. As such it is a prerequisite for the platform specific projects [abbozza-arduino](https://github.com/mbrinkmeier/abbozza-arduino) and 
+[abbozza-calliope](https://github.com/mbrinkmeier/abbozza-calliope).
 
 ## How to build
 
-abbozza-common is a Netbeans Project. It provides the common classes and files for the projects
+**abbozza-common** is a Netbeans Project. It provides the common classes and files for the projects
 [abbozza-arduino](https://github.com/mbrinkmeier/abbozza-arduino) and 
 [abbozza-calliope](https://github.com/mbrinkmeier/abbozza-calliope), which implement the IDEs for
 the specific platforms. The latter additionally requires the installer provided by [abbozza-calliope-install](https://github.com/mbrinkmeier/abbozza-calliope-install).
