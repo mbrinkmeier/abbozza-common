@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="en">
+    <msg id="GUI.TITLE">abbozza! Arduino Installer</msg>
+    <msg id="GUI.INSTALL_DIR">The sketchbook directory</msg>
+    <msg id="GUI.BROWSER">Browser to be used by abbozza!</msg>
+    <msg id="GUI.CANCEL">Cancel</msg>
+    <msg id="GUI.INSTALL">Install</msg>
+    <msg id="GUI.SELECT_EXECUTABLES">Select executable program</msg>
+    <msg id="GUI.MESSAGE"> Welcome!
+
+abbozza! Arduino requires:
+- Java 1.7 or higher
+- the Arduino IDE 1.6.4 or higher
+- a JavaScript-enabled browser
+
+Thank you for using abbozza! Arduino
+        
+The abbozza! Team </msg>
+
+    <msg id="MSG.PREREQUISITES">
+The Arduino IDE is required and shold be started at least
+once before abbozza! is installed!
+    </msg>
+
+    <msg id="MSG.ALREADY_INSTALLED">abbozza! Arduino is installed already!</msg>
+    <msg id="MSG.CONTINUE_INSTALLATION">Continue installation?</msg>
+    <msg id="MSG.SUCCESS">Installation successfull completed!</msg>    
+ 
+    <msg id="ERR.TITLE">Error!</msg>
+    <msg id="ERR.CANNOT_WRITE">Can't write into #!</msg>
+    <msg id="ERR.CANNOT_BACKUP">Can't backup previous installation!</msg>
+    <msg id="ERR.YOTTA_MISSING">Yotta could not be found!</msg>
+    
+    <msg id="MSG.STARTING_INSTALLATION">Installation started ...</msg>
+    <msg id="MSG.CHECKING_PREREQUISITES">... checking prereqisites</msg>
+    <msg id="MSG.CREATING_DIR">... directory # created</msg>
+    <msg id="MSG.BACKUP">... moving old version to #</msg>
+    <msg id="MSG.WRITING">... writing #</msg>
+    <msg id="MSG.ADDING_MENU">... generating menu entries</msg>
+    <msg id="MSG.WRITING_CONFIGURATION">... writing configuration file #</msg>
+</language>
