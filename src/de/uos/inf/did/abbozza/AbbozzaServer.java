@@ -90,8 +90,8 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     // Version
     public static final int VER_MAJOR = 0;
-    public static final int VER_MINOR = 8;
-    public static final int VER_REV = 4;
+    public static final int VER_MINOR = 9;
+    public static final int VER_REV = 0;
     public static final int VER_HOTFIX = 0;
     public static final String VER_REM = "";
     public static final String VERSION = "" + VER_MAJOR + "." + VER_MINOR + "." + VER_REV + "." + VER_HOTFIX + " " + VER_REM;
@@ -100,10 +100,14 @@ public abstract class AbbozzaServer implements HttpHandler {
     private static AbbozzaServer instance;
 
     // The paths
-    protected String globalJarPath;      // The directory containing the global jar
-    protected String localJarPath;       // The directory containig the local jar
+    protected String globalJarPath;     // The directory containing the global jar
+    protected String localJarPath;      // The directory containig the local jar
     protected String sketchbookPath;    // The default path fpr local Sketches
     protected String configPath;        // The path to the config file
+    protected String userPath;          // The path to the user directory
+    protected String jarPath;           // The parent directory of the jar
+    protected String globalPluginPath;
+    protected String localPluginPath;
 
     // several attributes
     protected String system;                // the name of the system (used for paths)
@@ -119,8 +123,6 @@ public abstract class AbbozzaServer implements HttpHandler {
     public MonitorHandler monitorHandler;
     private URL _lastSketchFile = null;
     private URL _taskContext;
-    protected String globalPluginPath;
-    protected String localPluginPath;
     private PluginManager pluginManager;
 
     protected String _boardName;
@@ -160,7 +162,7 @@ public abstract class AbbozzaServer implements HttpHandler {
          * Read the configuration from
          * <user.home>/.abbozza/<system>/abbozza.cfg
          */
-        configPath = System.getProperty("user.home") + "/.abbozza/" + this.system + "/abbozza.cfg";
+        // configPath = userPath + this.system + "/abbozza.cfg";
         System.out.println("Reading config from " + configPath);
         config = new AbbozzaConfig(configPath);
 
@@ -192,7 +194,31 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     }
 
-    public abstract void setPaths();
+    /**
+     * This default operation sets the main paths
+     */
+    public void setPaths() {
+        userPath = System.getProperty("user.home") + "/.abbozza/" + system;
+        configPath = userPath + "/abbozza.cfg";
+        
+        URI uri = null;
+        File installFile = new File("/");
+        try {
+            uri = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+            installFile = new File(uri);
+        } catch (URISyntaxException ex) {
+            JOptionPane.showMessageDialog(null, "Unexpected error: Malformed URL " + uri.toString()
+                    + "Start installer from jar!", "abbozza! installation error", JOptionPane.ERROR_MESSAGE);
+        }
+        jarPath = installFile.getParentFile().getAbsolutePath();
+        
+        globalJarPath = "";
+        localJarPath = "";
+        sketchbookPath = "";
+        globalPluginPath = "";
+        localPluginPath = "";
+    };
+    
     public abstract void registerSystemHandlers();
 
     
@@ -390,11 +416,10 @@ public abstract class AbbozzaServer implements HttpHandler {
     public void startServer() {
 
         if ((!isStarted) && (AbbozzaServer.getInstance() == this)) {
-
             this.isStarted = true;
 
-            AbbozzaLogger.out("Duplexer Started ... ", AbbozzaLogger.INFO);
-            AbbozzaLogger.out("Starting ... ", AbbozzaLogger.INFO);
+            // AbbozzaLogger.out("Duplexer Started ... ", AbbozzaLogger.INFO);
+            AbbozzaLogger.out("Starting server ... ", AbbozzaLogger.INFO);
 
             serverPort = config.getServerPort();
             while (httpServer == null) {
@@ -419,6 +444,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     public void startBrowser(String file) {
+        AbbozzaLogger.out("Starting browser");
         Runtime runtime = Runtime.getRuntime();
 
         if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {

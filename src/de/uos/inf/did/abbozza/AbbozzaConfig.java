@@ -16,7 +16,35 @@
  * the License.
  */
 /**
- * @fileoverview ... @author michael.brinkmeier@uni-osnabrueck.de (Michael
+ * @fileoverview AbbozzaConfig manages a set of preferences, settings, options 
+ * and properties required by an abbozza! server.
+ * 
+ * It handles three types of properties:
+ * 
+ * 1) Base Properties
+ *    These are settings required by the server. Each instance of AbbozzaConfig
+ *    provides at least the default values for these properties.
+ *    They are:
+ *    - The port on which the servber should run (if possible)
+ *    - A flag indicating wether the server is automatically started (arduino)
+ *    - The path to the used browser
+ *    - A flag inidcating wether the browser should be started immediately
+ *    - The locale
+ *    - The update url
+ *    - A flag inidcating wether the server should check for updates
+ *    - The path of the task directory
+ *    - A flag inidcating if the task should be editable
+ * 
+ * 2) Additional Properties
+ *    These properties are settings required by specific implementations.
+ *    They contain string values and are identified by specific keys.
+ * 
+ * 3) Options
+ *    Options are described in the options.xml file and are configurable in the
+ *    Option tree, displayed in the config dialog. They vcan be set and read by
+ *    several operations, depending on the type of the values.
+ * 
+ * @author michael.brinkmeier@uni-osnabrueck.de (Michael
  * Brinkmeier)
  */
 package de.uos.inf.did.abbozza;
@@ -53,23 +81,31 @@ public class AbbozzaConfig {
 
     /**
      * Reads the configuration from the given path.
+     * The file is a standard properties file, consisting of
+     * key-value-pairs.
+     * 
+     * @param path The path of the file to be read.
      */
     public AbbozzaConfig(String path) {
         configPath = path;
         read();
     }
 
+    
     /**
-     * Sets the default configuration
+     * Constructs an AbbozzaConfig object containing only the default
+     * base properties and an empty browser Path.
      */
     public AbbozzaConfig() {
         configPath = null;
         setDefault("");
     }
 
+    
+    
     /**
-     * This method reads the configuration from the file. If the file does not
-     * exist, set the default configuration and write it.
+     * This method reads the configuration from the file at configPath. 
+     * If the file does not exist, set the default configuration and write it.
      */
     public void read() {
         if (configPath == null) {
@@ -91,7 +127,10 @@ public class AbbozzaConfig {
     }
 
     /**
-     * Prepare the default configuration
+     * Prepare the default configuration. The browser path is set to the
+     * given value.
+     * 
+     * @param browserPath The browser path to be set.
      */
     public void setDefault(String browserPath) {
         config = new Properties();
@@ -111,9 +150,12 @@ public class AbbozzaConfig {
         setDefaultOptions();
         AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         AbbozzaLogger.out("Default configuration set", AbbozzaLogger.INFO);
-        // }        
     }
 
+    /**
+     * This operation sets the default values of all options given in the
+     * option tree of the associated server.
+     */
     public void setDefaultOptions() {
         Document optionXml = AbbozzaServer.getInstance().getOptionTree();
 
@@ -138,14 +180,13 @@ public class AbbozzaConfig {
         }
     }
 
+    /**
+     * This operation sets the various settings by the given properties.
+     * If a config file is set, the configuration is stored there afterwards.
+     * 
+     * @param properties The collection of values to be set.
+     */
     public void set(Properties properties) {
-
-        if ("true".equals(properties.get("freshInstall"))) {
-            AbbozzaLogger.out("Setting default configuration after fresh install", AbbozzaLogger.NONE);
-            setDefault(properties.getProperty("browserPath"));
-            write();
-            return;
-        }
 
         config = (Properties) properties.clone();
 
@@ -173,10 +214,12 @@ public class AbbozzaConfig {
         } else {
             AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         }
+
+        write();        
     }
 
     /**
-     * Writes the current configuration to a file
+     * Writes the current configuration to the config file, if one is given.
      */
     public void write() {
         if (configPath == null) {
@@ -196,7 +239,7 @@ public class AbbozzaConfig {
     }
 
     /**
-     *
+     * This operation returns a clone of the current settings.
      */
     public Properties get() {
         Properties props = (Properties) config.clone();
@@ -208,7 +251,10 @@ public class AbbozzaConfig {
     }
 
     /*
-     * Stores the current config_* values in the properties
+     * Stores the current config_* values in the given properties.
+     * 
+     * @param props The Properties object into which the current values should
+     * be stored.
      */
     private void storeProperties(Properties props) {
         props.setProperty("autoStart", config_autoStart ? "true" : "false");
@@ -228,7 +274,7 @@ public class AbbozzaConfig {
      * The string contains a series of <key>=<value> pairs, seperated by
      * commata and enclosed in braces {,}
      * 
-     * @param options
+     * @param options The string continiag the key-value-pairs
      * @throws IOException 
      */
     public void apply(String options) throws IOException {
@@ -246,6 +292,26 @@ public class AbbozzaConfig {
      * Operations for setting and retreiving options from the option tree.
      * 
      */
+    
+    /**
+     * Set an additional Property.
+     * 
+     * @param key The key
+     * @param value The value
+     */
+    public void setProperty(String key, String value) {
+        config.setProperty(key, value);
+    }
+    
+    /**
+     * Retreive an additional property.
+     * 
+     * @param key The key of the requested property
+     * @return  The value
+     */
+    public String getProperty(String key) {
+        return config.getProperty(key);
+    }
     
     /**
      * Set a boolean option
