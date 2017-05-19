@@ -36,8 +36,11 @@ import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.arduino.handler.BoardHandler;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -60,8 +63,57 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     public String runtimePath;
 
+    public static URI jarUri;
+    
+    public static boolean isGlobal;
+    public static boolean localExists;
+    public static String name;
+    
+    // During class load check is this calss is loaded from the global tool jar
+    static {
+        isGlobal = true;
+        localExists = false;
+        jarUri = null;
+        try {
+            // Get jar file
+            jarUri = Abbozza.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+            
+            // Get 
+            File sketchbookFolder = BaseNoGui.getSketchbookFolder();
+            System.out.println("Checking sketchbook folder: " + sketchbookFolder.toURI().toString());
+            File localJar = new File(sketchbookFolder,"/tools/Abbozza/tool/abbozza-arduino.jar");
+            if ( localJar.exists() ) {
+                System.out.println("LOCAL jar found at " + localJar.toURI().toString());
+                localExists = true;
+                if ( localJar.toURI().toString().startsWith(jarUri.toString())) {
+                    isGlobal = false;
+                } else {
+                    isGlobal = true;
+                    System.out.println("GLOBAL jar found at " + jarUri.toString());
+                }
+            } else {
+                isGlobal = true;
+                System.out.println("GLOBAL jar found at " + jarUri.toString());
+            }
+        } catch (URISyntaxException ex) {
+        }
+
+        if ( jarUri == null ) {
+            System.out.println("abbozza! in panic! Cannot find abbozza-arduino.jar!");
+            System.exit(1);
+        }        
+    }
+    
+    
+    
     @Override
     public void init(Editor editor) {        
+        
+        if ( isGlobal && localExists ) {
+            System.out.println("Suppressing global abbozza! tool, since local version exists!");
+            return;
+        }
+        
         String version = BaseNoGui.VERSION_NAME;
         int pos = version.indexOf('.');
         arduino_major = Integer.parseInt(version.substring(0, pos));
@@ -76,6 +128,11 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     @Override
     public void run() {
+        if ( isGlobal && localExists ) {
+            System.out.println("Suppressing global abbozza! tool, since local version exists!");
+            return;
+        }
+
         // Do not start a second Abbozza instance!
         if (Abbozza.getInstance() != this) {
             return;
@@ -118,9 +175,10 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
     public void findJarsAndDirs(JarDirHandler jarHandler) {
         jarHandler.clear();
         jarHandler.addDir(sketchbookPath + "/tools/Abbozza/web", "Local directory");
-        jarHandler.addJar(sketchbookPath + "/tools/Abbozza/tool/abbozza-arduino.jar", "Local jar");
+        // jarHandler.addJar(sketchbookPath + "/tools/Abbozza/tool/abbozza-arduino.jar", "Local jar");
         jarHandler.addDir(runtimePath + "tools/Abbozza/web", "Global directory");
-        jarHandler.addJar(runtimePath + "tools/Abbozza/tool/abbozza-arduino.jar", "Global jar");
+        // jarHandler.addJar(runtimePath + "tools/Abbozza/tool/abbozza-arduino.jar", "Global jar");
+        jarHandler.addJar(jarUri, "Jar");
     }
 
     public void print(String message) {
@@ -134,6 +192,10 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     @Override
     public String getMenuTitle() {
+        if ( isGlobal && localExists ) {
+            System.out.println("Suppressing global abbozza! tool, since local version exists!");
+            return "abbozza! (deactivated)";
+        }        
         return "abbozza!";
     }
 
