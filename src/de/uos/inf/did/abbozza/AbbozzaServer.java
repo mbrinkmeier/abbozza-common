@@ -250,13 +250,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         return this.system;
     }
 
-    public void findJarsAndDirs(JarDirHandler jarHandler) {
-        jarHandler.clear();
-        jarHandler.addDir(localJarPath, "Local directory");
-        jarHandler.addJar(localJarPath + "/Abbozza.jar", "Local jar");
-        jarHandler.addDir(globalJarPath, "Global directory");
-        jarHandler.addJar(globalJarPath + "/Abbozza.jar", "Global jar");
-    }
+    public abstract void findJarsAndDirs(JarDirHandler jarHandler);
 
 
     public void registerHandlers() {
@@ -429,7 +423,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                     httpServer.start();
                     AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
                 } catch (Exception e) {
-                    AbbozzaLogger.stackTrace(e);
+                    // AbbozzaLogger.stackTrace(e);
                     AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
                     serverPort++;
                     httpServer = null;

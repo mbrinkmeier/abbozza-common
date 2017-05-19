@@ -22,6 +22,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This HttpHandler handles requests for files which can be in one of several
@@ -95,6 +97,22 @@ public class JarDirHandler implements HttpHandler {
             return;
         }        
         entries.add(uri);
+    }
+
+    /**
+     * Add a jar to the list of possible locations.
+     * 
+     * @param uri The uri to the jar
+     * @param name the name for messagaging purposes
+     */
+    public void addJar(URI uri, String name) {
+        try {
+            URI jarUri = new URI("jar:"+ uri.toString() + "!");
+            AbbozzaLogger.out("JarHandler: " + name + " : " + jarUri.toString(),AbbozzaLogger.DEBUG);
+            entries.add(jarUri);
+        } catch (URISyntaxException ex) {
+            AbbozzaLogger.err("Malformed URL: jar:" + uri.toString() + "!");
+        }
     }
     
     
