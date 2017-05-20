@@ -71,7 +71,7 @@ public class Sender extends Thread {
         // Check if web message
         if ( msg.getHandler() == null ) {
             // If not, simply write it
-            AbbozzaLogger.out("AbbozzaMonitor: Sending " + msg.toString() + " to board",AbbozzaLogger.DEBUG);            
+            AbbozzaLogger.out("Sender: Sending " + msg.toString() + " to board",AbbozzaLogger.DEBUG);            
             _monitor.writeMessage(msg.toString());  
         } else {
             // Otherwise        
@@ -85,7 +85,7 @@ public class Sender extends Thread {
                     }
                 }
             } else {        
-                AbbozzaLogger.out("AbbozzaMonitor: Sending " + msg.toString() + " to board",AbbozzaLogger.DEBUG);            
+                AbbozzaLogger.out("Sender: Sending " + msg.toString() + " to board",AbbozzaLogger.DEBUG);            
                 if (msg.getTimeout() == 0) {
                     _monitor.writeMessage(msg.toString());  
                 } else {

@@ -38,6 +38,13 @@ public class Message {
     private SerialHandler _handler;
     private long _timeout;
     private long _stoptime;
+    private int _state;
+    private String _response;
+    
+    public static final int WAITING = 0;
+    public static final int TIMEDOUT = -1;
+    public static final int RESPONSE_READY = 1;
+    public static final int DONE = 2;
  
     /*
     public Message(String id, String msg) {
@@ -64,6 +71,11 @@ public class Message {
         _exchg = exchg;
         _handler = handler;
         _timeout = timeout;
+        if ( _timeout == 0 ) {
+            _state = DONE;
+        } else {
+            _state = WAITING;
+        }
     }
     
     public String getMsg() {
@@ -85,6 +97,14 @@ public class Message {
         return _msg;
     }
 
+    public int getState() {
+        return _state;
+    }
+    
+    public void setState(int state) {
+        _state = state;
+    }
+    
     public HttpExchange getHttpExchange() {
         return _exchg;
     }
@@ -102,10 +122,22 @@ public class Message {
     }
     
     public boolean isTimedOut() {
-        return ( System.currentTimeMillis() > _stoptime );
+        if ( System.currentTimeMillis() > _stoptime ) {
+            _state = TIMEDOUT;
+            return true;
+        }
+        return false;
     }
 
     String getIdPostfix() {
         return this._idPostfix;
+    }
+    
+    public String getResponse() {
+        return _response;
+    }
+    
+    public void setResponse(String resp) {
+        _response = resp;
     }
 }

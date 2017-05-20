@@ -27,9 +27,12 @@ import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
+import de.uos.inf.did.abbozza.monitor.Message;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -49,7 +52,6 @@ public class SerialHandler extends AbstractHandler {
         // No timeout means that the request is not waitung
         query = query.replace("%20"," ");
         AbbozzaLogger.out("SerialHandler: received " + he.getRequestURI().toString(),AbbozzaLogger.DEBUG);
-        AbbozzaLogger.out("SerialHandler: received " + query,AbbozzaLogger.DEBUG);
         query = query.replace('&', '\n');
         Properties props = new Properties();
         props.load(new StringReader(query));
@@ -59,7 +61,27 @@ public class SerialHandler extends AbstractHandler {
         }
         AbbozzaMonitor monitor = this._abbozzaServer.monitorHandler.getMonitor();
         if ( monitor != null ) {
-           monitor.sendMessage((String) props.get("msg"), he, this, timeout);
+           Message msg = monitor.sendMessage((String) props.get("msg"), he, this, timeout);
+           while ( msg.getState() == Message.WAITING ) {
+               try {
+                   Thread.sleep(100);
+               } catch (InterruptedException ex) {
+               }
+           }
+           switch ( msg.getState() ) {
+               case Message.DONE:
+                   AbbozzaLogger.out("SerialHandler: message sent");
+                    sendResponse(he, 200, "text/plain", ""); 
+                    break;
+               case Message.TIMEDOUT:
+                    AbbozzaLogger.out("SerialHandler: message timed out");
+                    sendResponse(he, 400, "text/plain", "query timed out!"); 
+                    break;
+               case Message.RESPONSE_READY:
+                    AbbozzaLogger.out("SerialHandler: received : " + msg.getResponse());
+                    sendResponse(he, 200, "text/plain", msg.getResponse() ); 
+                    break;
+           } 
         } else {
            sendResponse(he, 400, "text/plain", "No board listens!"); 
         }

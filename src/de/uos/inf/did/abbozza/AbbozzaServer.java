@@ -61,6 +61,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -420,6 +421,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                 try {
                     httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
                     registerHandlers();
+                    httpServer.setExecutor(Executors.newCachedThreadPool()); // ATTENTION
                     httpServer.start();
                     AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
                 } catch (Exception e) {

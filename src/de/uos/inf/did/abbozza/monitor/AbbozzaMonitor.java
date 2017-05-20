@@ -38,8 +38,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Level;
@@ -69,7 +71,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     private SerialPort serialPort;
     private StringBuffer unprocessedMsg;
     private HashMap<String, MonitorPanel> panels;
-    protected ArrayBlockingQueue<Message> _msgQueue;
+    protected Queue<Message> _msgQueue;
     protected HashMap<String, Message> _waitingMsg;
     private Sender _sender;
 
@@ -98,7 +100,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     }
 
     private void init() {
-        _msgQueue = new ArrayBlockingQueue<Message>(10);
+        // _msgQueue = new ArrayBlockingQueue<Message>(100);
+        _msgQueue = new ArrayDeque<Message>(100);
         _waitingMsg = new HashMap<String, Message>();
 
         _sender = new Sender(this);
@@ -318,11 +321,13 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                 // Remove timed out requests
                 if (msg.isTimedOut()) {
                     _waitingMsg.remove(key);
-                    try {
-                        msg.getHandler().sendResponse(msg.getHttpExchange(), 400, "text/plain", "query timed out!");
-                    } catch (IOException ex) {
-                        Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    AbbozzaLogger.out("AbbozzaMonitor: Message " + key + " timed out");
+                    // try {
+                    msg.setResponse("timed out!");
+                    // msg.getHandler().sendResponse(msg.getHttpExchange(), 400, "text/plain", "query timed out!");
+                    // } catch (IOException ex) {
+                    //     AbbozzaLogger.out("Could not send response");
+                    // }
                 }
             }
         }
@@ -339,7 +344,6 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
         // Send to all monitor panels
         processMessage(s);
-
     }
 
     /**
@@ -361,10 +365,13 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
      *
      * @param msg The message
      */
-    public void sendMessage(String msg) {
+    public Message sendMessage(String msg) {
+        Message mesg = null;
         if (this.boardPort != null) {
-            _msgQueue.add(new Message("", msg, null, null, 0));
+            mesg = new Message("", msg, null, null, 0);
+            _msgQueue.add(mesg);
         }
+        return mesg;
     }
 
     /**
@@ -376,22 +383,25 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
      * @param handler The Handler handling the request
      * @param timeout The timeout for the response (if greater than zero)
      */
-    public void sendMessage(String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
+    public Message sendMessage(String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
+        Message mesg = null;
         if (this.boardPort == null) {
-            return;
+            return null;
         }
         if (timeout > 0) {
             String id = "_" + Long.toHexString(System.currentTimeMillis());
-            Message _msg = new Message(id, msg, exchg, handler, timeout);
-            _msgQueue.add(_msg);
+            mesg = new Message(id, msg, exchg, handler, timeout);
+            _msgQueue.add(mesg);
+            return mesg;
         } else {
-            sendMessage(msg);
+            mesg = sendMessage(msg);
             try {
                 handler.sendResponse(exchg, 200, "text/plain", "");
             } catch (IOException ex) {
-                Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                AbbozzaLogger.stackTrace(ex);
             }
         }
+        return mesg;
     }
 
     /**
@@ -403,6 +413,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         this.textArea.append(msg);
     }
 
+    
     /**
      * Process a message received from the board. If it is enclose double
      * brackets [[ <prefix> <msg> ]]. Check the <prefix> and send it to the
@@ -442,6 +453,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         } while ((start != -1) && (end != -1));
     }
 
+    
     /**
      * This method responds to a received message wih leading id.
      *
@@ -451,22 +463,29 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         int pos;
         Message _msg;
         msg = msg.trim();
+        AbbozzaLogger.out("AbbozzaMonitor: respond to " + msg);
         if (msg.startsWith("_")) {
             pos = msg.indexOf(' ');
             String id = msg.substring(0, pos);
+            AbbozzaLogger.out("AbbozzaMonitor: Checking for message id " + id);
             _msg = _waitingMsg.get(id);
             if (_msg != null) {
                 msg = "[[" + _msg.getIdPostfix() + " " + msg.substring(pos).trim() + "]]";
+                AbbozzaLogger.out("AbbozzaMonitor: Try to send " + msg);
                 _waitingMsg.remove(id);
-                try {
-                    _msg.getHandler().sendResponse(_msg.getHttpExchange(), 200, "text/plain", msg);
-                } catch (IOException ex) {
-                    Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                // try {
+                    _msg.setResponse(msg);
+                    _msg.setState(Message.RESPONSE_READY);
+                    // _msg.getHandler().sendResponse(_msg.getHttpExchange(), 200, "text/plain", msg);
+                // } catch (IOException ex) {
+                //     AbbozzaLogger.out("Could not send response.");
+                //     AbbozzaLogger.stackTrace(ex);
+                // }
             }
         }
     }
 
+    
     /**
      * Add a Panel to the Monitor. Messages enclosed in double brackets of the
      * form [[ <prefix> <msg> ]] are send to the panel.
