@@ -46,6 +46,7 @@ void AbbozzaParser::check() {
     
     if ( Serial.available() ) {
         // append string to buffer
+        Serial.setTimeout(100);
         newBuf = Serial.readString();
         buffer.concat(newBuf);
         if (debug) {
