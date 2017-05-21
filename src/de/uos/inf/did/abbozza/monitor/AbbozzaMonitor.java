@@ -43,9 +43,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -78,27 +75,23 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     // private AbbozzaMonitorPanel monitor = null;
     /**
      * Creates new AbbozzaMonitor and asks for port
-     *
-     * @param boardport
      */
     public AbbozzaMonitor() {
-
         init();
-        // TODO Choice of port
-        // return portNames[0];
-
     }
 
     /**
      * Creates new AbbozzaMonitor with given port
      *
-     * @param boardport
+     * @param port
+     * @param rate
      */
     public AbbozzaMonitor(String port, int rate) {
         init();
         setBoardPort(port, rate);
     }
 
+    
     private void init() {
         // _msgQueue = new ArrayBlockingQueue<Message>(100);
         _msgQueue = new ArrayDeque<Message>(100);
@@ -284,10 +277,12 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
     public synchronized void addToUpdateBuffer(char buff[], int n) {
         updateBuffer.append(buff, 0, n);
+        AbbozzaLogger.out("buffer: " + updateBuffer.toString());
     }
 
     public synchronized void addToUpdateBuffer(String buf) {
         updateBuffer.append(buf.toCharArray(), 0, buf.length());
+        AbbozzaLogger.out("buffer: " + updateBuffer.toString());
     }
 
     private synchronized String consumeUpdateBuffer() {
@@ -322,12 +317,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                 if (msg.isTimedOut()) {
                     _waitingMsg.remove(key);
                     AbbozzaLogger.out("AbbozzaMonitor: Message " + key + " timed out");
-                    // try {
                     msg.setResponse("timed out!");
-                    // msg.getHandler().sendResponse(msg.getHttpExchange(), 400, "text/plain", "query timed out!");
-                    // } catch (IOException ex) {
-                    //     AbbozzaLogger.out("Could not send response");
-                    // }
                 }
             }
         }
@@ -335,12 +325,10 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         // Check update buffer
         String s = consumeUpdateBuffer();
 
-        if (s.isEmpty()) {
-            return;
+        if (!s.isEmpty()) {
+            // Default handling
+            appendText(s);
         }
-
-        // Default handling
-        appendText(s);
 
         // Send to all monitor panels
         processMessage(s);
@@ -356,7 +344,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
             serialPort.writeString(msg);
             appendText("-> " + msg + "\n");
         } catch (SerialPortException ex) {
-            AbbozzaLogger.err("Error sendig to serial port");
+            AbbozzaLogger.err("Error sending to serial port");
         }
     }
 
@@ -396,7 +384,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         } else {
             mesg = sendMessage(msg);
             try {
-                handler.sendResponse(exchg, 200, "text/plain", "");
+                handler.sendResponse(exchg, 200, "text/plain", "ok");
             } catch (IOException ex) {
                 AbbozzaLogger.stackTrace(ex);
             }

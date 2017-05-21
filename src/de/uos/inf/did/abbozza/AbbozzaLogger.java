@@ -16,17 +16,15 @@
  * the License.
  */
 /**
- * @fileoverview ... @author michael.brinkmeier@uni-osnabrueck.de (Michael
- * Brinkmeier)
+ * @fileoverview This class provides a Logging system for abbozza!
+ * 
+ * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
 package de.uos.inf.did.abbozza;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -87,7 +85,7 @@ public class AbbozzaLogger {
     }
 
     public static void out(String msg) {
-        if (level > NONE) {
+        if (level >= DEBUG ) {
             System.out.println("abbozza! [out] : " + msg);
             fire("abbozza! [out] : " + msg);
         }
@@ -101,12 +99,16 @@ public class AbbozzaLogger {
     }
 
     public static void err(String msg) {
-        System.out.println("abbozza! [err] : " + msg);
+        if ( level >= ERROR ) {
+            System.out.println("abbozza! [err] : " + msg);
             fire("abbozza! [err] : " + msg);
+        }
     }
     
     public static void stackTrace(Exception ex) {
-        System.out.println("abbozza! [err] : Stack trace for exception");
-        ex.printStackTrace(System.out);
+        if (level >= ERROR ) {
+            System.out.println("abbozza! [err] : Stack trace for exception");
+            ex.printStackTrace(System.out);
+        }
     }
 }

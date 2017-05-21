@@ -70,15 +70,15 @@ public class SerialHandler extends AbstractHandler {
            }
            switch ( msg.getState() ) {
                case Message.DONE:
-                   AbbozzaLogger.out("SerialHandler: message sent");
-                    sendResponse(he, 200, "text/plain", ""); 
+                    AbbozzaLogger.out("SerialHandler: message sent");
+                    sendResponse(he, 200, "text/plain", "ok"); 
                     break;
                case Message.TIMEDOUT:
                     AbbozzaLogger.out("SerialHandler: message timed out");
                     sendResponse(he, 400, "text/plain", "query timed out!"); 
                     break;
                case Message.RESPONSE_READY:
-                    AbbozzaLogger.out("SerialHandler: received : " + msg.getResponse());
+                    AbbozzaLogger.out("SerialHandler: answer : " + msg.getResponse());
                     sendResponse(he, 200, "text/plain", msg.getResponse() ); 
                     break;
            } 
