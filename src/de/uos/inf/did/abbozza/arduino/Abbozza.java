@@ -30,11 +30,13 @@ import processing.app.PreferencesData;
 import processing.app.tools.Tool;
 
 import com.sun.net.httpserver.*;
+import de.uos.inf.did.abbozza.AbbozzaConfigDialog;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.arduino.handler.BoardHandler;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
+import de.uos.inf.did.abbozza.plugin.PluginConfigPanel;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
@@ -181,6 +183,11 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         jarHandler.addJar(jarUri, "Jar");
     }
 
+    public void adaptConfigDialog(AbbozzaConfigDialog dialog) {
+        dialog.addPanel(new PluginConfigPanel());
+    }
+    
+    
     public void print(String message) {
         AbbozzaLogger.out(message);
     }
