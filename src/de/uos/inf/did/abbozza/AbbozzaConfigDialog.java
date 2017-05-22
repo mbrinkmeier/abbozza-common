@@ -200,8 +200,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        scrollPane = new javax.swing.JScrollPane();
-        featureTree = new javax.swing.JTree();
         serverPanel = new javax.swing.JPanel();
         autoStartBox = new javax.swing.JCheckBox();
         browserStartBox = new javax.swing.JCheckBox();
@@ -221,6 +219,8 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         taskPathField = new javax.swing.JTextField();
         taskPathButton = new javax.swing.JButton();
         editableTasks = new javax.swing.JCheckBox();
+        scrollPane = new javax.swing.JScrollPane();
+        featureTree = new javax.swing.JTree();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -272,14 +272,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         logoPanel.add(jLabel2, java.awt.BorderLayout.LINE_END);
 
         contentPanel.add(logoPanel, java.awt.BorderLayout.PAGE_START);
-
-        featureTree.setToolTipText("");
-        featureTree.setCellEditor(new FeatureCellEditor(featureTree));
-        featureTree.setCellRenderer(new FeatureCellRenderer());
-        featureTree.setEditable(true);
-        scrollPane.setViewportView(featureTree);
-
-        jTabbedPane1.addTab(AbbozzaLocale.entry("gui.feature_title"), scrollPane);
 
         autoStartBox.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         autoStartBox.setSelected(config.startAutomatically());
@@ -362,7 +354,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(serverPanelLayout.createSequentialGroup()
-                                .addComponent(browserPathField, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+                                .addComponent(browserPathField, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(browserButton, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(serverPanelLayout.createSequentialGroup()
@@ -371,7 +363,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                     .addGroup(serverPanelLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(updateUrlField, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE))
+                        .addComponent(updateUrlField, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE))
                     .addGroup(serverPanelLayout.createSequentialGroup()
                         .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(serverPanelLayout.createSequentialGroup()
@@ -384,7 +376,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(localeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(updateBox))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 277, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         serverPanelLayout.setVerticalGroup(
@@ -402,7 +394,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                 .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(browserButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(browserPathField, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                        .addComponent(browserPathField)
                         .addComponent(jLabel6)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -417,7 +409,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                     .addGroup(serverPanelLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(updateUrlField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -452,7 +444,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                         .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(taskPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 6, Short.MAX_VALUE))
+                                .addGap(0, 11, Short.MAX_VALUE))
                             .addComponent(taskPathField))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(taskPathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -474,7 +466,15 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
 
         jTabbedPane1.addTab(AbbozzaLocale.entry("gui.tasks"), taskPanel);
 
-        contentPanel.add(jTabbedPane1, java.awt.BorderLayout.LINE_START);
+        featureTree.setToolTipText("");
+        featureTree.setCellEditor(new FeatureCellEditor(featureTree));
+        featureTree.setCellRenderer(new FeatureCellRenderer());
+        featureTree.setEditable(true);
+        scrollPane.setViewportView(featureTree);
+
+        jTabbedPane1.addTab(AbbozzaLocale.entry("gui.feature_title"), scrollPane);
+
+        contentPanel.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
         jTabbedPane1.getAccessibleContext().setAccessibleDescription("");
 
         getContentPane().add(contentPanel, java.awt.BorderLayout.CENTER);
