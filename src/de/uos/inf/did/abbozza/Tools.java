@@ -30,6 +30,9 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -37,6 +40,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -101,4 +105,26 @@ public class Tools {
         }
    }
 
+   public static Document getXml(URL url) {
+       Document xml = null;
+       try {
+                        
+          DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+          DocumentBuilder builder = factory.newDocumentBuilder();
+
+          xml = builder.parse(url.openStream());
+        } catch (ParserConfigurationException ex) {
+            xml = null;
+            AbbozzaLogger.err("Tools: Could not parse " + url);
+            AbbozzaLogger.stackTrace(ex);
+        } catch (SAXException ex) {
+            xml = null;
+            AbbozzaLogger.err("Tools: Could not parse " + url);
+            AbbozzaLogger.stackTrace(ex);
+        } catch (IOException ex) {
+            xml = null;
+            AbbozzaLogger.err("Tools: Could not find " + url);
+        }
+        return xml;        
+    }
 }

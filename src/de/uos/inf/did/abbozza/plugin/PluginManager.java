@@ -138,7 +138,7 @@ public class PluginManager implements HttpHandler {
         }           
     }
 
-    private void addJars(File jars[]) {
+    protected void addJars(File jars[]) {
         Plugin plugin;
         Document pluginXml;
         URL pluginUrl;
@@ -200,7 +200,7 @@ public class PluginManager implements HttpHandler {
         while ( plugins.hasMoreElements()) {
             Plugin plugin = plugins.nextElement();
             Node feature = plugin.getFeature();
-            if (feature != null) {
+            if (plugin.isActivated() && (feature != null)) {
                 try {
                     features.adoptNode(feature);
                     root.appendChild(feature);
@@ -292,15 +292,15 @@ public class PluginManager implements HttpHandler {
             pluginXml = builder.parse(pluginUrl.openStream());
         } catch (ParserConfigurationException ex) {
             pluginXml = null;
-            AbbozzaLogger.err("PluginManager: Could not parse " + pluginUrl + "/plugin.xml");
+            AbbozzaLogger.err("PluginManager: Could not parse " + pluginUrl);
             AbbozzaLogger.stackTrace(ex);
         } catch (SAXException ex) {
             pluginXml = null;
-            AbbozzaLogger.err("PluginManager: Could not parse " + pluginUrl + "/plugin.xml");
+            AbbozzaLogger.err("PluginManager: Could not parse " + pluginUrl);
             AbbozzaLogger.stackTrace(ex);
         } catch (IOException ex) {
             pluginXml = null;
-            AbbozzaLogger.err("PluginManager: Could not find " + pluginUrl + "/plugin.xml");
+            AbbozzaLogger.err("PluginManager: Could not find " + pluginUrl);
         }
         return pluginXml;        
     }

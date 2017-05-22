@@ -20,6 +20,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -80,7 +81,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         }
         
         if (showServer) {
-            jTabbedPane1.setSelectedComponent(serverPanel);
+            tabbedPane.setSelectedComponent(serverPanel);
         }
         
         // AbbozzaLogger.out(AbbozzaLocale.getLocale());
@@ -125,8 +126,18 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         config.setUpdateUrl(this.updateUrlField.getText());
         config.setTaskPath(this.taskPathField.getText());
         config.setTasksEditable(this.editableTasks.isSelected());
+        
         storeOptions();
 
+        for (int comp = 3; comp < tabbedPane.getTabCount(); comp++ ) {
+            try {
+                AbbozzaConfigPanel panel = (AbbozzaConfigPanel) tabbedPane.getComponentAt(comp);
+                panel.storeConfiguration(config);
+            } catch (ClassCastException ex) {
+                AbbozzaLogger.stackTrace(ex);
+            }
+        }
+        
         config.write();
     }
 
@@ -199,9 +210,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         logoPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        scrollPane = new javax.swing.JScrollPane();
-        featureTree = new javax.swing.JTree();
+        tabbedPane = new javax.swing.JTabbedPane();
         serverPanel = new javax.swing.JPanel();
         autoStartBox = new javax.swing.JCheckBox();
         browserStartBox = new javax.swing.JCheckBox();
@@ -221,6 +230,8 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         taskPathField = new javax.swing.JTextField();
         taskPathButton = new javax.swing.JButton();
         editableTasks = new javax.swing.JCheckBox();
+        scrollPane = new javax.swing.JScrollPane();
+        featureTree = new javax.swing.JTree();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -272,14 +283,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         logoPanel.add(jLabel2, java.awt.BorderLayout.LINE_END);
 
         contentPanel.add(logoPanel, java.awt.BorderLayout.PAGE_START);
-
-        featureTree.setToolTipText("");
-        featureTree.setCellEditor(new FeatureCellEditor(featureTree));
-        featureTree.setCellRenderer(new FeatureCellRenderer());
-        featureTree.setEditable(true);
-        scrollPane.setViewportView(featureTree);
-
-        jTabbedPane1.addTab(AbbozzaLocale.entry("gui.feature_title"), scrollPane);
 
         autoStartBox.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         autoStartBox.setSelected(config.startAutomatically());
@@ -362,7 +365,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(serverPanelLayout.createSequentialGroup()
-                                .addComponent(browserPathField, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+                                .addComponent(browserPathField, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(browserButton, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(serverPanelLayout.createSequentialGroup()
@@ -371,7 +374,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                     .addGroup(serverPanelLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(updateUrlField, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE))
+                        .addComponent(updateUrlField, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE))
                     .addGroup(serverPanelLayout.createSequentialGroup()
                         .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(serverPanelLayout.createSequentialGroup()
@@ -422,7 +425,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab(AbbozzaLocale.entry("gui.server_and_browser"), serverPanel);
+        tabbedPane.addTab(AbbozzaLocale.entry("gui.server_and_browser"), serverPanel);
         serverPanel.getAccessibleContext().setAccessibleDescription("");
 
         jLabel7.setText(AbbozzaLocale.entry("gui.task_path"));
@@ -452,7 +455,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                         .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(taskPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 6, Short.MAX_VALUE))
+                                .addGap(0, 72, Short.MAX_VALUE))
                             .addComponent(taskPathField))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(taskPathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -472,10 +475,18 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                 .addContainerGap(203, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab(AbbozzaLocale.entry("gui.tasks"), taskPanel);
+        tabbedPane.addTab(AbbozzaLocale.entry("gui.tasks"), taskPanel);
 
-        contentPanel.add(jTabbedPane1, java.awt.BorderLayout.LINE_START);
-        jTabbedPane1.getAccessibleContext().setAccessibleDescription("");
+        featureTree.setToolTipText("");
+        featureTree.setCellEditor(new FeatureCellEditor(featureTree));
+        featureTree.setCellRenderer(new FeatureCellRenderer());
+        featureTree.setEditable(true);
+        scrollPane.setViewportView(featureTree);
+
+        tabbedPane.addTab(AbbozzaLocale.entry("gui.feature_title"), scrollPane);
+
+        contentPanel.add(tabbedPane, java.awt.BorderLayout.CENTER);
+        tabbedPane.getAccessibleContext().setAccessibleDescription("");
 
         getContentPane().add(contentPanel, java.awt.BorderLayout.CENTER);
 
@@ -647,17 +658,24 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JComboBox localeComboBox;
     private javax.swing.JPanel logoPanel;
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JPanel serverPanel;
     private javax.swing.JSpinner serverPortSpinner;
     private javax.swing.JButton storeButton;
+    private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JPanel taskPanel;
     private javax.swing.JButton taskPathButton;
     private javax.swing.JTextField taskPathField;
     private javax.swing.JCheckBox updateBox;
     private javax.swing.JTextField updateUrlField;
     // End of variables declaration//GEN-END:variables
+
+    public void addPanel(AbbozzaConfigPanel panel) {
+        tabbedPane.add(panel, tabbedPane.getTabCount());
+        tabbedPane.setTitleAt(tabbedPane.getTabCount()-1, panel.getName());
+    }
+    
+    
 }
