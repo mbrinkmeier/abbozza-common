@@ -17,7 +17,12 @@
  * limitations under the License.
  */
 /**
- * @fileoverview ...
+ * @fileoverview This class is an abstract abbozza! server
+ * 
+ * The server requires sevejbral directories and files:
+ * - jarPath: the path of the jar, containing all required files
+ * - 
+ * 
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
 package de.uos.inf.did.abbozza;
@@ -227,17 +232,17 @@ public abstract class AbbozzaServer implements HttpHandler {
         return sketchbookPath;
     }
 
-    public String getConfigPath() {
-        return configPath;
-    }
+//    public String getConfigPath() {
+//        return configPath;
+//    }
 
-    public String getGlobalJarPath() {
-        return globalJarPath;
-    }
+//    public String getGlobalJarPath() {
+//        return globalJarPath;
+//    }
 
-    public String getLocalJarPath() {
-        return localJarPath;
-    }
+//    public String getLocalJarPath() {
+//        return localJarPath;
+//    }
 
     public String getGlobalPluginPath() {
         return globalPluginPath;
@@ -623,6 +628,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         AbbozzaConfig config = this.getConfiguration();
         Properties props = config.get();
         AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(props, null, false, true);
+        adaptConfigDialog(dialog);
         dialog.setAlwaysOnTop(true);
         dialog.setModal(true);
         dialog.toFront();
@@ -639,7 +645,9 @@ public abstract class AbbozzaServer implements HttpHandler {
             return 1;
             //sendResponse(exchg, 440, "text/plain", "");
         }
-
+    }
+    
+    public void adaptConfigDialog(AbbozzaConfigDialog dialog) {
     }
 
     public void monitorIsClosed() {

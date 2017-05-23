@@ -82,7 +82,7 @@ public class Plugin {
         // this._feature = null;
         // this._locales = null;
         parseXML(xml);
-        AbbozzaLogger.out("Plugin: " + this._url + " added", AbbozzaLogger.INFO);
+        AbbozzaLogger.out("Plugin: " + this._id + " (" + this._url + ") added", AbbozzaLogger.INFO);
     }
     
     /**
@@ -96,7 +96,10 @@ public class Plugin {
                 Node root = plugins.item(0);
                 this._id = root.getAttributes().getNamedItem("id").getNodeValue();
                 this._system = root.getAttributes().getNamedItem("system").getNodeValue();
-                this._parentOption = root.getAttributes().getNamedItem("parent").getNodeValue();
+                this._parentOption = "gui.blocks";
+                if ( root.getAttributes().getNamedItem("parent") != null ) {
+                    this._parentOption = root.getAttributes().getNamedItem("parent").getNodeValue();
+                }
                 NodeList children = root.getChildNodes();
                 Node child;
                 for ( int i = 0; i < children.getLength(); i++) {
@@ -144,7 +147,8 @@ public class Plugin {
                 }   
             }
         } catch (Exception ex) {
-            this._id = null;
+            System.out.println(Tools.documentToString(pluginXml));
+            AbbozzaLogger.stackTrace(ex);
         }
         
         if (_options == null) {
