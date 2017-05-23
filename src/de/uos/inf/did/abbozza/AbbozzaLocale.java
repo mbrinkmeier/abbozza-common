@@ -315,10 +315,10 @@ public class AbbozzaLocale {
      * @return 
      */
     public static String entry(String key) {
+        System.out.println(key);
         Element el = localeXml.getElementById(key);
         if ( el == null ) return key;
         return el.getTextContent();
-        // entries.getProperty(key, key);
     }
 
     /**
@@ -330,7 +330,6 @@ public class AbbozzaLocale {
      * @return 
      */
     public static String entry(String key, String value) {
-        // String res = entries.getProperty(key, key);
         String res = entry(key);
         res = res.replace("#", value);
         return res;

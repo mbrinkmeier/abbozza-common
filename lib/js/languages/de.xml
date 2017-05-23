@@ -96,6 +96,10 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.use_double">Verwende präzisere Dezimalzahlen (64 Bit)</msg>
         <msg id="gui.usb">USB Kommunikation</msg>        
         <msg id="gui.messages">Nachrichten</msg>
+        <msg id="gui.is_installed">Installiert</msg>
+        <msg id="gui.install">Installieren</msg>
+        <msg id="gui.reinstall">Erneut installieren</msg>
+        <msg id="gui.plugin_panel">Plugins</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

@@ -149,9 +149,9 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
             this.installButton.setEnabled(true);
         } else {
             if ( checkPlugin(node.getAttributes().getNamedItem("id").getTextContent()) ) {
-                this.installButton.setText(AbbozzaLocale.entry("GUI.REINSTALL"));
+                this.installButton.setText(AbbozzaLocale.entry("gui.reinstall"));
             } else {
-                this.installButton.setText(AbbozzaLocale.entry("GUI.INSTALL"));                
+                this.installButton.setText(AbbozzaLocale.entry("gui.install"));                
             }
             this.installButton.setEnabled(false);
             
@@ -181,7 +181,7 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
 
     @Override
     public String getName() {
-        return AbbozzaLocale.entry("GUI.PLUGIN_PANEL");
+        return AbbozzaLocale.entry("gui.plugin_panel");
     }
 
     private void reloadPlugins() {

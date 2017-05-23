@@ -96,6 +96,10 @@ Continuing?</msg>
         <msg id="gui.use_double">Use more precise decimals (64 Bit)</msg>
         <msg id="gui.usb">USB communication</msg>
         <msg id="gui.messages">Messages</msg>
+        <msg id="gui.is_installed">Installed</msg>
+        <msg id="gui.install">Install</msg>
+        <msg id="gui.reinstall">Reinstallieren</msg>
+        <msg id="gui.plugin_panel">Plugins</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>

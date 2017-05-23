@@ -49,7 +49,7 @@ public class PluginPanel extends javax.swing.JPanel {
         
         Plugin plugin = AbbozzaServer.getPluginManager().getPlugin(id);
         if ( plugin != null ) {
-            this.statusLabel.setText(AbbozzaLocale.entry("GUI.IS_INSTALLED"));
+            this.statusLabel.setText(AbbozzaLocale.entry("gui.is_installed"));
         }
         this.statusLabel.setText("");
 
