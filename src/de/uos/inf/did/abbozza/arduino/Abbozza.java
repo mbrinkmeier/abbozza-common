@@ -125,7 +125,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         AbbozzaLogger.out("Found arduino version " + arduino_major + "." +arduino_minor + "." + arduino_rev,AbbozzaLogger.INFO);
         
         this.editor = editor;
-        super.init("arduino");                
+        super.init("arduino");
     }
 
     @Override
