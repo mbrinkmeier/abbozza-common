@@ -7,6 +7,7 @@ package de.uos.inf.did.abbozza.plugin;
 
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.awt.Color;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,8 +44,15 @@ public class PluginPanel extends javax.swing.JPanel {
         if (_selected) {
             this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         } else {
-            this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 5));
         }
+        
+        Plugin plugin = AbbozzaServer.getPluginManager().getPlugin(id);
+        if ( plugin != null ) {
+            this.statusLabel.setText(AbbozzaLocale.entry("GUI.IS_INSTALLED"));
+        }
+        this.statusLabel.setText("");
+
     }
 
     /**
@@ -57,8 +65,8 @@ public class PluginPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         nameLabel = new javax.swing.JLabel();
-        urlLabel = new javax.swing.JLabel();
         descPane = new javax.swing.JTextArea();
+        statusLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -66,17 +74,14 @@ public class PluginPanel extends javax.swing.JPanel {
         nameLabel.setBackground(new java.awt.Color(255, 255, 255));
         nameLabel.setText(_name);
 
-        urlLabel.setBackground(new java.awt.Color(255, 255, 255));
-        urlLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        urlLabel.setText(_url);
-
         descPane.setColumns(20);
         descPane.setLineWrap(true);
         descPane.setRows(5);
         descPane.setText(_desc);
         descPane.setWrapStyleWord(true);
-        descPane.setMinimumSize(null);
         descPane.setPreferredSize(null);
+
+        statusLabel.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -87,7 +92,7 @@ public class PluginPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(descPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(urlLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -96,17 +101,16 @@ public class PluginPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(nameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(descPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(descPane, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(urlLabel)
+                .addComponent(statusLabel)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea descPane;
     private javax.swing.JLabel nameLabel;
-    private javax.swing.JLabel urlLabel;
+    private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
 }

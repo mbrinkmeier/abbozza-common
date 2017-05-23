@@ -144,12 +144,27 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
     }//GEN-LAST:event_installButtonActionPerformed
 
     private void pluginListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_pluginListValueChanged
-        if (this.pluginList.getSelectedValue() != null) {
+        Node node =  this.pluginList.getSelectedValue();
+        if ( node != null) {
             this.installButton.setEnabled(true);
         } else {
-            this.installButton.setEnabled(false);            
+            if ( checkPlugin(node.getAttributes().getNamedItem("id").getTextContent()) ) {
+                this.installButton.setText(AbbozzaLocale.entry("GUI.REINSTALL"));
+            } else {
+                this.installButton.setText(AbbozzaLocale.entry("GUI.INSTALL"));                
+            }
+            this.installButton.setEnabled(false);
+            
         }
     }//GEN-LAST:event_pluginListValueChanged
+
+    public boolean checkPlugin(String id) {
+        Plugin plugin = AbbozzaServer.getPluginManager().getPlugin(id);
+        if ( plugin != null ) {
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void storeConfiguration(AbbozzaConfig config) {
@@ -231,6 +246,7 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         } catch (IOException ex) {
             AbbozzaLogger.err("Can't write to " + file.getAbsolutePath());
         }
+        
     }
     
 }

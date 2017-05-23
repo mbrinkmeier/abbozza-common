@@ -26,6 +26,7 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.File;
@@ -38,6 +39,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -306,6 +308,7 @@ public class PluginManager implements HttpHandler {
     }
 
     private boolean checkRequirements(Plugin plugin) {
+        String libs = "";
         if ( !plugin.getSystem().equals( this._abbozza.getSystem()) ) {
             return false;
         }
@@ -319,10 +322,15 @@ public class PluginManager implements HttpHandler {
                 // If a required library is not found, reject the plugin
                 if ( !this._abbozza.checkLibrary(name) ) {
                     AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " : required library " + name + " not found",AbbozzaLogger.INFO);
+                    libs = libs + "\n- " + name;
                     foundAll = false;
                 }
             }
             child = child.getNextSibling();
+        }
+        if ( !foundAll ) {
+            JOptionPane.showMessageDialog(null, "Plugin " + plugin.getName() + ": " + AbbozzaLocale.entry("GUI.MISSING_LIBRARIES",libs) , 
+                    AbbozzaLocale.entry("GUI.MISSING_LIB_TITLE"), JOptionPane.INFORMATION_MESSAGE);
         }
         return foundAll;
     }
