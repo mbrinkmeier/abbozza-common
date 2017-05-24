@@ -23,17 +23,20 @@ public class InstallToolLinux extends InstallTool {
         "Name=##name##\n" +
         "GenericName=##genname##\n" +
         "Exec=##path##\n" + 
+        "Path=##working##\n" + 
         "Categories=Development;IDE;Education\n" +
         "Icon=##icon##.png";
     
     @Override
     public boolean addAppToMenu(String fileName, String name, String genericName, String path, String icon, boolean global) {
         try {
+            String working = new File(path).getParentFile().getAbsolutePath();
             String entry = desktopEntry;
             entry = entry.replace("##name##",name);
             entry = entry.replace("##genname##",genericName);
             entry = entry.replace("##path##",path);
             entry = entry.replace("##icon##",icon);
+            entry = entry.replace("##working##",working);
             
             File file;
             if ( global ) {

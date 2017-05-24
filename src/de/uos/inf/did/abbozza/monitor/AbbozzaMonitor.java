@@ -43,6 +43,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -51,6 +54,7 @@ import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
+import jssc.SerialPortList;
 
 /**
  *
@@ -169,6 +173,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
         protocolPopUp = new javax.swing.JPopupMenu();
         resetItem = new javax.swing.JMenuItem();
+        jComboBox1 = new javax.swing.JComboBox<>();
         tabPanel = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         textPane = new javax.swing.JScrollPane();
@@ -177,6 +182,9 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         sendText = new javax.swing.JComboBox();
         logoPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        portBox = new javax.swing.JComboBox<>();
+        baudBox = new javax.swing.JComboBox<>();
 
         protocolPopUp.setToolTipText("");
 
@@ -188,6 +196,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
             }
         });
         protocolPopUp.add(resetItem);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("abbozza! Monitor");
@@ -248,6 +258,27 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         jLabel1.setAlignmentX(1.0F);
         logoPanel.add(jLabel1, java.awt.BorderLayout.EAST);
 
+        portBox.setModel(new DefaultComboBoxModel(SerialPortList.getPortNames()));
+        portBox.setMinimumSize(new java.awt.Dimension(150, 24));
+        portBox.setOpaque(false);
+        portBox.setPreferredSize(new java.awt.Dimension(100, 24));
+        portBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                portBoxActionPerformed(evt);
+            }
+        });
+        jPanel2.add(portBox);
+
+        baudBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "110", "300", "600", "1200", "4800", "9600", "14400", "19200", "38400", "57600", "115200", "128000", "256000", " " }));
+        baudBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                baudBoxActionPerformed(evt);
+            }
+        });
+        jPanel2.add(baudBox);
+
+        logoPanel.add(jPanel2, java.awt.BorderLayout.LINE_START);
+
         getContentPane().add(logoPanel, java.awt.BorderLayout.SOUTH);
 
         pack();
@@ -265,6 +296,28 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
             this.sendText.setSelectedItem(null);
         }
     }//GEN-LAST:event_sendButtonActionPerformed
+
+    private void baudBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_baudBoxActionPerformed
+        int baud = Integer.getInteger((String) baudBox.getSelectedItem());
+        try {
+            serialPort.setParams(baud, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+        } catch (SerialPortException ex) {
+            Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_baudBoxActionPerformed
+
+    private void portBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portBoxActionPerformed
+       String name = (String) portBox.getSelectedItem();
+       if ( !name.equals(serialPort.getPortName()) ) {
+           try {
+               serialPort.closePort();
+               serialPort = new SerialPort(name);
+               serialPort.openPort();
+           } catch (SerialPortException ex) {
+               Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       }
+    }//GEN-LAST:event_portBoxActionPerformed
 
     private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
         String msg = evt.getActionCommand();
@@ -292,9 +345,13 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> baudBox;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel logoPanel;
+    private javax.swing.JComboBox<String> portBox;
     private javax.swing.JPopupMenu protocolPopUp;
     private javax.swing.JMenuItem resetItem;
     private javax.swing.JButton sendButton;
