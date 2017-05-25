@@ -103,7 +103,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     public static final String VERSION = "" + VER_MAJOR + "." + VER_MINOR + "." + VER_REV + "." + VER_HOTFIX + " " + VER_REM;
 
     // Instance
-    private static AbbozzaServer instance;
+    protected static AbbozzaServer instance;
 
     // The paths
     protected String globalJarPath;     // The directory containing the global jar
@@ -120,7 +120,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected JarDirHandler jarHandler;
 
     protected AbbozzaConfig config = null;
-    private boolean isStarted = false;      // true if the server was started
+    protected boolean isStarted = false;      // true if the server was started
     // public ByteArrayOutputStream logger;
     private DuplexPrintStream errStream;
     private DuplexPrintStream outStream;
@@ -129,7 +129,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     public MonitorHandler monitorHandler;
     private URL _lastSketchFile = null;
     private URL _taskContext;
-    private PluginManager pluginManager;
+    protected PluginManager pluginManager;
 
     protected String _boardName;
     

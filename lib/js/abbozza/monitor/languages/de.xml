@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="de">
+    <gui>
+        <msg id="gui.file_menu">Datei</msg> 
+        <msg id="gui.menu_quit">Beenden</msg> 
+        <msg id="gui.menu_rescan">Such nach seriellen Ports</msg> 
+    </gui>
+</language>

@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -51,6 +52,7 @@ import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
+import jssc.SerialPortList;
 
 /**
  *
@@ -177,6 +179,9 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         sendText = new javax.swing.JComboBox();
         logoPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        portBox = new javax.swing.JComboBox<>();
+        rateBox = new javax.swing.JComboBox<>();
 
         protocolPopUp.setToolTipText("");
 
@@ -192,7 +197,6 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("abbozza! Monitor");
         setMinimumSize(new java.awt.Dimension(640, 480));
-        setPreferredSize(new java.awt.Dimension(640, 480));
 
         java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
         jPanel1Layout.columnWidths = new int[] {0};
@@ -248,6 +252,14 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         jLabel1.setAlignmentX(1.0F);
         logoPanel.add(jLabel1, java.awt.BorderLayout.EAST);
 
+        portBox.setModel(new DefaultComboBoxModel(SerialPortList.getPortNames()));
+        jPanel2.add(portBox);
+
+        rateBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "300", "1200", "2400", "4800", "9600", "14400", "19200", "28800", "38400", "57600", "115200", "230400" }));
+        jPanel2.add(rateBox);
+
+        logoPanel.add(jPanel2, java.awt.BorderLayout.WEST);
+
         getContentPane().add(logoPanel, java.awt.BorderLayout.SOUTH);
 
         pack();
@@ -294,8 +306,11 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel logoPanel;
+    private javax.swing.JComboBox<String> portBox;
     private javax.swing.JPopupMenu protocolPopUp;
+    private javax.swing.JComboBox<String> rateBox;
     private javax.swing.JMenuItem resetItem;
     private javax.swing.JButton sendButton;
     private javax.swing.JComboBox sendText;
@@ -498,10 +513,26 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     }
 
     public void setBoardPort(String boardPort, int rate) {
-        this.boardPort = boardPort;
-        this.baudRate = rate;
+        setBoardPort(boardPort);
+        setRate(rate);
     }
 
+    public void setBoardPort(String port) {
+        this.boardPort = boardPort;
+        portBox.setSelectedItem(boardPort);
+    }
+    
+    public void setRate(int rate) {
+        for (int i = 0; i < rateBox.getItemCount(); i ++ ) {
+            String baud = rateBox.getItemAt(i);
+            int ra = Integer.parseInt(baud);
+            if ( ra == rate ) {
+                rateBox.setSelectedIndex(i);
+            }
+        }
+        
+    }
+    
     public void enableWindow(boolean enable) {
         this.setVisible(true);
 
@@ -634,6 +665,10 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                 AbbozzaLogger.err("Error in receiving string from serial port: " + ex);
             }
         }
+    }
+
+    void scanPorts() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
