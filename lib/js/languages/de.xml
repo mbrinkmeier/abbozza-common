@@ -154,6 +154,8 @@ Trotzdem fortfahren?</msg>
         <msg id="txt.FROMNUMBER">Wandle # in Text um</msg>
         <msg id="txt.TEXTFROMASCII">Zeichen mit ASCII-Code</msg>
         <msg id="txt.ASCIIFROMTEXT">ASCII-Code von</msg>
+        <msg id="txt.LENGTH">Länge von</msg>
+        <msg id="txt.SUBSTRING">Teilstring von # von Position # bis</msg>
 		
         <msg id="math.MIN">Minimum</msg>
         <msg id="math.MAX">Maximum</msg>

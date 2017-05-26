@@ -24,6 +24,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import jssc.SerialPortList;
 
 /**
  *
@@ -92,11 +93,25 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
 
         monitor = new AbbozzaMonitor();
         monitor.setDefaultCloseOperation(JDialog.EXIT_ON_CLOSE);
-        monitor.setRate(115200);
+        
         
         initMenu();
         
         monitor.setVisible(true);
+
+        String[] ports = SerialPortList.getPortNames();
+        
+        if ((ports != null) && (ports.length>0)) {
+            monitor.setBoardPort(ports[0],115200);
+        } else {
+            monitor.setRate(115200);            
+        }
+        
+        try {
+            monitor.open();
+        } catch (Exception ex) {
+            Logger.getLogger(AbbozzaMonitorServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
