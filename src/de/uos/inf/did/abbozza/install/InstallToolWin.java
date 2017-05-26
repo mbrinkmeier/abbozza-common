@@ -8,6 +8,8 @@ package de.uos.inf.did.abbozza.install;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,44 +27,46 @@ public class InstallToolWin extends InstallTool {
         return "Win";
     }
 
-    private String desktopEntry = 
-        "[Desktop Entry]\n" + 
-        "Type=Application\n" + 
-        "Name=##name##\n" +
-        "GenericName=##genname##\n" +
-        "Exec=##path##\n" + 
-        "Categories=Development;IDE;Education\n" +
-        "Icon=##icon##";
-
+    private String powershellScript =
+       "$WshShell = New-Object -ComObject WScript.Shell; " +
+       "$Shortcut = $WshShell.CreateShortcut(\\\"##lnkpath##\\##name##.lnk\\\"); " +
+       "$Shortcut.TargetPath = \\\"##path##\\\"; " +
+       "$Shortcut.IconLocation = \\\"##icon##.ico\\\"; " +
+       "$Shortcut.Description = \\\"##genname##\\\"; " +
+       "$Shortcut.WorkingDirectory = \\\"##working##\\\"; " +
+       "$Shortcut.Save()";
+    
     @Override
     public boolean addAppToMenu(String fileName, String name, String genName, String path, String icon, boolean global) {
-        try {
-            String entry = desktopEntry;
-            entry = entry.replace("##name##",name);
-            entry = entry.replace("##genname##",genName);
-            entry = entry.replace("##path##",path);
-            entry = entry.replace("##icon##",icon);
-            
-            File file;
-            if ( global ) {
-                file = new File("C:/ProgramData/Microsoft/Windows/Start Menu/Programs/" + fileName + ".desktop");
-            } else {
-                file = new File( System.getenv("APPDATA") + "/Microsoft/Windows/Start Menu/Programs/" + fileName + ".desktop");
-            }
-
-            file.createNewFile();
-            
-            if ( file.exists() ) {
-                PrintWriter out = new PrintWriter(file);
-                out.print(entry);
-                out.close();
-            } else {
-                System.out.println(file.getAbsolutePath() + " existiert nicht");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace(System.out);
-            return false;
+        File file;
+        if ( global ) {
+            file = new File("C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Abbozza");
+        } else {
+            file = new File( System.getenv("APPDATA") + "/Microsoft/Windows/Start Menu/Programs/Abbozza");
         }
+        file.mkdir();
+        
+        String working = new File(path).getParentFile().getAbsolutePath();
+        String entry = powershellScript;
+        entry = entry.replace("##lnkpath##",file.getAbsolutePath());
+        entry = entry.replace("##name##",name);
+        entry = entry.replace("##genname##",genName);
+        entry = entry.replace("##path##",path);
+        entry = entry.replace("##icon##",icon);
+        entry = entry.replace("##working##",working);
+        
+        ProcessBuilder procBuilder = new ProcessBuilder("powershell","-Command","\"& {" + entry + " }\"");
+        procBuilder.inheritIO();
+        Process proc = null;
+        try {
+            proc = procBuilder.start();
+            proc.waitFor();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(InstallToolWin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(InstallToolWin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return true;
     }
     

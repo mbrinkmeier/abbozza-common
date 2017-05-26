@@ -24,7 +24,7 @@ public class InstallToolLinux extends InstallTool {
         "GenericName=##genname##\n" +
         "Exec=##path##\n" + 
         "Categories=Development;IDE;Education\n" +
-        "Icon=##icon##";
+        "Icon=##icon##.png";
     
     @Override
     public boolean addAppToMenu(String fileName, String name, String genericName, String path, String icon, boolean global) {
