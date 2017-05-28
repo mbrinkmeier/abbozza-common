@@ -102,6 +102,10 @@ public abstract class InstallTool {
      */
     public abstract boolean isAdministrator();
     
+    public abstract String getScriptSuffix();
+    
+    public abstract String getIconSuffix();
+    
     
     /**
      * This operation returns the user directory.

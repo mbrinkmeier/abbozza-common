@@ -25,7 +25,7 @@ public class InstallToolLinux extends InstallTool {
         "Exec=##path##\n" + 
         "Path=##working##\n" +
         "Categories=Development;IDE;Education\n" +
-        "Icon=##icon##.png";
+        "Icon=##icon##";
     
     @Override
     public boolean addAppToMenu(String fileName, String name, String genericName, String path, String icon, boolean global) {
@@ -69,6 +69,16 @@ public class InstallToolLinux extends InstallTool {
     @Override
     public String getSystem() {
         return "Linux";
+    }
+
+    @Override
+    public String getScriptSuffix() {
+        return "sh";
+    }
+
+    @Override
+    public String getIconSuffix() {
+        return "png";
     }
     
 }

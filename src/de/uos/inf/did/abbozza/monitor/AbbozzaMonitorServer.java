@@ -107,12 +107,14 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
             monitor.setRate(115200);            
         }
         
+        /*
+        
         try {
             monitor.open();
         } catch (Exception ex) {
             Logger.getLogger(AbbozzaMonitorServer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        */
     }
 
     private void initMenu() {

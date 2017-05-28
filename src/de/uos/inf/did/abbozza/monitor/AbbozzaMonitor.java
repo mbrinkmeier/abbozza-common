@@ -678,7 +678,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                 AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.INFO);
             }
         } else {
-            String msg = "No board connected!";
+            String msg = "No board connected!\n";
             addToUpdateBuffer(msg.toCharArray(), msg.length());
         }
 

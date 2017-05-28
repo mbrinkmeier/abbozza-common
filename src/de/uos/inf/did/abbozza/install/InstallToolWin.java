@@ -31,7 +31,7 @@ public class InstallToolWin extends InstallTool {
        "$WshShell = New-Object -ComObject WScript.Shell; " +
        "$Shortcut = $WshShell.CreateShortcut(\\\"##lnkpath##\\##name##.lnk\\\"); " +
        "$Shortcut.TargetPath = \\\"##path##\\\"; " +
-       "$Shortcut.IconLocation = \\\"##icon##.ico\\\"; " +
+       "$Shortcut.IconLocation = \\\"##icon##\\\"; " +
        "$Shortcut.Description = \\\"##genname##\\\"; " +
        "$Shortcut.WorkingDirectory = \\\"##working##\\\"; " +
        "$Shortcut.Save()";
@@ -68,6 +68,16 @@ public class InstallToolWin extends InstallTool {
         }
         
         return true;
+    }
+
+    @Override
+    public String getScriptSuffix() {
+        return "bat";
+    }
+
+    @Override
+    public String getIconSuffix() {
+        return "ico";
     }
     
 }
