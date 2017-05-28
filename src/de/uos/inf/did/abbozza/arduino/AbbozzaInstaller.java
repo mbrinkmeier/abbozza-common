@@ -382,12 +382,30 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         }
 
         /**
-         * 3rd step: Copy abbozza-arduino.jar to target directory
+         * 3rd step: Copy abbozza-arduino.jar and jssc to target directory
          */
         try {
             targetFile.createNewFile();
-            addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", abbozzaDir + "/lib/abbozza-calliope.jar"));
+            addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", abbozzaDir + "lib/abbozza-arduino.jar"));
             Files.copy(installerFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", abbozzaDir + "lib/jssc-2.8.0.jar"));
+            File libDir = new File(sketchbookDir.getAbsolutePath() + "/tools/Abbozza/lib/");
+            libDir.mkdirs();
+            installTool.copyFromJar(installerJar,"lib/jssc-2.8.0.jar",libDir.getAbsolutePath() + "/jssc-2.8.0.jar");
+            String scriptPath = sketchbookDir.getAbsolutePath() + "/tools/Abbozza/";
+            addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", scriptPath + "/arduinoMonitor.[sh|bat]"));
+            installTool.copyFromJar(installerJar,"lib/arduinoMonitor.sh",scriptPath + "/arduinoMonitor.sh");
+            installTool.copyFromJar(installerJar,"lib/arduinoMonitor.bat",scriptPath + "/arduinoMonitor.bat");
+            addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", scriptPath + "/abbozza_icon_monitor.[png|ico]"));
+            installTool.copyFromJar(installerJar,"img/abbozza_icon_monitor.png",scriptPath + "lib/abbozza_icon_monitor.png");
+            installTool.copyFromJar(installerJar,"img/abbozza_icon_monitor.ico",scriptPath + "lib/abbozza_icon_monitor.ico");
+            
+            String scriptSuffix = installTool.getScriptSuffix();
+            String iconSuffix = installTool.getIconSuffix();
+
+            installTool.addAppToMenu("arduinoMonitor", "abbozza! Monitor Arduino",
+                "abbozza! Monitor Arduino",
+                scriptPath + "arduinoMonitor."+scriptSuffix, scriptPath + "lib/abbozza_icon_monitor." + iconSuffix, false);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this,
                     AbbozzaLocale.entry("ERR.CANNOT_WRITE", targetFile.getAbsolutePath()),
