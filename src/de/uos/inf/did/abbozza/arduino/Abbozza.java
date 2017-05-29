@@ -79,23 +79,24 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         try {
             // Get jar file
             jarUri = Abbozza.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+            System.out.println("abbozza!: Initializing " + jarUri.getPath());
             
             // Get 
             File sketchbookFolder = BaseNoGui.getSketchbookFolder();
-            System.out.println("Checking sketchbook folder: " + sketchbookFolder.toURI().toString());
+            System.out.println("abbozza!: Checking sketchbook folder: " + sketchbookFolder.toURI().toString());
             File localJar = new File(sketchbookFolder,"/tools/Abbozza/tool/abbozza-arduino.jar");
             if ( localJar.exists() ) {
-                System.out.println("LOCAL jar found at " + localJar.toURI().toString());
+                System.out.println("abbozza!: LOCAL jar found at " + localJar.toURI().toString());
                 localExists = true;
                 if ( localJar.toURI().toString().startsWith(jarUri.toString())) {
                     isGlobal = false;
                 } else {
                     isGlobal = true;
-                    System.out.println("GLOBAL jar found at " + jarUri.toString());
+                    System.out.println("abbozza!: GLOBAL jar found at " + jarUri.toString());
                 }
             } else {
                 isGlobal = true;
-                System.out.println("GLOBAL jar found at " + jarUri.toString());
+                System.out.println("abbozza!: GLOBAL jar found at " + jarUri.toString());
             }
         } catch (URISyntaxException ex) {
         }

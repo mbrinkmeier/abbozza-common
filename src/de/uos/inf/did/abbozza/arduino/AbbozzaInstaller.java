@@ -364,7 +364,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
          * 2nd step: Backup previous version
          */
         File targetFile = new File(abbozzaDir + "abbozza-arduino.jar");
-        File backup = new File(abbozzaDir + "abbozza-arduino_" + System.currentTimeMillis() + ".jar");
+        File backup = new File(abbozzaDir + "abbozza-arduino_" + System.currentTimeMillis() + "._jar_");
         if (targetFile.exists()) {
             addMsg(msgDoc, AbbozzaLocale.entry("MSG.BACKUP", backup.getAbsolutePath()));
             try {
