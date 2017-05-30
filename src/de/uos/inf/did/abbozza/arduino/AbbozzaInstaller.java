@@ -146,7 +146,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             prefName = prefName + "/.arduino15/preferences.txt";
         } else if (osName.equals("Mac")) {
             sketchbookDir = prefName + "/Documents/Arduino/";
-            prefName = prefName + "/Library/Arduino/preferences.txt";
+            prefName = prefName + "/Library/Arduino15/preferences.txt";
         } else if (osName.equals("Win")) {
             sketchbookDir = prefName + "\\Documents\\Arduino\\";
             prefName = prefName + "\\AppData\\Local\\Arduino15\\preferences.txt";
@@ -407,16 +407,17 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
                 "abbozza! Monitor Arduino",
                 scriptPath + "arduinoMonitor."+scriptSuffix, scriptPath + "lib/abbozza_icon_monitor." + iconSuffix, false);
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this,
-                    AbbozzaLocale.entry("ERR.CANNOT_WRITE", targetFile.getAbsolutePath()),
-                    AbbozzaLocale.entry("ERR.TITLE"), JOptionPane.ERROR_MESSAGE);
-            return;
+           JOptionPane.showMessageDialog(this,
+                   AbbozzaLocale.entry("ERR.CANNOT_WRITE", targetFile.getAbsolutePath()),
+                   AbbozzaLocale.entry("ERR.TITLE"), JOptionPane.ERROR_MESSAGE);
+           return;
         }
 
         /**
          * 4th step: Install libraries
          */
         File libDir = new File(sketchbookDir + "/libraries/Abbozza/");
+        addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", sketchbookDir + "/libraries/Abbozza/"));
         libDir.mkdirs();
 
         JarEntry entry;
@@ -439,8 +440,9 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         try {            
             File prefFile = new File(System.getProperty("user.home") + "/.abbozza/arduino/abbozza.cfg");
             prefFile.getParentFile().mkdirs();
-            prefFile.createNewFile();
+            // prefFile.createNewFile();
             Properties config = new Properties();
+            config.load(prefFile.toURI().toURL().openStream());
 
             config.setProperty("freshInstall", "true");
             config.setProperty("browserPath", browserField.getText());
