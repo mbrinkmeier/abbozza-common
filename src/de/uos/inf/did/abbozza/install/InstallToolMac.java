@@ -23,7 +23,7 @@ public class InstallToolMac extends InstallTool {
 
     @Override
     public boolean addAppToMenu(String fileName, String name, String genName, String path, String icon, boolean global) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
 
     @Override

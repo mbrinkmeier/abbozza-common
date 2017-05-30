@@ -56,10 +56,11 @@ public class MonitorHandler extends AbstractHandler {
             sendResponse(exchg, 440, "text/plain", "");
         }
     }
+    
+    
 
-    public boolean open() {
-        
-        AbbozzaLogger.out("Open monitor", AbbozzaLogger.INFO );
+    public boolean open() {    
+        AbbozzaLogger.out("MonitorHandler: Open monitor", AbbozzaLogger.INFO );
         if (monitor != null) {
             if (resume()) {
                 monitor.toFront();
@@ -73,16 +74,16 @@ public class MonitorHandler extends AbstractHandler {
         int rate = this._abbozzaServer.getBaudRate();
         
         if (port != null) {
-            AbbozzaLogger.out("Port discovered: " + port , AbbozzaLogger.INFO);
-            AbbozzaLogger.out("Initializing ... " , AbbozzaLogger.INFO);        
+            AbbozzaLogger.out("MonitorHandler: Port discovered: " + port , AbbozzaLogger.INFO);
+            AbbozzaLogger.out("MonitorHandler: Initializing ... " , AbbozzaLogger.INFO);        
             try {
                 monitor = new AbbozzaMonitor(port,rate);
             } catch (Exception ex) {
                 AbbozzaLogger.err(ex.getLocalizedMessage());
             }
-            AbbozzaLogger.out("Monitor initialized" , AbbozzaLogger.INFO);
+            AbbozzaLogger.out("MonitorHandler: Monitor initialized" , AbbozzaLogger.INFO);
         } else {
-            AbbozzaLogger.out("No board discovered" , AbbozzaLogger.INFO);
+            AbbozzaLogger.out("MonitorHandler: No board discovered" , AbbozzaLogger.INFO);
             monitor = new AbbozzaMonitor();
         }
         
@@ -99,7 +100,7 @@ public class MonitorHandler extends AbstractHandler {
     }
 
     public boolean resume() {
-        AbbozzaLogger.out("Resume monitor", AbbozzaLogger.INFO );
+        AbbozzaLogger.out("MonitorHandler: Resume monitor", AbbozzaLogger.INFO );
         if (monitor == null) {
             return false;
         }

@@ -101,8 +101,13 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         _msgQueue = new ArrayDeque<Message>(100);
         _waitingMsg = new HashMap<String, Message>();
 
-        _sender = new Sender(this);
-        _sender.start();
+        if (_sender == null) {
+            _sender = new Sender(this);
+        }
+        
+        if ( !_sender.isAlive() ) {
+            _sender.start();
+        }
 
         initComponents();
         DefaultCaret caret = (DefaultCaret) textArea.getCaret();
@@ -131,7 +136,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         updateTimer = new Timer(33, this);  // redraw serial monitor at 30 Hz
         updateTimer.start();
         unprocessedMsg = new StringBuffer();
-
+      
         panels = new HashMap<String, MonitorPanel>();
         TableMonitor tableMonitor = new TableMonitor();
         this.addMonitorPanel(tableMonitor, "table");
@@ -291,29 +296,31 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     }//GEN-LAST:event_sendButtonActionPerformed
 
     private void portBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portBoxActionPerformed
+        System.out.println("A");
+        String port = (String) portBox.getSelectedItem();
         try {
-            String port = (String) portBox.getSelectedItem();
             if ( port == null ) return;
-            System.out.println(boardPort);
             if ( (boardPort != null) && (port.equals(boardPort)) ) return;
             boardPort = port;
-            System.out.println(boardPort);
+            AbbozzaLogger.out("AbbozzaMonitor.portBoxActionPerformed: Switching to " + boardPort);
             this.close();
             this.open();
         } catch (Exception ex) {
-            AbbozzaLogger.err("AbbozzaMonitor: Could not open " + boardPort);
+            AbbozzaLogger.err("AbbozzaMonitor.portBoxActionPerformed: Could not open " + port);
         }
     }//GEN-LAST:event_portBoxActionPerformed
 
     private void rateBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rateBoxActionPerformed
+       System.out.println("B");
        String rateString = (String) rateBox.getSelectedItem();
        if ( rateString == null) return;
        baudRate = Integer.parseInt( rateString );
+       AbbozzaLogger.out("AbbozzaMonitor.portBoxActionPerformed: Setting rate to " + rateString);
         try {
            this.close();
            this.open();
         } catch (Exception ex) {
-            AbbozzaLogger.err("AbbozzaMonitor: Could not set " + boardPort + " to " + baudRate + " baud");
+            AbbozzaLogger.err("AbbozzaMonitor.rateBoxActionPerformed: Could not set " + boardPort + " to " + baudRate + " baud");
         }
     }//GEN-LAST:event_rateBoxActionPerformed
 
@@ -398,7 +405,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
             serialPort.writeString(msg);
             appendText("-> " + msg + "\n");
         } catch (SerialPortException ex) {
-            AbbozzaLogger.err("Error sending to serial port");
+            AbbozzaLogger.err("AbbozzaMonitor: Error sending to serial port");
         }
     }
 
@@ -552,19 +559,24 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     }
 
     public void setBoardPort(String boardPort, int rate) {
+        System.out.println("AA");
         setBoardPort(boardPort);
+        System.out.println("AB");
         setRate(rate);
+        System.out.println("AC");
     }
 
     public void setBoardPort(String port) {
-        this.boardPort = boardPort;
+        this.boardPort = port;
         for (int i = 0; i < portBox.getItemCount(); i ++ ) {
             String p = portBox.getItemAt(i);
             if ( p.equals(port) ) {
                 portBox.setSelectedIndex(i);
+                return;
             }
         }
         
+        portBox.addItem(boardPort);
         portBox.setSelectedItem(boardPort);
     }
     
@@ -608,7 +620,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         // If the window is visible, try to open the serial port
         if (serialPort != null) {
             if ( !serialPort.isOpened() ) {
-                AbbozzaLogger.out("Serial port " + serialPort.getPortName() + " not available!",AbbozzaLogger.INFO);
+                AbbozzaLogger.out("AbbozzaMonitor: Serial port " + serialPort.getPortName() + " not available!",AbbozzaLogger.INFO);
                 serialPort = null;
             } else {
                 return;
@@ -622,7 +634,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                     addToUpdateBuffer(buff, n);
                 }
             };*/
-            AbbozzaLogger.out("Opening serial port " + boardPort,AbbozzaLogger.INFO);
+            AbbozzaLogger.out("AbbozzaMonitor: Opening serial port " + boardPort,AbbozzaLogger.INFO);
             serialPort = new SerialPort(boardPort);
             try {
                 serialPort.openPort();
@@ -653,7 +665,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         this.setVisible(true);
 
         if (boardPort != null) {
-            AbbozzaLogger.out("Open " + boardPort, AbbozzaLogger.INFO);
+            AbbozzaLogger.out("AbbozzaMonitor: Open " + boardPort, AbbozzaLogger.INFO);
             try {
 //                serial = new Serial(boardPort, 9600) {
 //                    @Override
@@ -708,7 +720,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                 String receivedData = serialPort.readString(event.getEventValue());
                 this.addToUpdateBuffer(receivedData);
             } catch (SerialPortException ex) {
-                AbbozzaLogger.err("Error in receiving string from serial port: " + ex);
+                AbbozzaLogger.err("AbbozzaMonitor: Error in receiving string from serial port: " + ex);
             }
         }
     }

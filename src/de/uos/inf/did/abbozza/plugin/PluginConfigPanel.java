@@ -61,20 +61,20 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        urlComboBox = new javax.swing.JComboBox<>();
+        urlComboBox = new javax.swing.JComboBox<String>();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         pluginList = new javax.swing.JList<Node>();
         installButton = new javax.swing.JButton();
 
-        urlComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "http://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/plugins.xml" }));
+        urlComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "http://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/plugins.xml" }));
         urlComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlComboBoxActionPerformed(evt);
             }
         });
 
-        jLabel1.setText(AbbozzaLocale.entry("GUI.PLUGIN_URL"));
+        jLabel1.setText(AbbozzaLocale.entry("gui.plugin_url"));
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -88,7 +88,7 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         });
         jScrollPane1.setViewportView(pluginList);
 
-        installButton.setText(AbbozzaLocale.entry("GUI.INSTALL"));
+        installButton.setText(AbbozzaLocale.entry("gui.install"));
         installButton.setEnabled(false);
         installButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
