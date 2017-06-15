@@ -426,7 +426,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                 try {
                     httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
                     registerHandlers();
-                    httpServer.setExecutor(Executors.newCachedThreadPool()); // ATTENTION
+                    httpServer.setExecutor(Executors.newFixedThreadPool(20)); // ATTENTION
                     httpServer.start();
                     AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
                 } catch (Exception e) {
