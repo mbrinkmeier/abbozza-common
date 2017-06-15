@@ -28,7 +28,7 @@
 AbbozzaParser::AbbozzaParser() {
     buffer = "";
     currentCommand = "";
-    remainder = "";
+    // remainder = "";
     debug = false;
 }
 
@@ -37,7 +37,7 @@ void AbbozzaParser::check() {
     int start, end;
 
     String newBuf;
-    String prefix;
+    // String prefix;
     String currentLine;
     
     currentCommand = "";
@@ -63,8 +63,8 @@ void AbbozzaParser::check() {
         if ( start >= 0 ) {
             end = buffer.indexOf("]]");
             if ( end >= 0 ) {
-                prefix = buffer.substring(0,start);
-                remainder.concat(prefix);
+                // prefix = buffer.substring(0,start);
+                // remainder.concat(prefix);
                 currentLine = buffer.substring(start+2,end);
                 currentLine.replace('\n',' ');
                 currentLine.replace('\t',' ');
