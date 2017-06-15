@@ -55,8 +55,10 @@ void AbbozzaParser::check() {
             buf.replace("]]","]_]");
             Serial.println("Buffer : '" + buf + "'");
         }
-        // find next command
-        currentLine = "";
+    }
+    // find next command
+    currentLine = "";
+    do {
         start = buffer.indexOf("[[");
         if ( start >= 0 ) {
             end = buffer.indexOf("]]");
@@ -71,7 +73,7 @@ void AbbozzaParser::check() {
                 setCommand(currentLine);
             }
         }
-    }
+    } while ((start >= 0) && (end >= 0));
 }
 
 

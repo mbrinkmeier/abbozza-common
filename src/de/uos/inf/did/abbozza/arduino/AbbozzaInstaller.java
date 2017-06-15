@@ -440,7 +440,9 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         try {            
             File prefFile = new File(System.getProperty("user.home") + "/.abbozza/arduino/abbozza.cfg");
             prefFile.getParentFile().mkdirs();
-            // prefFile.createNewFile();
+            if (!prefFile.exists()) {
+                prefFile.createNewFile();
+            }
             Properties config = new Properties();
             config.load(prefFile.toURI().toURL().openStream());
 

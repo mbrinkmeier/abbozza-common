@@ -365,7 +365,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
     }
 
     public int getBaudRate() {
-        return SerialPort.BAUDRATE_9600;
+        return SerialPort.BAUDRATE_115200;
     }
 }
 

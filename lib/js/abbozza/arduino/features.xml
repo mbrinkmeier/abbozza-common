@@ -233,8 +233,7 @@
             <block type="dev_ir_read"></block>
             <block type="dev_ir_read_dist"></block>
         </category> 		
-        
-        <category name="Töne" id="cat.SOUND">
+        <category name="Töne" id="cat.SOUND" color="150">
             <block type="dev_speaker"></block>
             <block type="dev_speaker_play"></block>
             <block type="dev_speaker_play_dur"></block>
@@ -243,6 +242,7 @@
             <block type="dev_speaker_note_int"></block>
             <block type="dev_speaker_mute"></block>
         </category>
+        
     </feature>
 
     <feature id ="feat.INT" option="interrupts">
