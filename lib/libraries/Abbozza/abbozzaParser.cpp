@@ -58,7 +58,7 @@ void AbbozzaParser::check() {
     }
     // find next command
     currentLine = "";
-    do {
+    // do {
         start = buffer.indexOf("[[");
         if ( start >= 0 ) {
             end = buffer.indexOf("]]");
@@ -73,7 +73,7 @@ void AbbozzaParser::check() {
                 setCommand(currentLine);
             }
         }
-    } while ((start >= 0) && (end >= 0));
+    // } while ((start >= 0) && (end >= 0));
 }
 
 
