@@ -110,7 +110,7 @@ Continuing?</msg>
         <msg id="menu.expand_all">Unfold blocks</msg>
         <msg id="menu.block_expand">Unfold single block</msg>
         <msg id="menu.help">Help</msg>;
-        <msg id="menu.delete_x_blocks">Delete block #</msg>
+        <msg id="menu.delete_x_blocks">Delete %1 blocks</msg>
         <msg id="menu.enable_block">Activate block</msg>
         <msg id="menu.disable_block">Deactivate block</msg>
         <msg id="menu.external_inputs">External inputs</msg>

@@ -110,7 +110,7 @@ Trotzdem fortfahren?</msg>
         <msg id="menu.expand_all">Entfalte Blöcke</msg>
         <msg id="menu.block_expand">Block entfalten</msg>
         <msg id="menu.help">Hilfe</msg>;
-        <msg id="menu.delete_x_blocks">Block # löschen</msg>
+        <msg id="menu.delete_x_blocks">Lösche %1 Blöcke</msg>
         <msg id="menu.enable_block">Block aktivieren</msg>
         <msg id="menu.disable_block">Block deaktivieren</msg>
         <msg id="menu.external_inputs">Externe Eingänge</msg>

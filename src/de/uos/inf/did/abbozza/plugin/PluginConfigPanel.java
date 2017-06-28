@@ -213,6 +213,7 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         Node node = (Node) value;
         String name = "???";
         String desc = "???";
+        String requires = "";
         String id = node.getAttributes().getNamedItem("id").getTextContent();
         String url = node.getAttributes().getNamedItem("url").getTextContent();
         NodeList children = node.getChildNodes();
@@ -222,9 +223,20 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
                 name = child.getTextContent();
             } else if (child.getNodeName().equals("description")) {
                 desc = child.getTextContent().trim();
+            } else if (child.getNodeName().equals("requires")) {
+                String lib = child.getTextContent().trim();
+                if ( requires.length() > 0 ) {
+                    requires = requires + ", ";
+                }
+                requires = requires + lib;
             }
         }
         
+
+        if ( requires.length() > 0 ) {
+            desc = desc + "\n\nRequired libraries: " + requires;
+        }
+
         PluginPanel pluginPanel = new PluginPanel(name,url,desc,id,this, isSelected);
         
         return pluginPanel;

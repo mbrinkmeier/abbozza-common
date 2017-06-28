@@ -9,17 +9,20 @@ import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.awt.Color;
+import java.awt.Component;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 /**
  *
  * @author michael
  */
-public class PluginPanel extends javax.swing.JPanel {
+public class PluginPanel extends javax.swing.JPanel implements ListCellRenderer {
 
     private String _name;
     protected String _url;
@@ -48,10 +51,14 @@ public class PluginPanel extends javax.swing.JPanel {
         }
         
         Plugin plugin = AbbozzaServer.getPluginManager().getPlugin(id);
+        
+        String text = _name + "\n\n" + _desc + "\n\n";
+
         if ( plugin != null ) {
-            this.statusLabel.setText(AbbozzaLocale.entry("gui.is_installed"));
+            text = text + AbbozzaLocale.entry("gui.is_installed");
         }
-        this.statusLabel.setText("");
+        descPane.setBackground(Color.WHITE);
+        descPane.setText(text);
 
     }
 
@@ -64,24 +71,18 @@ public class PluginPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        nameLabel = new javax.swing.JLabel();
         descPane = new javax.swing.JTextArea();
-        statusLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        nameLabel.setBackground(new java.awt.Color(255, 255, 255));
-        nameLabel.setText(_name);
-
+        descPane.setEditable(false);
         descPane.setColumns(20);
         descPane.setLineWrap(true);
         descPane.setRows(5);
         descPane.setText(_desc);
         descPane.setWrapStyleWord(true);
-        descPane.setPreferredSize(null);
-
-        statusLabel.setText("jLabel1");
+        descPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -89,28 +90,24 @@ public class PluginPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(descPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(descPane)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(nameLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(descPane, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(statusLabel)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(descPane)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea descPane;
-    private javax.swing.JLabel nameLabel;
-    private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        return this;
+    }
 }
