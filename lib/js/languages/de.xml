@@ -214,7 +214,7 @@ Trotzdem fortfahren?</msg>
         <msg id ="serial.END">Beende Kommunikation mit dem Computer</msg>
         <msg id ="serial.WRITEINT">Sende Zahl # an den Computer</msg>
         <msg id ="serial.WRITEBYTE">Sende # an den Computer</msg>
-        <msg id ="serial.PRINT">Schreibe # an den Computer (ohne Zeilenende)</msg>
+        <msg id ="serial.PRINT">Schreibe # an den Computer (ohne Zeilenende)</msg>-
         <msg id ="serial.PRINTLN">Schreibe # an den Computer</msg>
         <msg id ="serial.AVAILABLE">Zeichen vom Computer empfangen</msg>
         <msg id ="serial.READLN">Lese Zeile vom Computer</msg>
@@ -340,12 +340,13 @@ Trotzdem fortfahren?</msg>
         <msg id="err.ILLEGAL_PIN">Ungültiger Pin: #1</msg>
         <msg id="err.DEFAULT_VALUE">Wert nicht gesetzt</msg>
         <msg id="err.ILLEGAL_ANALOG_PIN">Kein analoger Pin!</msg>
-        <msg id="err.WRONG_SYSTEM">Der Sketch ist für # Systeme!</msg>
+        <msg id="err.WRONG_SYSTEM">Der Sketch ist für # Systeme!&#10;Soll er trotzdem geladen werden?</msg>
         <msg id="err.WRONG_SYSTEM_TITLE">Falsches System!</msg>
         <msg id="err.WRONG_NAME">Unbekannter Name</msg>
     </errors>
     <names>
         <msg id="arduino">Arduino kompatible</msg>
-        <msg id="calliope">Calliope Mini und micro:bit kompatible</msg>
+        <msg id="calliope">MicroPython für Calliope Mini und micro:bit</msg>
+        <msg id="calliopeC">C für Calliope Mini and micro:bit</msg>
     </names>
 </language>

@@ -126,8 +126,12 @@ public class LoadHandler extends AbstractHandler {
             }
             
             if ((!panel.getSystem().equals(this._abbozzaServer.getSystem())) && (!panel.getSystem().equals(""))) {
-                JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("err.WRONG_SYSTEM",AbbozzaLocale.entry(panel.getSystem())), AbbozzaLocale.entry("err.WRONG_SYSTEM_TITLE"),JOptionPane.ERROR_MESSAGE);
-                throw new IOException();
+                // JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("err.WRONG_SYSTEM",AbbozzaLocale.entry(panel.getSystem())), AbbozzaLocale.entry("err.WRONG_SYSTEM_TITLE"),JOptionPane.ERROR_MESSAGE);
+                int option = JOptionPane.showConfirmDialog(null, AbbozzaLocale.entry("err.WRONG_SYSTEM",AbbozzaLocale.entry(panel.getSystem())), 
+                             AbbozzaLocale.entry("err.WRONG_SYSTEM_TITLE"),JOptionPane.YES_NO_OPTION);
+                if ( option == JOptionPane.NO_OPTION ) {
+                    throw new IOException();
+                }
             }
             
             if (panel.applyOptions()) {
