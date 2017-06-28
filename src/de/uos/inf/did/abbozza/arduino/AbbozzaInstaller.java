@@ -150,10 +150,9 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         } else if (osName.equals("Win")) {
             sketchbookDir = prefName + "\\Documents\\Arduino\\";
             prefName = prefName + "\\AppData\\Local\\Arduino15\\preferences.txt";
-            System.out.println(prefName);
         } else {
             sketchbookDir = prefName + "/AppData/Roaming/Arduino/";
-            prefName = prefName + "/AppData/Roaming/Arduino/preferences.txt";
+            prefName = prefName + "/AppData/Roaming/Arduino15/preferences.txt";
         }
 
         Properties prefs = new Properties();
@@ -315,6 +314,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         buttonPanel.add(cancelButton);
 
         installButton.setText(AbbozzaLocale.entry("GUI.INSTALL"));
+        installButton.setSelected(true);
         installButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 installButtonActionPerformed(evt);

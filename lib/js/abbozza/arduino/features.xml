@@ -10,7 +10,11 @@
             <block type="loop_endless"></block>
             <block type="loop_while"></block>
             <block type="loop_do_while"></block>
-            <block type="loop_fixed"></block>
+            <block type="loop_fixed">
+                <value name="COUNT">
+                    <block type="math_number"><field name="VALUE">42</field></block>
+                </value>                   
+            </block>
             <block type="loop_count_dir">
                 <value name="FROM">
                     <block type="math_number"><field name="VALUE">0</field></block>
