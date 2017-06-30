@@ -91,7 +91,6 @@
             <block type="text_from_number"></block>
             <block type="text_from_ascii"></block>
             <block type="ascii_from_text"></block>
-            <block type="ascii_from_text"></block>
         </category>
 
         <category name="Ein- und Ausgabe" id="cat.INOUT">
