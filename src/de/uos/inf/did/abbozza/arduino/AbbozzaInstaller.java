@@ -81,6 +81,8 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
 
         // Initialize the frame
         initComponents();
+        
+        this.getRootPane().setDefaultButton(installButton);
 
         this.setTitle(AbbozzaLocale.entry("GUI.TITLE"));
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -306,6 +308,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         cancelButton.setText(AbbozzaLocale.entry("GUI.CANCEL"));
+        cancelButton.setDefaultCapable(false);
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
