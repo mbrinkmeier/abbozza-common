@@ -209,15 +209,14 @@ Trotzdem fortfahren?</msg>
         <msg id ="io.READAPIN">Analoger Wert von Pin</msg>
         <msg id ="io.SETAPIN">Setze Pin # auf analogen Wert</msg>
 		
-        <msg id ="serial.BEGINRATE">Starte Kommunikation mit dem Computer mit # baud</msg>
-        <msg id ="serial.BEGIN">Starte Kommunikation mit dem Computer</msg>
-        <msg id ="serial.END">Beende Kommunikation mit dem Computer</msg>
-        <msg id ="serial.WRITEINT">Sende Zahl # an den Computer</msg>
-        <msg id ="serial.WRITEBYTE">Sende # an den Computer</msg>
-        <msg id ="serial.PRINT">Schreibe # an den Computer (ohne Zeilenende)</msg>-
-        <msg id ="serial.PRINTLN">Schreibe # an den Computer</msg>
-        <msg id ="serial.AVAILABLE">Zeichen vom Computer empfangen</msg>
-        <msg id ="serial.READLN">Lese Zeile vom Computer</msg>
+        <msg id ="serial.BEGINRATE">Setze USB-Datenrate auf # Baud</msg>
+        <msg id ="serial.END">Stoppe Kommunikation über USB</msg>
+        <msg id ="serial.WRITEINT">Sende # über USB</msg>
+        <msg id ="serial.PRINT">Sende # über USB</msg>-
+        <msg id ="serial.PRINTLN">Sende Zeile # über USB</msg>
+        <msg id ="serial.AVAILABLE">Zeichen über USB empfangen</msg>
+        <msg id ="serial.READLN">Lese Zeile über USB</msg>
+        <msg id ="serial.SENDVALUES">Sende Werte über USB</msg>
                 
         <msg id ="func.NAME">Name</msg>
         <msg id ="func.CALL">Führe # aus</msg>
@@ -314,8 +313,8 @@ Trotzdem fortfahren?</msg>
         <msg id="int.FALLING">Abfall</msg>
         
         <msg id="cat.PARSE">Nachrichten</msg>
-        <msg id="parse.EXECUTE_MSG">Prüfe Nachrichten</msg>
-        <msg id="parse.STD_CMD">Prüfe Standard Nachrichten</msg>
+        <msg id="parse.EXECUTE_MSG">Prüfe USB-Nachrichten</msg>
+        <msg id="parse.STD_CMD">Standardnachrichten</msg>
         <msg id="parse.COMMAND">Falls # empfangen</msg>
         <msg id="parse.COMMANDS">Nachrichten</msg>
         <msg id="parse.CMD">Bei Nachricht # tue</msg>

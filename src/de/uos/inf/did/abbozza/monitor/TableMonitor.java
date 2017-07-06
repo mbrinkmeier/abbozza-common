@@ -33,6 +33,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPopupMenu;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultCaret;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -63,6 +64,7 @@ public class TableMonitor extends MonitorPanel {
      */
     public TableMonitor() {
         initComponents();
+        
         buffer = new StringBuffer();
         tableModel = new TableMonitorModel();
         table.setModel(tableModel);
@@ -101,6 +103,8 @@ public class TableMonitor extends MonitorPanel {
         popup.add(resetItem);
 
         setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setAutoscrolls(true);
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

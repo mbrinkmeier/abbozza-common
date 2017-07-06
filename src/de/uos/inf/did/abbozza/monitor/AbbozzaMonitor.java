@@ -110,6 +110,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         }
 
         initComponents();
+        
         DefaultCaret caret = (DefaultCaret) textArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
@@ -187,8 +188,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         logoPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        portBox = new javax.swing.JComboBox<>();
-        rateBox = new javax.swing.JComboBox<>();
+        portBox = new javax.swing.JComboBox<String>();
+        rateBox = new javax.swing.JComboBox<String>();
 
         protocolPopUp.setToolTipText("");
 
@@ -267,7 +268,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         });
         jPanel2.add(portBox);
 
-        rateBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "300", "1200", "2400", "4800", "9600", "14400", "19200", "28800", "38400", "57600", "115200", "230400" }));
+        rateBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "300", "1200", "2400", "4800", "9600", "14400", "19200", "28800", "38400", "57600", "115200", "230400" }));
         rateBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rateBoxActionPerformed(evt);
@@ -288,15 +289,14 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         String msg = (String) this.sendText.getEditor().getItem();
-        if (msg != null && !msg.isEmpty()) {
+        if (msg != null && !msg.isEmpty()) {            
             this.sendMessage(msg);
-            this.sendText.addItem(new String(msg));
+            this.sendText.insertItemAt(new String(msg),0);
             this.sendText.setSelectedItem(null);
         }
     }//GEN-LAST:event_sendButtonActionPerformed
 
     private void portBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portBoxActionPerformed
-        System.out.println("A");
         String port = (String) portBox.getSelectedItem();
         try {
             if ( port == null ) return;
@@ -311,7 +311,6 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     }//GEN-LAST:event_portBoxActionPerformed
 
     private void rateBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rateBoxActionPerformed
-       System.out.println("B");
        String rateString = (String) rateBox.getSelectedItem();
        if ( rateString == null) return;
        baudRate = Integer.parseInt( rateString );
@@ -328,7 +327,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         String msg = evt.getActionCommand();
         if (msg != null && !msg.isEmpty()) {
             this.sendMessage(msg);
-            this.sendText.addItem(new String(msg));
+            this.sendText.insertItemAt(new String(msg),0);
             this.sendText.setSelectedItem(null);
         }
     }
@@ -559,11 +558,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     }
 
     public void setBoardPort(String boardPort, int rate) {
-        System.out.println("AA");
         setBoardPort(boardPort);
-        System.out.println("AB");
         setRate(rate);
-        System.out.println("AC");
     }
 
     public void setBoardPort(String port) {

@@ -91,7 +91,7 @@ public class MonitorHandler extends AbstractHandler {
             monitor.open();
             monitor.setVisible(true);
             monitor.toFront();
-            monitor.setAlwaysOnTop(true);
+            // monitor.setAlwaysOnTop(true);
         } catch (Exception ex) {
             AbbozzaLogger.err(ex.getLocalizedMessage());
             return false;

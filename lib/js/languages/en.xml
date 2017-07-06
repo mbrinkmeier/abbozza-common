@@ -209,15 +209,15 @@ Continuing?</msg>
         <msg id ="io.READAPIN">Analog value of pin</msg>
         <msg id ="io.SETAPIN">Set pin # to analog value</msg>
 		
-        <msg id ="serial.BEGINRATE">Start communication with the computer with # baud</msg>
-        <msg id ="serial.BEGIN">Start communication with the computer</msg>
-        <msg id ="serial.END">Stop communication</msg>
-        <msg id ="serial.WRITEINT">Send number # to the computer</msg>
-        <msg id ="serial.WRITEBYTE">Send # to the computer</msg>
-        <msg id ="serial.PRINT">Send # to the computer(w/o newline)</msg>
-        <msg id ="serial.PRINTLN">Send # to the computer</msg>
-        <msg id ="serial.AVAILABLE">Received characters from the computer</msg>
-        <msg id ="serial.READLN">Read line from computer</msg>
+        <msg id ="serial.BEGINRATE">Set USB-rate to # Baud</msg>
+        <msg id ="serial.END">Stop communication over USB</msg>
+        <msg id ="serial.WRITEINT">Send # over USB</msg>
+        <msg id ="serial.PRINT">Send # over USB</msg>-
+        <msg id ="serial.PRINTLN">Send line # over  USB</msg>
+        <msg id ="serial.AVAILABLE">Character available at USB</msg>
+        <msg id ="serial.READLN">Read line over USB</msg>
+        <msg id ="serial.SENDVALUES">Send values over USB</msg>
+                
                 
         <msg id ="func.NAME">Name</msg>
         <msg id ="func.CALL">Call # </msg>
@@ -310,8 +310,8 @@ Continuing?</msg>
         <msg id="int.FALLING">falling</msg>
 
         <msg id="cat.PARSE">Messages</msg>
-        <msg id="parse.EXECUTE_MSG">Check Messages</msg>
-        <msg id="parse.STD_CMD">Check for standard messages</msg>
+        <msg id="parse.EXECUTE_MSG">Check USB-messages</msg>
+        <msg id="parse.STD_CMD">standard messages</msg>
         <msg id="parse.COMMAND">If # received</msg>
         <msg id="parse.COMMANDS">Messages</msg>
         <msg id="parse.CMD">On message # do</msg>
