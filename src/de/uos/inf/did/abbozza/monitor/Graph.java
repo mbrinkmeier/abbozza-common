@@ -136,17 +136,21 @@ public class Graph extends javax.swing.JPanel implements TableModelListener {
         gr.drawString("high", rect.x + rect.width - 30, (getHeight()-1)*1/7 + 13);
         
         // 10 and 16 Bit marks
+        int y1 = (getHeight()-1)*(1023-256)/1023;
+        int y2 = (getHeight()-1)*(1023-512)/1023;
+        int y3 = (getHeight()-1)*(1023-768)/1023;
         for (int i=0; i < rect.width; i=i+20) {
-            gr.drawLine(rect.x+i,getHeight()/2,rect.x+i+10,getHeight()/2);
-            gr.drawLine(rect.x+i,getHeight()*3/4,rect.x+i+10,getHeight()*3/4);
-            gr.drawLine(rect.x+i,getHeight()/4,rect.x+i+10,getHeight()/4);
+            gr.drawLine(rect.x+i,y1,rect.x+i+10,y1);
+            gr.drawLine(rect.x+i,y2,rect.x+i+10,y2);
+            gr.drawLine(rect.x+i,y3,rect.x+i+10,y3);
         }
-        gr.drawString("512",rect.x+5,getHeight()/2-2);
-        gr.drawString("256",rect.x+5,getHeight()/4-2);
-        gr.drawString("768",rect.x+5,getHeight()*3/4-2);
-        gr.drawString("32768",rect.x+rect.width/2-15,getHeight()/2-2);
-        gr.drawString("16348",rect.x+rect.width/2-15,getHeight()/4-2);
-        gr.drawString("49152",rect.x+rect.width/2-15,getHeight()*3/4-2);
+        
+        gr.drawString("512",rect.x+5,y2-2);
+        gr.drawString("768",rect.x+5,y3-2);
+        gr.drawString("256",rect.x+5,y1-2);
+        gr.drawString("32768",rect.x+rect.width/2-15,y2-2);
+        gr.drawString("49152",rect.x+rect.width/2-15,y3-2);
+        gr.drawString("16348",rect.x+rect.width/2-15,y1-2);
         
         int row = 0;
         Enumeration<TableMonitorModel.Entry> en = myTable.getEntries();
@@ -174,7 +178,7 @@ public class Graph extends javax.swing.JPanel implements TableModelListener {
                 } else if ( xType == ROWCOUNT ) {
                     x = row;
                 }
-                gr.fillOval(x*xZoom-1,y*yZoom-1, 2, 2);          
+                gr.fillRect(x*xZoom,y*yZoom, 1, 1);          
             }
             row++;
         }
