@@ -242,6 +242,7 @@ Continuing?</msg>
         <msg id="dev.RED">red</msg>
         <msg id="dev.GREEN">green</msg>
         <msg id="dev.BLUE">blue</msg>
+        <msg id="dev.WHITE">white</msg>
         <msg id="dev.SETRGBLED">Set RGB-LED # to</msg>        
         <msg id="dev.COMMON_CATHODE">Common cathode(-)</msg>
         <msg id="dev.COMMON_ANODE">Common anode(+)</msg>

@@ -241,6 +241,7 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.RED">Rot</msg>
         <msg id="dev.GREEN">Grün</msg>
         <msg id="dev.BLUE">Blau</msg>
+        <msg id="dev.WHITE">Weiß</msg>
         <msg id="dev.SETRGBLED">Setze RGB-LED # auf</msg>
         <msg id="dev.COMMON_CATHODE">Gemeinsame Kathode(-)</msg>
         <msg id="dev.COMMON_ANODE">Gemeinsame Anode(+)</msg>
