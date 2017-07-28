@@ -83,6 +83,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         initComponents();
         
         this.getRootPane().setDefaultButton(installButton);
+        installButton.requestFocusInWindow();
 
         this.setTitle(AbbozzaLocale.entry("GUI.TITLE"));
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
