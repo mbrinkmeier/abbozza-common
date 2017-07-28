@@ -49,6 +49,8 @@ public class LoadHandlerPanel extends javax.swing.JPanel implements PropertyChan
     
     /**
      * Creates new form LoadHandlerPanel
+     * 
+     * @param chooser The {@link JFileChooser} used for choosing the file.
      */
     public LoadHandlerPanel(JFileChooser chooser) {
         this.chooser = chooser;

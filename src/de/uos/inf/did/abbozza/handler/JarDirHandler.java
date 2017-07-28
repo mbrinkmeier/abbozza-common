@@ -49,7 +49,7 @@ public class JarDirHandler implements HttpHandler {
 
     /**
      * Add an URL to the list of possible locations.
-     * @param url The url to be added
+     * @param uri The URI to be added
      */
     public void addURI(URI uri) {
         entries.add(uri);
@@ -171,7 +171,6 @@ public class JarDirHandler implements HttpHandler {
      * 
      * @param path The requested path
      * @return A bytearray containig the contents of the requesed file or null.
-     * @throws IOException 
      */
     public byte[] getBytes(String path) {
         AbbozzaLogger.out("JarDirHandler: Reading " + path, AbbozzaLogger.DEBUG);

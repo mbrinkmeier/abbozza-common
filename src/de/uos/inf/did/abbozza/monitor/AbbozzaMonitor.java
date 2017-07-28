@@ -43,8 +43,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -87,8 +85,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     /**
      * Creates new AbbozzaMonitor with given port
      *
-     * @param port
-     * @param rate
+     * @param port The port to which the board is connected.
+     * @param rate The baud rate of the serial communication.
      */
     public AbbozzaMonitor(String port, int rate) {
         init();
@@ -412,6 +410,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
      * Enque a message for sending without timeout and without waiting for it.
      *
      * @param msg The message
+     * 
+     * @return The enqued message object
      */
     public Message sendMessage(String msg) {
         Message mesg = null;
@@ -430,6 +430,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
      * @param exchg The HttpExchange object representing the request
      * @param handler The Handler handling the request
      * @param timeout The timeout for the response (if greater than zero)
+     * 
+     * @return The enqued message object
      */
     public Message sendMessage(String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
         Message mesg = null;
@@ -551,7 +553,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     /**
      * Returns the current port is a board is connected, null otherwise.
      *
-     * @return
+     * @return The name of the port
      */
     public String getBoardPort() {
         return boardPort;

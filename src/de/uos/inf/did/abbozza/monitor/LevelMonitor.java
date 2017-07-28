@@ -45,6 +45,8 @@ public class LevelMonitor extends MonitorPanel implements TableModelListener {
 
     /**
      * Creates new form GraphMonitor
+     * 
+     * @param table The model to be used
      */
     public LevelMonitor(TableMonitorModel table) {
         myTable = table;

@@ -67,6 +67,8 @@ public class Graph extends javax.swing.JPanel implements TableModelListener {
     
     /**
      * Creates new form Graph
+     * 
+     * @param table The table model to be used
      */
     public Graph(TableMonitorModel table) {
         myTable = table;

@@ -54,8 +54,9 @@ public abstract class InstallTool {
 
 
     /**
+     * Returns the id of the system.
      * 
-     * @return 
+     * @return The id of the system.
      */
     public abstract String getSystem();
     
@@ -66,7 +67,7 @@ public abstract class InstallTool {
      * @param inp The InputStream from which the content is read.
      * @param file The file to write it to
      * 
-     * @throws IOException 
+     * @throws IOException An exception is thrown if an error occured.
      */
     public void writeToFile(InputStream inp, File file) throws IOException {
         try (FileOutputStream out = new FileOutputStream(file)) {
@@ -83,13 +84,14 @@ public abstract class InstallTool {
      * This operation adds a given app to the start menu. It has to be
      * implemented in the OS-specific install tools.
      * 
-     * @param fileName
+     * @param fileName The file of the program to be started.
      * @param name Name of the menu entry.
-     * @param genName
+     * @param genName The general name of the entry.
      * @param path Path to the executable starting the app.
      * @param icon Path to the icon fpr the entry.
      * @param global If true, the menu entry should be installed for all users.
-     * @return 
+     * 
+     * @return {@code true} if successful, {@code false} otherwise. 
      */
     public abstract boolean addAppToMenu(String fileName, String name, String genName, String path, String icon, boolean global);
     

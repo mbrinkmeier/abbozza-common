@@ -240,6 +240,8 @@ public class AbbozzaConfig {
 
     /**
      * This operation returns a clone of the current settings.
+     * 
+     * @return A clone of the properties.
      */
     public Properties get() {
         Properties props = (Properties) config.clone();
@@ -271,11 +273,11 @@ public class AbbozzaConfig {
     
     /**
      * Apply the string of options.
-     * The string contains a series of <key>=<value> pairs, seperated by
+     * The string contains a series of &lt;key&gt;=&lt;value&gt; pairs, seperated by
      * commata and enclosed in braces {,}
      * 
      * @param options The string continiag the key-value-pairs
-     * @throws IOException 
+     * @throws IOException Thrown if an error occurs.
      */
     public void apply(String options) throws IOException {
         // Remove braces, replace commata by newlines and remove leading 
@@ -386,6 +388,7 @@ public class AbbozzaConfig {
      * 
      * Oprerations for the general options, which aren't organized in the option tree.
      * 
+     * @return the current port.
      */
     public int getServerPort() {
         return config_serverPort;

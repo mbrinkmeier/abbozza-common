@@ -47,9 +47,9 @@ import org.xml.sax.SAXException;
 
 /**
  * This class implements a basic plugin for abbozza! 
- * It provides a handler for requests with path "/plugin/<name>/".
+ * It provides a handler for requests with path "/plugin/&lt;name&gt;/".
  * 
- * @author michael
+ * @author Michael Brinkmeier (michael.brinkmeier@uni-osnabrueck.de)
  */
 public class Plugin {
 
@@ -72,7 +72,8 @@ public class Plugin {
     /**
      * Instantiate the pugin. 
      * 
-     * @param url
+     * @param url The URL of the plugin
+     * @param xml The XML-document containing the plugin informations.
      */
     public Plugin(URL url, Document xml) {
         this._handler = null;
@@ -218,7 +219,7 @@ public class Plugin {
     }
     
     /**
-     * Gets a http handler for the context /plugin/<id>
+     * Gets a http handler for the context /plugin/&lt;id&gt;
      * 
      * @return The http handler
      */

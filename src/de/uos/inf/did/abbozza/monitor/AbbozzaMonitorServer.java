@@ -41,9 +41,9 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
     }
 
     /**
-     * The system independent initialization of the server
+     * The system independent initialization of the server.
      *
-     * @param system
+     * @param system The id of the system type
      */
     public void init(String system) {
         // If there is already an Abbozza instance, silently die

@@ -33,6 +33,13 @@ public class PluginPanel extends javax.swing.JPanel implements ListCellRenderer 
     
     /**
      * Creates new form PluginPanel
+     * 
+     * @param name The name of the plugin.
+     * @param url The URL of the plugin.
+     * @param desc A description of the plugin.
+     * @param id The id of the plugin.
+     * @param panel The Panel displaying the plugin information.
+     * @param selected If {@code true} the panel is selected after creation.
      */
     public PluginPanel(String name, String url, String desc, String id, PluginConfigPanel panel, boolean selected) {
         _name = name;

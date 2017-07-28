@@ -42,7 +42,7 @@ public class AbbozzaLocale {
     /**
      * Set the current locale and reads it from the xml-files
      * 
-     * @param loc 
+     * @param loc The locale to be used.
      */
     public static void setLocale(String loc) {
         locale = loc;
@@ -59,7 +59,8 @@ public class AbbozzaLocale {
      * Build the locale from the given directory
      * 
      * @param loc The locale
-     * @param path The directory in wjhich the locale files are located.
+     * @param path The directory in which the locale files are located.
+     * @param jar The jar file in which the files are stored.
      */
     public static void setLocale(String loc, JarFile jar, String path) {
         locale = loc;
@@ -76,7 +77,7 @@ public class AbbozzaLocale {
     /**
      * Builds the locale from common, system specific and plugin locales
      * 
-     * @return 
+     * @return The XML-document containig the locale entries.
      */
     private static Document buildLocale() {
         try {
@@ -141,6 +142,9 @@ public class AbbozzaLocale {
 
     /**
      * Builds the locale from the specified path
+     * 
+     * @param jar The jar containing the locale files.
+     * @param path The path inside the jar to the locale file.
      * 
      * @return 
      */
@@ -298,7 +302,7 @@ public class AbbozzaLocale {
     /**
      * gets the current locale
      * 
-     * @return 
+     * @return The current locale.
      */
     public static String getLocale() {
         return locale;
@@ -311,8 +315,8 @@ public class AbbozzaLocale {
     /**
      * Returns an entry of the current locale
      * 
-     * @param key
-     * @return 
+     * @param key The key of the requested entry.
+     * @return The value of the requested entry.
      */
     public static String entry(String key) {
         Element el = localeXml.getElementById(key);
@@ -326,7 +330,7 @@ public class AbbozzaLocale {
      * 
      * @param key The key of the entry
      * @param value The replacement for '#' in the found string
-     * @return 
+     * @return The changed entry.
      */
     public static String entry(String key, String value) {
         String res = entry(key);

@@ -9,30 +9,16 @@ package de.uos.inf.did.abbozza;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -57,6 +43,12 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form AbbozzaConfigDialog
+     * 
+     * @param props The properties displayed and modified in the dialog.
+     * @param parent The parent frame.
+     * @param showServer This flag inidcates if the server tab shoulkd be shown ({@code true})
+     * or not ({@code fale})
+     * @param modal A flag inidcating, wether the dialog should be modal ({@code true}) or not ({@code false}).
      */
     public AbbozzaConfigDialog(Properties props, java.awt.Frame parent, boolean showServer, boolean modal) {
         super(parent, modal);      

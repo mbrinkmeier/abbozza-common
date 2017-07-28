@@ -33,7 +33,7 @@ import javax.swing.JDialog;
 
 /**
  *
- * @author mbrinkmeier
+ * @author Michael Brinkmeier (mbrinkmeieruni-osnabrueck.de)
  */
 public class AbbozzaInstaller extends javax.swing.JDialog {
 
@@ -41,7 +41,10 @@ public class AbbozzaInstaller extends javax.swing.JDialog {
     static public final String VERSION = "0.1";
 
     /**
-     * Creates new form AbbozzaInstallerQuery
+     * Creates new form.
+     * 
+     * @param parent The parent frame of the installer
+     * @param modal A flag inidcating, wether the installer should be modal.
      */
     public AbbozzaInstaller(java.awt.Frame parent, boolean modal) {
         super(parent, modal);

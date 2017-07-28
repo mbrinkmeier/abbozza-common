@@ -36,6 +36,8 @@ public class GraphMonitor extends MonitorPanel {
    
     /**
      * Creates new form GraphMonitor
+     * 
+     * @param table The table model to be used
      */
     public GraphMonitor(TableMonitorModel table) {
         initComponents();

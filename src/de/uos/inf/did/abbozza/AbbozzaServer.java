@@ -136,7 +136,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     /**
      * The system independent initialization of the server
      *
-     * @param system
+     * @param system The id of the system.
      */
     public void init(String system) {
         // If there is already an Abbozza instance, silently die
@@ -285,8 +285,9 @@ public abstract class AbbozzaServer implements HttpHandler {
     /**
      * Request handling
      *
-     * @param exchg
-     * @throws java.io.IOException
+     * @param exchg The {@link HttpExchange} to be handled.
+     * 
+     * @throws java.io.IOException Thrown if an error occured.
      */
     @Override
     public void handle(HttpExchange exchg) throws IOException {

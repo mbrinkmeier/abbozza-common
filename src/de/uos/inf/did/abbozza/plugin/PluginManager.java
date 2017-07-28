@@ -251,9 +251,11 @@ public class PluginManager implements HttpHandler {
     }
     
     /**
-     * This operation returns a Document containing the locales of all registered plugins.
+     * This operation adds all locale entries of all registered plugins to a
+     * given XML root.
      * 
-     * @return 
+     * @param locale The requested locale
+     * @param root The Element to which the locale entries should be added
      */
     public void addLocales(String locale, Element root) {
         try {
