@@ -136,7 +136,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
     /**
      * Get the preferences of the installed arduino app
      *
-     * @return
+     * @return A Properties-object containig the preference settings.
      */
     public Properties getPreferences() {
 
