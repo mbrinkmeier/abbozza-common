@@ -8,6 +8,7 @@ package de.uos.inf.did.abbozza.install;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +43,7 @@ public class InstallToolLinux extends InstallTool {
             if ( global ) {
                 file = new File("/usr/share/applications/" + fileName + ".desktop");
             } else {
+                Files.createDirectories( new File(this.getUserDir() + "/.local/share/applications/").toPath());
                 file = new File( this.getUserDir() + "/.local/share/applications/" + fileName + ".desktop");
             }
 
