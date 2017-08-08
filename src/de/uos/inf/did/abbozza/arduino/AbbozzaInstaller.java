@@ -392,10 +392,12 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             targetFile.createNewFile();
             addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", abbozzaDir + "lib/abbozza-arduino.jar"));
             Files.copy(installerFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", abbozzaDir + "lib/jssc-2.8.0.jar"));
             File libDir = new File(sketchbookDir.getAbsolutePath() + "/tools/Abbozza/lib/");
             libDir.mkdirs();
+            addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", abbozzaDir + "lib/jssc-2.8.0.jar"));
             installTool.copyFromJar(installerJar,"lib/jssc-2.8.0.jar",libDir.getAbsolutePath() + "/jssc-2.8.0.jar");
+            installTool.copyFromJar(installerJar, "lib/rsyntaxtextarea.jar", libDir.getAbsolutePath() + "/lib/license_jssc.txt");
+            
             String scriptPath = sketchbookDir.getAbsolutePath() + "/tools/Abbozza/";
             addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", scriptPath + "/arduinoMonitor.[sh|bat]"));
             installTool.copyFromJar(installerJar,"lib/arduinoMonitor.sh",scriptPath + "/arduinoMonitor.sh");
