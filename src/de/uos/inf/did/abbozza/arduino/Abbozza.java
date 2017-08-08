@@ -15,6 +15,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 /**
  * @fileoverview The main class for the abbozza! server
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
@@ -152,6 +153,9 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         super.setPaths();
         
         sketchbookPath = PreferencesData.get("sketchbook.path");
+        if ( sketchbookPath.contains("%HOME%")) {
+            sketchbookPath = sketchbookPath.replace("%HOME%", System.getProperty("user.home"));
+        }
         // configPath = sketchbookPath + "/tools/Abbozza/Abbozza.cfg";
         localJarPath = sketchbookPath + "/tools/Abbozza/tool/";
         globalJarPath = PreferencesData.get("runtime.ide.path") + "/";
