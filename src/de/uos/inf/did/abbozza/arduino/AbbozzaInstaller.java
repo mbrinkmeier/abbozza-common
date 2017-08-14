@@ -97,8 +97,8 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         if (installTool.getSystem().equals("Mac")) {
             // OsX only requires the command 'open'
             browserField.setText("open");
-            browserField.setEnabled(false);
-            browserButton.setEnabled(false);
+            // browserField.setEnabled(false);
+            // browserButton.setEnabled(false);
         }
 
         AbbozzaLogger.init();
@@ -396,7 +396,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             libDir.mkdirs();
             addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", abbozzaDir + "lib/jssc-2.8.0.jar"));
             installTool.copyFromJar(installerJar,"lib/jssc-2.8.0.jar",libDir.getAbsolutePath() + "/jssc-2.8.0.jar");
-            installTool.copyFromJar(installerJar, "lib/rsyntaxtextarea.jar", libDir.getAbsolutePath() + "/lib/license_jssc.txt");
+            installTool.copyFromJar(installerJar,"lib/license_jssc.txt", libDir.getAbsolutePath() + "/license_jssc.txt");
             
             String scriptPath = sketchbookDir.getAbsolutePath() + "/tools/Abbozza/";
             addMsg(msgDoc, AbbozzaLocale.entry("MSG.WRITING", scriptPath + "/arduinoMonitor.[sh|bat]"));
