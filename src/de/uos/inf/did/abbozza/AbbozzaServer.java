@@ -476,7 +476,18 @@ public abstract class AbbozzaServer implements HttpHandler {
                             Desktop desktop = Desktop.getDesktop();
                             if (desktop.isSupported(Desktop.Action.BROWSE)) {
                                 String url = "localhost:" + serverPort + "/abbozza.html";
-                                Desktop.getDesktop().browse(new URI(url));
+                                // if (this.getSystem().equals("Mac")) {
+                                //     Runtime runtimeMac = Runtime.getRuntime();
+                                //     String[] args = { "osascript", "-e", "open location \"" + url + "\"" };
+                                //     try {
+                                //         Process process = runtimeMac.exec(args);
+                                //     }
+                                //     catch (IOException e) {
+                                //         failed = true;
+                                //      }                                    
+                                // } else {
+                                        Desktop.getDesktop().browse(new URI(url));
+                                // }
                             } else {
                                 failed = true;
                             }
@@ -506,7 +517,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                             runtime.exec(cmd);
                             toolToBack();
                         } catch (IOException e) {
-                            // TODO Browser could not be started
+                            AbbozzaLogger.err("Browser could not be started: " + e.getMessage());
                         }
                         // sendResponse(exchg, 200, "text/plain", abbozza.getProperties().toString());
                     } else {
