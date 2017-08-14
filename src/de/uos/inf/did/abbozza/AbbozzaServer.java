@@ -450,13 +450,17 @@ public abstract class AbbozzaServer implements HttpHandler {
         Runtime runtime = Runtime.getRuntime();
 
         if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
-            String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
+            String[] cmd = new String[2];
+            // cmd[0] =  "\"" + config.getBrowserPath().replace("\"", "\\\"") + "\"";
+            cmd[0] =  config.getBrowserPath();
+            cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
+            // String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
             try {
-                AbbozzaLogger.out("Starting browser " + cmd);
+                AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
                 runtime.exec(cmd);
                 toolToBack();
             } catch (IOException e) {
-                // TODO Browser could not be started
+                AbbozzaLogger.err("Browser could not be started: " + e.getMessage());
             }
         } else {
             Object[] options = {AbbozzaLocale.entry("msg.cancel"), AbbozzaLocale.entry("msg.open_standard_browser"), AbbozzaLocale.entry("msg.give_browser")};
@@ -511,9 +515,11 @@ public abstract class AbbozzaServer implements HttpHandler {
                         config.set(dialog.getConfiguration());
                         AbbozzaLocale.setLocale(config.getLocale());
                         config.write();
-                        String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + system + ".html";
+                        String[] cmd = new String[2];
+                        cmd[0] =  config.getBrowserPath();
+                        cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
                         try {
-                            AbbozzaLogger.out("Starting browser " + cmd);
+                            AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
                             runtime.exec(cmd);
                             toolToBack();
                         } catch (IOException e) {
