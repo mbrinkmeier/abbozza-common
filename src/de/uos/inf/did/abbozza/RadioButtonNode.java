@@ -24,6 +24,7 @@
 package de.uos.inf.did.abbozza;
 
 import java.util.Enumeration;
+import javax.swing.AbstractButton;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -40,21 +41,21 @@ public class RadioButtonNode extends CheckBoxNode {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		// boolean state = ((AbstractButton) e.getSource()).isSelected();
-		DefaultMutableTreeNode parent = (DefaultMutableTreeNode) getNode().getParent();
-		if (parent != null) {
-			Enumeration<?> it = parent.children();
-			while (it.hasMoreElements()) {
-				DefaultMutableTreeNode child = (DefaultMutableTreeNode) it.nextElement();
-				if ( child.getUserObject() instanceof RadioButtonNode) {
-					// System.out.println(((RadioButtonNode) child.getUserObject()).getText() + " -> false");
-					((RadioButtonNode) child.getUserObject()).setSelected(false);
-				}
-			}
-			// System.out.println(getText() + " -> true");
-			// System.out.println();
-			setSelected(true);
+            // boolean state = ((AbstractButton) e.getSource()).isSelected();
+            DefaultMutableTreeNode parent = (DefaultMutableTreeNode) getNode().getParent();
+            if (parent != null) {
+                Enumeration<?> it = parent.children();
+            	while (it.hasMoreElements()) {
+                    DefaultMutableTreeNode child = (DefaultMutableTreeNode) it.nextElement();
+                    if ( child.getUserObject() instanceof RadioButtonNode) {
+                    // System.out.println(((RadioButtonNode) child.getUserObject()).getText() + " -> false");
+                    ((RadioButtonNode) child.getUserObject()).setSelected(false);
 		}
+            }
+            // System.out.println(getText() + " -> true");
+            // System.out.println();
+            setSelected(true);
+            }
 	}
 	
 	

@@ -50,9 +50,11 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.blocks">Blöcke</msg>
         <msg id="gui.code">Code</msg>         
         <msg id="gui.misc">Sonstiges</msg>         
+        <msg id="gui.advanced">Fortgeschrittene Blöcke</msg>
         <msg id="gui.operations">Operationen</msg>         
         <msg id="gui.local_variables">Lokale Variablen</msg>         
         <msg id="gui.serial_communication">Serielle Kommunikation</msg>         
+        <msg id="gui.i2cs">I2CS Geräte</msg>         
         <msg id="gui.arrays">Felder/Reihungen</msg>         
         <msg id="gui.no_arrays">Keine Felder/Reihungen</msg>         
         <msg id="gui.lin_arrays">Eindimensionale Felder/Reihungen</msg>         
@@ -100,6 +102,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.install">Installieren</msg>
         <msg id="gui.reinstall">Erneut installieren</msg>
         <msg id="gui.plugin_panel">Plugins</msg>
+        <msg id="gui.i2cs_master">I2CS Master</msg>
+        <msg id="gui.i2cs_slave">I2CS Slave</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
@@ -138,6 +142,8 @@ Trotzdem fortfahren?</msg>
         <msg id="cat.INT">Interrupts</msg>
         <msg id="cat.TEACHER">Lehrer</msg>
         <msg id="cat.USB">USB Kommunikation</msg>        
+        <msg id="cat.I2CS_MASTER">I2CS Master</msg>
+        <msg id="cat.I2CS_SLAVE">I2CS Slave</msg>
 </categories>
     <blocks>
         <msg id="STRING">Text</msg>
@@ -286,6 +292,19 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.OCTAVE_THREE_LINE">dreigestrichenen Oktave (höher)</msg>
         <msg id="dev.OCTAVE_FOUR_LINE">viergestrichenen Oktave (sehr hoch)</msg>
         
+        <msg id="dev.I2CS_MASTER">Aktiviere I2CS als Master</msg>
+        <msg id="dev.I2CS_SLAVE">Aktiviere I2CS als Slave mit Adresse</msg>
+        <msg id="dev.I2CS_MASTER_SEND">I2CS: Sende # an Adresse</msg>
+        <msg id="dev.I2CS_MASTER_REQUEST">I2CS: Fordere # Bytes von Adresse</msg>
+        <msg id="dev.I2CS_BEGIN">I2CS: Beginne Transaktion mit Adresse</msg>
+        <msg id="dev.I2CS_END">I2CS: Beende Transaktion</msg>
+        <msg id="dev.I2CS_WRITE">I2CS: Sende #  an Adresse</msg>
+        <msg id="dev.I2CS_WRITE_ARRAY">I2CS: Sende #  an Adresse</msg>
+        <msg id="dev.I2CS_AVAILABLE">I2CS: verfügbare Bytes</msg>
+        <msg id="dev.I2CS_READ">I2CS: Lese</msg>
+        <msg id="dev.I2CS_RECEIVE">I2CS: Führe aus, wenn Nachricht empfangen wird: </msg>
+        <msg id="dev.I2CS_REQUEST">I2CS: Führe aus, wenn abgefragt: </msg>
+
         <msg id="AND">und</msg>
         <msg id="MILLIS">Zeit in Millisekunden (ms)</msg>
         <msg id="MICROS">Zeit in Mikroseconden (µs)</msg>

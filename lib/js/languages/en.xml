@@ -50,9 +50,11 @@ Continuing?</msg>
         <msg id="gui.blocks">Blocks</msg>
         <msg id="gui.code">Code</msg>         
         <msg id="gui.misc">Misc</msg>         
+        <msg id="gui.advanced">Advanced blocks<msg>
         <msg id="gui.operations">Operations</msg>         
         <msg id="gui.local_variables">Local variables</msg>         
         <msg id="gui.serial_communication">Serial Communication</msg>         
+        <msg id="gui.i2cs">I2CS Devices</msg>         
         <msg id="gui.arrays">Arrays</msg>         
         <msg id="gui.no_arrays">No arrays</msg>         
         <msg id="gui.lin_arrays">Linear arrays</msg>         
@@ -100,6 +102,8 @@ Continuing?</msg>
         <msg id="gui.install">Install</msg>
         <msg id="gui.reinstall">Reinstallieren</msg>
         <msg id="gui.plugin_panel">Plugins</msg>
+        <msg id="gui.i2cs_master">I2CS Master</msg>
+        <msg id="gui.i2cs_slave">I2CS Slave</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
@@ -138,6 +142,8 @@ Continuing?</msg>
         <msg id="cat.INT">Interrupts</msg>
         <msg id="cat.TEACHER">Teacher</msg>        
         <msg id="cat.USB">USB communication</msg>
+        <msg id="cat.I2CS_MASTER">I2CS Master</msg>
+        <msg id="cat.I2CS_SLAVE">I2CS Slave</msg>
     </categories>
     <blocks>
         <msg id="STRING">Text</msg>
@@ -285,8 +291,21 @@ Continuing?</msg>
         <msg id="dev.OCTAVE_ONE_LINE">one-line octave (regular)</msg>
         <msg id="dev.OCTAVE_TWO_LINE">two-line octave (high)</msg>
         <msg id="dev.OCTAVE_THREE_LINE">three-line octave (higher)</msg>
-        <msg id="dev.OCTAVE_FOUR_LINE">four-line octave (very high)</msg>
-			
+        <msg id="dev.OCTAVE_FOUR_LINE">four-line octave (very high)</msg>			
+        
+        <msg id="dev.I2CS_MASTER">Activate I2CS as master</msg>
+        <msg id="dev.I2CS_SLAVE">Activate I2CS as slave with address</msg>
+        <msg id="dev.I2CS_MASTER_SEND">I2CS: Send # to address</msg>
+        <msg id="dev.I2CS_MASTER_REQUEST">I2CS: Request # bytes from address</msg>
+        <msg id="dev.I2CS_BEGIN">I2CS: Start transmission to adresse</msg>
+        <msg id="dev.I2CS_END">I2CS: End transmission</msg>
+        <msg id="dev.I2CS_WRITE">I2CS: Send # to address</msg>
+        <msg id="dev.I2CS_WRITE_ARRAY">I2CS: Send # to address</msg>
+        <msg id="dev.I2CS_AVAILABLE">I2CS: available bytes</msg>
+        <msg id="dev.I2CS_READ">I2CS: read</msg>
+        <msg id="dev.I2CS_RECEIVE">I2CS: if message is received, call </msg>
+        <msg id="dev.I2CS_REQUEST">I2CS: on request, call </msg>
+
         <msg id="SETUP">Setup</msg>
         <msg id="LOOP">Main loop</msg>
         <msg id="DEVICES">Devices</msg>
