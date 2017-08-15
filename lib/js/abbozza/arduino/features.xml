@@ -1,39 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features>
+    
+    <!-- The basic features, w/o variables, operations, arrays ... -->
     <feature id="feat.BASE">
-        <category name="Entscheidungen" id="cat.COND">
+        
+        <!-- The basic conditionals and boolean logic -->
+        <category name="Logik" id="cat.LOGIC">
             <block type="cond_if"></block>
             <block type="cond_if_else"></block>
+            <block type="logic_const"></block>
+            <block type="logic_op"></block>
+            <block type="logic_not"></block>
+            <block type="logic_compare"></block>
         </category>
 
+        <!-- Basic loops -->
         <category name="Schleifen" id="cat.LOOPS">
             <block type="loop_endless"></block>
-            <block type="loop_while"></block>
-            <block type="loop_do_while"></block>
             <block type="loop_fixed">
                 <value name="COUNT">
-                    <block type="math_number"><field name="VALUE">42</field></block>
+                    <block type="math_number">
+                        <field name="VALUE">42</field>
+                    </block>
                 </value>                   
             </block>
-            <block type="loop_count_dir">
-                <value name="FROM">
-                    <block type="math_number"><field name="VALUE">0</field></block>
-                </value>   
-                <value name="TO">
-                    <block type="math_number"><field name="VALUE">42</field></block>
-                </value>   
-            </block>
-            <block type="loop_count_dir_step">
-                <value name="FROM">
-                    <block type="math_number"><field name="VALUE">0</field></block>
-                </value>   
-                <value name="TO">
-                    <block type="math_number"><field name="VALUE">42</field></block>
-                </value>   
-                <value name="STEP">
-                    <block type="math_number"><field name="VALUE">1</field></block>
-                </value>   
-            </block>
+            <block type="loop_while"></block>
+            <block type="loop_do_while"></block>
             <block type="loop_break"></block>
             <block type="loop_delay">
                 <value name="TIME">
@@ -47,52 +39,46 @@
             </block>            
         </category>
 
-        <category id="cat.FUNC">
-        </category>
-        
-        <category name="Variablen" id="cat.VAR">
-            <block type="var_block"></block>
-            <block type="var_assign">
-                <value name="LEFT">
-                    <block type="var_block"></block>
-                </value>
-            </block>
-        </category>
-
-        <category name="Logik" id="cat.LOGIC">
-            <block type="logic_const"></block>
-            <block type="logic_op"></block>
-            <block type="logic_not"></block>
-            <block type="logic_compare"></block>
-        </category>
-	    
+        <!-- Integer math -->
         <category name="Mathe" id="cat.MATH">
             <block type="math_number"></block>
-            <block type="math_decimal"></block>
             <block type="math_calc"></block>
-            <!--block type="math_round"></block-->
-            <block type="math_unary"></block>
-            <block type="math_binary"></block>
-            <block type="math_random"></block>
-            <block type="math_random2"></block>
-            <block type="math_randomseed"></block>
+            <block type="math_random">
+                <value name="MAX">
+                    <block type="math_number">
+                        <field name="VALUE">100</field>
+                    </block>
+                </value>
+            </block>
+            <block type="math_random2">
+                <value name="MIN">
+                    <block type="math_number">
+                        <field name="VALUE">1</field>
+                    </block>
+                </value>                
+                <value name="MAX">
+                    <block type="math_number">
+                        <field name="VALUE">50</field>
+                    </block>
+                </value>                
+            </block>
+            <block type="math_randomseed">
+                <value name="SEED">
+                    <block type="math_millis"></block>
+                </value>                                
+            </block>
             <block type="math_millis"></block>
             <block type="math_micros"></block>
-            <block type="math_constrain"></block>
-            <block type="math_scale"></block>
         </category>
-	    
+        
+        <!-- Simple string operations -->
         <category name="Text" id="cat.TEXT">
             <block type="text_const"></block>
             <block type="text_length"></block>
             <block type="text_concat"></block>
-            <block type="text_charat"></block>
-            <block type="text_substring"></block>
-            <block type="text_from_number"></block>
-            <block type="text_from_ascii"></block>
-            <block type="ascii_from_text"></block>
         </category>
-
+        
+        <!-- Basic pin in- and output -->
         <category name="Ein- und Ausgabe" id="cat.INOUT">
             <block type="inout_pin"></block>
             <block type="inout_pinmode">
@@ -128,24 +114,67 @@
                 </value>
             </block>
         </category>
-
-        <category name="Sensoren" id="cat.DEVIN">
-        </category>
-
-        <category name="Aktuatoren" id="cat.DEVOUT">
-        </category>
-	    
-        <category id="cat.SERIAL">
-        </category>
         
-        <category name="Interrupts" id="cat.INT">
+        <!-- Variables -->        
+        <category name="Variablen" id="cat.VAR">
+            <block type="var_block"></block>
+            <block type="var_assign">
+                <value name="LEFT">
+                    <block type="var_block"></block>
+                </value>
+            </block>
         </category>
-                         
-        <!--category name="Test" id="cat.TEST">
-            <block type="test"></block>
-        </category-->
+
     </feature>
-		
+
+        
+    <!-- Advanced blocks -->
+    <feature id="feat.ADVANCED" option="advanced">
+        
+        <!-- Advanced loops -->
+        <category name="Schleifen" id="cat.LOOPS">
+            <block type="loop_count_dir">
+                <value name="FROM">
+                    <block type="math_number"><field name="VALUE">0</field></block>
+                </value>   
+                <value name="TO">
+                    <block type="math_number"><field name="VALUE">42</field></block>
+                </value>   
+            </block>
+            <block type="loop_count_dir_step">
+                <value name="FROM">
+                    <block type="math_number"><field name="VALUE">0</field></block>
+                </value>   
+                <value name="TO">
+                    <block type="math_number"><field name="VALUE">42</field></block>
+                </value>   
+                <value name="STEP">
+                    <block type="math_number"><field name="VALUE">1</field></block>
+                </value>   
+            </block>
+        </category>
+
+        <!-- Advanced mathematical blocks -->
+        <category name="Mathe" id="cat.MATH">
+            <block type="math_decimal"></block>
+            <block type="math_unary"></block>
+            <block type="math_binary"></block>
+            <block type="math_constrain"></block>
+            <block type="math_scale"></block>
+        </category>
+
+        <!-- Advanced string operations -->	    
+        <category name="Text" id="cat.TEXT">
+            <block type="text_charat"></block>
+            <block type="text_substring"></block>
+            <block type="text_from_number"></block>
+            <block type="text_from_ascii"></block>
+            <block type="ascii_from_text"></block>
+        </category>
+    </feature>
+
+
+    <!-- Operations -->		
     <feature id="feat.FUNC" option="operations">
         <category id="cat.FUNC">
             <block type="func_decl"></block>
@@ -154,6 +183,8 @@
         </category>
     </feature>
 	
+        
+    <!-- Serial communication via USB -->
     <feature id="feat.USB" option="usb">
         <category id="cat.USB">
             <block type="serial_begin_rate"></block>
@@ -167,6 +198,8 @@
         </category>
     </feature>
         
+        
+    <!-- Messages via USB -->
     <feature id="feat.MESSAGE" option="messages">
         <category id ="cat.USB">
             <block type="message_parse">
@@ -184,6 +217,7 @@
     </feature>        
     
     
+   <!-- Serial communication via pins -->
     <feature id="feat.SERIAL" option="serial">
         <category id="cat.SERIAL">
             <block type="dev_serial"></block>
@@ -199,18 +233,8 @@
         </category>
     </feature>
         
-    <feature id="feat.SERIALRATE">
-        <category id="cat.SERIAL">
-            <!-- block type="serial_begin_rate"></block -->
-        </category>
-    </feature>
 
-    <feature id="feat.MISC" option="lcd">
-        <category name="LCD" id="cat.LCD">
-            <block type="dev_lcd"></block>
-        </category>
-    </feature>
-                
+    <!-- Devices -->                
     <feature id="feat.DEVICES" option="devices">
         <category name="Aktuatoren" id="cat.DEVOUT">
             <block type="dev_led"></block>
@@ -248,9 +272,10 @@
             <block type="dev_speaker_note_int"></block>
             <block type="dev_speaker_mute"></block>
         </category>
-        
     </feature>
 
+
+    <!-- Interrupts -->
     <feature id ="feat.INT" option="interrupts">
         <category name="Interrupts" id="cat.INT">
             <block type="int_interrupts"></block>
@@ -260,6 +285,35 @@
             <block type="int_isr"></block>
         </category>
     </feature>        
-    
 
+        
+    <!-- I2CS Master -->
+    <feature id ="feat.I2CS_MASTER" option="i2cs_master">
+        <category name="I2CS" id="cat.I2CS_MASTER">
+            <block type="dev_i2cs_master"></block>
+            <block type="dev_i2cs_master_send"></block>
+            <block type="dev_i2cs_master_request"></block>
+            <block type="dev_i2cs_master_begin"></block>
+            <block type="dev_i2cs_master_end"></block>
+            <block type="dev_i2cs_write"></block>
+            <block type="dev_i2cs_write_array"></block>
+            <block type="dev_i2cs_available"></block>
+            <block type="dev_i2cs_read"></block>
+        </category>
+    </feature>        
+
+    <!-- I2CS Slave -->
+    <feature id ="feat.I2CS_SLAVE" option="i2cs_slave">
+        <category name="I2CS" id="cat.I2CS_SLAVE">
+            <block type="dev_i2cs_slave"></block>
+            <block type="dev_i2cs_write"></block>
+            <block type="dev_i2cs_write_array"></block>
+            <block type="dev_i2cs_available"></block>
+            <block type="dev_i2cs_read"></block>
+            <block type="dev_i2cs_on_receive"></block>
+            <block type="dev_i2cs_on_request"></block>
+            <block type="int_isr"></block>
+        </category>
+    </feature>        
+   
 </features>
