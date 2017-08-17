@@ -3,19 +3,11 @@
     
     <!-- The basic features, w/o variables, operations, arrays ... -->
     <feature id="feat.BASE">
-        
-        <!-- The basic conditionals and boolean logic -->
-        <category name="Logik" id="cat.LOGIC">
-            <block type="cond_if"></block>
-            <block type="cond_if_else"></block>
-            <block type="logic_const"></block>
-            <block type="logic_op"></block>
-            <block type="logic_not"></block>
-            <block type="logic_compare"></block>
-        </category>
 
-        <!-- Basic loops -->
-        <category name="Schleifen" id="cat.LOOPS">
+        <!-- Basic control structures -->        
+        <category id="cat.CTRL">
+            <block type="cond_if"></block>
+            <block type="cond_if_else"></block>            
             <block type="loop_endless"></block>
             <block type="loop_fixed">
                 <value name="COUNT">
@@ -39,8 +31,32 @@
             </block>            
         </category>
 
+        <!-- Variables -->        
+        <category id="cat.VAR">
+            <block type="var_block"></block>
+            <block type="var_assign">
+                <value name="LEFT">
+                    <block type="var_block"></block>
+                </value>
+            </block>
+        </category>
+        
+        <!-- Operations -->		
+        <category id="cat.FUNC">
+        </category>
+    
+    
+        <!-- The basic boolean logic -->
+        <category id="cat.LOGIC">
+            <block type="logic_const"></block>
+            <block type="logic_op"></block>
+            <block type="logic_not"></block>
+            <block type="logic_compare"></block>
+        </category>
+
+
         <!-- Integer math -->
-        <category name="Mathe" id="cat.MATH">
+        <category id="cat.MATH">
             <block type="math_number"></block>
             <block type="math_calc"></block>
             <block type="math_random">
@@ -70,16 +86,17 @@
             <block type="math_millis"></block>
             <block type="math_micros"></block>
         </category>
-        
+
+                
         <!-- Simple string operations -->
-        <category name="Text" id="cat.TEXT">
+        <category id="cat.TEXT">
             <block type="text_const"></block>
             <block type="text_length"></block>
             <block type="text_concat"></block>
         </category>
         
         <!-- Basic pin in- and output -->
-        <category name="Ein- und Ausgabe" id="cat.INOUT">
+        <category id="cat.INOUT">
             <block type="inout_pin"></block>
             <block type="inout_pinmode">
                 <value name="PIN">
@@ -115,16 +132,26 @@
             </block>
         </category>
         
-        <!-- Variables -->        
-        <category name="Variablen" id="cat.VAR">
-            <block type="var_block"></block>
-            <block type="var_assign">
-                <value name="LEFT">
-                    <block type="var_block"></block>
-                </value>
-            </block>
+        <category id="cat.DEVIN">
         </category>
 
+        <category id="cat.DEVOUT">
+        </category>
+
+        <category id="cat.SOUND">
+        </category>
+        
+        <category id ="cat.USB">
+        </category>
+
+        <category id="cat.SERIAL">
+        </category>
+        
+        <category id="cat.I2CS_MASTER">
+        </category>
+
+        <category id="cat.I2CS_SLAVE">
+        </category>        
     </feature>
 
         
@@ -132,7 +159,7 @@
     <feature id="feat.ADVANCED" option="advanced">
         
         <!-- Advanced loops -->
-        <category name="Schleifen" id="cat.LOOPS">
+        <category id="cat.CTRL">
             <block type="loop_count_dir">
                 <value name="FROM">
                     <block type="math_number"><field name="VALUE">0</field></block>
@@ -155,7 +182,7 @@
         </category>
 
         <!-- Advanced mathematical blocks -->
-        <category name="Mathe" id="cat.MATH">
+        <category id="cat.MATH">
             <block type="math_decimal"></block>
             <block type="math_unary"></block>
             <block type="math_binary"></block>
@@ -164,7 +191,7 @@
         </category>
 
         <!-- Advanced string operations -->	    
-        <category name="Text" id="cat.TEXT">
+        <category id="cat.TEXT">
             <block type="text_charat"></block>
             <block type="text_substring"></block>
             <block type="text_from_number"></block>
