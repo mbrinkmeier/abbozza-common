@@ -102,6 +102,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.install">Installieren</msg>
         <msg id="gui.reinstall">Erneut installieren</msg>
         <msg id="gui.plugin_panel">Plugins</msg>
+        <msg id="gui.no_i2cs">Kein I2CS</msg>
         <msg id="gui.i2cs_master">I2CS Master</msg>
         <msg id="gui.i2cs_slave">I2CS Slave</msg>
     </gui>
