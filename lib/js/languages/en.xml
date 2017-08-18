@@ -54,7 +54,11 @@ Continuing?</msg>
         <msg id="gui.operations">Operations</msg>         
         <msg id="gui.local_variables">Local variables</msg>         
         <msg id="gui.serial_communication">Serial Communication</msg>         
-        <msg id="gui.i2cs">I2CS Devices</msg>         
+        <msg id="gui.i2cs">I2CS</msg>         
+        <msg id="gui.events">Events</msg>         
+        <msg id="gui.radio">Radio communication</msg>
+        <msg id="gui.motors">Motors</msg>
+        <msg id="gui.gpio">Input/Output Pins</msg>
         <msg id="gui.arrays">Arrays</msg>         
         <msg id="gui.no_arrays">No arrays</msg>         
         <msg id="gui.lin_arrays">Linear arrays</msg>         
@@ -132,6 +136,7 @@ Continuing?</msg>
         <msg id="cat.DEVOUT">Actuators</msg>
         <msg id="cat.MATH">Maths</msg>
         <msg id="cat.TEXT">Text</msg>
+        <msg id="cat.DISPLAY">Display</msg>
         <msg id="cat.VAR">Variables</msg>
         <msg id="cat.FUNC">Operations</msg>
         <msg id="cat.DEVICES">Devices</msg>
@@ -143,8 +148,11 @@ Continuing?</msg>
         <msg id="cat.INT">Interrupts</msg>
         <msg id="cat.TEACHER">Teacher</msg>        
         <msg id="cat.USB">USB communication</msg>
+        <msg id="cat.Radio">Radio communication</msg>
+        <msg id="cat.I2CS">I2CS</msg>
         <msg id="cat.I2CS_MASTER">I2CS Master</msg>
         <msg id="cat.I2CS_SLAVE">I2CS Slave</msg>
+        <msg id="cat.EVENTS">Events</msg>
     </categories>
     <blocks>
         <msg id="STRING">Text</msg>
@@ -296,16 +304,17 @@ Continuing?</msg>
         
         <msg id="dev.I2CS_MASTER">Activate I2CS as master</msg>
         <msg id="dev.I2CS_SLAVE">Activate I2CS as slave with address</msg>
-        <msg id="dev.I2CS_MASTER_SEND">I2CS: Send # to address</msg>
+        <msg id="dev.I2CS_MASTER_SEND">I2CS: Send byte # to address</msg>
+        <msg id="dev.I2CS_MASTER_SEND_STRING">I2CS: Send # an Adresse</msg>
         <msg id="dev.I2CS_MASTER_REQUEST">I2CS: Request # bytes from address</msg>
         <msg id="dev.I2CS_BEGIN">I2CS: Start transmission to adresse</msg>
         <msg id="dev.I2CS_END">I2CS: End transmission</msg>
-        <msg id="dev.I2CS_WRITE">I2CS: Send # to address</msg>
-        <msg id="dev.I2CS_WRITE_ARRAY">I2CS: Send # to address</msg>
+        <msg id="dev.I2CS_WRITE">I2CS: Send byte # to address</msg>
+        <msg id="dev.I2CS_WRITE_STRING">I2CS: Send # to address</msg>
         <msg id="dev.I2CS_AVAILABLE">I2CS: available bytes</msg>
-        <msg id="dev.I2CS_READ">I2CS: read</msg>
-        <msg id="dev.I2CS_RECEIVE">I2CS: if message is received, call </msg>
-        <msg id="dev.I2CS_REQUEST">I2CS: on request, call </msg>
+        <msg id="dev.I2CS_READ">I2CS: read byte</msg>
+        <msg id="dev.I2CS_RECEIVE">I2CS: call # if message is received</msg>
+        <msg id="dev.I2CS_REQUEST">I2CS: call # if on request is received</msg>
 
         <msg id="SETUP">Setup</msg>
         <msg id="LOOP">Main loop</msg>

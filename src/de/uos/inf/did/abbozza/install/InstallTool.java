@@ -142,6 +142,7 @@ public abstract class InstallTool {
             }
             return true;
         } catch (IOException ex) {
+            System.out.println(ex.getLocalizedMessage());
             ex.printStackTrace(System.out);
             return false;
         }
@@ -167,6 +168,7 @@ public abstract class InstallTool {
             }
             return true;
         } catch (IOException ex) {
+            System.out.println(ex.getLocalizedMessage());
             ex.printStackTrace(System.out);
             return false;
         }

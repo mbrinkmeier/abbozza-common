@@ -203,6 +203,8 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         tabbedPane = new javax.swing.JTabbedPane();
+        scrollPane = new javax.swing.JScrollPane();
+        featureTree = new javax.swing.JTree();
         serverPanel = new javax.swing.JPanel();
         autoStartBox = new javax.swing.JCheckBox();
         browserStartBox = new javax.swing.JCheckBox();
@@ -222,8 +224,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         taskPathField = new javax.swing.JTextField();
         taskPathButton = new javax.swing.JButton();
         editableTasks = new javax.swing.JCheckBox();
-        scrollPane = new javax.swing.JScrollPane();
-        featureTree = new javax.swing.JTree();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -275,6 +275,14 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         logoPanel.add(jLabel2, java.awt.BorderLayout.LINE_END);
 
         contentPanel.add(logoPanel, java.awt.BorderLayout.PAGE_START);
+
+        featureTree.setToolTipText("");
+        featureTree.setCellEditor(new FeatureCellEditor(featureTree));
+        featureTree.setCellRenderer(new FeatureCellRenderer());
+        featureTree.setEditable(true);
+        scrollPane.setViewportView(featureTree);
+
+        tabbedPane.addTab(AbbozzaLocale.entry("gui.feature_title"), scrollPane);
 
         autoStartBox.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         autoStartBox.setSelected(config.startAutomatically());
@@ -379,7 +387,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(localeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(updateBox))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 277, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         serverPanelLayout.setVerticalGroup(
@@ -397,7 +405,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                 .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(browserButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(browserPathField, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                        .addComponent(browserPathField)
                         .addComponent(jLabel6)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -412,7 +420,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                     .addGroup(serverPanelLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(updateUrlField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -468,14 +476,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         );
 
         tabbedPane.addTab(AbbozzaLocale.entry("gui.tasks"), taskPanel);
-
-        featureTree.setToolTipText("");
-        featureTree.setCellEditor(new FeatureCellEditor(featureTree));
-        featureTree.setCellRenderer(new FeatureCellRenderer());
-        featureTree.setEditable(true);
-        scrollPane.setViewportView(featureTree);
-
-        tabbedPane.addTab(AbbozzaLocale.entry("gui.feature_title"), scrollPane);
 
         contentPanel.add(tabbedPane, java.awt.BorderLayout.CENTER);
         tabbedPane.getAccessibleContext().setAccessibleDescription("");
