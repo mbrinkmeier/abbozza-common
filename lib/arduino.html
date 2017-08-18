@@ -63,13 +63,13 @@
         <script src="js/abbozza/blocks/InOut.js" type="text/javascript"></script>
         <script src="js/abbozza/blocks/USB.js" type="text/javascript"></script>
         <script src="js/abbozza/blocks/Messages.js" type="text/javascript"></script>
+        <script src="js/abbozza/blocks/DeviceDecl.js" type="text/javascript"></script>
         
         <!-- the unknown block -->
         <script src="js/abbozza/blocks/Unknown.js" type="text/javascript"></script>
 
         <!-- arduino specific blocks -->
         <script src="js/abbozza/arduino/blocks/Main.js" type="text/javascript"></script>
-        <script src="js/abbozza/arduino/blocks/DeviceDecl.js" type="text/javascript"></script>
         <script src="js/abbozza/arduino/blocks/Math2.js" type="text/javascript"></script>
         <script src="js/abbozza/arduino/blocks/Interrupts.js" type="text/javascript"></script>
 
@@ -92,7 +92,7 @@
     </head>
 
     
-    <body onload="Abbozza.init('arduino');">
+    <body onload="Abbozza.init('arduino',true);">
 
         <div id="overlay" onclick="Abbozza.overlayClicked(this, event)">
             <div id="overlay_content">

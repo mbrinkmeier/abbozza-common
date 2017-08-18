@@ -334,7 +334,7 @@
         <category name="I2CS" id="cat.I2CS_SLAVE">
             <block type="dev_i2cs_slave"></block>
             <block type="dev_i2cs_write"></block>
-            <block type="dev_i2cs_write_array"></block>
+            <block type="dev_i2cs_write_string"></block>
             <block type="dev_i2cs_available"></block>
             <block type="dev_i2cs_read"></block>
             <block type="dev_i2cs_on_receive"></block>
