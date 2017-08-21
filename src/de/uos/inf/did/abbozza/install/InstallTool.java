@@ -5,10 +5,12 @@
  */
 package de.uos.inf.did.abbozza.install;
 
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -174,4 +176,26 @@ public abstract class InstallTool {
         }
     }
 
+    
+    public void copyDirectory(File source, File target) throws IOException {
+        
+        // AbbozzaLogger.out("InstallTool: Copying " + source.getAbsolutePath() + " to " + target.getAbsolutePath());
+        // If the source is a directory, copy its content
+        if (source.isDirectory()) {
+            // create target if it doesn't exist
+            if (!target.exists()) {
+                target.mkdirs();
+            }
+            // Copy all children
+            String files[] = source.list();
+            for (String file : files) {
+                File srcFile = new File(source, file);
+                File destFile = new File(target, file);
+                copyDirectory(srcFile, destFile);
+            }
+        } else {
+            // If it is a file, copy it directly
+            Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
 }

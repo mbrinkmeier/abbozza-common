@@ -61,6 +61,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -168,8 +170,20 @@ public abstract class AbbozzaServer implements HttpHandler {
          * Read the configuration from
          * <user.home>/.abbozza/<system>/abbozza.cfg
          */
+        // Check if the users config file exists.
+        File configFile = new File(configPath);
+        if ( !configFile.exists() ) {
+            // if not, copy the template from <jarPath>/
+            File templateFile = new File(jarPath + "/" + system + "_abbozza.cfg");
+            AbbozzaLogger.out("Copying template configuration " + templateFile.getAbsolutePath() + " to " + configFile.getAbsolutePath(), AbbozzaLogger.INFO);
+            try {            
+                Files.copy(templateFile.toPath(),configFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ex) {
+                AbbozzaLogger.err("Copying template configuration " + templateFile.getAbsolutePath() + " to " + configFile.getAbsolutePath() + " failed!");
+            }
+        }
+
         // configPath = userPath + this.system + "/abbozza.cfg";
-        System.out.println("Reading config from " + configPath);
         config = new AbbozzaConfig(configPath);
 
         AbbozzaLocale.setLocale(config.getLocale());
@@ -205,6 +219,17 @@ public abstract class AbbozzaServer implements HttpHandler {
      */
     public void setPaths() {
         userPath = System.getProperty("user.home") + "/.abbozza/" + system;
+
+        // Check if the user directory exists
+        File userDir = new File(userPath);
+        if ( !userDir.exists() ) {
+            try {
+                Files.createDirectories(userDir.toPath());
+            } catch (IOException ex) {
+                AbbozzaLogger.err("[Fatal] Could not create: " + userPath);
+                System.exit(1);
+            }
+        }
         configPath = userPath + "/abbozza.cfg";
         
         URI uri = null;

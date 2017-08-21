@@ -43,17 +43,6 @@ public class CheckHandler extends AbstractHandler {
     @Override
     public void handle(HttpExchange exchg) throws IOException {
         try {            
-            /*
-            BufferedReader in = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));
-            StringBuffer code = new StringBuffer();
-            while ( in.ready() ) {
-                String line = in.readLine();
-                code.append(line);
-                code.append('\n');
-            }
-            in.close();
-            */
-            
             InputStreamReader isr =  new InputStreamReader(exchg.getRequestBody());
             BufferedReader br = new BufferedReader(isr);
 
@@ -85,10 +74,7 @@ public class CheckHandler extends AbstractHandler {
         String response;
 
         response = _abbozzaServer.compileCode(code);
-        // response = AbbozzaLogger.getErr();
 
-        // AbbozzaLogger.out("compile response: " + response,AbbozzaLogger.ALL);
-        
         return response;
     }
 
