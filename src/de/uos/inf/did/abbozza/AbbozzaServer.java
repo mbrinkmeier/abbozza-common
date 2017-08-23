@@ -200,11 +200,12 @@ public abstract class AbbozzaServer implements HttpHandler {
             this._taskContext = null;
         }
 
-        // AbbozzaLocale.setLocale("de_DE");
         AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
+        
+        setAdditionalPaths();
 
-        // taskHandler = new TaskHandler(this);
-        // AbbozzaLogger.out("Path to tasks : " + config.getTaskPath(),AbbozzaLogger.ALL);
+        additionalInitialization();
+        
         if (config.startAutomatically()) {
             this.startServer();
             if (config.startBrowser()) {
@@ -809,8 +810,8 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public boolean checkLibrary(String name) {
         return false;
-    }
-
+    }    
+    
     public void setBoardName(String name) {
         this._boardName = name;
     }
@@ -818,5 +819,12 @@ public abstract class AbbozzaServer implements HttpHandler {
     public String getBoardName() {
         return this._boardName;
     }
+    
+    public void additionalInitialization() {
+    }
+
+    public void setAdditionalPaths() {
+    }
+    
     
 }
