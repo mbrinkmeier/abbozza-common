@@ -9,13 +9,15 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
 /**
  *
  * @author michael
  */
-public class AbbozzaLoggingFrame extends javax.swing.JFrame {
+public class AbbozzaLoggingFrame extends javax.swing.JFrame implements DocumentListener {
 
     /**
      * Creates new form AbbozzaLoggingFrame and centers it on the screen.
@@ -28,7 +30,7 @@ public class AbbozzaLoggingFrame extends javax.swing.JFrame {
         int x = (screen.width - getWidth()) / 2;
         int y = (screen.height - getHeight()) / 2;
         setLocation(x, y);
-
+        
     }
 
     /**
@@ -123,6 +125,7 @@ public class AbbozzaLoggingFrame extends javax.swing.JFrame {
     public void setDocument(Document doc) {
         this.textArea.setDocument(doc);
         this.textArea.setCaretPosition(doc.getLength());
+        doc.addDocumentListener(this);
     }
     
     /**
@@ -140,5 +143,20 @@ public class AbbozzaLoggingFrame extends javax.swing.JFrame {
     public void enableButton() {
         this.okButton.setEnabled(true);
         this.okButton.requestFocusInWindow();
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        this.textArea.update(this.textArea.getGraphics());
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
