@@ -78,6 +78,7 @@ public class AbbozzaConfig {
     private boolean config_update = false;
     private String config_taskPath = configPath;
     private boolean config_tasksEditable = true;
+    private int config_timeout = 120000;
 
     /**
      * Reads the configuration from the given path.
@@ -146,6 +147,7 @@ public class AbbozzaConfig {
         config_update = false;
         config_taskPath = System.getProperty("user.home");
         config_tasksEditable = true;
+        config_timeout = 120000;
         storeProperties(config);
         setDefaultOptions();
         AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
@@ -214,6 +216,11 @@ public class AbbozzaConfig {
         } else {
             AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         }
+        if (properties.getProperty("timeout") != null) {
+            config_timeout=Integer.parseInt(properties.getProperty("timeout", ""+AbbozzaLogger.NONE));
+        } else {
+            config_timeout=120000;
+        }
 
         write();        
     }
@@ -269,6 +276,7 @@ public class AbbozzaConfig {
         props.setProperty("update", config_update ? "true" : "false");
         props.setProperty("taskPath", config_taskPath);
         props.setProperty("tasksEditable", config_tasksEditable ? "true" : "false");
+        props.setProperty("timeout", Integer.toString(config_timeout));
     }
     
     /**

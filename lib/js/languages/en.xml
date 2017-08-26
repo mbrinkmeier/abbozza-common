@@ -27,6 +27,8 @@ Continuing?</msg>
         <msg id="msg.click_to_continue">Click to continue</msg>
         <msg id="msg.sketch_description">An abbozza! sketch</msg>
         <msg id="msg.invalid_sketch"># not found, not accessible or no valid sketch!</msg>
+        <msg id="msg.compile_timeout">Compiling takes to long!</msg>
+        <msg id="msg.upload_timeout">Compiling and uploading takes to long!</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Generate Code</msg>
@@ -324,7 +326,7 @@ Continuing?</msg>
         <msg id="GLOBALVARS">Global variables</msg>
         <msg id="TITLE">Title</msg>
         <msg id="VARIABLES">Variables</msg>
-        <msg id="UPLOADING">Load Sketch onto Arduino ...</msg>
+        <msg id="UPLOADING">Upload sketch ...</msg>
         <msg id="SERVERMSG">Server-messages</msg>
         <msg id="INFOMSG">Informations</msg>
         <msg id="MESSAGES">Messages</msg>

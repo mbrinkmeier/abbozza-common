@@ -27,10 +27,12 @@ Trotzdem fortfahren?</msg>
         <msg id="msg.click_to_continue">Klicken um fortzufahren</msg>
         <msg id="msg.sketch_description">Ein abbozza! Sketch</msg>        
         <msg id="msg.invalid_sketch"># nicht gefunden, nicht lesbar oder kein gültiger Sketch!</msg>
+        <msg id="msg.compile_timeout">Kompilieren dauert zu lange!</msg>
+        <msg id="msg.upload_timeout">Kompilieren und Hochladen dauert zu lange!</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Erzeuge Code</msg>
-        <msg id="gui.upload_button">Lade Code auf Arduino</msg>
+        <msg id="gui.upload_button">Lade Code hoch</msg>
         <msg id="gui.new_button">Neuer Sketch</msg>
         <msg id="gui.load_button">Lade Sketch</msg>
         <msg id="gui.save_button">Speichere Sketch</msg>
@@ -327,7 +329,7 @@ Trotzdem fortfahren?</msg>
         <msg id="GLOBALVARS">Globale Variablen</msg>
         <msg id="TITLE">Titel</msg>
         <msg id="VARIABLES">Variablen</msg>
-        <msg id="UPLOADING">Lade Sketch auf Arduino ...</msg>
+        <msg id="UPLOADING">Lade Sketch hoch ...</msg>
         <msg id="SERVERMSG">Server-Meldungen</msg>
         <msg id="INFOMSG">Informationen</msg>
         <msg id="MESSAGES">Meldungen</msg>
