@@ -69,7 +69,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
         findJarsAndDirs(jarHandler);
 
         // Load plugins
-        pluginManager = new PluginManager(this);
+        // pluginManager = new PluginManager(this);
 
         /**
          * Read the configuration from

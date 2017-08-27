@@ -462,6 +462,14 @@ public class AbbozzaConfig {
         config_taskPath = taskPath;
     }
 
+    public String getFullTaskPath() {
+        String path = config_taskPath;
+        if ( config_taskPath.contains("%HOME%")) {
+            path = config_taskPath.replace("%HOME%", System.getProperty("user.home"));
+        }
+        return path;
+    }
+    
     public void setTasksEditable(boolean selected) {
         config_tasksEditable = selected;
     }

@@ -38,7 +38,8 @@ public class InstallToolWin extends InstallTool {
     
     @Override
     public boolean addAppToMenu(String fileName, String name, String genName, String path, String icon, boolean global) {
-        File file;
+        File file = null;
+        
         if ( global ) {
             file = new File("C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Abbozza");
         } else {
@@ -61,10 +62,16 @@ public class InstallToolWin extends InstallTool {
         try {
             proc = procBuilder.start();
             proc.waitFor();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(InstallToolWin.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(InstallToolWin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            if ( file != null ) {
+                System.err.print("Error while writing shortcut to " + file.getAbsolutePath() + " : ");
+                System.err.println(ex.getLocalizedMessage());
+                return false;
+            } else {
+                System.err.print("Error while writing shortcut : ");
+                System.err.println(ex.getLocalizedMessage());
+                return false;
+            }
         }
         
         return true;

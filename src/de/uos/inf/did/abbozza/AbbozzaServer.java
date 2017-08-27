@@ -195,7 +195,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
 
         try {
-            this._taskContext = new File(this.getConfiguration().getTaskPath()).toURI().toURL();
+            this._taskContext = new File(this.getConfiguration().getFullTaskPath()).toURI().toURL();
         } catch (MalformedURLException ex) {
             this._taskContext = null;
         }
@@ -629,7 +629,15 @@ public abstract class AbbozzaServer implements HttpHandler {
                     StringBuilder xmlStringBuilder = new StringBuilder();
                     ByteArrayInputStream input = new ByteArrayInputStream(bytes);
                     optionsXml = builder.parse(input);
+                } else {
+                    // options.xml not found
+                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder builder;
+                    builder = factory.newDocumentBuilder();
+                    optionsXml = builder.newDocument();
+                    optionsXml.createElement("options");
                 }
+                
                 // If successful, add the plugin trees
                 Node root = optionsXml.getElementsByTagName("options").item(0);
                 Enumeration<Plugin> plugins = this.pluginManager.plugins();

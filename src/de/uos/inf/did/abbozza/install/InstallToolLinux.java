@@ -30,6 +30,7 @@ public class InstallToolLinux extends InstallTool {
     
     @Override
     public boolean addAppToMenu(String fileName, String name, String genericName, String path, String icon, boolean global) {
+        File file = null;
         try {
             String working = new File(path).getParentFile().getAbsolutePath();
             String entry = desktopEntry;
@@ -39,7 +40,6 @@ public class InstallToolLinux extends InstallTool {
             entry = entry.replace("##icon##",icon);
             entry = entry.replace("##working##",working);
             
-            File file;
             if ( global ) {
                 file = new File("/usr/share/applications/" + fileName + ".desktop");
             } else {
@@ -54,10 +54,16 @@ public class InstallToolLinux extends InstallTool {
                 out.print(entry);
                 out.close();
             } else {
-                System.out.println(file.getAbsolutePath() + " existiert nicht");
+                System.err.println(file.getAbsolutePath() + " existiert nicht");
             }
         } catch (IOException ex) {
-            ex.printStackTrace(System.out);
+            if ( file != null ) {
+                System.err.print("Error while writing shortcut to " + file.getAbsolutePath() + " : ");
+                System.err.println(ex.getLocalizedMessage());
+            } else {
+                System.err.print("Error while writing shortcut : ");
+                System.err.println(ex.getLocalizedMessage());
+            }
             return false;
         }
         return true;
