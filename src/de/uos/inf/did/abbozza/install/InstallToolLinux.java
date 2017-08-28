@@ -81,12 +81,12 @@ public class InstallToolLinux extends InstallTool {
 
     @Override
     public String getScriptSuffix() {
-        return "sh";
+        return ".sh";
     }
 
     @Override
     public String getIconSuffix() {
-        return "png";
+        return "";
     }
     
 }

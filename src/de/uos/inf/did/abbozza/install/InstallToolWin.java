@@ -79,12 +79,12 @@ public class InstallToolWin extends InstallTool {
 
     @Override
     public String getScriptSuffix() {
-        return "bat";
+        return ".bat";
     }
 
     @Override
     public String getIconSuffix() {
-        return "ico";
+        return ".ico";
     }
     
 }

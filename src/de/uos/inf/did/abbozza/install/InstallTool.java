@@ -6,6 +6,8 @@
 package de.uos.inf.did.abbozza.install;
 
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import java.awt.Rectangle;
+import java.awt.Window;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,6 +21,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 /**
@@ -172,27 +175,12 @@ public abstract class InstallTool {
             return false;
         }
     }
-
     
-    public void copyDirectory(File source, File target) throws IOException {
-        
-        // AbbozzaLogger.out("InstallTool: Copying " + source.getAbsolutePath() + " to " + target.getAbsolutePath());
-        // If the source is a directory, copy its content
-        if (source.isDirectory()) {
-            // create target if it doesn't exist
-            if (!target.exists()) {
-                target.mkdirs();
-            }
-            // Copy all children
-            String files[] = source.list();
-            for (String file : files) {
-                File srcFile = new File(source, file);
-                File destFile = new File(target, file);
-                copyDirectory(srcFile, destFile);
-            }
-        } else {
-            // If it is a file, copy it directly
-            Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        }
-    }
+    public static void centerWindow(Window window) {
+        Rectangle screen = window.getGraphicsConfiguration().getBounds();
+        window.setLocation(
+            screen.x + (screen.width - window.getWidth()) / 2,
+            screen.y + (screen.height - window.getHeight()) / 2
+        );        
+    }    
 }

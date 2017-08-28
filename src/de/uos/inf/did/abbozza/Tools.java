@@ -22,6 +22,10 @@
  */
 package de.uos.inf.did.abbozza;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +34,9 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import javax.swing.JDialog;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -126,5 +133,37 @@ public class Tools {
             AbbozzaLogger.err("Tools: Could not find " + url);
         }
         return xml;        
+    }
+   
+    public static void copyDirectory(File source, File target, boolean onlyIfNewer) throws IOException {
+        
+        // AbbozzaLogger.out("InstallTool: Copying " + source.getAbsolutePath() + " to " + target.getAbsolutePath());
+        // If the source is a directory, copy its content
+        if (source.isDirectory()) {
+            // create target if it doesn't exist
+            if (!target.exists()) {
+                target.mkdirs();
+            }
+            // Copy all children
+            String files[] = source.list();
+            for (String file : files) {
+                File srcFile = new File(source, file);
+                File destFile = new File(target, file);
+                copyDirectory(srcFile, destFile,onlyIfNewer);
+            }
+        } else {
+            // If it is a file, copy it directly
+            if ( (!target.exists()) || (onlyIfNewer == false) || (source.lastModified() > target.lastModified()) ) {
+                Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+    }
+    
+    public static void centerWindow(Window window) {
+        Rectangle screen = window.getGraphicsConfiguration().getBounds();
+        window.setLocation(
+            screen.x + (screen.width - window.getWidth()) / 2,
+            screen.y + (screen.height - window.getHeight()) / 2
+        );        
     }
 }
