@@ -26,11 +26,8 @@ public class AbbozzaLoggingFrame extends javax.swing.JFrame implements DocumentL
         initComponents();
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screen.width - getWidth()) / 2;
-        int y = (screen.height - getHeight()) / 2;
-        setLocation(x, y);
         
+        InstallTool.centerWindow(this);        
     }
 
     /**
@@ -158,5 +155,5 @@ public class AbbozzaLoggingFrame extends javax.swing.JFrame implements DocumentL
     @Override
     public void changedUpdate(DocumentEvent e) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }    
 }

@@ -17,12 +17,17 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
 
     private static Thread splashThread;
     private static AbbozzaSplashScreen splashScreen;
+    private String splashImage;
     
     /**
      * Creates new form AbbozzaSplashScreen
+     * 
+     * @param image The name of the image for the splash screen
      */
-    public AbbozzaSplashScreen() {
+    public AbbozzaSplashScreen(String image) {
         super((JFrame) null,false);
+        splashImage = image;
+        
         initComponents();
         
         Tools.centerWindow(this);
@@ -57,15 +62,19 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
 
         image.setBackground(new java.awt.Color(255, 255, 255));
         image.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/abbozza-calliope-splash.png"))); // NOI18N
+        image.setIcon(new javax.swing.ImageIcon(getClass().getResource(splashImage)));
         getContentPane().add(image);
-        image.setBounds(0, 0, 320, 200);
+        image.setBounds(0, 0, 0, 0);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void showSplashScreen() {
-        splashScreen = new AbbozzaSplashScreen();
+    /**
+     * 
+     * @param image 
+     */
+    public static void showSplashScreen(String image) {
+        splashScreen = new AbbozzaSplashScreen(image);
         splashThread = new Thread(splashScreen);
         splashThread.start();
     }
