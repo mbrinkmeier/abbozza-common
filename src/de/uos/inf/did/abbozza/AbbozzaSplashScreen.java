@@ -6,7 +6,9 @@
 package de.uos.inf.did.abbozza;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -62,9 +64,9 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
 
         image.setBackground(new java.awt.Color(255, 255, 255));
         image.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        image.setIcon(new javax.swing.ImageIcon(getClass().getResource(splashImage)));
+        image.setIcon(new ImageIcon(AbbozzaSplashScreen.class.getClass().getResource(splashImage)));
         getContentPane().add(image);
-        image.setBounds(0, 0, 0, 0);
+        image.setBounds(0, 0, 320, 200);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
