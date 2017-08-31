@@ -58,7 +58,11 @@ public class LoadHandler extends AbstractHandler {
             String query = exchg.getRequestURI().getQuery();
             if ( query == null ) {
                 String sketch = loadSketch();
-                this.sendResponse(exchg, 200, "text/xml; charset=utf-8", sketch);
+                if ( sketch != null ) {
+                    this.sendResponse(exchg, 200, "text/xml; charset=utf-8", sketch);
+                } else {
+                    this.sendResponse(exchg, 404, "", "");                    
+                }
             } else {
                 AbbozzaLogger.out("loadHandler: load " + query, AbbozzaLogger.DEBUG);
                 String sketch = loadSketch(query);
@@ -144,6 +148,8 @@ public class LoadHandler extends AbstractHandler {
                 AbbozzaServer.getConfig().apply(panel.getOptions());
             }            
         } else {
+            _abbozzaServer.setDialogOpen(false);
+            _abbozzaServer.resetFrame();
             throw new IOException();
         }
         _abbozzaServer.setDialogOpen(false);

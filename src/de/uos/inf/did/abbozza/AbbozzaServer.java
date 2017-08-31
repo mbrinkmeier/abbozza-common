@@ -50,6 +50,7 @@ import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -151,6 +152,8 @@ public abstract class AbbozzaServer implements HttpHandler {
         if (instance != null) {
             return;
         }
+        // Set static instance
+        instance = this;
 
         // Set the system name
         this.system = system;
@@ -158,10 +161,15 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Initialize the logger
         AbbozzaLogger.init();
         AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
+        AbbozzaLogger.registerStream(System.out);
+        userPath = System.getProperty("user.home") + "/.abbozza/" + system;
+        try {
+            AbbozzaLogger.registerStream(new FileOutputStream(userPath + "/abbozza.log",false));
+        } catch (FileNotFoundException ex) {
+            AbbozzaLogger.err("Can't log to " + userPath + "/abbozza.log");
+        }
 
-        // Set static instance
-        instance = this;
-
+        // Setting paths
         AbbozzaLogger.out("Setting paths");
         setPaths();
 
@@ -188,7 +196,6 @@ public abstract class AbbozzaServer implements HttpHandler {
                 AbbozzaLogger.err("Copying template configuration " + templateFile.getAbsolutePath() + " to " + configFile.getAbsolutePath() + " failed!");
             }
         }
-
         // configPath = userPath + this.system + "/abbozza.cfg";
         config = new AbbozzaConfig(configPath);
 
@@ -209,18 +216,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
         
         setAdditionalPaths();
-
         additionalInitialization();
-        
-        if (config.startAutomatically()) {
-            this.startServer();
-            if (config.startBrowser()) {
-                this.startBrowser(system + ".html");
-            }
-        }
-
     }
 
+    
     /**
      * This default operation sets the main paths
      */

@@ -23,6 +23,7 @@
 package de.uos.inf.did.abbozza;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Vector;
 
@@ -41,9 +42,14 @@ public class AbbozzaLogger {
     static private int level;
     
     static private Vector<AbbozzaLoggerListener> _listeners = new Vector<AbbozzaLoggerListener>();
-
+    
     static private ByteArrayOutputStream errorLogger = new ByteArrayOutputStream();
+    
+    static private Vector<OutputStream> streams;
 
+    static {
+        streams = new Vector<OutputStream>();
+    }
     
     public static void init() {
         System.setErr(new PrintStream(errorLogger));
@@ -76,6 +82,16 @@ public class AbbozzaLogger {
         }
     }
     
+    public static void registerStream(OutputStream stream) {
+        if ( !streams.contains(stream) ) {
+            streams.add(stream);
+        }
+    }
+    
+    public static void unregisterStream(OutputStream stream) {
+        streams.removeElement(stream);
+    }
+
     public static void setLevel(int lvl) {
         level = lvl;
     }
@@ -86,29 +102,38 @@ public class AbbozzaLogger {
 
     public static void out(String msg) {
         if (level >= DEBUG ) {
-            System.out.println("abbozza! [out] : " + msg);
+            write("abbozza! [out] : " + msg);
             fire("abbozza! [out] : " + msg);
         }
     }
 
     public static void out(String msg, int lvl) {
         if (lvl <= level) {
-            System.out.println("abbozza! [out] : " + msg);
+            write("abbozza! [out] : " + msg);
             fire("abbozza! [out] : " + msg);
         }
     }
 
     public static void err(String msg) {
         if ( level >= ERROR ) {
-            System.out.println("abbozza! [err] : " + msg);
+            write("abbozza! [err] : " + msg);
             fire("abbozza! [err] : " + msg);
         }
     }
     
     public static void stackTrace(Exception ex) {
         if (level >= ERROR ) {
-            System.out.println("abbozza! [err] : Stack trace for exception");
+            write("abbozza! [err] : Stack trace for exception");
             ex.printStackTrace(System.out);
+        }
+    }
+    
+    private static void write(String msg) {
+        for (OutputStream stream : streams) {
+            try {
+                stream.write(msg.getBytes());
+                stream.write('\n');
+            } catch (Exception ex) {}
         }
     }
 }
