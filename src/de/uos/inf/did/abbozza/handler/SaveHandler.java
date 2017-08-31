@@ -69,6 +69,8 @@ public class SaveHandler extends AbstractHandler {
     }
 
     public void saveSketch(InputStream stream) throws IOException {
+        if ( _abbozzaServer.isDialogOpen() ) return;
+        
         // Read the XML-Document
         // Read in into XML-document
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -116,6 +118,10 @@ public class SaveHandler extends AbstractHandler {
             // Generate JFileChooser
             File lastSketchFile = new File(_abbozzaServer.getLastSketchFile().toURI());
             String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
+            
+            _abbozzaServer.bringFrameToFront();
+            _abbozzaServer.setDialogOpen(true);
+            
             JFileChooser chooser = new JFileChooser(path) {
                 protected JDialog createDialog(Component parent)
                         throws HeadlessException {
@@ -196,6 +202,8 @@ public class SaveHandler extends AbstractHandler {
             AbbozzaLogger.out(ex.toString(), AbbozzaLogger.DEBUG);
             ex.printStackTrace(System.err);
         }
+        _abbozzaServer.setDialogOpen(false);
+        _abbozzaServer.resetFrame();        
         _abbozzaServer.toolIconify();
     }
 

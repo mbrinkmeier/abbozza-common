@@ -70,6 +70,8 @@ public class LoadHandler extends AbstractHandler {
     }
 
     public String loadSketch() throws IOException {
+        if ( _abbozzaServer.isDialogOpen() ) return null;
+        
         String result = "";
         File lastSketchFile;
         URL last = _abbozzaServer.getLastSketchFile();
@@ -107,6 +109,10 @@ public class LoadHandler extends AbstractHandler {
         } else {
             chooser.setSelectedFile(lastSketchFile);
         }
+        
+        _abbozzaServer.bringFrameToFront();
+        _abbozzaServer.setDialogOpen(true);
+        
         int choice = chooser.showOpenDialog(null);
         if ((choice == JFileChooser.APPROVE_OPTION) || (panel.getUrl() != null)) {
             URL url;
@@ -140,6 +146,8 @@ public class LoadHandler extends AbstractHandler {
         } else {
             throw new IOException();
         }
+        _abbozzaServer.setDialogOpen(false);
+        _abbozzaServer.resetFrame();
         _abbozzaServer.toolIconify();
         return result;
     }

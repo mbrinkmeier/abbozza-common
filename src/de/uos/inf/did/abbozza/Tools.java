@@ -78,62 +78,8 @@ public class Tools {
     }
     
     
-   public static String documentToString(Document doc) {
-       try {
-            StringWriter sw = new StringWriter();
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer transformer = tf.newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
-            transformer.transform(new DOMSource(doc), new StreamResult(sw));
-        return sw.toString();
-        } catch (Exception ex) {
-            throw new RuntimeException("Error converting to String", ex);
-        }
-   }
 
-   public static String documentToString(Node doc) {
-       try {
-            StringWriter sw = new StringWriter();
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer transformer = tf.newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-
-            transformer.transform(new DOMSource(doc), new StreamResult(sw));
-        return sw.toString();
-        } catch (Exception ex) {
-            throw new RuntimeException("Error converting to String", ex);
-        }
-   }
-
-   public static Document getXml(URL url) {
-       Document xml = null;
-       try {
-                        
-          DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-          DocumentBuilder builder = factory.newDocumentBuilder();
-
-          xml = builder.parse(url.openStream());
-        } catch (ParserConfigurationException ex) {
-            xml = null;
-            AbbozzaLogger.err("Tools: Could not parse " + url);
-            AbbozzaLogger.stackTrace(ex);
-        } catch (SAXException ex) {
-            xml = null;
-            AbbozzaLogger.err("Tools: Could not parse " + url);
-            AbbozzaLogger.stackTrace(ex);
-        } catch (IOException ex) {
-            xml = null;
-            AbbozzaLogger.err("Tools: Could not find " + url);
-        }
-        return xml;        
-    }
    
     public static void copyDirectory(File source, File target, boolean onlyIfNewer) throws IOException {
         
@@ -159,11 +105,4 @@ public class Tools {
         }
     }
     
-    public static void centerWindow(Window window) {
-        Rectangle screen = window.getGraphicsConfiguration().getBounds();
-        window.setLocation(
-            screen.x + (screen.width - window.getWidth()) / 2,
-            screen.y + (screen.height - window.getHeight()) / 2
-        );        
-    }
 }

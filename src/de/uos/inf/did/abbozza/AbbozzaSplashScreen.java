@@ -5,6 +5,7 @@
  */
 package de.uos.inf.did.abbozza;
 
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -32,7 +33,7 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
         
         initComponents();
         
-        Tools.centerWindow(this);
+        GUITool.centerWindow(this);
     }
 
     /**
@@ -72,8 +73,9 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
     }// </editor-fold>//GEN-END:initComponents
 
     /**
+     * This operation shows a splash screen with the given image as background.
      * 
-     * @param image 
+     * @param image The image
      */
     public static void showSplashScreen(String image) {
         splashScreen = new AbbozzaSplashScreen(image);

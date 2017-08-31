@@ -45,6 +45,7 @@ import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
 import de.uos.inf.did.abbozza.plugin.Plugin;
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -71,6 +72,7 @@ import java.util.Vector;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -132,7 +134,11 @@ public abstract class AbbozzaServer implements HttpHandler {
     private URL _lastSketchFile = null;
     private URL _taskContext;
     protected PluginManager pluginManager;
-
+    
+    protected JFrame mainFrame = null;     // The main frame
+    protected boolean dialogOpen = false;  // Used to prevent multiple open windows
+    private int oldState = 0;              // Stores the original state of the mainFrame
+    
     protected String _boardName;
     
     /**
@@ -677,25 +683,31 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     public int openConfigDialog() {
+        // Prevent opening another dialog
+        if ( this.isDialogOpen() ) return 1;
+        
         AbbozzaConfig config = this.getConfiguration();
         Properties props = config.get();
+        
+        this.bringFrameToFront();
+        toolIconify();
+        
         AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(props, null, false, true);
+        
         adaptConfigDialog(dialog);
-        dialog.setAlwaysOnTop(true);
+        GUITool.centerWindow(dialog);
         dialog.setModal(true);
         dialog.toFront();
         dialog.setVisible(true);
-        toolIconify();
+        
         if (dialog.getState() == 0) {
             config.set(dialog.getConfiguration());
             AbbozzaLocale.setLocale(config.getLocale());
             AbbozzaLogger.out("closed with " + config.getLocale());
             config.write();
             return 0;
-            //sendResponse(exchg, 200, "text/plain", config.get().toString());
         } else {
             return 1;
-            //sendResponse(exchg, 440, "text/plain", "");
         }
     }
     
@@ -765,11 +777,6 @@ public abstract class AbbozzaServer implements HttpHandler {
         return SerialPort.BAUDRATE_115200;
     }
 
-    /*
-    public int getRunningServerPort() {
-        return serverPort;
-    }
-     */
     public static PluginManager getPluginManager() {
         return instance.pluginManager;
     }
@@ -833,6 +840,24 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public void setAdditionalPaths() {
     }
+
+    public boolean isDialogOpen() {
+        return dialogOpen;
+    }
+
+    public void setDialogOpen(boolean dialogOpen) {
+        this.dialogOpen = dialogOpen;
+    }
     
+    public void bringFrameToFront() {
+        if ( mainFrame == null ) return;
+        oldState = mainFrame.getExtendedState();
+        GUITool.bringToFront(mainFrame);
+    }
+
+    public void resetFrame() {
+        if ( mainFrame == null ) return;
+        mainFrame.setExtendedState(oldState);
+    }
     
 }

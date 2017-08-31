@@ -12,6 +12,7 @@ import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.Tools;
 import de.uos.inf.did.abbozza.install.InstallTool;
+import de.uos.inf.did.abbozza.tools.XMLTool;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -188,7 +189,7 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         try {
             String urlString = (String) urlComboBox.getSelectedItem();
             URL url = new URL(urlString);
-            Document pluginsXml = Tools.getXml(url);
+            Document pluginsXml = XMLTool.getXml(url);
             if (pluginsXml == null) {
                 return;
             }
@@ -202,8 +203,6 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
             pluginList.setModel(list);
             
         } catch (MalformedURLException ex) {
-            Logger.getLogger(PluginConfigPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
             Logger.getLogger(PluginConfigPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

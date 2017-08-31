@@ -18,6 +18,8 @@
         <msg id="msg.board_found">Board found: # on #</msg>
         <msg id="msg.select_board">Select a board</msg>   
         <msg id="msg.open_config">Open Configuration dialog ...</msg>
+        <msg id="msg.load_sketch">Load sketch ...</msg>
+        <msg id="msg.save_sketch">Save sketch ...</msg>
         <msg id="msg.generate_sketch">Generating sketch ...</msg>
         <msg id="msg.code_generated">Code generated without errors ...</msg>
         <msg id="msg.error_upload">Error during upload!</msg>

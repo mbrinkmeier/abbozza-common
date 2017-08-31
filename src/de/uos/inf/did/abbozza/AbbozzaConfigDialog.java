@@ -487,6 +487,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         setVisible(false);
+        dispose();
         state = 1;
     }//GEN-LAST:event_cancelButtonActionPerformed
 
@@ -494,6 +495,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         storeConfiguration();
         state = 0;
         setVisible(false);
+        dispose();
     }//GEN-LAST:event_storeButtonActionPerformed
 
     private void updateBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBoxActionPerformed
@@ -669,5 +671,8 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         tabbedPane.setTitleAt(tabbedPane.getTabCount()-1, panel.getName());
     }
     
-    
+    public void dispose() {
+        AbbozzaServer.instance.resetFrame();
+        super.dispose();
+    }
 }
