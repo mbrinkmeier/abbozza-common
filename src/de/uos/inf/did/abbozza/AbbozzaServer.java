@@ -52,6 +52,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -62,6 +63,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -111,6 +113,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected static AbbozzaServer instance;
 
     // The paths
+    protected String runtimePath;       // The parent directory of jarPath, containig lib, plugins, bin ...
     protected String globalJarPath;     // The directory containing the global jar
     protected String localJarPath;      // The directory containig the local jar
     protected String sketchbookPath;    // The default path fpr local Sketches
@@ -162,17 +165,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         AbbozzaLogger.init();
         AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
         AbbozzaLogger.registerStream(System.out);
-        userPath = System.getProperty("user.home") + "/.abbozza/" + system;
-        try {
-            AbbozzaLogger.registerStream(new FileOutputStream(userPath + "/abbozza.log",false));
-        } catch (FileNotFoundException ex) {
-            AbbozzaLogger.err("Can't log to " + userPath + "/abbozza.log");
-        }
 
         // Setting paths
-        AbbozzaLogger.out("Setting paths");
         setPaths();
-
+        
         // Find Jars
         jarHandler = new JarDirHandler();
         findJarsAndDirs(jarHandler);
@@ -184,37 +180,28 @@ public abstract class AbbozzaServer implements HttpHandler {
          * Read the configuration from
          * <user.home>/.abbozza/<system>/abbozza.cfg
          */
-        // Check if the users config file exists.
-        File configFile = new File(configPath);
-        if ( !configFile.exists() ) {
-            // if not, copy the template from <jarPath>/
-            File templateFile = new File(jarPath + "/" + system + "_abbozza.cfg");
-            AbbozzaLogger.out("Copying template configuration " + templateFile.getAbsolutePath() + " to " + configFile.getAbsolutePath(), AbbozzaLogger.INFO);
-            try {            
-                Files.copy(templateFile.toPath(),configFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException ex) {
-                AbbozzaLogger.err("Copying template configuration " + templateFile.getAbsolutePath() + " to " + configFile.getAbsolutePath() + " failed!");
-            }
-        }
-        // configPath = userPath + this.system + "/abbozza.cfg";
         config = new AbbozzaConfig(configPath);
 
+        // Load the locale
         AbbozzaLocale.setLocale(config.getLocale());
 
-        AbbozzaLogger.out("Version " + VERSION, AbbozzaLogger.INFO);
+        AbbozzaLogger.info("Version " + VERSION);
 
+        // Check for Update
         if (this.getConfiguration().getUpdate()) {
             checkForUpdate(false);
         }
 
+        // Set the initial taskContext, if a task path is given
         try {
             this._taskContext = new File(this.getConfiguration().getFullTaskPath()).toURI().toURL();
         } catch (MalformedURLException ex) {
             this._taskContext = null;
         }
 
-        AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
-        
+        AbbozzaLogger.info(AbbozzaLocale.entry("msg.loaded"));
+
+        // Call the initialization hooks for subclasses
         setAdditionalPaths();
         additionalInitialization();
     }
@@ -224,20 +211,33 @@ public abstract class AbbozzaServer implements HttpHandler {
      * This default operation sets the main paths
      */
     public void setPaths() {
+        // Set user Path to $HOME/.abbozza/<system>
         userPath = System.getProperty("user.home") + "/.abbozza/" + system;
 
         // Check if the user directory exists
         File userDir = new File(userPath);
         if ( !userDir.exists() ) {
+            // Create user dir if it oesn't exist
             try {
                 Files.createDirectories(userDir.toPath());
             } catch (IOException ex) {
+                // If creatiuon  of user ir not possible, terminate
                 AbbozzaLogger.err("[Fatal] Could not create: " + userPath);
                 System.exit(1);
             }
         }
-        configPath = userPath + "/abbozza.cfg";
         
+        // Set config path and read configuration
+        configPath = userPath + "/abbozza.cfg";
+
+        // Register log file to AbbozzaLogger
+        try {
+            AbbozzaLogger.registerStream(new FileOutputStream(userPath + "/abbozza.log",false));
+        } catch (FileNotFoundException ex) {
+            AbbozzaLogger.err("Can't log to " + userPath + "/abbozza.log");
+        }
+        
+        // Determine the executed jar
         URI uri = null;
         File installFile = new File("/");
         try {
@@ -248,7 +248,9 @@ public abstract class AbbozzaServer implements HttpHandler {
                     + "Start installer from jar!", "abbozza! installation error", JOptionPane.ERROR_MESSAGE);
         }
         jarPath = installFile.getParentFile().getAbsolutePath();
+        runtimePath = installFile.getParentFile().getParent();
         
+        // These paths have to be set in the subclass
         globalJarPath = "";
         localJarPath = "";
         sketchbookPath = "";
@@ -362,6 +364,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public void checkForUpdate(boolean reportNoUpdate) {
         // TODO !!!
+        /*
         String updateUrl = AbbozzaServer.getConfig().getUpdateUrl();
         String version = "";
 
@@ -443,6 +446,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         } catch (IOException ex) {
             AbbozzaLogger.err("VERSION file not found");
         }
+        */
     }
 
     public void startServer() {

@@ -42,9 +42,7 @@ public class AbbozzaLogger {
     static private int level;
     
     static private Vector<AbbozzaLoggerListener> _listeners = new Vector<AbbozzaLoggerListener>();
-    
     static private ByteArrayOutputStream errorLogger = new ByteArrayOutputStream();
-    
     static private Vector<OutputStream> streams;
 
     static {
@@ -52,6 +50,7 @@ public class AbbozzaLogger {
     }
     
     public static void init() {
+        level = 1;
         System.setErr(new PrintStream(errorLogger));
     }
     
@@ -102,28 +101,47 @@ public class AbbozzaLogger {
 
     public static void out(String msg) {
         if (level >= DEBUG ) {
-            write("abbozza! [out] : " + msg);
-            fire("abbozza! [out] : " + msg);
+            write("[out] : " + msg);
+            fire("[out] : " + msg);
         }
+    }
+
+    public static void debug(String msg) {
+        out(msg,DEBUG);
+    }
+
+    public static void warn(String msg) {
+        out(msg,WARNING);
+    }
+
+    public static void info(String msg) {
+        out(msg,INFO);
     }
 
     public static void out(String msg, int lvl) {
         if (lvl <= level) {
-            write("abbozza! [out] : " + msg);
-            fire("abbozza! [out] : " + msg);
+            String prefix = "";
+            switch (lvl) {
+                case INFO    : prefix = "[inf] : "; break;
+                case WARNING : prefix = "[wrn] : "; break;
+                case DEBUG   : prefix = "[dbg] : "; break;
+                default      : prefix = "[out] : "; break;
+            }                    
+            write(prefix + msg);
+            fire(prefix + msg);
         }
     }
 
     public static void err(String msg) {
         if ( level >= ERROR ) {
-            write("abbozza! [err] : " + msg);
-            fire("abbozza! [err] : " + msg);
+            write("[err] : " + msg);
+            fire("[err] : " + msg);
         }
     }
     
     public static void stackTrace(Exception ex) {
         if (level >= ERROR ) {
-            write("abbozza! [err] : Stack trace for exception");
+            write("[err] : Stack trace for exception");
             ex.printStackTrace(System.out);
         }
     }
