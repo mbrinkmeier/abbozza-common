@@ -64,8 +64,6 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     private Editor editor;
 
-    public String runtimePath;
-
     public static URI jarUri;
     
     public static boolean isGlobal;
