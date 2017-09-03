@@ -6,7 +6,7 @@
         <msg id="msg.server_reachable">Server erreichbar unter #</msg> 
         <msg id="msg.not_found"># nicht gefunden</msg> 
         <msg id="msg.compiling">Kompiliere ...</msg> 
-        <msg id="msg.done_compiling">Kompilation beendet</msg> 
+        <msg id="msg.done_compiling">Kompilation erfolgreich beendet</msg> 
         <msg id="msg.error_compiling">Kompilation fehlgeschlagen</msg> 
         <msg id="msg.file_overwrite"># existiert bereits! Soll die Datei überschrieben werden?</msg> 
         <msg id="msg.cancel">Abbrechen</msg> 
@@ -106,6 +106,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.use_double">Verwende präzisere Dezimalzahlen (64 Bit)</msg>
         <msg id="gui.usb">USB Kommunikation</msg>        
         <msg id="gui.messages">Nachrichten</msg>
+        <msg id="gui.log">Protokoll</msg>
         <msg id="gui.is_installed">Installiert</msg>
         <msg id="gui.install">Installieren</msg>
         <msg id="gui.reinstall">Erneut installieren</msg>
@@ -113,6 +114,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.no_i2cs">Kein I2CS</msg>
         <msg id="gui.i2cs_master">I2CS Master</msg>
         <msg id="gui.i2cs_slave">I2CS Slave</msg>
+        <msg id="gui.error_in_line">Fehler in Zeile # bei Zeichen </msg>
+        <msg id="gui.error_msg">Fehlermeldung</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
