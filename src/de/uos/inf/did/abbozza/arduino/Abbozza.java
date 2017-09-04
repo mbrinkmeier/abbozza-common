@@ -370,5 +370,15 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
     public int getBaudRate() {
         return SerialPort.BAUDRATE_115200;
     }
+
+    @Override
+    public String findBoard() {
+        return "";
+    }
+
+    @Override
+    public File queryPathToBoard(String path) {
+        return new File(path);
+    }
 }
 
