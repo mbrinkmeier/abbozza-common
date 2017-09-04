@@ -351,6 +351,9 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public abstract String uploadCode(String code);
 
+    public abstract String findBoard();
+    public abstract File queryPathToBoard(String path);
+    
     public void checkForUpdate(boolean reportNoUpdate) {
         // TODO !!!
         /*

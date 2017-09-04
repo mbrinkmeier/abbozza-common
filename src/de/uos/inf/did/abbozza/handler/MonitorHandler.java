@@ -58,7 +58,6 @@ public class MonitorHandler extends AbstractHandler {
     }
     
     
-
     public boolean open() {    
         AbbozzaLogger.out("MonitorHandler: Open monitor", AbbozzaLogger.INFO );
         if (monitor != null) {

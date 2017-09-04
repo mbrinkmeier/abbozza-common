@@ -283,5 +283,15 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
             monitor.scanPorts();
         }
     }
+
+    @Override
+    public String findBoard() {
+        return "";
+    }
+
+    @Override
+    public File queryPathToBoard(String path) {
+        return null;
+    }
     
 }

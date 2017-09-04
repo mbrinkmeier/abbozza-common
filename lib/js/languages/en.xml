@@ -26,6 +26,7 @@
         <msg id="msg.drop_sketch">The sketch wasn't saved.
 Changes may be lost.
 Continuing?</msg> 
+        <msg id="msg.save_question">Should the sketch be saved?</msg>
         <msg id="msg.click_to_continue">Click to continue</msg>
         <msg id="msg.sketch_description">An abbozza! sketch</msg>
         <msg id="msg.invalid_sketch"># not found, not accessible or no valid sketch!</msg>
@@ -300,6 +301,8 @@ Continuing?</msg>
         <msg id="dev.MOTORSPEED">Set speed of Motor # to</msg>
         <msg id="dev.FORWARD">forward</msg>
         <msg id="dev.BACKWARD">backward</msg>
+        <msg id="dev.MICROPHONE_GET">Microphone level</msg>
+        
         <msg id="AND">and</msg>
         <msg id="MILLIS">Time in milliseconds (ms)</msg>
         <msg id="MICROS">Time in microseconds (µs)</msg>

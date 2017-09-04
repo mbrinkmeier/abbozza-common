@@ -26,6 +26,7 @@
         <msg id="msg.drop_sketch">Der Sketch wurde nicht gespeichert.
 Wenn Du fortfährst gehen eventuell Änderungen verloren.
 Trotzdem fortfahren?</msg> 
+        <msg id="msg.save_question">Soll der Sketch gespeichert werden?</msg>
         <msg id="msg.click_to_continue">Klicken um fortzufahren</msg>
         <msg id="msg.sketch_description">Ein abbozza! Sketch</msg>        
         <msg id="msg.invalid_sketch"># nicht gefunden, nicht lesbar oder kein gültiger Sketch!</msg>
@@ -298,6 +299,7 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.MOTORSPEED">Setze Geschwindigkeit von Motor # auf</msg>
         <msg id="dev.FORWARD">vorwärts</msg>
         <msg id="dev.BACKWARD">rückwärts</msg>
+        <msg id="dev.MICROPHONE_GET">Mikrophon Lautstärke</msg>
         
         <msg id="dev.SPEAKER">Lautsprecher</msg>
         <msg id="dev.SPEAKER_MUTE">Lautsprecher # aus</msg>
