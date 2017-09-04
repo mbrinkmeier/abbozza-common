@@ -162,7 +162,7 @@ public class AbbozzaConfig {
         // Check if default configuration in <runtimePath>/lib/ exists
         // and load it.
         AbbozzaServer abbozza = AbbozzaServer.getInstance();
-        File defaultConfigFile = new File(abbozza.runtimePath+ "/lib/" + abbozza.system + ".cfg");
+        File defaultConfigFile = new File(abbozza.abbozzaPath+ "/lib/" + abbozza.system + ".cfg");
         AbbozzaLogger.out("Cheking for default configuration in " + defaultConfigFile.getAbsolutePath());
         if ( defaultConfigFile.exists() ) {
             try {

@@ -24,6 +24,7 @@
 
 package de.uos.inf.did.abbozza.monitor;
 
+import de.uos.inf.did.abbozza.AbbozzaLocale;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,14 +33,6 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JPopupMenu;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.text.DefaultCaret;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 /**
  *
@@ -86,7 +79,7 @@ public class TableMonitor extends MonitorPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
 
-        saveItem.setText("Speichern");
+        saveItem.setText(AbbozzaLocale.entry("gui.save"));
         saveItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveItemActionPerformed(evt);
@@ -94,7 +87,7 @@ public class TableMonitor extends MonitorPanel {
         });
         popup.add(saveItem);
 
-        resetItem.setText("Löschen");
+        resetItem.setText(AbbozzaLocale.entry("gui.clear"));
         resetItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resetItemActionPerformed(evt);

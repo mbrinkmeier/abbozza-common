@@ -48,6 +48,7 @@ Continuing?</msg>
         <msg id="gui.browser_path">Path to the browser</msg>         
         <msg id="gui.server_port">Server port</msg>         
         <msg id="gui.server_and_browser">Server and browser</msg>         
+        <msg id="gui.clear">Clear</msg>         
         <msg id="gui.save">Save</msg>         
         <msg id="gui.cancel">Cancel</msg>         
         <msg id="gui.options">Options</msg>         
@@ -115,7 +116,13 @@ Continuing?</msg>
         <msg id="gui.i2cs_master">I2CS Master</msg>
         <msg id="gui.i2cs_slave">I2CS Slave</msg>
         <msg id="gui.error_in_line">Error in line # at character </msg>
-        <msg id="gui.error_msg">Error message</msg>        
+        <msg id="gui.error_msg">Error message</msg>      
+        <msg id="gui.log_none">None</msg>
+        <msg id="gui.log_err">Errors</msg>
+        <msg id="gui.log_warn">Warnings</msg>
+        <msg id="gui.log_info">Informations</msg>
+        <msg id="gui.log_debug">Everything</msg>
+  
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>

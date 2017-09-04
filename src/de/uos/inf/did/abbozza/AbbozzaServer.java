@@ -102,7 +102,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected static AbbozzaServer instance;
 
     // The paths
-    protected String runtimePath;       // The parent directory of jarPath, containig lib, plugins, bin ...
+    protected String abbozzaPath;       // The parent directory of jarPath, containig lib, plugins, bin ...
     protected String globalJarPath;     // The directory containing the global jar
     protected String localJarPath;      // The directory containig the local jar
     protected String sketchbookPath;    // The default path fpr local Sketches
@@ -237,7 +237,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                     + "Start installer from jar!", "abbozza! installation error", JOptionPane.ERROR_MESSAGE);
         }
         jarPath = installFile.getParentFile().getAbsolutePath();
-        runtimePath = installFile.getParentFile().getParent();
+        abbozzaPath = installFile.getParentFile().getParent();
         
         // These paths have to be set in the subclass
         globalJarPath = "";

@@ -48,6 +48,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.browser_path">Pfad zum Browser</msg>         
         <msg id="gui.server_port">Server Port</msg>         
         <msg id="gui.server_and_browser">Server und Browser</msg>         
+        <msg id="gui.clear">Löschen</msg>         
         <msg id="gui.save">Speichern</msg>         
         <msg id="gui.cancel">Abbrechen</msg>         
         <msg id="gui.options">Optionen</msg>
@@ -116,6 +117,11 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.i2cs_slave">I2CS Slave</msg>
         <msg id="gui.error_in_line">Fehler in Zeile # bei Zeichen </msg>
         <msg id="gui.error_msg">Fehlermeldung</msg>        
+        <msg id="gui.log_none">Nichts</msg>
+        <msg id="gui.log_err">Fehler</msg>
+        <msg id="gui.log_warn">Warnungen</msg>
+        <msg id="gui.log_info">Informationen</msg>
+        <msg id="gui.log_debug">Alles</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
