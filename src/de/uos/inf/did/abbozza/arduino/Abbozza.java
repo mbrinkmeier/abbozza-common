@@ -158,7 +158,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         // configPath = sketchbookPath + "/tools/Abbozza/Abbozza.cfg";
         localJarPath = sketchbookPath + "/tools/Abbozza/tool/";
         globalJarPath = PreferencesData.get("runtime.ide.path") + "/";
-        runtimePath = globalJarPath;
+        abbozzaPath = globalJarPath;
         
         localPluginPath = sketchbookPath + "/tools/Abbozza/plugins";
         globalPluginPath = globalJarPath + "/tools/Abbozza/plugins";
@@ -182,7 +182,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         jarHandler.clear();
         jarHandler.addDir(sketchbookPath + "/tools/Abbozza/web", "Local directory");
         // jarHandler.addJar(sketchbookPath + "/tools/Abbozza/tool/abbozza-arduino.jar", "Local jar");
-        jarHandler.addDir(runtimePath + "tools/Abbozza/web", "Global directory");
+        jarHandler.addDir(abbozzaPath + "tools/Abbozza/web", "Global directory");
         // jarHandler.addJar(runtimePath + "tools/Abbozza/tool/abbozza-arduino.jar", "Global jar");
         jarHandler.addJar(jarUri, "Jar");
     }
