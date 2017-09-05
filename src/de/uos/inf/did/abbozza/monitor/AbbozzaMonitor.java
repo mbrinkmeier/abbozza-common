@@ -690,10 +690,11 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
             addToUpdateBuffer(msg.toCharArray(), msg.length());
         }
 
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        GUITool.centerWindow(this);
+        /*Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - this.getWidth()) / 2;
         int y = (screen.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
+        this.setLocation(x, y); */
     }
 
     public void close() throws Exception {

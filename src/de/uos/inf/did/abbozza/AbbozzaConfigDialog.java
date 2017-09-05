@@ -6,6 +6,7 @@
 package de.uos.inf.did.abbozza;
 
 // import de.uos.inf.did.abbozza.arduino.Abbozza;
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -59,10 +60,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         initComponents();
 
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screen.width - this.getWidth()) / 2;
-        int y = (screen.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
+        GUITool.centerWindow(this);
         
         loadConfiguration();
 

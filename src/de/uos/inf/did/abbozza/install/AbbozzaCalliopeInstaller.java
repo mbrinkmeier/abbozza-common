@@ -5,6 +5,7 @@
  */
 package de.uos.inf.did.abbozza.install;
 
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -53,10 +54,11 @@ public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
 
         this.setTitle("abbozza! Calliope Installer");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        GUITool.centerWindow(this);
+        /* Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - getWidth()) / 2;
         int y = (screen.height - getHeight()) / 2;
-        setLocation(x, y);
+        setLocation(x, y);*/
 
         abbozzaDir = System.getProperty("user.home") + "/.abbozza/calliope";
         File aD = new File(abbozzaDir);

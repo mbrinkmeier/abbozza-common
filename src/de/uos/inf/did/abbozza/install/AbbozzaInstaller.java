@@ -23,6 +23,7 @@ package de.uos.inf.did.abbozza.install;
 
 import de.uos.inf.did.abbozza.install.AbbozzaArduinoInstaller;
 import de.uos.inf.did.abbozza.install.AbbozzaCalliopeInstaller;
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -52,10 +53,11 @@ public class AbbozzaInstaller extends javax.swing.JDialog {
         initComponents();
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        GUITool.centerWindow(this);
+        /* Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - getWidth()) / 2;
         int y = (screen.height - getHeight()) / 2;
-        setLocation(x, y);
+        setLocation(x, y); */
     }
 
     /**
