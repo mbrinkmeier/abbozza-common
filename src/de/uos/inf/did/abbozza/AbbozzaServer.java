@@ -704,6 +704,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         } else {
             return 1;
         }
+        
     }
     
     public void adaptConfigDialog(AbbozzaConfigDialog dialog) {
