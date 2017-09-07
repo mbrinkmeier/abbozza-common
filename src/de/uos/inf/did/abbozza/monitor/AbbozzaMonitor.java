@@ -28,6 +28,7 @@ import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -158,11 +159,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
             }
         });
 
-        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screen.width - this.getWidth()) / 2;
-        int y = (screen.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
+        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);        
+        GUITool.centerWindow(this);
     }
 
     /**
@@ -692,10 +690,11 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
             addToUpdateBuffer(msg.toCharArray(), msg.length());
         }
 
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        GUITool.centerWindow(this);
+        /*Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - this.getWidth()) / 2;
         int y = (screen.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
+        this.setLocation(x, y); */
     }
 
     public void close() throws Exception {

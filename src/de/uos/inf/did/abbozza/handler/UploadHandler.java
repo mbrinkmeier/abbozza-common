@@ -82,15 +82,13 @@ public class UploadHandler extends AbstractHandler {
     }
 
      public String uploadCode(String code) {     
-         AbbozzaLogger.resetErr();
+         // AbbozzaLogger.resetErr();
 
          String response;
 
-         System.err.println(code);
          response = _abbozzaServer.uploadCode(code);
          AbbozzaLogger.out("Compiling response : \"" + response +"\"",AbbozzaLogger.INFO);
         
-         // response = AbbozzaLogger.getErr();
          return response;
     }   
      

@@ -27,6 +27,7 @@ import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.Tools;
+import de.uos.inf.did.abbozza.tools.XMLTool;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -52,7 +53,7 @@ public class LocaleHandler extends AbstractHandler {
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        String resp = Tools.documentToString(AbbozzaLocale.getLocaleXml());
+        String resp = XMLTool.documentToString(AbbozzaLocale.getLocaleXml());
         resp = resp.trim();
         sendResponse(exchg, 200, "text/xml; charset=utf-8", resp);
     }

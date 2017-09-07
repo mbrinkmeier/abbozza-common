@@ -10,7 +10,9 @@
       <SubComponents>
         <MenuItem class="javax.swing.JMenuItem" name="saveItem">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Speichern"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="AbbozzaLocale.entry(&quot;gui.save&quot;)" type="code"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveItemActionPerformed"/>
@@ -18,7 +20,9 @@
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="resetItem">
           <Properties>
-            <Property name="text" type="java.lang.String" value="L&#xf6;schen"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="AbbozzaLocale.entry(&quot;gui.clear&quot;)" type="code"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="resetItemActionPerformed"/>

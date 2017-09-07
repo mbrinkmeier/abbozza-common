@@ -79,7 +79,7 @@ public class TaskHandler extends AbstractHandler {
                 AbbozzaLogger.out("TaskHandler: loading from given url " + path ,AbbozzaLogger.DEBUG);                
             } catch (MalformedURLException ex) {
                 // If it isn't a wellformed URL reset the anchor to the standard task path
-                taskContext = new URL("file://" + this._abbozzaServer.getConfiguration().getTaskPath());
+                taskContext = new URL("file://" + this._abbozzaServer.getConfiguration().getFullTaskPath());
                 _abbozzaServer.setTaskContext(taskContext);
             }
         } else {
@@ -107,25 +107,6 @@ public class TaskHandler extends AbstractHandler {
                     
             AbbozzaLogger.out("TaskHandler: " + sketch.toString() + " received", AbbozzaLogger.INFO);
         } else {
-            /*
-            bytearray = getBytes(path);
-                
-            if (bytearray == null) {
-                AbbozzaLogger.out("TaskHandler: " + sketch.toString() + " not found! Looking in jars!", AbbozzaLogger.INFO);
-                AbbozzaLogger.out("TaskHandler: Looking for " + "/tasks/" + AbbozzaServer.getInstance().getSystem() + sketch.toString(), AbbozzaLogger.INFO);
-                // String result = "abbozza! : " + path + " not found in task directory! Looking in jars.";
-                bytearray = this._jarHandler.getBytes("/tasks/" + AbbozzaServer.getInstance().getSystem() + path);
-            }
-        
-            if (bytearray == null) {        
-                AbbozzaLogger.out("TaskHandler: tasks" + path + " not found!", AbbozzaLogger.INFO);     
-                String result = "abbozza! : " + path + " not found!";
-                exchg.sendResponseHeaders(400, result.length());
-                os.write(result.getBytes());
-                os.close();
-                return;
-            }
-            */
             return;
         }
         
@@ -154,80 +135,5 @@ public class TaskHandler extends AbstractHandler {
         os.write(bytearray, 0, bytearray.length);
         os.close();    
     }
-    
-    /*
-    public InputStream getStream(String path) throws IOException {
-        URL url;
-        try {
-            url = new URL(path);
-        } catch (MalformedURLException ex) {
-            AbbozzaLogger.out("TaskHandler : malformed URL " + path + " requested",AbbozzaLogger.DEBUG);
-            return null;
-        }
-
-        URLConnection conn = url.openConnection();
-        InputStream in = conn.getInputStream();        
         
-        return in;
-    }
-    */
-    
-    /*
-    public byte[] getBytes(String path) throws IOException {
-
-        // Check if there is a jar in the path
-        if ( path.contains(".jar") ) {
-            int index = path.indexOf(".jar")+4;
-            String jarPath = path.substring(0, index );
-            AbbozzaLogger.out("TaskHandler : File in jar " + jarPath + " requested",AbbozzaLogger.DEBUG);
-            JarFile jarFile = new JarFile(jarPath);
-            return getBytesFromJar(jarFile,path.substring(index));
-        }
-        
-        File file = new File(path); 
-        if (!file.exists()) {
-            return null;
-        }
-        
-        String taskPath = this._abbozzaServer.getConfiguration().getTaskPath();
-        if (!file.getCanonicalPath().startsWith(taskPath)) {
-            return null;
-        }
-        
-        FileInputStream fis = new FileInputStream(file);
-
-        byte[] bytearray = new byte[(int) file.length()];
-        BufferedInputStream bis = new BufferedInputStream(fis);
-        bis.read(bytearray, 0, bytearray.length);
-        bis.close();
-
-        return bytearray;
-    }
-    */
-    
-    /*
-    public byte[] getBytesFromJar(JarFile jarFile, String path) throws IOException {
-        
-        if ( path.equals("")  ) {
-            path = "start.abz";
-        }
-        
-        AbbozzaLogger.out("TaskHandler : Reading bytes from " + path + " in " + jarFile.getName(),AbbozzaLogger.DEBUG);
-        
-        path = path.substring(1, path.length());
-        ZipEntry entry = jarFile.getEntry(path);
-        InputStream fis = jarFile.getInputStream(entry);
-
-        if (fis == null) {
-            return null;
-        }
-
-        byte[] bytearray = new byte[(int) entry.getSize()];
-        BufferedInputStream bis = new BufferedInputStream(fis);
-        bis.read(bytearray, 0, bytearray.length);
-        bis.close();
-
-        return bytearray;
-    }
-    */
 }

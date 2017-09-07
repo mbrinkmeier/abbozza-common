@@ -15,16 +15,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/**
- * @fileoverview ... @author michael.brinkmeier@uni-osnabrueck.de (Michael
- * Brinkmeier)
- */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.tools;
 
 /**
  *
  * @author mbrinkmeier
  */
-public class NewClass {
+public class FileTool {
     
 }

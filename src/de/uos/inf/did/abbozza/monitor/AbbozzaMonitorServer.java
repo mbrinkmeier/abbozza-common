@@ -69,7 +69,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
         findJarsAndDirs(jarHandler);
 
         // Load plugins
-        pluginManager = new PluginManager(this);
+        // pluginManager = new PluginManager(this);
 
         /**
          * Read the configuration from
@@ -282,6 +282,16 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
         } else if (e.getActionCommand().equals("RESCAN")) {
             monitor.scanPorts();
         }
+    }
+
+    @Override
+    public String findBoard() {
+        return "";
+    }
+
+    @Override
+    public File queryPathToBoard(String path) {
+        return null;
     }
     
 }

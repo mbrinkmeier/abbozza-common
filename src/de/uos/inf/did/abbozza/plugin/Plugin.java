@@ -28,6 +28,7 @@ import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.Tools;
+import de.uos.inf.did.abbozza.tools.XMLTool;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -148,7 +149,7 @@ public class Plugin {
                 }   
             }
         } catch (Exception ex) {
-            System.out.println(Tools.documentToString(pluginXml));
+            System.out.println(XMLTool.documentToString(pluginXml));
             AbbozzaLogger.stackTrace(ex);
         }
         

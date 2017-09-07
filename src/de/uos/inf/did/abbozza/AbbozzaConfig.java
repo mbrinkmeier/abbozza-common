@@ -78,6 +78,7 @@ public class AbbozzaConfig {
     private boolean config_update = false;
     private String config_taskPath = configPath;
     private boolean config_tasksEditable = true;
+    private int config_timeout = 120000;
 
     /**
      * Reads the configuration from the given path.
@@ -111,6 +112,7 @@ public class AbbozzaConfig {
         if (configPath == null) {
             return;
         }
+        
         File prefFile = new File(configPath);
         config = new Properties();
         try {
@@ -118,6 +120,8 @@ public class AbbozzaConfig {
             AbbozzaLogger.out("Reading config from " + configPath, AbbozzaLogger.DEBUG);
             config.load(new FileInputStream(prefFile));
             set(config);
+            AbbozzaLogger.err("Writing configuration to " + configPath);
+            write();
         } catch (IOException ex) {
             // Create a new configuration file
             AbbozzaLogger.err("Configuration file " + configPath + " not found! Creating one!");
@@ -133,6 +137,8 @@ public class AbbozzaConfig {
      * @param browserPath The browser path to be set.
      */
     public void setDefault(String browserPath) {
+        
+        // Set default configuration
         config = new Properties();
 
         AbbozzaLogger.out("Setting internal default configuration", AbbozzaLogger.INFO);
@@ -146,10 +152,30 @@ public class AbbozzaConfig {
         config_update = false;
         config_taskPath = System.getProperty("user.home");
         config_tasksEditable = true;
+        config_timeout = 120000;
         storeProperties(config);
+        
         setDefaultOptions();
         AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         AbbozzaLogger.out("Default configuration set", AbbozzaLogger.INFO);
+
+        // Check if default configuration in <runtimePath>/lib/ exists
+        // and load it.
+        AbbozzaServer abbozza = AbbozzaServer.getInstance();
+        File defaultConfigFile = new File(abbozza.abbozzaPath+ "/lib/" + abbozza.system + ".cfg");
+        AbbozzaLogger.out("Cheking for default configuration in " + defaultConfigFile.getAbsolutePath());
+        if ( defaultConfigFile.exists() ) {
+            try {
+                // Load the configuration
+                AbbozzaLogger.out("Reading default config from " + defaultConfigFile.getAbsolutePath(), AbbozzaLogger.DEBUG);
+                config.load(new FileInputStream(defaultConfigFile));
+                set(config);
+            } catch (IOException ex) {
+                AbbozzaLogger.err("Default configuration file " + defaultConfigFile.getAbsolutePath() + " could not be read!");
+            }
+        }
+
+        write();
     }
 
     /**
@@ -214,6 +240,11 @@ public class AbbozzaConfig {
         } else {
             AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         }
+        if (properties.getProperty("timeout") != null) {
+            config_timeout=Integer.parseInt(properties.getProperty("timeout", ""+AbbozzaLogger.NONE));
+        } else {
+            config_timeout=120000;
+        }
 
         write();        
     }
@@ -269,6 +300,7 @@ public class AbbozzaConfig {
         props.setProperty("update", config_update ? "true" : "false");
         props.setProperty("taskPath", config_taskPath);
         props.setProperty("tasksEditable", config_tasksEditable ? "true" : "false");
+        props.setProperty("timeout", Integer.toString(config_timeout));
     }
     
     /**
@@ -454,6 +486,14 @@ public class AbbozzaConfig {
         config_taskPath = taskPath;
     }
 
+    public String getFullTaskPath() {
+        String path = config_taskPath;
+        if ( config_taskPath.contains("%HOME%")) {
+            path = config_taskPath.replace("%HOME%", System.getProperty("user.home"));
+        }
+        return path;
+    }
+    
     public void setTasksEditable(boolean selected) {
         config_tasksEditable = selected;
     }

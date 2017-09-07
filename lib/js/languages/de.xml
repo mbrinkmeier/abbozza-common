@@ -6,7 +6,7 @@
         <msg id="msg.server_reachable">Server erreichbar unter #</msg> 
         <msg id="msg.not_found"># nicht gefunden</msg> 
         <msg id="msg.compiling">Kompiliere ...</msg> 
-        <msg id="msg.done_compiling">Kompilation beendet</msg> 
+        <msg id="msg.done_compiling">Kompilation erfolgreich beendet</msg> 
         <msg id="msg.error_compiling">Kompilation fehlgeschlagen</msg> 
         <msg id="msg.file_overwrite"># existiert bereits! Soll die Datei überschrieben werden?</msg> 
         <msg id="msg.cancel">Abbrechen</msg> 
@@ -18,19 +18,24 @@
         <msg id="msg.board_found">Board gefunden: # an #</msg> 
         <msg id="msg.select_board">Wähle ein Board aus</msg> 
         <msg id="msg.open_config">Öffne Konfigurations-Dialog ...</msg>
+        <msg id="msg.load_sketch">Lade Sketch ...</msg>
+        <msg id="msg.save_sketch">Speichere Sketch ...</msg>
         <msg id="msg.generate_sketch">Generiere Sketch ...</msg>
         <msg id="msg.code_generated">Code wurde fehlerfrei generiert ...</msg>
         <msg id="msg.error_upload">Fehler beim Upload auf das Board!</msg>
         <msg id="msg.drop_sketch">Der Sketch wurde nicht gespeichert.
 Wenn Du fortfährst gehen eventuell Änderungen verloren.
 Trotzdem fortfahren?</msg> 
+        <msg id="msg.save_question">Soll der Sketch gespeichert werden?</msg>
         <msg id="msg.click_to_continue">Klicken um fortzufahren</msg>
         <msg id="msg.sketch_description">Ein abbozza! Sketch</msg>        
         <msg id="msg.invalid_sketch"># nicht gefunden, nicht lesbar oder kein gültiger Sketch!</msg>
+        <msg id="msg.compile_timeout">Kompilieren dauert zu lange!</msg>
+        <msg id="msg.upload_timeout">Kompilieren und Hochladen dauert zu lange!</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Erzeuge Code</msg>
-        <msg id="gui.upload_button">Lade Code auf Arduino</msg>
+        <msg id="gui.upload_button">Lade Code hoch</msg>
         <msg id="gui.new_button">Neuer Sketch</msg>
         <msg id="gui.load_button">Lade Sketch</msg>
         <msg id="gui.save_button">Speichere Sketch</msg>
@@ -44,6 +49,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.browser_path">Pfad zum Browser</msg>         
         <msg id="gui.server_port">Server Port</msg>         
         <msg id="gui.server_and_browser">Server und Browser</msg>         
+        <msg id="gui.clear">Löschen</msg>         
         <msg id="gui.save">Speichern</msg>         
         <msg id="gui.cancel">Abbrechen</msg>         
         <msg id="gui.options">Optionen</msg>
@@ -102,6 +108,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.use_double">Verwende präzisere Dezimalzahlen (64 Bit)</msg>
         <msg id="gui.usb">USB Kommunikation</msg>        
         <msg id="gui.messages">Nachrichten</msg>
+        <msg id="gui.log">Protokoll</msg>
         <msg id="gui.is_installed">Installiert</msg>
         <msg id="gui.install">Installieren</msg>
         <msg id="gui.reinstall">Erneut installieren</msg>
@@ -109,6 +116,13 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.no_i2cs">Kein I2CS</msg>
         <msg id="gui.i2cs_master">I2CS Master</msg>
         <msg id="gui.i2cs_slave">I2CS Slave</msg>
+        <msg id="gui.error_in_line">Fehler in Zeile # bei Zeichen </msg>
+        <msg id="gui.error_msg">Fehlermeldung</msg>        
+        <msg id="gui.log_none">Nichts</msg>
+        <msg id="gui.log_err">Fehler</msg>
+        <msg id="gui.log_warn">Warnungen</msg>
+        <msg id="gui.log_info">Informationen</msg>
+        <msg id="gui.log_debug">Alles</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
@@ -153,7 +167,7 @@ Trotzdem fortfahren?</msg>
         <msg id="cat.I2CS_MASTER">I2CS Master</msg>
         <msg id="cat.I2CS_SLAVE">I2CS Slave</msg>
         <msg id="cat.EVENTS">Ereignisse</msg>
-</categories>
+    </categories>
     <blocks>
         <msg id="STRING">Text</msg>
         <msg id="DECIMAL">Dezimalzahl</msg>
@@ -285,6 +299,7 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.MOTORSPEED">Setze Geschwindigkeit von Motor # auf</msg>
         <msg id="dev.FORWARD">vorwärts</msg>
         <msg id="dev.BACKWARD">rückwärts</msg>
+        <msg id="dev.MICROPHONE_GET">Mikrophon Lautstärke</msg>
         
         <msg id="dev.SPEAKER">Lautsprecher</msg>
         <msg id="dev.SPEAKER_MUTE">Lautsprecher # aus</msg>
@@ -327,7 +342,7 @@ Trotzdem fortfahren?</msg>
         <msg id="GLOBALVARS">Globale Variablen</msg>
         <msg id="TITLE">Titel</msg>
         <msg id="VARIABLES">Variablen</msg>
-        <msg id="UPLOADING">Lade Sketch auf Arduino ...</msg>
+        <msg id="UPLOADING">Lade Sketch hoch ...</msg>
         <msg id="SERVERMSG">Server-Meldungen</msg>
         <msg id="INFOMSG">Informationen</msg>
         <msg id="MESSAGES">Meldungen</msg>

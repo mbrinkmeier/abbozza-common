@@ -27,6 +27,7 @@ import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.Tools;
+import de.uos.inf.did.abbozza.tools.XMLTool;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
@@ -45,7 +46,7 @@ public class FeatureHandler extends AbstractHandler {
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        sendResponse(exchg, 200, "text/xml", Tools.documentToString(getFeatures()));
+        sendResponse(exchg, 200, "text/xml", XMLTool.documentToString(getFeatures()));
     }
 
     private Document getFeatures() {

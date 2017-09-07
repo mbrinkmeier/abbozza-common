@@ -58,7 +58,11 @@ public class LoadHandler extends AbstractHandler {
             String query = exchg.getRequestURI().getQuery();
             if ( query == null ) {
                 String sketch = loadSketch();
-                this.sendResponse(exchg, 200, "text/xml; charset=utf-8", sketch);
+                if ( sketch != null ) {
+                    this.sendResponse(exchg, 200, "text/xml; charset=utf-8", sketch);
+                } else {
+                    this.sendResponse(exchg, 404, "", "");                    
+                }
             } else {
                 AbbozzaLogger.out("loadHandler: load " + query, AbbozzaLogger.DEBUG);
                 String sketch = loadSketch(query);
@@ -70,6 +74,8 @@ public class LoadHandler extends AbstractHandler {
     }
 
     public String loadSketch() throws IOException {
+        if ( _abbozzaServer.isDialogOpen() ) return null;
+        
         String result = "";
         File lastSketchFile;
         URL last = _abbozzaServer.getLastSketchFile();
@@ -107,6 +113,10 @@ public class LoadHandler extends AbstractHandler {
         } else {
             chooser.setSelectedFile(lastSketchFile);
         }
+        
+        _abbozzaServer.bringFrameToFront();
+        _abbozzaServer.setDialogOpen(true);
+        
         int choice = chooser.showOpenDialog(null);
         if ((choice == JFileChooser.APPROVE_OPTION) || (panel.getUrl() != null)) {
             URL url;
@@ -138,8 +148,12 @@ public class LoadHandler extends AbstractHandler {
                 AbbozzaServer.getConfig().apply(panel.getOptions());
             }            
         } else {
+            _abbozzaServer.setDialogOpen(false);
+            _abbozzaServer.resetFrame();
             throw new IOException();
         }
+        _abbozzaServer.setDialogOpen(false);
+        _abbozzaServer.resetFrame();
         _abbozzaServer.toolIconify();
         return result;
     }

@@ -24,6 +24,7 @@
 
 package de.uos.inf.did.abbozza;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JCheckBox;
@@ -54,10 +55,14 @@ public class FeatureCellRenderer extends DefaultTreeCellRenderer {
 			DefaultMutableTreeNode tn = (DefaultMutableTreeNode) value;
 			if ( tn.getUserObject() instanceof RadioButtonNode ) {
 				RadioButtonNode rbn = (RadioButtonNode) tn.getUserObject();
-				return new JRadioButton(rbn.getText(),rbn.isSelected());
+                                JRadioButton btn = new JRadioButton(rbn.getText(),rbn.isSelected());
+                                btn.setBackground(Color.WHITE);
+				return btn;
 			} else  if ( tn.getUserObject() instanceof CheckBoxNode ) {
 				CheckBoxNode cbn = (CheckBoxNode) tn.getUserObject();
-				return new JCheckBox(cbn.getText(),cbn.isSelected());
+                                JCheckBox btn = new JCheckBox(cbn.getText(),cbn.isSelected());
+                                btn.setBackground(Color.WHITE);
+				return btn;
 			}
                         return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
                         // return new JLabel(tn.toString());

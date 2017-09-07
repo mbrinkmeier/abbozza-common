@@ -6,7 +6,7 @@
         <msg id="msg.server_reachable">Server reachable under #</msg> 
         <msg id="msg.not_found"># not found</msg> 
         <msg id="msg.compiling">Compile ...</msg> 
-        <msg id="msg.done_compiling">Compilation finished</msg>
+        <msg id="msg.done_compiling">Compilation succesfully finished</msg>
         <msg id="msg.error_compiling">Error during compilation</msg> 
         <msg id="msg.file_overwrite"># already exists! Overwrite the file?</msg> 
         <msg id="msg.cancel">Cancel</msg> 
@@ -18,15 +18,20 @@
         <msg id="msg.board_found">Board found: # on #</msg>
         <msg id="msg.select_board">Select a board</msg>   
         <msg id="msg.open_config">Open Configuration dialog ...</msg>
+        <msg id="msg.load_sketch">Load sketch ...</msg>
+        <msg id="msg.save_sketch">Save sketch ...</msg>
         <msg id="msg.generate_sketch">Generating sketch ...</msg>
         <msg id="msg.code_generated">Code generated without errors ...</msg>
         <msg id="msg.error_upload">Error during upload!</msg>
         <msg id="msg.drop_sketch">The sketch wasn't saved.
 Changes may be lost.
 Continuing?</msg> 
+        <msg id="msg.save_question">Should the sketch be saved?</msg>
         <msg id="msg.click_to_continue">Click to continue</msg>
         <msg id="msg.sketch_description">An abbozza! sketch</msg>
         <msg id="msg.invalid_sketch"># not found, not accessible or no valid sketch!</msg>
+        <msg id="msg.compile_timeout">Compiling takes to long!</msg>
+        <msg id="msg.upload_timeout">Compiling and uploading takes to long!</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Generate Code</msg>
@@ -44,6 +49,7 @@ Continuing?</msg>
         <msg id="gui.browser_path">Path to the browser</msg>         
         <msg id="gui.server_port">Server port</msg>         
         <msg id="gui.server_and_browser">Server and browser</msg>         
+        <msg id="gui.clear">Clear</msg>         
         <msg id="gui.save">Save</msg>         
         <msg id="gui.cancel">Cancel</msg>         
         <msg id="gui.options">Options</msg>         
@@ -102,6 +108,7 @@ Continuing?</msg>
         <msg id="gui.use_double">Use more precise decimals (64 Bit)</msg>
         <msg id="gui.usb">USB communication</msg>
         <msg id="gui.messages">Messages</msg>
+        <msg id="gui.log">Log</msg>
         <msg id="gui.is_installed">Installed</msg>
         <msg id="gui.install">Install</msg>
         <msg id="gui.reinstall">Reinstallieren</msg>
@@ -109,6 +116,14 @@ Continuing?</msg>
         <msg id="gui.no_i2cs">No I2CS</msg>
         <msg id="gui.i2cs_master">I2CS Master</msg>
         <msg id="gui.i2cs_slave">I2CS Slave</msg>
+        <msg id="gui.error_in_line">Error in line # at character </msg>
+        <msg id="gui.error_msg">Error message</msg>      
+        <msg id="gui.log_none">None</msg>
+        <msg id="gui.log_err">Errors</msg>
+        <msg id="gui.log_warn">Warnings</msg>
+        <msg id="gui.log_info">Informations</msg>
+        <msg id="gui.log_debug">Everything</msg>
+  
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
@@ -286,6 +301,8 @@ Continuing?</msg>
         <msg id="dev.MOTORSPEED">Set speed of Motor # to</msg>
         <msg id="dev.FORWARD">forward</msg>
         <msg id="dev.BACKWARD">backward</msg>
+        <msg id="dev.MICROPHONE_GET">Microphone level</msg>
+        
         <msg id="AND">and</msg>
         <msg id="MILLIS">Time in milliseconds (ms)</msg>
         <msg id="MICROS">Time in microseconds (µs)</msg>
@@ -324,7 +341,7 @@ Continuing?</msg>
         <msg id="GLOBALVARS">Global variables</msg>
         <msg id="TITLE">Title</msg>
         <msg id="VARIABLES">Variables</msg>
-        <msg id="UPLOADING">Load Sketch onto Arduino ...</msg>
+        <msg id="UPLOADING">Upload sketch ...</msg>
         <msg id="SERVERMSG">Server-messages</msg>
         <msg id="INFOMSG">Informations</msg>
         <msg id="MESSAGES">Messages</msg>

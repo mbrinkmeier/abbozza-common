@@ -45,14 +45,13 @@ import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
 import de.uos.inf.did.abbozza.plugin.Plugin;
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Desktop;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.InetSocketAddress;
@@ -60,17 +59,12 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -108,12 +102,16 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected static AbbozzaServer instance;
 
     // The paths
+    // Paths determined by the installation
+    protected String abbozzaPath;       // The parent directory of jarPath, containig lib, plugins, bin ...
+    protected String jarPath;           // The parent directory of the jar
+    protected String userPath;          // The path to the user directory
+    protected String configPath;        // The path to the config file
+    
+    // Configurable paths
     protected String globalJarPath;     // The directory containing the global jar
     protected String localJarPath;      // The directory containig the local jar
     protected String sketchbookPath;    // The default path fpr local Sketches
-    protected String configPath;        // The path to the config file
-    protected String userPath;          // The path to the user directory
-    protected String jarPath;           // The parent directory of the jar
     protected String globalPluginPath;
     protected String localPluginPath;
 
@@ -132,7 +130,11 @@ public abstract class AbbozzaServer implements HttpHandler {
     private URL _lastSketchFile = null;
     private URL _taskContext;
     protected PluginManager pluginManager;
-
+    
+    protected JFrame mainFrame = null;     // The main frame
+    protected boolean dialogOpen = false;  // Used to prevent multiple open windows
+    private int oldState = 0;              // Stores the original state of the mainFrame
+    
     protected String _boardName;
     
     /**
@@ -145,6 +147,8 @@ public abstract class AbbozzaServer implements HttpHandler {
         if (instance != null) {
             return;
         }
+        // Set static instance
+        instance = this;
 
         // Set the system name
         this.system = system;
@@ -152,13 +156,11 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Initialize the logger
         AbbozzaLogger.init();
         AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
+        AbbozzaLogger.registerStream(System.out);
 
-        // Set static instance
-        instance = this;
-
-        AbbozzaLogger.out("Setting paths");
+        // Setting paths
         setPaths();
-
+        
         // Find Jars
         jarHandler = new JarDirHandler();
         findJarsAndDirs(jarHandler);
@@ -170,69 +172,64 @@ public abstract class AbbozzaServer implements HttpHandler {
          * Read the configuration from
          * <user.home>/.abbozza/<system>/abbozza.cfg
          */
-        // Check if the users config file exists.
-        File configFile = new File(configPath);
-        if ( !configFile.exists() ) {
-            // if not, copy the template from <jarPath>/
-            File templateFile = new File(jarPath + "/" + system + "_abbozza.cfg");
-            AbbozzaLogger.out("Copying template configuration " + templateFile.getAbsolutePath() + " to " + configFile.getAbsolutePath(), AbbozzaLogger.INFO);
-            try {            
-                Files.copy(templateFile.toPath(),configFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException ex) {
-                AbbozzaLogger.err("Copying template configuration " + templateFile.getAbsolutePath() + " to " + configFile.getAbsolutePath() + " failed!");
-            }
-        }
-
-        // configPath = userPath + this.system + "/abbozza.cfg";
         config = new AbbozzaConfig(configPath);
 
+        // Load the locale
         AbbozzaLocale.setLocale(config.getLocale());
 
-        AbbozzaLogger.out("Version " + VERSION, AbbozzaLogger.INFO);
+        AbbozzaLogger.info("Version " + VERSION);
 
+        // Check for Update
         if (this.getConfiguration().getUpdate()) {
             checkForUpdate(false);
         }
 
+        // Set the initial taskContext, if a task path is given
         try {
-            this._taskContext = new File(this.getConfiguration().getTaskPath()).toURI().toURL();
+            this._taskContext = new File(this.getConfiguration().getFullTaskPath()).toURI().toURL();
         } catch (MalformedURLException ex) {
             this._taskContext = null;
         }
 
-        AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
-        
+        AbbozzaLogger.info(AbbozzaLocale.entry("msg.loaded"));
+
+        // Call the initialization hooks for subclasses
         setAdditionalPaths();
-
         additionalInitialization();
-        
-        if (config.startAutomatically()) {
-            this.startServer();
-            if (config.startBrowser()) {
-                this.startBrowser(system + ".html");
-            }
-        }
-
     }
 
+    
     /**
      * This default operation sets the main paths
      */
     public void setPaths() {
+        // Set user Path to $HOME/.abbozza/<system>
         userPath = System.getProperty("user.home") + "/.abbozza/" + system;
 
         // Check if the user directory exists
         File userDir = new File(userPath);
         if ( !userDir.exists() ) {
+            // Create user dir if it oesn't exist
             try {
                 Files.createDirectories(userDir.toPath());
             } catch (IOException ex) {
+                // If creatiuon  of user ir not possible, terminate
                 AbbozzaLogger.err("[Fatal] Could not create: " + userPath);
                 System.exit(1);
             }
         }
-        configPath = userPath + "/abbozza.cfg";
         
+        // Set config path and read configuration
+        configPath = userPath + "/abbozza.cfg";
+
+        // Register log file to AbbozzaLogger
+        try {
+            AbbozzaLogger.registerStream(new FileOutputStream(userPath + "/abbozza.log",false));
+        } catch (FileNotFoundException ex) {
+            AbbozzaLogger.err("Can't log to " + userPath + "/abbozza.log");
+        }
+        
+        // Determine the executed jar
         URI uri = null;
         File installFile = new File("/");
         try {
@@ -243,7 +240,9 @@ public abstract class AbbozzaServer implements HttpHandler {
                     + "Start installer from jar!", "abbozza! installation error", JOptionPane.ERROR_MESSAGE);
         }
         jarPath = installFile.getParentFile().getAbsolutePath();
+        abbozzaPath = installFile.getParentFile().getParent();
         
+        // These paths have to be set in the subclass
         globalJarPath = "";
         localJarPath = "";
         sketchbookPath = "";
@@ -251,41 +250,49 @@ public abstract class AbbozzaServer implements HttpHandler {
         localPluginPath = "";
     };
     
-    public abstract void registerSystemHandlers();
-
     
+    
+    /**
+     * Some getters for basic configuration details.
+     */
+
+     /**
+      * Get the configured and expanded sketchbook path.
+      * @return The sketchbook path
+      */
     public String getSketchbookPath() {
         return sketchbookPath;
     }
 
-//    public String getConfigPath() {
-//        return configPath;
-//    }
-
-//    public String getGlobalJarPath() {
-//        return globalJarPath;
-//    }
-
-//    public String getLocalJarPath() {
-//        return localJarPath;
-//    }
-
+    /**
+     * Get the global plugin path.
+     * @return The global plugin path
+     */
     public String getGlobalPluginPath() {
         return globalPluginPath;
     }
 
+    /**
+     * Get the users plugin path.
+     * @return The users plugin path.
+     */
     public String getLocalPluginPath() {
         return localPluginPath;
     }
 
+    /**
+     * Get the name of the system.
+     * 
+     * @return The name of the system.
+     */
     public String getSystem() {
         return this.system;
     }
 
-    public abstract void findJarsAndDirs(JarDirHandler jarHandler);
-
-
-    public void registerHandlers() {
+    /**
+     * Register the default, system independent handlers.
+     */
+    protected void registerHandlers() {
         registerSystemHandlers();
         httpServer.createContext("/abbozza/load", new LoadHandler(this));
         httpServer.createContext("/abbozza/save", new SaveHandler(this));
@@ -308,6 +315,136 @@ public abstract class AbbozzaServer implements HttpHandler {
         this.pluginManager.registerPluginHandlers(httpServer);
     }
 
+
+    /**
+     * Starts the server.
+     */
+    protected void startServer() {
+
+        if ((!isStarted) && (AbbozzaServer.getInstance() == this)) {
+            this.isStarted = true;
+
+            // AbbozzaLogger.out("Duplexer Started ... ", AbbozzaLogger.INFO);
+            AbbozzaLogger.out("Starting server ... ", AbbozzaLogger.INFO);
+
+            serverPort = config.getServerPort();
+            while (httpServer == null) {
+                try {
+                    httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
+                    registerHandlers();
+                    httpServer.setExecutor(Executors.newFixedThreadPool(20)); // ATTENTION
+                    httpServer.start();
+                    AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
+                } catch (Exception e) {
+                    // AbbozzaLogger.stackTrace(e);
+                    AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
+                    serverPort++;
+                    httpServer = null;
+                }
+            }
+
+            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(config.getServerPort())), 4);
+
+            String url = "http://localhost:" + config.getServerPort() + "/" + system + ".html";
+            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_reachable", url));
+        }
+    }
+
+
+    /**
+     * Starts the Browser with the given URL.
+     * 
+     * @param url The URL to be opened
+     */
+    public void startBrowser(String url) {
+        AbbozzaLogger.out("Starting browser");
+        Runtime runtime = Runtime.getRuntime();
+
+        if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
+            String[] cmd = new String[2];
+            // cmd[0] =  "\"" + config.getBrowserPath().replace("\"", "\\\"") + "\"";
+            cmd[0] =  expandPath(config.getBrowserPath());
+            cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
+            // String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
+            try {
+                AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
+                runtime.exec(cmd);
+                toolToBack();
+            } catch (IOException e) {
+                AbbozzaLogger.err("Browser could not be started: " + e.getMessage());
+            }
+        } else {
+            Object[] options = {AbbozzaLocale.entry("msg.cancel"), AbbozzaLocale.entry("msg.open_standard_browser"), AbbozzaLocale.entry("msg.give_browser")};
+            Object selected = JOptionPane.showOptionDialog(null, AbbozzaLocale.entry("msg.no_browser_given"),
+                    AbbozzaLocale.entry("msg.no_browser_given"),
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
+                    null, options, options[0]);
+            switch (selected.toString()) {
+                case "0":
+                    AbbozzaLogger.out("Aborted by user");
+                    System.exit(0);
+                    break;
+                case "1":
+                    boolean failed = false;
+                    if (Desktop.isDesktopSupported()) {
+                        try {
+                            Desktop desktop = Desktop.getDesktop();
+                            if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                                String xurl = "localhost:" + serverPort + "/abbozza.html";
+                                // if (this.getSystem().equals("Mac")) {
+                                //     Runtime runtimeMac = Runtime.getRuntime();
+                                //     String[] args = { "osascript", "-e", "open location \"" + url + "\"" };
+                                //     try {
+                                //         Process process = runtimeMac.exec(args);
+                                //     }
+                                //     catch (IOException e) {
+                                //         failed = true;
+                                //      }                                    
+                                // } else {
+                                        Desktop.getDesktop().browse(new URI(xurl));
+                                // }
+                            } else {
+                                failed = true;
+                            }
+                        } catch (IOException | URISyntaxException e) {
+                            failed = true;
+                        }
+                    } else {
+                        failed = true;
+                    }
+                    if (failed) {
+                        JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("msg.cant_open_standard_browser"), "abbozza!", JOptionPane.ERROR_MESSAGE);
+                        AbbozzaLogger.out("standard browser could not be started");
+                        System.exit(0);
+                    }
+                    break;
+                case "2":
+                    AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(config.get(), null, true, true);
+                    dialog.setModal(true);
+                    dialog.setVisible(true);
+                    if (dialog.getState() == 0) {
+                        config.set(dialog.getConfiguration());
+                        AbbozzaLocale.setLocale(config.getLocale());
+                        config.write();
+                        String[] cmd = new String[2];
+                        cmd[0] =  expandPath(config.getBrowserPath());
+                        cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
+                        try {
+                            AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
+                            runtime.exec(cmd);
+                            toolToBack();
+                        } catch (IOException e) {
+                            AbbozzaLogger.err("Browser could not be started: " + e.getMessage());
+                        }
+                        // sendResponse(exchg, 200, "text/plain", abbozza.getProperties().toString());
+                    } else {
+                        // sendResponse(exchg, 440, "text/plain", "");
+                    }
+                    break;
+            }
+        }
+    }
+
     /**
      * Request handling
      *
@@ -328,14 +465,6 @@ public abstract class AbbozzaServer implements HttpHandler {
             os.write(result.getBytes());
             os.close();
         } else {
-            /*
-            String line;
-            BufferedReader in = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));
-            while (in.ready()) {
-                line = in.readLine();
-            }
-             */
-
             Headers responseHeaders = exchg.getResponseHeaders();
             responseHeaders.set("Content-Type", "text/plain");
             exchg.sendResponseHeaders(200, 0);
@@ -343,20 +472,88 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
     }
 
-    // Tool handling
-    // Moves a tool to the back
+    /**
+     * Abstract system specific operations
+     */
+    
+    /**
+     * This operation registers additional, system specific handlers, like the
+     * board handler.
+     * 
+     */
+    public abstract void registerSystemHandlers();
+    
+    /**
+     * This operation finds the jars and directories to be used by the server and
+     * adds them to the given jarHandler.
+     * 
+     * @param jarHandler The jarHandler to which the jars and directories should be added.
+     */
+    public abstract void findJarsAndDirs(JarDirHandler jarHandler);
+
+
+    /**
+     * Abstract operations for Tool handling, compilation etc.
+     */
+    
+    /**
+     * Moves the tool window to the back.
+     */
     public abstract void toolToBack();
 
+    /**
+     * Sets the code in the tool window.
+     * 
+     * @param code The generated code.
+     */
     public abstract void toolSetCode(String code);
 
+    /**
+     * Iconifies the tool window.
+     */
     public abstract void toolIconify();
 
+    /**
+     * Compiles the given code 
+     * @param code The code to be compiled.
+     * @return The output produced by the compilation process. The result is
+     * empty, if the compilation was successful.
+     */
     public abstract String compileCode(String code);
 
+    /**
+     * Compiles and uploads the code to the board.
+     * 
+     * @param code The code to be compiled.
+     * @return The output produced by the compilation process. The result is
+     * empty, if the compilation was successful.
+     */
     public abstract String uploadCode(String code);
 
+    /**
+     * Detects a connected board.
+     * 
+     * @return The string indicating the path or name of the board. Empty if no
+     * board was found
+     */
+    public abstract String findBoard();
+    
+    /**
+     * This operation  asks the user for to select a board/path.
+     * 
+     * @param path The preset path/name.
+     * @return The path/name selected by the user.
+     */
+    public abstract File queryPathToBoard(String path);
+    
+    /**
+     * This operation checks for updates
+     * 
+     * @param reportNoUpdate True if an update is available.
+     */
     public void checkForUpdate(boolean reportNoUpdate) {
         // TODO !!!
+        /*
         String updateUrl = AbbozzaServer.getConfig().getUpdateUrl();
         String version = "";
 
@@ -438,127 +635,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         } catch (IOException ex) {
             AbbozzaLogger.err("VERSION file not found");
         }
+        */
     }
 
-    public void startServer() {
 
-        if ((!isStarted) && (AbbozzaServer.getInstance() == this)) {
-            this.isStarted = true;
-
-            // AbbozzaLogger.out("Duplexer Started ... ", AbbozzaLogger.INFO);
-            AbbozzaLogger.out("Starting server ... ", AbbozzaLogger.INFO);
-
-            serverPort = config.getServerPort();
-            while (httpServer == null) {
-                try {
-                    httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
-                    registerHandlers();
-                    httpServer.setExecutor(Executors.newFixedThreadPool(20)); // ATTENTION
-                    httpServer.start();
-                    AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
-                } catch (Exception e) {
-                    // AbbozzaLogger.stackTrace(e);
-                    AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
-                    serverPort++;
-                    httpServer = null;
-                }
-            }
-
-            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(config.getServerPort())), 4);
-
-            String url = "http://localhost:" + config.getServerPort() + "/" + system + ".html";
-            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_reachable", url));
-        }
-    }
-
-    public void startBrowser(String file) {
-        AbbozzaLogger.out("Starting browser");
-        Runtime runtime = Runtime.getRuntime();
-
-        if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
-            String[] cmd = new String[2];
-            // cmd[0] =  "\"" + config.getBrowserPath().replace("\"", "\\\"") + "\"";
-            cmd[0] =  config.getBrowserPath();
-            cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
-            // String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
-            try {
-                AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
-                runtime.exec(cmd);
-                toolToBack();
-            } catch (IOException e) {
-                AbbozzaLogger.err("Browser could not be started: " + e.getMessage());
-            }
-        } else {
-            Object[] options = {AbbozzaLocale.entry("msg.cancel"), AbbozzaLocale.entry("msg.open_standard_browser"), AbbozzaLocale.entry("msg.give_browser")};
-            Object selected = JOptionPane.showOptionDialog(null, AbbozzaLocale.entry("msg.no_browser_given"),
-                    AbbozzaLocale.entry("msg.no_browser_given"),
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
-                    null, options, options[0]);
-            switch (selected.toString()) {
-                case "0":
-                    AbbozzaLogger.out("Aborted by user");
-                    System.exit(0);
-                    break;
-                case "1":
-                    boolean failed = false;
-                    if (Desktop.isDesktopSupported()) {
-                        try {
-                            Desktop desktop = Desktop.getDesktop();
-                            if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                                String url = "localhost:" + serverPort + "/abbozza.html";
-                                // if (this.getSystem().equals("Mac")) {
-                                //     Runtime runtimeMac = Runtime.getRuntime();
-                                //     String[] args = { "osascript", "-e", "open location \"" + url + "\"" };
-                                //     try {
-                                //         Process process = runtimeMac.exec(args);
-                                //     }
-                                //     catch (IOException e) {
-                                //         failed = true;
-                                //      }                                    
-                                // } else {
-                                        Desktop.getDesktop().browse(new URI(url));
-                                // }
-                            } else {
-                                failed = true;
-                            }
-                        } catch (IOException | URISyntaxException e) {
-                            failed = true;
-                        }
-                    } else {
-                        failed = true;
-                    }
-                    if (failed) {
-                        JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("msg.cant_open_standard_browser"), "abbozza!", JOptionPane.ERROR_MESSAGE);
-                        AbbozzaLogger.out("standard browser could not be started");
-                        System.exit(0);
-                    }
-                    break;
-                case "2":
-                    AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(config.get(), null, true, true);
-                    dialog.setModal(true);
-                    dialog.setVisible(true);
-                    if (dialog.getState() == 0) {
-                        config.set(dialog.getConfiguration());
-                        AbbozzaLocale.setLocale(config.getLocale());
-                        config.write();
-                        String[] cmd = new String[2];
-                        cmd[0] =  config.getBrowserPath();
-                        cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
-                        try {
-                            AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
-                            runtime.exec(cmd);
-                            toolToBack();
-                        } catch (IOException e) {
-                            AbbozzaLogger.err("Browser could not be started: " + e.getMessage());
-                        }
-                        // sendResponse(exchg, 200, "text/plain", abbozza.getProperties().toString());
-                    } else {
-                        // sendResponse(exchg, 440, "text/plain", "");
-                    }
-                    break;
-            }
-        }
-    }
 
     // @TODO Change the path
     /*
@@ -629,7 +709,15 @@ public abstract class AbbozzaServer implements HttpHandler {
                     StringBuilder xmlStringBuilder = new StringBuilder();
                     ByteArrayInputStream input = new ByteArrayInputStream(bytes);
                     optionsXml = builder.parse(input);
+                } else {
+                    // options.xml not found
+                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder builder;
+                    builder = factory.newDocumentBuilder();
+                    optionsXml = builder.newDocument();
+                    optionsXml.createElement("options");
                 }
+                
                 // If successful, add the plugin trees
                 Node root = optionsXml.getElementsByTagName("options").item(0);
                 Enumeration<Plugin> plugins = this.pluginManager.plugins();
@@ -669,26 +757,33 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     public int openConfigDialog() {
+        // Prevent opening another dialog
+        if ( this.isDialogOpen() ) return 1;
+        
         AbbozzaConfig config = this.getConfiguration();
         Properties props = config.get();
+        
+        this.bringFrameToFront();
+        toolIconify();
+        
         AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(props, null, false, true);
+        
         adaptConfigDialog(dialog);
-        dialog.setAlwaysOnTop(true);
+        GUITool.centerWindow(dialog);
         dialog.setModal(true);
         dialog.toFront();
         dialog.setVisible(true);
-        toolIconify();
+        
         if (dialog.getState() == 0) {
             config.set(dialog.getConfiguration());
             AbbozzaLocale.setLocale(config.getLocale());
             AbbozzaLogger.out("closed with " + config.getLocale());
             config.write();
             return 0;
-            //sendResponse(exchg, 200, "text/plain", config.get().toString());
         } else {
             return 1;
-            //sendResponse(exchg, 440, "text/plain", "");
         }
+        
     }
     
     public void adaptConfigDialog(AbbozzaConfigDialog dialog) {
@@ -757,11 +852,6 @@ public abstract class AbbozzaServer implements HttpHandler {
         return SerialPort.BAUDRATE_115200;
     }
 
-    /*
-    public int getRunningServerPort() {
-        return serverPort;
-    }
-     */
     public static PluginManager getPluginManager() {
         return instance.pluginManager;
     }
@@ -825,6 +915,36 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public void setAdditionalPaths() {
     }
+
+    public boolean isDialogOpen() {
+        return dialogOpen;
+    }
+
+    public void setDialogOpen(boolean dialogOpen) {
+        this.dialogOpen = dialogOpen;
+    }
     
-    
+    public void bringFrameToFront() {
+        if ( mainFrame == null ) return;
+        oldState = mainFrame.getExtendedState();
+        GUITool.bringToFront(mainFrame);
+    }
+
+    public void resetFrame() {
+        if ( mainFrame == null ) return;
+        mainFrame.setExtendedState(oldState);
+    }
+ 
+    protected String expandPath(String path) {
+        if ( path == null ) return null;
+        
+        String xPath = path;
+        if (path.contains("%HOME%")) {
+            xPath = xPath.replace("%HOME%", userPath);
+        }
+        if (xPath.contains("%ABBOZZA%")) {
+            xPath = xPath.replace("%ABBOZZA%", abbozzaPath);
+        }
+        return xPath;
+    }
 }

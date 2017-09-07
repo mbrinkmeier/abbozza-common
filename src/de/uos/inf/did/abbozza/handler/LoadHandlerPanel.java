@@ -130,7 +130,7 @@ public class LoadHandlerPanel extends javax.swing.JPanel implements PropertyChan
     }// </editor-fold>//GEN-END:initComponents
 
     private void taskPathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskPathButtonActionPerformed
-        chooser.setCurrentDirectory(new File(AbbozzaServer.getConfig().getTaskPath()));
+        chooser.setCurrentDirectory(new File(AbbozzaServer.getConfig().getFullTaskPath()));
     }//GEN-LAST:event_taskPathButtonActionPerformed
 
     private void sketchbookPathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sketchbookPathButtonActionPerformed

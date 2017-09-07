@@ -6,6 +6,7 @@
 package de.uos.inf.did.abbozza;
 
 // import de.uos.inf.did.abbozza.arduino.Abbozza;
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -59,10 +60,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         initComponents();
 
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screen.width - this.getWidth()) / 2;
-        int y = (screen.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
+        GUITool.centerWindow(this);
         
         loadConfiguration();
 
@@ -487,6 +485,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         setVisible(false);
+        dispose();
         state = 1;
     }//GEN-LAST:event_cancelButtonActionPerformed
 
@@ -494,6 +493,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         storeConfiguration();
         state = 0;
         setVisible(false);
+        dispose();
     }//GEN-LAST:event_storeButtonActionPerformed
 
     private void updateBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBoxActionPerformed
@@ -669,5 +669,8 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         tabbedPane.setTitleAt(tabbedPane.getTabCount()-1, panel.getName());
     }
     
-    
+    public void dispose() {
+        AbbozzaServer.instance.resetFrame();
+        super.dispose();
+    }
 }

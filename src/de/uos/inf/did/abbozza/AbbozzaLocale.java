@@ -241,64 +241,7 @@ public class AbbozzaLocale {
        
         return localeXml;
     }
-
-    /**
-     * Adds the entries of a given locale-xml file
-     * 
-     * @param path 
-     */
-    /*
-    public static void addLocaleXml(String path) {
-        Document localeXml;
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-
-        if ( AbbozzaServer.getInstance().jarHandler == null ) return;
         
-        try {
-            AbbozzaLogger.out("Loading locale from " + path,4);
-            InputStream stream = AbbozzaServer.getInstance().jarHandler.getInputStream(path);
-            builder = factory.newDocumentBuilder();
-            StringBuilder xmlStringBuilder = new StringBuilder();
-            localeXml = builder.parse(stream);
-            
-            NodeList nodes = localeXml.getElementsByTagName("msg");
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                String key = node.getAttributes().getNamedItem("id").getNodeValue();
-                String entry = node.getTextContent();
-                entries.setProperty(key, entry);
-            }
-        } catch (Exception ex) {
-            AbbozzaLogger.out("AbbozzaLocale: " + path + " not found");
-        }
-    }
-    */
-    
-    /**
-     * Adds the entries of a given Document
-     * 
-     * @param path 
-     */
-    /*
-    public static void addLocaleXml(Document localeXml) {
-        if (localeXml == null) return;
-        
-        try {           
-            NodeList nodes = localeXml.getElementsByTagName("msg");
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                String key = node.getAttributes().getNamedItem("id").getNodeValue();
-                String entry = node.getTextContent();
-                entries.setProperty(key, entry);
-            }
-        } catch (Exception ex) {
-            AbbozzaLogger.stackTrace(ex);
-        }
-    }
-    */
-    
     /**
      * gets the current locale
      * 
@@ -319,6 +262,7 @@ public class AbbozzaLocale {
      * @return The value of the requested entry.
      */
     public static String entry(String key) {
+        if ( localeXml == null ) return key;
         Element el = localeXml.getElementById(key);
         if ( el == null ) return key;
         return el.getTextContent();
