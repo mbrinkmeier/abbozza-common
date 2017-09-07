@@ -127,8 +127,16 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         this.editor = editor;
         
         super.init("arduino");
+        
+        if ( config.startAutomatically() ) {
+            startServer();
+            if ( config.startBrowser() ) {
+                startBrowser("arduino.html");
+            }
+        }
     }
 
+    
     @Override
     public void run() {
         if ( isGlobal && localExists ) {
@@ -143,8 +151,6 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
         startServer();
         startBrowser("arduino.html");
-
-        
     }
 
     @Override
