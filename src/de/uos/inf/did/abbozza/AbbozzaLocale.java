@@ -131,7 +131,8 @@ public class AbbozzaLocale {
             }
             
             // Add locales from Plugins
-            AbbozzaServer.getPluginManager().addLocales(locale,root);
+            if ( AbbozzaServer.getPluginManager() != null )
+                AbbozzaServer.getPluginManager().addLocales(locale,root);
             
             return localeXml;
         } catch (Exception ex) {

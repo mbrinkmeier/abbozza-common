@@ -113,7 +113,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
         ImageIcon icon = new ImageIcon(AbbozzaMonitor.class.getResource("/img/abbozza_icon_monitor.png"));
         this.setIconImage(icon.getImage());
-        
+
         DefaultCaret caret = (DefaultCaret) textArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 

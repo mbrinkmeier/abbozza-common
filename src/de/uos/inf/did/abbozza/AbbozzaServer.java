@@ -307,12 +307,14 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/abbozza/monitor", monitorHandler);
         httpServer.createContext("/abbozza/monitorresume", monitorHandler);
         httpServer.createContext("/abbozza/version", new VersionHandler(this));
-        httpServer.createContext("/abbozza/plugins", this.pluginManager);
+        if (this.pluginManager != null) 
+            httpServer.createContext("/abbozza/plugins", this.pluginManager);
         httpServer.createContext("/abbozza/", this /* handler */);
         httpServer.createContext("/task/", new TaskHandler(this, jarHandler));
         httpServer.createContext("/", jarHandler);
 
-        this.pluginManager.registerPluginHandlers(httpServer);
+        if (this.pluginManager != null ) 
+            this.pluginManager.registerPluginHandlers(httpServer);
     }
 
 
@@ -337,6 +339,8 @@ public abstract class AbbozzaServer implements HttpHandler {
                     AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
                 } catch (Exception e) {
                     // AbbozzaLogger.stackTrace(e);
+                    AbbozzaLogger.err(e.getLocalizedMessage());
+                    e.printStackTrace(System.out);
                     AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
                     serverPort++;
                     httpServer = null;

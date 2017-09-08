@@ -57,6 +57,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
         // Initialize the logger
         AbbozzaLogger.init();
         AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
+        AbbozzaLogger.registerStream(System.out);
 
         // Set static instance
         instance = this;
@@ -69,7 +70,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
         findJarsAndDirs(jarHandler);
 
         // Load plugins
-        // pluginManager = new PluginManager(this);
+        pluginManager = new PluginManager(this);
 
         /**
          * Read the configuration from
@@ -78,6 +79,8 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
         // System.out.println("Reading config from " + configPath);
         config = new AbbozzaConfig(configPath);
 
+        AbbozzaLogger.info("Setting locale");
+        
         AbbozzaLocale.setLocale(config.getLocale());
 
         AbbozzaLogger.out("Version " + VERSION, AbbozzaLogger.INFO);
