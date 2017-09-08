@@ -45,6 +45,7 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -109,6 +110,9 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         }
 
         initComponents();
+
+        ImageIcon icon = new ImageIcon(AbbozzaMonitor.class.getResource("/img/abbozza_icon_monitor.png"));
+        this.setIconImage(icon.getImage());
         
         DefaultCaret caret = (DefaultCaret) textArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
