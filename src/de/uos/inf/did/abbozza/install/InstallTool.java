@@ -54,6 +54,8 @@ public abstract class InstallTool {
         return tool;
     }
 
+    public abstract String getInstallPath(boolean global);
+
 
     /**
      * Returns the id of the system.
@@ -183,4 +185,19 @@ public abstract class InstallTool {
             screen.y + (screen.height - window.getHeight()) / 2
         );        
     }    
+    
+    public String expandPath(String path) {
+        if ( path == null ) return null;
+        
+        String xPath = path;
+        if (path.contains("%HOME%")) {
+            xPath = xPath.replace("%HOME%", System.getProperty("user.home"));
+        }
+        return xPath;
+    }
+    
+    public File adaptUserInstallDir(File dir) {
+        return new File(dir.getAbsolutePath());
+    }
+
 }

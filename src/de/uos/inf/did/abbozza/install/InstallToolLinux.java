@@ -71,7 +71,20 @@ public class InstallToolLinux extends InstallTool {
 
     @Override
     public boolean isAdministrator() {
-        return false;
+        try {
+            String command = "sudo -v -n";
+            Process p = Runtime.getRuntime().exec(command);
+            p.waitFor();                            // Wait for for command to finish
+            int exitValue = p.exitValue();          // If exit value 0, then admin user.
+
+            if (0 == exitValue) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
@@ -87,6 +100,15 @@ public class InstallToolLinux extends InstallTool {
     @Override
     public String getIconSuffix() {
         return "";
+    }
+
+    @Override
+    public String getInstallPath(boolean global) {
+        if ( global ) {
+            return "/usr/local/lib/abbozza";            
+        } else {
+            return System.getProperty("user.home") + "/abbozza";
+        }
     }
     
 }

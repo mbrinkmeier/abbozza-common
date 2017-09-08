@@ -19,9 +19,22 @@ public class InstallToolWin extends InstallTool {
 
     @Override
     public boolean isAdministrator() {
-        return false;
-    }
+        try {
+            String command = "reg query \"HKU\\S-1-5-19\"";
+            Process p = Runtime.getRuntime().exec(command);
+            p.waitFor();                            // Wait for for command to finish
+            int exitValue = p.exitValue();          // If exit value 0, then admin user.
 
+            if (0 == exitValue) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
     @Override
     public String getSystem() {
         return "Win";
@@ -86,5 +99,15 @@ public class InstallToolWin extends InstallTool {
     public String getIconSuffix() {
         return ".ico";
     }
+
+    @Override
+    public String getInstallPath(boolean global) {
+        if ( global ) {
+            return "C:/Program Files (x86)/abbozza";            
+        } else {
+            return System.getProperty("user.home") + "/abbozza";
+        }
+    }
+    
     
 }
