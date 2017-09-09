@@ -936,7 +936,17 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public void resetFrame() {
         if ( mainFrame == null ) return;
-        mainFrame.setExtendedState(oldState);
+        if ((oldState & JFrame.ICONIFIED) > 0 ) {
+            AbbozzaLogger.err("was iconified");
+            int state = mainFrame.getExtendedState() | JFrame.ICONIFIED;
+            mainFrame.setExtendedState(state);
+            mainFrame.setVisible(false);
+            mainFrame.setVisible(true);
+        } else { 
+            AbbozzaLogger.err("wasn't iconified");
+            mainFrame.setExtendedState(oldState);
+        }
+        // mainFrame.setVisible(true);
     }
  
     protected String expandPath(String path) {
