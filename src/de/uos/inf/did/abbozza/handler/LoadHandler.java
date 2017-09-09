@@ -140,6 +140,9 @@ public class LoadHandler extends AbstractHandler {
                 int option = JOptionPane.showConfirmDialog(null, AbbozzaLocale.entry("err.WRONG_SYSTEM",AbbozzaLocale.entry(panel.getSystem())), 
                              AbbozzaLocale.entry("err.WRONG_SYSTEM_TITLE"),JOptionPane.YES_NO_OPTION);
                 if ( option == JOptionPane.NO_OPTION ) {
+                    _abbozzaServer.setDialogOpen(false);
+                    _abbozzaServer.resetFrame();
+                    _abbozzaServer.toolIconify();
                     throw new IOException();
                 }
             }
@@ -150,6 +153,7 @@ public class LoadHandler extends AbstractHandler {
         } else {
             _abbozzaServer.setDialogOpen(false);
             _abbozzaServer.resetFrame();
+            _abbozzaServer.toolIconify();
             throw new IOException();
         }
         _abbozzaServer.setDialogOpen(false);
