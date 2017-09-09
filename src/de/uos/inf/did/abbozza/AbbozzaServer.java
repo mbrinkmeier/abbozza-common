@@ -931,17 +931,23 @@ public abstract class AbbozzaServer implements HttpHandler {
     public void bringFrameToFront() {
         if ( mainFrame == null ) return;
         oldState = mainFrame.getExtendedState();
+        AbbozzaLogger.err("oldState gets " + oldState);
         GUITool.bringToFront(mainFrame);
     }
 
     public void resetFrame() {
         if ( mainFrame == null ) return;
         if ((oldState & JFrame.ICONIFIED) > 0 ) {
+            AbbozzaLogger.err("oldState was " + oldState);
             AbbozzaLogger.err("was iconified");
             int state = mainFrame.getExtendedState() | JFrame.ICONIFIED;
             mainFrame.setExtendedState(state);
-            mainFrame.setVisible(false);
-            mainFrame.setVisible(true);
+            String osName = System.getProperty("os.name");
+            if ( osName.contains("Mac") ) {
+               // To minimize the mainFrame in Mac OS this seems to be required
+               mainFrame.setVisible(false);
+               mainFrame.setVisible(true);
+            }
         } else { 
             AbbozzaLogger.err("wasn't iconified");
             mainFrame.setExtendedState(oldState);
