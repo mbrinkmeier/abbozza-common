@@ -136,6 +136,7 @@ public class SaveHandler extends AbstractHandler {
             SaveHandlerPanel panel = new SaveHandlerPanel();
             chooser.setAccessory(panel);
             chooser.addPropertyChangeListener(panel);            
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             
             panel.setDescription(desc.getTextContent());
             panel.setOptionSelected(opts.getAttribute("apply").equals("yes") ? true : false);
