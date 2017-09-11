@@ -32,6 +32,7 @@ Continuing?</msg>
         <msg id="msg.invalid_sketch"># not found, not accessible or no valid sketch!</msg>
         <msg id="msg.compile_timeout">Compiling takes to long!</msg>
         <msg id="msg.upload_timeout">Compiling and uploading takes to long!</msg>
+        <msg id="msg.cleaning_buildsystem">Cleaning buildsystem</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Generate Code</msg>
@@ -123,7 +124,7 @@ Continuing?</msg>
         <msg id="gui.log_warn">Warnings</msg>
         <msg id="gui.log_info">Informations</msg>
         <msg id="gui.log_debug">Everything</msg>
-  
+        <msg id="gui.clean_buildsystem">Clean</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>

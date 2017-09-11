@@ -69,12 +69,7 @@ public class CheckHandler extends AbstractHandler {
     
     
     public String setCode(String code) { 
-        // AbbozzaLogger.resetErr();
-        
-        String response;
-
-        response = _abbozzaServer.compileCode(code);
-
+        String response = _abbozzaServer.compileCode(code);
         return response;
     }
 

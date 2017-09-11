@@ -117,6 +117,10 @@ public class AbbozzaLogger {
     public static void info(String msg) {
         out(msg,INFO);
     }
+    
+    public static void force(String msg) {
+        out(msg,-1);
+    }
 
     public static void out(String msg, int lvl) {
         if (lvl <= level) {
@@ -125,7 +129,7 @@ public class AbbozzaLogger {
                 case INFO    : prefix = "[inf] : "; break;
                 case WARNING : prefix = "[wrn] : "; break;
                 case DEBUG   : prefix = "[dbg] : "; break;
-                default      : prefix = "[out] : "; break;
+                default      : prefix = ""; break;
             }                    
             write(prefix + msg);
             fire(prefix + msg);

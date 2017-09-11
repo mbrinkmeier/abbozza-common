@@ -92,7 +92,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     // Version
     public static final int VER_MAJOR = 0;
-    public static final int VER_MINOR = 9;
+    public static final int VER_MINOR = 10;
     public static final int VER_REV = 0;
     public static final int VER_HOTFIX = 0;
     public static final String VER_REM = "";
@@ -155,7 +155,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Initialize the logger
         AbbozzaLogger.init();
-        AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
+        AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         AbbozzaLogger.registerStream(System.out);
 
         // Setting paths
@@ -960,7 +960,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         
         String xPath = path;
         if (path.contains("%HOME%")) {
-            xPath = xPath.replace("%HOME%", userPath);
+            xPath = xPath.replace("%HOME%", System.getProperty("user.home"));
         }
         if (xPath.contains("%ABBOZZA%")) {
             xPath = xPath.replace("%ABBOZZA%", abbozzaPath);

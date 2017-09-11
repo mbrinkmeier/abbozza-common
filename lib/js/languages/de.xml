@@ -32,6 +32,7 @@ Trotzdem fortfahren?</msg>
         <msg id="msg.invalid_sketch"># nicht gefunden, nicht lesbar oder kein gültiger Sketch!</msg>
         <msg id="msg.compile_timeout">Kompilieren dauert zu lange!</msg>
         <msg id="msg.upload_timeout">Kompilieren und Hochladen dauert zu lange!</msg>
+        <msg id="msg.cleaning_buildsystem">Bereinige Kompilierverzeichnis</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Erzeuge Code</msg>
@@ -123,6 +124,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.log_warn">Warnungen</msg>
         <msg id="gui.log_info">Informationen</msg>
         <msg id="gui.log_debug">Alles</msg>
+        <msg id="gui.clean_buildsystem">Bereinigen</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
