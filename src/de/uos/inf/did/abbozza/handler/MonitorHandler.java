@@ -26,6 +26,7 @@ import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.io.IOException;
 
 /**
@@ -62,7 +63,7 @@ public class MonitorHandler extends AbstractHandler {
         AbbozzaLogger.out("MonitorHandler: Open monitor", AbbozzaLogger.INFO );
         if (monitor != null) {
             if (resume()) {
-                monitor.toFront();
+                GUITool.bringToFront(monitor);
                 return true;
             } else {
                 return false;
