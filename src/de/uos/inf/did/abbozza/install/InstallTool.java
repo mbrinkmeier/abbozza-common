@@ -6,6 +6,7 @@
 package de.uos.inf.did.abbozza.install;
 
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.tools.FileTool;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.io.File;
@@ -152,6 +153,13 @@ public abstract class InstallTool {
         }
     }
     
+    public boolean copyDirFromJar(JarFile file, String fromEntry, String path, boolean delete) {
+        if (delete) {
+            FileTool.removeDirectory(new File(path));
+        }
+        return copyDirFromJar(file,fromEntry,path);
+    }
+        
     public boolean copyDirFromJar(JarFile file, String fromEntry, String path) {
         try {
             Enumeration<JarEntry> entries = file.entries();

@@ -198,6 +198,9 @@ Trotzdem fortfahren?</msg>
         <msg id="math.SIN">sin</msg>
         <msg id="math.COS">cos</msg>
         <msg id="math.TAN">tan</msg>
+        <msg id="math.ASIN">arcsin</msg>
+        <msg id="math.ACOS">arccos</msg>
+        <msg id="math.ATAN">arctan</msg>
         <msg id="math.RANDOM0">Zufallszahl zwischen 0 und</msg>
         <msg id="math.RANDOM">Zufallszahl zwischen # und </msg>
         <msg id="math.INITRAND">Initialisiere Zufallsgenerator mit</msg>
