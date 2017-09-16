@@ -198,6 +198,9 @@ Continuing?</msg>
         <msg id="math.SIN">sin</msg>
         <msg id="math.COS">cos</msg>
         <msg id="math.TAN">tan</msg>
+        <msg id="math.ASIN">arcsin</msg>
+        <msg id="math.ACOS">arccos</msg>
+        <msg id="math.ATAN">arctan</msg>
         <msg id="math.RANDOM0">Random number between 0 and </msg>
         <msg id="math.RANDOM">Random number between # and </msg>
         <msg id="math.INITRAND">Initialise random generator with</msg>
