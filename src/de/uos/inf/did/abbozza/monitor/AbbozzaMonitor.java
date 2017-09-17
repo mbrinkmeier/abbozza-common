@@ -290,7 +290,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         String msg = (String) this.sendText.getEditor().getItem();
         if (msg != null && !msg.isEmpty()) {            
-            this.sendMessage(msg);
+            this.sendMessage(msg + "\n");
             this.sendText.insertItemAt(new String(msg),0);
             this.sendText.setSelectedItem(null);
         }
@@ -326,7 +326,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
         String msg = evt.getActionCommand();
         if (msg != null && !msg.isEmpty()) {
-            this.sendMessage(msg);
+            this.sendMessage(msg + "\n");
             this.sendText.insertItemAt(new String(msg),0);
             this.sendText.setSelectedItem(null);
         }
