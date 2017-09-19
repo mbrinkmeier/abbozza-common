@@ -332,10 +332,10 @@ Continuing?</msg>
         <msg id="dev.I2C_END">I2C: End transmission</msg>
         <msg id="dev.I2C_WRITE">I2C: Send byte # to address</msg>
         <msg id="dev.I2C_WRITE_STRING">I2C: Send # to address</msg>
-        <msg id="dev.I2C_AVAILABLE">I2C: available bytes</msg>
-        <msg id="dev.I2C_READ">I2C: read byte</msg>
-        <msg id="dev.I2C_RECEIVE">I2C: call # if message is received</msg>
-        <msg id="dev.I2C_REQUEST">I2C: call # if on request is received</msg>
+        <msg id="dev.I2C_AVAILABLE">I2C: Number of available bytes</msg>
+        <msg id="dev.I2C_READ">I2C: Read byte</msg>
+        <msg id="dev.I2C_RECEIVE">I2C: Call # if message is received</msg>
+        <msg id="dev.I2C_REQUEST">I2C: Call # if on request is received</msg>
 
         <msg id="SETUP">Setup</msg>
         <msg id="LOOP">Main loop</msg>

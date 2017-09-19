@@ -22,21 +22,14 @@
  */
 package de.uos.inf.did.abbozza.plugin;
 
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.Tools;
 import de.uos.inf.did.abbozza.tools.XMLTool;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,7 +37,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * This class implements a basic plugin for abbozza! 
@@ -149,7 +141,7 @@ public class Plugin {
                 }   
             }
         } catch (Exception ex) {
-            System.out.println(XMLTool.documentToString(pluginXml));
+            AbbozzaLogger.err(XMLTool.documentToString(pluginXml));
             AbbozzaLogger.stackTrace(ex);
         }
         

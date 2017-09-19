@@ -330,7 +330,7 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.I2C_END">I2C: Beende Transaktion</msg>
         <msg id="dev.I2C_WRITE">I2C: Sende Byte # an Adresse</msg>
         <msg id="dev.I2C_WRITE_STRING">I2C: Sende #  an Adresse</msg>
-        <msg id="dev.I2C_AVAILABLE">I2C: verfügbare Bytes</msg>
+        <msg id="dev.I2C_AVAILABLE">I2C: Anzahl der verfügbaren Bytes</msg>
         <msg id="dev.I2C_READ">I2C: Lese Byte</msg>
         <msg id="dev.I2C_RECEIVE">I2C: Führe # aus, wenn Nachricht empfangen wird</msg>
         <msg id="dev.I2C_REQUEST">I2C: Führe # aus, wenn angefragt</msg>

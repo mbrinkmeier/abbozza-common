@@ -110,8 +110,8 @@ public class PluginManager implements HttpHandler {
         });
         
         addJars(jars);
-
     }
+    
     
     private void addDirs(File dirs[]) {
         Plugin plugin;
@@ -140,6 +140,7 @@ public class PluginManager implements HttpHandler {
         }           
     }
 
+    
     protected void addJars(File jars[]) {
         Plugin plugin;
         Document pluginXml;
@@ -166,7 +167,8 @@ public class PluginManager implements HttpHandler {
             }
         }           
     }
-       
+    
+    
     /**
      * Get an iterator over all plugins
      * 
@@ -180,7 +182,6 @@ public class PluginManager implements HttpHandler {
         return this._plugins.get(id);
     }
 
-
     public void registerPluginHandlers(HttpServer server) {
         Enumeration<Plugin> plugins = _plugins.elements();
         while ( plugins.hasMoreElements()) {
@@ -191,8 +192,7 @@ public class PluginManager implements HttpHandler {
             }
         }
     }
-    
-    
+        
     public void mergeFeatures(Document features) {
         NodeList roots = features.getElementsByTagName("features");
         if (roots.getLength() == 0 ) return;
