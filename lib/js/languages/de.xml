@@ -61,7 +61,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.operations">Operationen</msg>         
         <msg id="gui.local_variables">Lokale Variablen</msg>         
         <msg id="gui.serial_communication">Serielle Kommunikation</msg>         
-        <msg id="gui.i2cs">I2CS</msg>         
+        <msg id="gui.i2c">I2C</msg>         
         <msg id="gui.events">Ereignisse</msg>         
         <msg id="gui.radio">Kommunikation über Funk</msg>
         <msg id="gui.motors">Motoren</msg>
@@ -114,9 +114,9 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.install">Installieren</msg>
         <msg id="gui.reinstall">Erneut installieren</msg>
         <msg id="gui.plugin_panel">Plugins</msg>
-        <msg id="gui.no_i2cs">Kein I2CS</msg>
-        <msg id="gui.i2cs_master">I2CS Master</msg>
-        <msg id="gui.i2cs_slave">I2CS Slave</msg>
+        <msg id="gui.no_i2c">Kein I2C</msg>
+        <msg id="gui.i2c_master">I2C Master</msg>
+        <msg id="gui.i2c_slave">I2C Slave</msg>
         <msg id="gui.error_in_line">Fehler in Zeile # bei Zeichen </msg>
         <msg id="gui.error_msg">Fehlermeldung</msg>        
         <msg id="gui.log_none">Nichts</msg>
@@ -165,9 +165,9 @@ Trotzdem fortfahren?</msg>
         <msg id="cat.TEACHER">Lehrer</msg>
         <msg id="cat.USB">USB Kommunikation</msg>        
         <msg id="cat.RADIO">Funk</msg>        
-        <msg id="cat.I2CS">I2CS</msg>        
-        <msg id="cat.I2CS_MASTER">I2CS Master</msg>
-        <msg id="cat.I2CS_SLAVE">I2CS Slave</msg>
+        <msg id="cat.I2C">I2C</msg>        
+        <msg id="cat.I2C_MASTER">I2C Master</msg>
+        <msg id="cat.I2C_SLAVE">I2C Slave</msg>
         <msg id="cat.EVENTS">Ereignisse</msg>
     </categories>
     <blocks>
@@ -321,19 +321,19 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.OCTAVE_THREE_LINE">dreigestrichenen Oktave (höher)</msg>
         <msg id="dev.OCTAVE_FOUR_LINE">viergestrichenen Oktave (sehr hoch)</msg>
         
-        <msg id="dev.I2CS_MASTER">Aktiviere I2CS als Master</msg>
-        <msg id="dev.I2CS_SLAVE">Aktiviere I2CS als Slave mit Adresse</msg>
-        <msg id="dev.I2CS_MASTER_SEND">I2CS: Sende Byte # an Adresse</msg>
-        <msg id="dev.I2CS_MASTER_SEND_STRING">I2CS: Sende # an Adresse</msg>
-        <msg id="dev.I2CS_MASTER_REQUEST">I2CS: Fordere # Bytes von Adresse</msg>
-        <msg id="dev.I2CS_BEGIN">I2CS: Beginne Transaktion mit Adresse</msg>
-        <msg id="dev.I2CS_END">I2CS: Beende Transaktion</msg>
-        <msg id="dev.I2CS_WRITE">I2CS: Sende Byte # an Adresse</msg>
-        <msg id="dev.I2CS_WRITE_STRING">I2CS: Sende #  an Adresse</msg>
-        <msg id="dev.I2CS_AVAILABLE">I2CS: verfügbare Bytes</msg>
-        <msg id="dev.I2CS_READ">I2CS: Lese Byte</msg>
-        <msg id="dev.I2CS_RECEIVE">I2CS: Führe # aus, wenn Nachricht empfangen wird</msg>
-        <msg id="dev.I2CS_REQUEST">I2CS: Führe # aus, wenn angefragt</msg>
+        <msg id="dev.I2C_MASTER">Aktiviere I2C als Master</msg>
+        <msg id="dev.I2C_SLAVE">Aktiviere I2C als Slave mit Adresse</msg>
+        <msg id="dev.I2C_MASTER_SEND">I2C: Sende Byte # an Adresse</msg>
+        <msg id="dev.I2C_MASTER_SEND_STRING">I2C: Sende # an Adresse</msg>
+        <msg id="dev.I2C_MASTER_REQUEST">I2C: Fordere # Bytes von Adresse</msg>
+        <msg id="dev.I2C_BEGIN">I2C: Beginne Transaktion mit Adresse</msg>
+        <msg id="dev.I2C_END">I2C: Beende Transaktion</msg>
+        <msg id="dev.I2C_WRITE">I2C: Sende Byte # an Adresse</msg>
+        <msg id="dev.I2C_WRITE_STRING">I2C: Sende #  an Adresse</msg>
+        <msg id="dev.I2C_AVAILABLE">I2C: verfügbare Bytes</msg>
+        <msg id="dev.I2C_READ">I2C: Lese Byte</msg>
+        <msg id="dev.I2C_RECEIVE">I2C: Führe # aus, wenn Nachricht empfangen wird</msg>
+        <msg id="dev.I2C_REQUEST">I2C: Führe # aus, wenn angefragt</msg>
 
         <msg id="AND">und</msg>
         <msg id="MILLIS">Zeit in Millisekunden (ms)</msg>
