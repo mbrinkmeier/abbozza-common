@@ -323,7 +323,7 @@
             <block type="dev_i2c_master_begin"></block>
             <block type="dev_i2c_master_end"></block>
             <block type="dev_i2c_write"></block>
-            <block type="dev_i2c_write_array"></block>
+            <!-- block type="dev_i2c_write_array"></block-->
             <block type="dev_i2c_available"></block>
             <block type="dev_i2c_read"></block>
         </category>
