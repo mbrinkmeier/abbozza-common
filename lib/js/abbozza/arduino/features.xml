@@ -147,10 +147,10 @@
         <category id="cat.SERIAL">
         </category>
         
-        <category id="cat.I2CS_MASTER">
+        <category id="cat.I2C_MASTER">
         </category>
 
-        <category id="cat.I2CS_SLAVE">
+        <category id="cat.I2C_SLAVE">
         </category>        
     </feature>
 
@@ -314,31 +314,31 @@
     </feature>        
 
         
-    <!-- I2CS Master -->
-    <feature id ="feat.I2CS_MASTER" option="i2cs_master">
-        <category name="I2CS" id="cat.I2CS_MASTER">
-            <block type="dev_i2cs_master"></block>
-            <block type="dev_i2cs_master_send"></block>
-            <block type="dev_i2cs_master_request"></block>
-            <block type="dev_i2cs_master_begin"></block>
-            <block type="dev_i2cs_master_end"></block>
-            <block type="dev_i2cs_write"></block>
-            <block type="dev_i2cs_write_array"></block>
-            <block type="dev_i2cs_available"></block>
-            <block type="dev_i2cs_read"></block>
+    <!-- I2C Master -->
+    <feature id ="feat.I2C_MASTER" option="i2c_master">
+        <category name="I2C" id="cat.I2C_MASTER">
+            <block type="dev_i2c_master"></block>
+            <block type="dev_i2c_master_send"></block>
+            <block type="dev_i2c_master_request"></block>
+            <block type="dev_i2c_master_begin"></block>
+            <block type="dev_i2c_master_end"></block>
+            <block type="dev_i2c_write"></block>
+            <block type="dev_i2c_write_array"></block>
+            <block type="dev_i2c_available"></block>
+            <block type="dev_i2c_read"></block>
         </category>
     </feature>        
 
-    <!-- I2CS Slave -->
-    <feature id ="feat.I2CS_SLAVE" option="i2cs_slave">
-        <category name="I2CS" id="cat.I2CS_SLAVE">
-            <block type="dev_i2cs_slave"></block>
-            <block type="dev_i2cs_write"></block>
-            <block type="dev_i2cs_write_string"></block>
-            <block type="dev_i2cs_available"></block>
-            <block type="dev_i2cs_read"></block>
-            <block type="dev_i2cs_on_receive"></block>
-            <block type="dev_i2cs_on_request"></block>
+    <!-- I2C Slave -->
+    <feature id ="feat.I2C_SLAVE" option="i2c_slave">
+        <category name="I2C" id="cat.I2C_SLAVE">
+            <block type="dev_i2c_slave"></block>
+            <block type="dev_i2c_write"></block>
+            <block type="dev_i2c_write_string"></block>
+            <block type="dev_i2c_available"></block>
+            <block type="dev_i2c_read"></block>
+            <block type="dev_i2c_on_receive"></block>
+            <block type="dev_i2c_on_request"></block>
             <block type="int_isr"></block>
         </category>
     </feature>        

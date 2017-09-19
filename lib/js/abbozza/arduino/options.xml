@@ -7,10 +7,10 @@
         </item>
         <item name="gui.devices" option="devices" default="true">
             <item name="gui.serial_communication" option="serial" default="true"/>
-            <group name="gui.i2cs">
-                <choice name="gui.no_i2cs" option="i2cs_no" default="true"/>                
-                <choice name="gui.i2cs_master" option="i2cs_master" default="false"/>                
-                <choice name="gui.i2cs_slave" option="i2cs_slave" default="false"/>                
+            <group name="gui.i2c">
+                <choice name="gui.no_i2c" option="i2c_no" default="true"/>                
+                <choice name="gui.i2c_master" option="i2c_master" default="false"/>                
+                <choice name="gui.i2c_slave" option="i2c_slave" default="false"/>                
             </group>
         </item>
         <item name="gui.usb" option="usb" default="true">
