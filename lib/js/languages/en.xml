@@ -294,7 +294,7 @@ Continuing?</msg>
         <msg id="dev.FORMULA">Distance [in mm] = # / ( Sensorvalue - # ) + </msg>
         <msg id="dev.LCD">LCD # Columns # Rows</msg>
         <msg id="dev.IRRECEIVER">Infrared-Receiver</msg>
-        <msg id="dev.SERIAL">Serial connection # Input Pin # Output Pin</msg>
+        <msg id="dev.SERIAL">Serial connection # Input Pin (RX) # Output Pin (TX)</msg>
         <msg id="dev.WRITEBYTE">Write byte # to </msg>
         <msg id="dev.READFROMLINE">Read byte from</msg>
         <msg id="dev.LINEAVAILABLE">Byte available at #</msg>
@@ -390,6 +390,7 @@ Continuing?</msg>
         <msg id="err.WRONG_SYSTEM">The sketch ist for # systems!&#10;Continue loading?</msg>
         <msg id="err.WRONG_SYSTEM_TITLE">Wrong system!</msg>
         <msg id="err.WRONG_NAME">Unknown</msg>
+        <msg id="err.INCOMPATIBLE_SYSTEM">Block not usable with current system.</msg>
 </errors>
     <names>
         <msg id="arduino">Arduino compatible</msg>

@@ -21,6 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  *
@@ -66,4 +69,36 @@ public class FileTool {
         }
     }
     
+    
+    public static void extractJar(ZipFile zipFile, File targetDir) {
+        ZipEntry entry;
+        Enumeration<ZipEntry> entries = (Enumeration) zipFile.entries();
+        while ( entries.hasMoreElements() ) {
+            entry = entries.nextElement();
+            if ( entry.isDirectory() ) {
+                File dir = new File(targetDir.getAbsolutePath()+"/"+entry.getName());
+                dir.mkdirs();
+            } else {
+                copyFromJar(zipFile,entry.getName(),targetDir.getAbsolutePath()+"/"+entry.getName());
+            }
+        }
+    }
+    
+    
+    public static boolean copyFromJar(ZipFile file, String fromEntry, String path) {
+        try {
+            ZipEntry entry = file.getEntry(fromEntry);
+            File target = new File(path);
+            Files.copy(file.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            if ( target.getAbsolutePath().endsWith(".sh") || target.getAbsolutePath().endsWith(".bat")) {
+                target.setExecutable(true);
+            }
+            return true;
+        } catch (IOException ex) {
+            System.out.println(ex.getLocalizedMessage());
+            ex.printStackTrace(System.out);
+            return false;
+        }
+    }
+
 }

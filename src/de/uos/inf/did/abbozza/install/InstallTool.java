@@ -153,6 +153,7 @@ public abstract class InstallTool {
         }
     }
     
+    
     public boolean copyDirFromJar(JarFile file, String fromEntry, String path, boolean delete) {
         if (delete) {
             FileTool.removeDirectory(new File(path));

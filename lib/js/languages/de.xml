@@ -293,7 +293,7 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.FORMULA">Entfernung [in mm] = # / ( Sensorwert - # ) + </msg>
         <msg id="dev.LCD">LCD # Spalten # Reihen</msg>
         <msg id="dev.IRRECEIVER">Infrarot-Empfänger</msg>
-        <msg id="dev.SERIAL">Serielle Verbindung # Input Pin # Output Pin</msg>
+        <msg id="dev.SERIAL">Serielle Verbindung # Input Pin (RX) # Output Pin (TX)</msg>
         <msg id="dev.WRITEBYTE">Schreibe Byte # auf</msg>
         <msg id="dev.READFROMLINE">Lies Byte von</msg>
         <msg id="dev.LINEAVAILABLE">Byte an # verfügbar</msg>
@@ -392,6 +392,7 @@ Trotzdem fortfahren?</msg>
         <msg id="err.WRONG_SYSTEM">Der Sketch ist für # Systeme!&#10;Soll er trotzdem geladen werden?</msg>
         <msg id="err.WRONG_SYSTEM_TITLE">Falsches System!</msg>
         <msg id="err.WRONG_NAME">Unbekannter Name</msg>
+        <msg id="err.INCOMPATIBLE_SYSTEM">Block nicht für das aktuelle System.</msg>
     </errors>
     <names>
         <msg id="arduino">Arduino kompatible</msg>
