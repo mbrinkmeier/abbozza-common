@@ -29,6 +29,8 @@ import com.sun.net.httpserver.HttpServer;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
+import de.uos.inf.did.abbozza.monitor.MonitorPanel;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -59,19 +61,18 @@ public class PluginManager implements HttpHandler {
     private Hashtable<String,Plugin> _plugins;
    
     
-    
     public PluginManager(AbbozzaServer server) {
-        AbbozzaLogger.out("PluginManager: Started",AbbozzaLogger.INFO);
+        AbbozzaLogger.info("PluginManager: Started");
         this._abbozza = server;
         this._plugins = new Hashtable<String,Plugin>();
-        this.detectPlugins();        
+        this.detectPlugins();
     }
     
     
     private void detectPlugins() {
         // Check local dir
         File path = new File(this._abbozza.getGlobalPluginPath());
-        AbbozzaLogger.out("PluginManager: Checking global dir " + path,AbbozzaLogger.INFO);    
+        AbbozzaLogger.info("PluginManager: Checking global dir " + path);    
         File[] dirs = null;
         dirs = path.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
@@ -155,7 +156,7 @@ public class PluginManager implements HttpHandler {
                         plugin = new Plugin(pluginUrl,pluginXml);
                         if (plugin.getId() != null ) {
                             AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " found in " + jars[i].toString() ,AbbozzaLogger.INFO);
-                            if ( checkRequirements(plugin)) {
+                            if ( checkRequirements(plugin) ) {
                                 AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " loaded",AbbozzaLogger.INFO);
                                 this._plugins.put(plugin.getId(), plugin);
                             }
@@ -192,7 +193,7 @@ public class PluginManager implements HttpHandler {
             }
         }
     }
-        
+
     public void mergeFeatures(Document features) {
         NodeList roots = features.getElementsByTagName("features");
         if (roots.getLength() == 0 ) return;
@@ -311,9 +312,10 @@ public class PluginManager implements HttpHandler {
 
     private boolean checkRequirements(Plugin plugin) {
         String libs = "";
-        if ( !plugin.getSystem().equals( this._abbozza.getSystem()) ) {
+        if ( !plugin.getSystem().equals("") && !plugin.getSystem().contains( this._abbozza.getSystem()) ) {
             return false;
         }
+        plugin.install();
         boolean foundAll = true;
         Node requirements = plugin.getRequirements();
         if ( requirements == null ) return true;
@@ -335,4 +337,19 @@ public class PluginManager implements HttpHandler {
         }
         return foundAll;
     }
+        
+    public void addMonitorPanels(AbbozzaMonitor monitor) {
+        Enumeration<Plugin> plugins = _plugins.elements();
+        while ( plugins.hasMoreElements()) {
+            Plugin plugin = plugins.nextElement();
+            if ( plugin.isActivated() ) {
+                MonitorPanel panel = plugin.getMonitorPanel();
+                if ( panel != null ) {
+                    AbbozzaLogger.info("PluginManager: Add monitor panel for plugin " + plugin.getId());
+                    monitor.addMonitorPanel( panel , plugin.getMonitorPanelPrefix());
+                }
+            }
+        }
+    }
+        
 }

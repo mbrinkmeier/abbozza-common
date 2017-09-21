@@ -21,6 +21,7 @@
  */
 package de.uos.inf.did.abbozza;
 
+import de.uos.inf.did.abbozza.tools.XMLTool;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
@@ -131,8 +132,8 @@ public class AbbozzaLocale {
             }
             
             // Add locales from Plugins
-            if ( AbbozzaServer.getPluginManager() != null )
-                AbbozzaServer.getPluginManager().addLocales(locale,root);
+            // if ( AbbozzaServer.getPluginManager() != null )
+            //    AbbozzaServer.getPluginManager().addLocales(locale,root);
             
             return localeXml;
         } catch (Exception ex) {
@@ -189,7 +190,34 @@ public class AbbozzaLocale {
     }
 
 
+    public static void addLocale(Node localesNode, String prefix) {
+        // Find the correctlanguag
+        Node languageNode = null;
+        NodeList children = localesNode.getChildNodes();
+        for ( int i = 0; i < children.getLength() ; i++ ) {
+            if ( children.item(i).getAttributes() != null ) {
+                Node id = children.item(i).getAttributes().getNamedItem("id");
+                if ( (id != null ) && ( id.getTextContent().equals(locale) ) ) {
+                    languageNode = children.item(i);
+                }
+            }
+        }
+       
+        if ( languageNode == null ) return;
 
+
+        Element child = (Element) languageNode.cloneNode(true);
+        localeXml.adoptNode(child);
+        Node root = localeXml.getElementsByTagName("languages").item(0);
+        root.appendChild(child);
+        NodeList msgs = child.getElementsByTagName("msg");
+        for ( int i = 0; i < msgs.getLength(); i++ ) {
+            ((Element) msgs.item(i)).setIdAttribute("id", true);
+        }
+        child.setAttribute("id",prefix + "_" + locale);
+        
+    }
+    
     /**
      * Loads the locale xml from the given path.
      * 

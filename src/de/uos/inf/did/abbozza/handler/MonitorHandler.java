@@ -86,6 +86,8 @@ public class MonitorHandler extends AbstractHandler {
             AbbozzaLogger.out("MonitorHandler: No board discovered" , AbbozzaLogger.INFO);
             monitor = new AbbozzaMonitor();
         }
+
+        if ( monitor == null ) return false;
         
         try {
             monitor.open();
@@ -97,9 +99,11 @@ public class MonitorHandler extends AbstractHandler {
             AbbozzaLogger.err(ex.getLocalizedMessage());
             return false;
         }
+        
         return true;
     }
 
+    
     public boolean resume() {
         AbbozzaLogger.out("MonitorHandler: Resume monitor", AbbozzaLogger.INFO );
         if (monitor == null) {

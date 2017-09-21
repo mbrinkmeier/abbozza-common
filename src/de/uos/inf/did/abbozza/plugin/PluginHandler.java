@@ -28,6 +28,7 @@ import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Vector;
 
 /**
  *
@@ -36,9 +37,11 @@ import java.io.OutputStream;
 public class PluginHandler implements HttpHandler {
 
     protected Plugin _plugin;
+    protected Vector<PluginListener> listeners;
     
     public PluginHandler() {
         this._plugin = null;
+        this.listeners = null;
     }
     
     public void setPlugin(Plugin plugin) {
@@ -67,6 +70,7 @@ public class PluginHandler implements HttpHandler {
 
         String path = exchg.getRequestURI().getPath();
         AbbozzaLogger.out("PluginHandler: " + path + " requested",AbbozzaLogger.INFO);
+        fireMessageReceived(exchg.getRequestURI().getQuery());
         
         String response = _plugin.getId();
         
@@ -76,4 +80,15 @@ public class PluginHandler implements HttpHandler {
         os.close();        
     }
     
+    public void addPluginListener(PluginListener listener) {
+        if ( listeners == null ) listeners = new Vector<PluginListener>();
+        listeners.add(listener);
+    }
+    
+    protected void fireMessageReceived(String msg) {
+        if ( listeners == null ) return;
+        for ( PluginListener listener: listeners) {
+            listener.receivedMessage(msg);
+        }
+    }
 }

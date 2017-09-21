@@ -25,8 +25,6 @@
 
 package de.uos.inf.did.abbozza.monitor;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
@@ -36,7 +34,19 @@ import javax.swing.JPopupMenu;
  */
 public abstract class MonitorPanel extends JPanel {
      
+    protected AbbozzaMonitor _monitor;
+    
     public abstract void processMessage(String msg);
     
-    public abstract JPopupMenu getPopUp();   
+    public abstract JPopupMenu getPopUp();
+    public abstract String getName();
+    
+    protected void setMonitor(AbbozzaMonitor monitor) {
+        _monitor = monitor;
+    }
+    
+    public AbbozzaMonitor getMonitor() {
+        return _monitor;
+    }
+    
 }

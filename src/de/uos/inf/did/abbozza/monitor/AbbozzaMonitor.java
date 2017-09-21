@@ -145,6 +145,9 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         this.addMonitorPanel(new GraphMonitor(tableMonitor.getTableModel()), "graph");
         this.addMonitorPanel(new LevelMonitor(tableMonitor.getTableModel()), "level");
 
+        AbbozzaServer.getPluginManager().addMonitorPanels(this);
+
+
         textArea.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 maybeShowPopup(e);
@@ -543,10 +546,11 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
      * @param panel The panel to be added
      * @param prefix The prefix of messages handled by the panel
      */
-    private void addMonitorPanel(MonitorPanel panel, String prefix) {
+    public void addMonitorPanel(MonitorPanel panel, String prefix) {
         if (panel != null) {
-            tabPanel.add(panel, 0);
+            tabPanel.add(panel,0);
             panels.put(prefix, panel);
+            panel.setMonitor(this);
         }
     }
 

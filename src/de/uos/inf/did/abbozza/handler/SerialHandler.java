@@ -31,8 +31,6 @@ import de.uos.inf.did.abbozza.monitor.Message;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

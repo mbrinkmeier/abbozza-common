@@ -45,6 +45,7 @@ import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
 import de.uos.inf.did.abbozza.plugin.Plugin;
+import de.uos.inf.did.abbozza.tools.FileTool;
 import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
@@ -64,6 +65,9 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.Executors;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
@@ -155,24 +159,20 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Initialize the logger
         AbbozzaLogger.init();
-        AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         AbbozzaLogger.registerStream(System.out);
 
         // Setting paths
         setPaths();
-        
-        // Find Jars
-        jarHandler = new JarDirHandler();
-        findJarsAndDirs(jarHandler);
-
-        // Load plugins
-        pluginManager = new PluginManager(this);
 
         /**
          * Read the configuration from
          * <user.home>/.abbozza/<system>/abbozza.cfg
          */
         config = new AbbozzaConfig(configPath);
+        
+        // Find Jars
+        jarHandler = new JarDirHandler();
+        findJarsAndDirs(jarHandler);
 
         // Load the locale
         AbbozzaLocale.setLocale(config.getLocale());
@@ -196,6 +196,9 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Call the initialization hooks for subclasses
         setAdditionalPaths();
         additionalInitialization();
+
+        // Load plugins
+        pluginManager = new PluginManager(this);
     }
 
     
@@ -249,7 +252,6 @@ public abstract class AbbozzaServer implements HttpHandler {
         globalPluginPath = "";
         localPluginPath = "";
     };
-    
     
     
     /**
@@ -461,7 +463,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         String path = exchg.getRequestURI().getPath();
         OutputStream os = exchg.getResponseBody();
 
-        AbbozzaLogger.out(path + " requested", AbbozzaLogger.DEBUG);
+        AbbozzaLogger.debug(path + " requested");
 
         if (!path.startsWith("/" + system)) {
             String result = AbbozzaLocale.entry("msg.not_found", path);
@@ -967,4 +969,35 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
         return xPath;
     }
+    
+    
+    public void installPluginLib(String pluginId, File srcDir) {        
+        File libDir = new File(sketchbookPath + "/libraries/" + pluginId + "/");
+        if ( (!libDir.exists()) || (libDir.lastModified() < srcDir.lastModified() )) {
+            AbbozzaLogger.info("Plugin " + pluginId + " : Copying library from directory" + srcDir.getAbsolutePath());
+            try {
+                libDir.mkdirs();
+                FileTool.copyDirectory(srcDir, libDir, true);
+            } catch (IOException ex) {
+                AbbozzaLogger.err("Plugin " + pluginId + " : Error during library installation");
+                AbbozzaLogger.err("Plugin " + pluginId + " : " + ex.getLocalizedMessage());
+            }
+        }
+    }
+    
+    public void installPluginLibFromJar(String pluginId, File jarFile) {        
+        try {
+            JarFile jar = new JarFile(jarFile);
+            File libDir = new File(sketchbookPath + "/libraries/" + pluginId +"/");
+            if ( (!libDir.exists()) || (libDir.lastModified() < jarFile.lastModified() )) {
+                AbbozzaLogger.info("Plugin " + pluginId + " : Copying from jar " + jarFile.getAbsolutePath());
+                libDir.mkdirs();
+                FileTool.copyDirFromJar(jar, "lib", libDir.getAbsolutePath());
+            }
+        } catch (IOException ex) {
+            AbbozzaLogger.err("Plugin " + pluginId + " : Error during library installation");
+            AbbozzaLogger.err("Plugin " + pluginId + " : " + ex.getLocalizedMessage());
+        }
+    }
+
 }

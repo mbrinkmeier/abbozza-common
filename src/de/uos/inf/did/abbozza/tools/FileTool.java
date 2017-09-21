@@ -17,11 +17,14 @@
  */
 package de.uos.inf.did.abbozza.tools;
 
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -97,6 +100,38 @@ public class FileTool {
         } catch (IOException ex) {
             System.out.println(ex.getLocalizedMessage());
             ex.printStackTrace(System.out);
+            return false;
+        }
+    }
+
+    public static boolean copyDirFromJar(JarFile file, String fromEntry, String path, boolean delete) {
+        if (delete) {
+            FileTool.removeDirectory(new File(path));
+        }
+        return copyDirFromJar(file,fromEntry,path);
+    }
+        
+    public static boolean copyDirFromJar(JarFile file, String fromEntry, String path) {
+        try {
+            Enumeration<JarEntry> entries = file.entries();
+            while ( entries.hasMoreElements() ) {
+                JarEntry entry = entries.nextElement();
+                if ( entry.getName().startsWith(fromEntry)) {
+                    String name = entry.getName().substring(fromEntry.length());
+                    File target = new File(path + name);
+                    if (entry.isDirectory()) {
+                        target.mkdir();
+                    } else {
+                        Files.copy(file.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        if ( target.getAbsolutePath().endsWith(".sh") || target.getAbsolutePath().endsWith(".bat")) {
+                            target.setExecutable(true);
+                        }
+                    }
+                }
+            }
+            return true;
+        } catch (IOException ex) {
+            AbbozzaLogger.err(ex.getLocalizedMessage());
             return false;
         }
     }

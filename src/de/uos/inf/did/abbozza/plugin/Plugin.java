@@ -22,14 +22,24 @@
  */
 package de.uos.inf.did.abbozza.plugin;
 
+import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.Tools;
+import de.uos.inf.did.abbozza.monitor.MonitorPanel;
+import de.uos.inf.did.abbozza.tools.FileTool;
 import de.uos.inf.did.abbozza.tools.XMLTool;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Vector;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -59,8 +69,8 @@ public class Plugin {
     private String _system;
     private String _parentOption;
     private PluginHandler _handler;
-    
-   
+    private Class _monitorPanelClass;
+    private String _monitorPanelPrefix;
         
     /**
      * Instantiate the pugin. 
@@ -73,8 +83,6 @@ public class Plugin {
         this._url = url;
         this._id = null;
         this._js = new Vector<URL>();
-        // this._feature = null;
-        // this._locales = null;
         parseXML(xml);
         AbbozzaLogger.out("Plugin: " + this._id + " (" + this._url + ") added", AbbozzaLogger.INFO);
     }
@@ -89,7 +97,11 @@ public class Plugin {
             if ( plugins.getLength() > 0) {
                 Node root = plugins.item(0);
                 this._id = root.getAttributes().getNamedItem("id").getNodeValue();
-                this._system = root.getAttributes().getNamedItem("system").getNodeValue();
+                if ( root.getAttributes().getNamedItem("system") != null ) {
+                    this._system = root.getAttributes().getNamedItem("system").getNodeValue();
+                } else {
+                    this._system = "";                    
+                }
                 this._parentOption = "gui.blocks";
                 if ( root.getAttributes().getNamedItem("parent") != null ) {
                     this._parentOption = root.getAttributes().getNamedItem("parent").getNodeValue();
@@ -130,6 +142,13 @@ public class Plugin {
                         this._handler = (PluginHandler) handlerClass.newInstance();
                         this._handler.setPlugin(this);
 
+                    // Get the monitor panel
+                    } else if (childName.equals("monitor")) {
+                        String className = ((Element) child).getAttributes().getNamedItem("class").getNodeValue();                            
+                        URLClassLoader classLoader = new URLClassLoader(new URL[]{_url.toURI().toURL()}, AbbozzaServer.class.getClassLoader() );
+                        _monitorPanelClass = classLoader.loadClass(className);
+                        _monitorPanelPrefix = ((Element) child).getAttributes().getNamedItem("prefix").getNodeValue();                            
+                    
                     // Get the feature tree
                     } else if (childName.equals("feature")) {
                         this._feature = child;
@@ -155,6 +174,11 @@ public class Plugin {
                 AbbozzaLogger.err("Plugin: " + ex.toString());
                 AbbozzaLogger.stackTrace(ex);
             }
+        }
+        
+        if ( _locales != null ) {
+            AbbozzaLogger.info("Plugin " +_id + " : Adding locale");
+            AbbozzaLocale.addLocale(this._locales, _id);
         }
     }
     
@@ -267,5 +291,46 @@ public class Plugin {
 
     public String getParentOption() {
         return this._parentOption;
+    }
+
+    public void install() {
+        AbbozzaServer abbozza = AbbozzaServer.getInstance();
+        try {
+            // Check if lib subdirectory exists
+            AbbozzaLogger.info("PluginManager : " + _id + " : Checking for libraries");
+            URL libs = new URL(_url,"lib");
+            if ( libs.getProtocol().startsWith("jar") ) {
+                String name = _url.getPath();
+                name = name.substring(5,name.length()-2); // strep leading "file:" and trailing "!/"
+                File jarFile = new File(name);
+                JarFile jar = new JarFile(jarFile);
+                if ( jar.getEntry("lib/") != null ) {
+                    abbozza.installPluginLibFromJar(_id,jarFile);
+                }
+            } else {
+                File srcDir = new File(_url.toString(),"lib");
+                if ( srcDir.exists() ) {
+                    abbozza.installPluginLib(_id, srcDir);
+                }
+            }
+            // If it exists, check if it is present in local libraries folder
+            // If not in local libraries folder or copy there is older, copy the lib
+        } catch (Exception ex) {
+            AbbozzaLogger.err(ex.getLocalizedMessage());
+        }
+    }
+    
+    
+    public MonitorPanel getMonitorPanel() {
+        try {
+            if ( _monitorPanelClass != null ) {            
+                return (MonitorPanel) _monitorPanelClass.newInstance();
+            }
+        } catch (Exception ex) {}
+        return null;
+    }
+    
+    public String getMonitorPanelPrefix() {
+        return _monitorPanelPrefix;
     }
 }

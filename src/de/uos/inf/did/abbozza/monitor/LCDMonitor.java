@@ -56,4 +56,9 @@ public class LCDMonitor extends MonitorPanel {
     }
     
     public void begin(int cols, int rows) {};
+
+    @Override
+    public String getName() {
+        return "LCD";
+    }
 }
