@@ -61,6 +61,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
@@ -726,9 +727,8 @@ public abstract class AbbozzaServer implements HttpHandler {
                 
                 // If successful, add the plugin trees
                 Node root = optionsXml.getElementsByTagName("options").item(0);
-                Enumeration<Plugin> plugins = this.pluginManager.plugins();
-                while (plugins.hasMoreElements()) {
-                    Plugin plugin = plugins.nextElement();
+                Collection<Plugin> plugins = this.pluginManager.plugins();
+                for ( Plugin plugin : plugins ) {
                     Node pluginOpts = plugin.getOptions();
 
                     ((Element) pluginOpts).setAttribute("plugin", plugin.getId());

@@ -27,19 +27,13 @@ import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.Tools;
 import de.uos.inf.did.abbozza.monitor.MonitorPanel;
-import de.uos.inf.did.abbozza.tools.FileTool;
 import de.uos.inf.did.abbozza.tools.XMLTool;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Vector;
 import java.util.jar.JarFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -127,6 +121,7 @@ public class Plugin {
                     // Get the option trees
                     } else if (childName.equals("options")) {
                         _options = child.cloneNode(true);
+                        
                     } else if (childName.equals("js") ) {
                         String fileName = ((Element) child).getAttributes().getNamedItem("file").getNodeValue();
                         if ( fileName != null ) {
@@ -332,5 +327,9 @@ public class Plugin {
     
     public String getMonitorPanelPrefix() {
         return _monitorPanelPrefix;
+    }
+    
+    public URL getURL() {
+        return _url;
     }
 }

@@ -20,10 +20,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Enumeration;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * This HttpHandler handles requests for files which can be in one of several
@@ -37,18 +35,18 @@ import java.util.logging.Logger;
 public class JarDirHandler implements HttpHandler {
 
     // The vector of entries
-    private Vector<URI> entries;
+    private ArrayList<URI> entries;
     private String sketch;
 
     /**
      * Initialize the JarDirHandler
      */
     public JarDirHandler() {
-        entries = new Vector<URI>();
+        entries = new ArrayList<URI>();
     }
 
     /**
-     * Add an URL to the list of possible locations.
+     * Add an URI to the list of possible locations.
      * @param uri The URI to be added
      */
     public void addURI(URI uri) {
@@ -64,9 +62,9 @@ public class JarDirHandler implements HttpHandler {
     public void addDir(String path, String name) {
         File file = new File(path);
         if (!file.exists()) {
-            AbbozzaLogger.out("JarHandler: " + name + " : " + file.toURI().toString() + " not found",AbbozzaLogger.DEBUG);
+            AbbozzaLogger.debug("JarHandler: " + name + " : " + file.toURI().toString() + " not found");
         } else {
-            AbbozzaLogger.out("JarHandler: " + name + " : " + file.toURI().toString() ,AbbozzaLogger.DEBUG);
+            AbbozzaLogger.err("JarHandler: " + name + " : " + file.toURI().toString());
         }
         entries.add(file.toURI());
     }
@@ -91,9 +89,9 @@ public class JarDirHandler implements HttpHandler {
         URI jarUri = new File(path).toURI();
         try {
             uri = new URI("jar:"+ jarUri.toString() +"!");
-            AbbozzaLogger.out("JarHandler: " + name + " : " + uri.toString(),AbbozzaLogger.DEBUG);
+            AbbozzaLogger.debug("JarHandler: " + name + " : " + uri.toString());
         } catch (URISyntaxException e) {
-            AbbozzaLogger.out("JarHandler: " + name + " not found (" + path + ")",AbbozzaLogger.DEBUG);
+            AbbozzaLogger.err("JarHandler: " + name + " not found (" + path + ")");
             return;
         }        
         entries.add(uri);
@@ -116,10 +114,19 @@ public class JarDirHandler implements HttpHandler {
     }
     
     
+    /**
+     * Cler the list of entries.
+     */
     public void clear() {
         entries.clear();
     }
 
+    /**
+     * Handle a request for a file.
+     * 
+     * @param exchg The incoming request
+     * @throws IOException 
+     */
     @Override
     public void handle(HttpExchange exchg) throws IOException {
 
@@ -138,6 +145,7 @@ public class JarDirHandler implements HttpHandler {
             return;
         }
 
+        // Set the response header according to the file extension
         Headers responseHeaders = exchg.getResponseHeaders();
         if (path.equals("/")) {
             responseHeaders.set("Content-Type", "text/html; charset=utf-8");
@@ -173,7 +181,7 @@ public class JarDirHandler implements HttpHandler {
      * @return A bytearray containig the contents of the requesed file or null.
      */
     public byte[] getBytes(String path) {
-        AbbozzaLogger.out("JarDirHandler: Reading " + path, AbbozzaLogger.DEBUG);
+        AbbozzaLogger.debug("JarDirHandler: Reading " + path);
         byte[] bytearray = null;
         int tries = 0;
 
@@ -181,16 +189,14 @@ public class JarDirHandler implements HttpHandler {
             path = "/" + AbbozzaServer.getInstance().getSystem() + ".html";
         }
 
-        AbbozzaLogger.out("JarDirHandler: Reading " + path, AbbozzaLogger.INFO);
-
         while ((tries < 3) && (bytearray == null)) {
 
-            Enumeration<URI> uriIt = entries.elements();
+            Iterator<URI> uriIt = entries.iterator();
 
-            while (uriIt.hasMoreElements() && (bytearray == null)) {
+            while (uriIt.hasNext() && (bytearray == null)) {
                 try {
                     // The uri contains the base
-                    URI uri = uriIt.nextElement();
+                    URI uri = uriIt.next();
                     URL fileUrl = new URL(uri.toString() + path);
                 
                     URLConnection conn = fileUrl.openConnection();
@@ -204,6 +210,7 @@ public class JarDirHandler implements HttpHandler {
                     bytearray = baos.toByteArray();   
                                         
                 } catch (IOException ex) {
+                    AbbozzaLogger.err("JarDirHandler: " + ex.getLocalizedMessage());
                     bytearray = null;
                 }
             }
@@ -235,11 +242,11 @@ public class JarDirHandler implements HttpHandler {
       
         while ((tries < 3) && (inStream == null)) {
 
-            Enumeration<URI> uriIt = entries.elements();
-            while (uriIt.hasMoreElements() && (inStream == null)) {
+            Iterator<URI> uriIt = entries.iterator();
+            while (uriIt.hasNext() && (inStream == null)) {
                 try {
                     // The uri contains the base
-                    URI uri = uriIt.nextElement();
+                    URI uri = uriIt.next();
                     URL fileUrl = new URL(uri.toString() + path);
                     
                     URLConnection conn = fileUrl.openConnection();
@@ -263,4 +270,10 @@ public class JarDirHandler implements HttpHandler {
         return inStream;
     }
     
+    
+    public void printEntries() {
+        for ( URI uri : entries ) {
+            AbbozzaLogger.info("JarDirHandler: containing " + uri.toString());
+        }
+    }
 }

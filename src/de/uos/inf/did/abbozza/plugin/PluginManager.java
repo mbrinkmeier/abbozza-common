@@ -26,9 +26,9 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import de.uos.inf.did.abbozza.monitor.MonitorPanel;
 import java.io.File;
@@ -36,9 +36,11 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -58,13 +60,13 @@ import org.xml.sax.SAXException;
 public class PluginManager implements HttpHandler {
 
     private AbbozzaServer _abbozza;
-    private Hashtable<String,Plugin> _plugins;
+    private HashMap<String,Plugin> _plugins;
    
     
     public PluginManager(AbbozzaServer server) {
         AbbozzaLogger.info("PluginManager: Started");
         this._abbozza = server;
-        this._plugins = new Hashtable<String,Plugin>();
+        this._plugins = new HashMap<String,Plugin>();
         this.detectPlugins();
     }
     
@@ -94,7 +96,7 @@ public class PluginManager implements HttpHandler {
         
         // Check global dir
         path = new File(this._abbozza.getLocalPluginPath());
-        AbbozzaLogger.out("PluginManager: Checking local dir " + path,AbbozzaLogger.INFO);        
+        AbbozzaLogger.info("PluginManager: Checking local dir " + path);        
         dirs = path.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
                 return pathname.isDirectory();
@@ -111,6 +113,8 @@ public class PluginManager implements HttpHandler {
         });
         
         addJars(jars);
+        
+        registerPluginHTMLPaths();
     }
     
     
@@ -125,9 +129,9 @@ public class PluginManager implements HttpHandler {
                     if ( pluginXml != null ) {
                         plugin = new Plugin(dirs[i].toURI().toURL(),pluginXml);
                         if (plugin.getId() != null ) {
-                            AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " found in " + dirs[i].toString() ,AbbozzaLogger.INFO);
+                            AbbozzaLogger.info("PluginManager: Plugin " + plugin.getId() + " found in " + dirs[i].toString());
                             if ( checkRequirements(plugin) ) {
-                                AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " loaded",AbbozzaLogger.INFO);
+                                AbbozzaLogger.debug("PluginManager: Plugin " + plugin.getId() + " loaded");
                                 this._plugins.put(plugin.getId(), plugin);
                             } else {
                                 
@@ -155,9 +159,9 @@ public class PluginManager implements HttpHandler {
                     if ( pluginXml != null ) {
                         plugin = new Plugin(pluginUrl,pluginXml);
                         if (plugin.getId() != null ) {
-                            AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " found in " + jars[i].toString() ,AbbozzaLogger.INFO);
+                            AbbozzaLogger.info("PluginManager: Plugin " + plugin.getId() + " found in " + jars[i].toString());
                             if ( checkRequirements(plugin) ) {
-                                AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " loaded",AbbozzaLogger.INFO);
+                                AbbozzaLogger.debug("PluginManager: Plugin " + plugin.getId() + " loaded");
                                 this._plugins.put(plugin.getId(), plugin);
                             }
                         }
@@ -175,8 +179,8 @@ public class PluginManager implements HttpHandler {
      * 
      * @return The iterator
      */
-    public Enumeration<Plugin> plugins() {
-        return this._plugins.elements();
+    public Collection<Plugin> plugins() {
+        return this._plugins.values();
     }
 
     public Plugin getPlugin(String id) {
@@ -184,24 +188,39 @@ public class PluginManager implements HttpHandler {
     }
 
     public void registerPluginHandlers(HttpServer server) {
-        Enumeration<Plugin> plugins = _plugins.elements();
-        while ( plugins.hasMoreElements()) {
-            Plugin plugin = plugins.nextElement();
+        Collection<Plugin> plugins = _plugins.values();
+        for ( Plugin plugin : plugins ) {
             if (plugin.getHttpHandler() != null) {
                 server.createContext("/abbozza/plugin/" + plugin.getId(), plugin.getHttpHandler());
-                AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " registered HttpHandler",AbbozzaLogger.INFO);
+                AbbozzaLogger.debug("PluginManager: Plugin " + plugin.getId() + " registered HttpHandler");
             }
         }
     }
 
+    protected void registerPluginHTMLPaths() {
+        Collection<Plugin> plugins = _plugins.values();
+        for ( Plugin plugin : plugins ) {
+            try {
+                URI uri = plugin.getURL().toURI();
+                URI htmlUri = new URI(uri.toString()+"html");
+                AbbozzaServer.getInstance().getJarHandler().addURI(htmlUri);
+                AbbozzaLogger.debug("PluginManager: Adding " + htmlUri.toString());
+            } catch (URISyntaxException ex) {
+                AbbozzaLogger.err(ex.getLocalizedMessage());
+            }
+        }
+        JarDirHandler h = AbbozzaServer.getInstance().getJarHandler();
+        h.printEntries();
+    }
+    
+    
     public void mergeFeatures(Document features) {
         NodeList roots = features.getElementsByTagName("features");
         if (roots.getLength() == 0 ) return;
         Node root = roots.item(0);
         
-        Enumeration<Plugin> plugins = _plugins.elements();
-        while ( plugins.hasMoreElements()) {
-            Plugin plugin = plugins.nextElement();
+        Collection<Plugin> plugins = _plugins.values();
+        for ( Plugin plugin : plugins ) {
             Node feature = plugin.getFeature();
             if (plugin.isActivated() && (feature != null)) {
                 try {
@@ -221,12 +240,11 @@ public class PluginManager implements HttpHandler {
         OutputStream os = exchg.getResponseBody();
         Headers responseHeaders = exchg.getResponseHeaders();
 
-        AbbozzaLogger.out("PluginManager: " + path + " requested",AbbozzaLogger.DEBUG);
+        AbbozzaLogger.debug("PluginManager: " + path + " requested");
         
         if (path.equals("/abbozza/plugins/plugins.js")) {
-            Enumeration<Plugin> plugins = _plugins.elements();
-            while ( plugins.hasMoreElements()) {
-                Plugin plugin = plugins.nextElement();
+        Collection<Plugin> plugins = _plugins.values();
+        for ( Plugin plugin : plugins ) {
                 if ( plugin.isActivated() ) {
                     response = response + "\n" + plugin.getJavaScript();
                 }
@@ -234,9 +252,8 @@ public class PluginManager implements HttpHandler {
             responseHeaders.set("Content-Type", "text/javascript");
         } else {
             response = "Found plugins:";
-            Enumeration<Plugin> plugins = _plugins.elements();
-            while ( plugins.hasMoreElements()) {
-                Plugin plugin = plugins.nextElement();
+        Collection<Plugin> plugins = _plugins.values();
+        for ( Plugin plugin : plugins ) {
                 response = response + "\n\t" + plugin.getId();
                 if ( plugin.isActivated() ) {
                     response = response + " [activated]";
@@ -268,9 +285,8 @@ public class PluginManager implements HttpHandler {
             locales = builder.newDocument();
 
             // Iterate through all plugins
-            Enumeration<Plugin> plugins = _plugins.elements();
-            while ( plugins.hasMoreElements()) {
-                Plugin plugin = plugins.nextElement();
+            Collection<Plugin> plugins = _plugins.values();
+            for ( Plugin plugin : plugins ) {
                 Element pluginLocale = plugin.getLocale(locale);
                 if (pluginLocale != null) {
                     root.getOwnerDocument().adoptNode(pluginLocale);
@@ -325,7 +341,7 @@ public class PluginManager implements HttpHandler {
                 String name = child.getAttributes().getNamedItem("name").getNodeValue();
                 // If a required library is not found, reject the plugin
                 if ( !this._abbozza.checkLibrary(name) ) {
-                    AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " : required library " + name + " not found",AbbozzaLogger.INFO);
+                    AbbozzaLogger.info("PluginManager: Plugin " + plugin.getId() + " : required library " + name + " not found");
                     libs = libs + "\n- " + name;
                     foundAll = false;
                 }
@@ -339,9 +355,8 @@ public class PluginManager implements HttpHandler {
     }
         
     public void addMonitorPanels(AbbozzaMonitor monitor) {
-        Enumeration<Plugin> plugins = _plugins.elements();
-        while ( plugins.hasMoreElements()) {
-            Plugin plugin = plugins.nextElement();
+        Collection<Plugin> plugins = _plugins.values();
+        for ( Plugin plugin : plugins ) {
             if ( plugin.isActivated() ) {
                 MonitorPanel panel = plugin.getMonitorPanel();
                 if ( panel != null ) {
