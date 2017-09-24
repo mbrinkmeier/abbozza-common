@@ -62,13 +62,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.Executors;
 import java.util.jar.JarFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
@@ -859,6 +856,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     public static PluginManager getPluginManager() {
+        if ( instance == null ) return null;
         return instance.pluginManager;
     }
 

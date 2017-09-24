@@ -258,13 +258,17 @@ public class Plugin {
         return this._feature.cloneNode(true);
     }
 
+    public Node getLocales() {
+        return this._locales;
+    }
+    
     /**
      * This operation returns the requested local node for the plugin
      * 
      * @param locale The requested Locale
      * @return The node containig the requested locale
      */
-    Element getLocale(String locale) {
+    public Element getLocale(String locale) {
         
         if ( this._locales == null) return null;
                 
@@ -331,5 +335,10 @@ public class Plugin {
     
     public URL getURL() {
         return _url;
+    }
+    
+    public void addLocale() {
+        AbbozzaLogger.info("Plugin " +_id + " : Adding locale");
+        AbbozzaLocale.addLocale(this._locales, _id);        
     }
 }

@@ -48,7 +48,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -113,7 +112,6 @@ public class PluginManager implements HttpHandler {
         });
         
         addJars(jars);
-        
         registerPluginHTMLPaths();
     }
     
@@ -271,11 +269,8 @@ public class PluginManager implements HttpHandler {
     /**
      * This operation adds all locale entries of all registered plugins to a
      * given XML root.
-     * 
-     * @param locale The requested locale
-     * @param root The Element to which the locale entries should be added
      */
-    public void addLocales(String locale, Element root) {
+    public void addLocales() {
         try {
             Document locales;
             
@@ -287,12 +282,7 @@ public class PluginManager implements HttpHandler {
             // Iterate through all plugins
             Collection<Plugin> plugins = _plugins.values();
             for ( Plugin plugin : plugins ) {
-                Element pluginLocale = plugin.getLocale(locale);
-                if (pluginLocale != null) {
-                    root.getOwnerDocument().adoptNode(pluginLocale);
-                    root.appendChild(pluginLocale);
-                    pluginLocale.setAttribute("id",plugin.getId() + "_" + locale);
-                }
+                plugin.addLocale();
             }
             
         } catch (ParserConfigurationException ex) {

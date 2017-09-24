@@ -125,7 +125,7 @@ public class JarDirHandler implements HttpHandler {
      * Handle a request for a file.
      * 
      * @param exchg The incoming request
-     * @throws IOException 
+     * @throws IOException Throws IOExcption if an error occurs during handling of the request.
      */
     @Override
     public void handle(HttpExchange exchg) throws IOException {

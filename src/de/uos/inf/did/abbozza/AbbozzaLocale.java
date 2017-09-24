@@ -53,7 +53,11 @@ public class AbbozzaLocale {
         for (int i = 0; i < nodes.getLength(); i++ ) {
             Element node = (Element) nodes.item(i);
             node.setIdAttribute("id", true);
-        }        
+        }
+        
+        if ( AbbozzaServer.getPluginManager() != null ) {
+            AbbozzaServer.getPluginManager().addLocales();
+        }
     }
 
     /**
@@ -72,6 +76,10 @@ public class AbbozzaLocale {
             Element node = (Element) nodes.item(i);
             node.setIdAttribute("id", true);
         }        
+
+        if ( AbbozzaServer.getPluginManager() != null ) {
+            AbbozzaServer.getPluginManager().addLocales();
+        }
     }
     
     

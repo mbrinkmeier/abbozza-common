@@ -148,7 +148,7 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="&lt;User Code&gt;">
+                  <JTabbedPaneConstraints tabName="&lt;Benutzerquelltext&gt;">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="AbbozzaLocale.entry(&quot;gui.feature_title&quot;)" type="code"/>
                     </Property>
@@ -178,7 +178,7 @@
               </AccessibilityProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="&lt;User Code&gt;">
+                  <JTabbedPaneConstraints tabName="&lt;Benutzerquelltext&gt;">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="AbbozzaLocale.entry(&quot;gui.server_and_browser&quot;)" type="code"/>
                     </Property>
@@ -440,7 +440,7 @@
             <Container class="javax.swing.JPanel" name="taskPanel">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="&lt;User Code&gt;">
+                  <JTabbedPaneConstraints tabName="&lt;Benutzerquelltext&gt;">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="AbbozzaLocale.entry(&quot;gui.tasks&quot;)" type="code"/>
                     </Property>

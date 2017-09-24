@@ -541,7 +541,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     
     /**
      * Add a Panel to the Monitor. Messages enclosed in double brackets of the
-     * form [[ <prefix> <msg> ]] are send to the panel.
+     * form [[ &lt;prefix&gt; &lt;msg&gt; ]] are send to the panel.
      *
      * @param panel The panel to be added
      * @param prefix The prefix of messages handled by the panel
