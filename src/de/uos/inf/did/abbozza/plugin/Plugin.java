@@ -93,8 +93,8 @@ public class Plugin {
                 this._id = root.getAttributes().getNamedItem("id").getNodeValue();
                 if ( root.getAttributes().getNamedItem("system") != null ) {
                     this._system = root.getAttributes().getNamedItem("system").getNodeValue();
-                } else {
-                    this._system = "";                    
+                } else { 
+                    this._system = "";
                 }
                 this._parentOption = "gui.blocks";
                 if ( root.getAttributes().getNamedItem("parent") != null ) {
@@ -155,7 +155,7 @@ public class Plugin {
                 }   
             }
         } catch (Exception ex) {
-            AbbozzaLogger.err(XMLTool.documentToString(pluginXml));
+            AbbozzaLogger.debug(XMLTool.documentToString(pluginXml));
             AbbozzaLogger.stackTrace(ex);
         }
         
