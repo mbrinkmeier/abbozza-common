@@ -43,7 +43,9 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.serial_button">Serieller Monitor</msg>
         <msg id="gui.connect_button">Verbinde zu Board</msg>
         <msg id="gui.config_button">Einstellungen</msg>
-        <msg id="gui.info_button">Aufgaben und Informationen</msg>
+        <msg id="gui.info_button">Hilfe and Informationen</msg>        
+        <msg id="gui.task_button">Aufgaben</msg>        
+        <msg id="gui.www_button">abbozza! Homepage</msg>        
         <msg id="gui.language">Sprache</msg>         
         <msg id="gui.start_directly">Starte abbozza! sofort</msg>         
         <msg id="gui.start_browser">Den Browser beim Start öffnen</msg>         

@@ -43,7 +43,9 @@ Continuing?</msg>
         <msg id="gui.serial_button">Serial Monitor</msg>
         <msg id="gui.connect_button">Connect to board</msg>
         <msg id="gui.config_button">Settings</msg>
-        <msg id="gui.info_button">Tasks and information</msg>        
+        <msg id="gui.info_button">Help and information</msg>        
+        <msg id="gui.task_button">Tasks</msg>        
+        <msg id="gui.www_button">abbozza! homepage</msg>        
         <msg id="gui.language">Language</msg>         
         <msg id="gui.start_directly">Start abbozza! with the IDE</msg>         
         <msg id="gui.start_browser">Open the browser at start</msg>         
