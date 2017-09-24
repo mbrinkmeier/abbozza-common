@@ -97,7 +97,11 @@ public class Plugin {
             if ( plugins.getLength() > 0) {
                 Node root = plugins.item(0);
                 this._id = root.getAttributes().getNamedItem("id").getNodeValue();
-                this._system = root.getAttributes().getNamedItem("system").getNodeValue();
+                if ( root.getAttributes().getNamedItem("system") != null ) {
+                    this._system = root.getAttributes().getNamedItem("system").getNodeValue();
+                } else { 
+                    this._system = "";
+                }
                 this._parentOption = "gui.blocks";
                 if ( root.getAttributes().getNamedItem("parent") != null ) {
                     this._parentOption = root.getAttributes().getNamedItem("parent").getNodeValue();
@@ -149,7 +153,7 @@ public class Plugin {
                 }   
             }
         } catch (Exception ex) {
-            System.out.println(XMLTool.documentToString(pluginXml));
+            AbbozzaLogger.debug(XMLTool.documentToString(pluginXml));
             AbbozzaLogger.stackTrace(ex);
         }
         
