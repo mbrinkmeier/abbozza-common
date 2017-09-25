@@ -57,7 +57,7 @@ Continuing?</msg>
         <msg id="gui.blocks">Blocks</msg>
         <msg id="gui.code">Code</msg>         
         <msg id="gui.misc">Misc</msg>         
-        <msg id="gui.advanced">Advanced blocks<msg>
+        <msg id="gui.advanced">Advanced blocks</msg>
         <msg id="gui.operations">Operations</msg>         
         <msg id="gui.local_variables">Local variables</msg>         
         <msg id="gui.serial_communication">Serial Communication</msg>         
