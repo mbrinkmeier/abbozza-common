@@ -39,6 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -60,17 +61,71 @@ public class PluginManager implements HttpHandler {
 
     private AbbozzaServer _abbozza;
     private HashMap<String,Plugin> _plugins;
+    private ArrayList<File> _directories;
    
     
     public PluginManager(AbbozzaServer server) {
         AbbozzaLogger.info("PluginManager: Started");
         this._abbozza = server;
         this._plugins = new HashMap<String,Plugin>();
-        this.detectPlugins();
+        this._directories = new ArrayList<File>();
+        // this.detectPlugins();
+    }
+    
+    /**
+     * Add a directory to the list of plugin locations.
+     * 
+     * @param dir The directory to be added
+     */
+    public void registerDir(File dir) {
+        this._directories.add(dir);
     }
     
     
-    private void detectPlugins() {
+    /**
+     * Add a directory to the list of plugin locations.
+     * 
+     * @param dir The directory to be added
+     */
+    public void registerDir(String path) {
+        this._directories.add(new File(path));        
+    }
+ 
+    /**
+     * Search the given paths for plugins.
+     * 
+     * @param dir the directory to be checked.
+     */
+    private void detectPlugins(File dir) {
+        AbbozzaLogger.info("PluginManager: Checking directory " + dir);
+        File[] dirs = null;
+        dirs = dir.listFiles(new FileFilter() {
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        });
+        
+        addDirs(dirs);
+
+        File [] jars = null;
+        jars = dir.listFiles(new FileFilter() {
+           public boolean accept(File pathname) {
+               return pathname.getName().endsWith(".jar");
+           } 
+        });
+        
+        addJars(jars);
+    }
+    
+    /**
+     * Detect plugins in the registered plugins.
+     */
+    public void detectPlugins() {
+        for ( File dir: this._directories) {
+            detectPlugins(dir);
+        }
+        
+        /*
         // Check local dir
         File path = new File(this._abbozza.getGlobalPluginPath());
         AbbozzaLogger.info("PluginManager: Checking global dir " + path);    
@@ -112,6 +167,8 @@ public class PluginManager implements HttpHandler {
         });
         
         addJars(jars);
+        */
+        
         registerPluginHTMLPaths();
     }
     

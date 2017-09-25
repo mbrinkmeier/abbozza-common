@@ -257,7 +257,7 @@ public class JarDirHandler implements HttpHandler {
 
                 if (inStream == null) {
                     tries++;
-                    AbbozzaServer.getInstance().findJarsAndDirs(this);
+                    // AbbozzaServer.getInstance().findJarsAndDirs(this);
                 }
             }
             

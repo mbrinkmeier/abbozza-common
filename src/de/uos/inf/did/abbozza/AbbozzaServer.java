@@ -171,7 +171,13 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Find Jars
         jarHandler = new JarDirHandler();
         findJarsAndDirs(jarHandler);
-
+        
+        // Initialize Plugins
+        pluginManager = new PluginManager(this);
+        pluginManager.registerDir(localPluginPath);
+        pluginManager.registerDir(globalPluginPath);
+        pluginManager.detectPlugins();
+        
         // Load the locale
         AbbozzaLocale.setLocale(config.getLocale());
 
@@ -193,10 +199,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Call the initialization hooks for subclasses
         setAdditionalPaths();
-        additionalInitialization();
-
-        // Load plugins
-        pluginManager = new PluginManager(this);
+        additionalInitialization();       
     }
 
     
