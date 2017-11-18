@@ -20,7 +20,7 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
 
     private static Thread splashThread;
     private static AbbozzaSplashScreen splashScreen;
-    private String splashImage;
+    private ImageIcon splashImage;
     
     /**
      * Creates new form AbbozzaSplashScreen
@@ -29,7 +29,7 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
      */
     public AbbozzaSplashScreen(String image) {
         super((JFrame) null,false);
-        splashImage = image;
+        splashImage = new ImageIcon(this.getClass().getResource(image));
         
         initComponents();
         
@@ -65,7 +65,7 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
 
         image.setBackground(new java.awt.Color(255, 255, 255));
         image.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        image.setIcon(new ImageIcon(AbbozzaSplashScreen.class.getClass().getResource(splashImage)));
+        image.setIcon(splashImage);
         getContentPane().add(image);
         image.setBounds(0, 0, 320, 200);
 

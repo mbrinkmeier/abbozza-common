@@ -60,7 +60,7 @@
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new ImageIcon(AbbozzaSplashScreen.class.getClass().getResource(splashImage))" type="code"/>
+          <Connection code="splashImage" type="code"/>
         </Property>
       </Properties>
       <Constraints>
