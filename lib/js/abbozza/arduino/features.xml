@@ -11,7 +11,7 @@
             <block type="loop_endless"></block>
             <block type="loop_fixed">
                 <value name="COUNT">
-                    <block type="math_number">
+                    <block type="math_number"><mutation confirmed="false"/>
                         <field name="VALUE">42</field>
                     </block>
                 </value>                   
@@ -21,12 +21,12 @@
             <block type="loop_break"></block>
             <block type="loop_delay">
                 <value name="TIME">
-                    <block type="math_number"><field name="VALUE">1000</field></block>
+                    <block type="math_number"><mutation confirmed="false"/><field name="VALUE">1000</field></block>
                 </value>
             </block>            
             <block type="loop_delay_micros">
                 <value name="TIME">
-                    <block type="math_number"><field name="VALUE">1000</field></block>
+                    <block type="math_number"><mutation confirmed="false"/><field name="VALUE">1000</field></block>
                 </value>
             </block>            
         </category>
@@ -61,19 +61,19 @@
             <block type="math_calc"></block>
             <block type="math_random">
                 <value name="MAX">
-                    <block type="math_number">
+                    <block type="math_number"><mutation confirmed="false"/>
                         <field name="VALUE">100</field>
                     </block>
                 </value>
             </block>
             <block type="math_random2">
                 <value name="MIN">
-                    <block type="math_number">
+                    <block type="math_number"><mutation confirmed="false"/>
                         <field name="VALUE">1</field>
                     </block>
                 </value>                
                 <value name="MAX">
-                    <block type="math_number">
+                    <block type="math_number"><mutation confirmed="false"/>
                         <field name="VALUE">50</field>
                     </block>
                 </value>                
@@ -126,7 +126,7 @@
                 <value name="PIN">
                     <block type="inout_pin"></block>
                 </value>
-                <value name="VALUE">
+                <value name="VALUE"><mutation confirmed="false"/>
                     <block type="math_number"></block>
                 </value>
             </block>
@@ -162,21 +162,21 @@
         <category id="cat.CTRL">
             <block type="loop_count_dir">
                 <value name="FROM">
-                    <block type="math_number"><field name="VALUE">0</field></block>
+                    <block type="math_number"><mutation confirmed="false"/><field name="VALUE">0</field></block>
                 </value>   
                 <value name="TO">
-                    <block type="math_number"><field name="VALUE">42</field></block>
+                    <block type="math_number"><mutation confirmed="false"/><field name="VALUE">42</field></block>
                 </value>   
             </block>
             <block type="loop_count_dir_step">
                 <value name="FROM">
-                    <block type="math_number"><field name="VALUE">0</field></block>
+                    <block type="math_number"><mutation confirmed="false"/><field name="VALUE">0</field></block>
                 </value>   
                 <value name="TO">
-                    <block type="math_number"><field name="VALUE">42</field></block>
+                    <block type="math_number"><mutation confirmed="false"/><field name="VALUE">42</field></block>
                 </value>   
                 <value name="STEP">
-                    <block type="math_number"><field name="VALUE">1</field></block>
+                    <block type="math_number"><mutation confirmed="false"/><field name="VALUE">1</field></block>
                 </value>   
             </block>
         </category>
@@ -250,7 +250,7 @@
             <block type="dev_serial"></block>
             <block type="dev_serial_write">
                 <value name="VALUE">
-                    <block type="math_number"></block>
+                    <block type="math_number"><mutation confirmed="false"/></block>
                 </value>
             </block>
             <block type="dev_serial_read"></block>
@@ -274,7 +274,7 @@
             <block type="dev_servo"></block>
             <block type="dev_servo_set">
                 <value name="VALUE">
-                    <block type="math_number"></block>
+                    <block type="math_number"><mutation confirmed="false"/></block>
                 </value>
             </block>
         </category> 		

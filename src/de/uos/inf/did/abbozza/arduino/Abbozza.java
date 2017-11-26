@@ -186,9 +186,9 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     public void findJarsAndDirs(JarDirHandler jarHandler) {
         jarHandler.clear();
-        jarHandler.addDir(sketchbookPath + "/tools/Abbozza/web", "Local directory");
+        jarHandler.addDir(sketchbookPath + "/tools/Abbozza", "Local directory");
         // jarHandler.addJar(sketchbookPath + "/tools/Abbozza/tool/abbozza-arduino.jar", "Local jar");
-        jarHandler.addDir(abbozzaPath + "tools/Abbozza/web", "Global directory");
+        jarHandler.addDir(abbozzaPath + "tools/Abbozza", "Global directory");
         // jarHandler.addJar(runtimePath + "tools/Abbozza/tool/abbozza-arduino.jar", "Global jar");
         jarHandler.addJar(jarUri, "Jar");
     }
