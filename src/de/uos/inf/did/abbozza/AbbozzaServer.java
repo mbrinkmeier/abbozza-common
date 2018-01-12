@@ -365,13 +365,16 @@ public abstract class AbbozzaServer implements HttpHandler {
         Runtime runtime = Runtime.getRuntime();
 
         if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
-            String[] cmd = new String[2];
+            String[] cmd = new String[3];
             // cmd[0] =  "\"" + config.getBrowserPath().replace("\"", "\\\"") + "\"";
-            cmd[0] =  expandPath(config.getBrowserPath());
-            cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
+            String opts = config.getProperty("browserOptions");
+            if ( opts == null ) opts = "";
+            cmd[0] = expandPath(config.getBrowserPath());
+            cmd[1] = opts;
+            cmd[2] = "http://localhost:" + serverPort + "/" + system + ".html";
             // String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
             try {
-                AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
+                AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1] + " " + cmd[2] );
                 runtime.exec(cmd);
                 toolToBack();
             } catch (IOException e) {
