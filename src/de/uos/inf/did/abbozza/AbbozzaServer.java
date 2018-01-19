@@ -93,9 +93,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     // Version
     public static final int VER_MAJOR = 0;     // Major version of common core
     public static final int VER_MINOR = 11;    // Minor version of common core
-    public static int VER_REV = -1;            // Has to be defined by the system specific code
-    public static int VER_HOTFIX = -1;         // Has to be defined by the system specific code
-    public static String VER_REM = "";   // Has to be defined by the system specific code
+    public static final int VER_HOTFIX = 0;    // Minor version of common core
 
     // Instance
     protected static AbbozzaServer instance;
@@ -971,7 +969,16 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
     
     public static String getVersion() {
-      return "" + VER_MAJOR + "." + VER_MINOR + "." + VER_REV + "." + VER_HOTFIX + " " + VER_REM;
+      return getSystemVersion();
     }
+    
+    public static String getCommonVersion() {
+      return "" + VER_MAJOR + "." + VER_MINOR + "." + VER_HOTFIX;
+    }
+    
+    public static String getSystemVersion() {
+        return "-1.-1 (common)";
+    };
+
     
 }
