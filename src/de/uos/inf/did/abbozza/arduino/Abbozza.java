@@ -261,7 +261,12 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     
     @Override
-    public String compileCode(String code) {
+    public int compileCode(String code) {
+        
+        compileMsg = "";
+        compileErrorMsg = "";
+        
+        String result = null;
         
         toolSetCode(code);        
 
@@ -275,7 +280,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         try {            
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
-            editor.getSketchController().build(false, false);
+            result = editor.getSketchController().build(false, false);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
         } catch (Exception e) {
@@ -291,14 +296,17 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         System.setErr(origErr);
   
         // Fetch response
-        String errMsg = buffer.toString();
-        System.err.println(errMsg);
-                
-        return errMsg;
+        compileErrorMsg = buffer.toString();
+
+        if ( result != null ) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     @Override
-    public String uploadCode(String code) {
+    public int uploadCode(String code) {
 
         boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
         PreferencesData.setBoolean("editor.save_on_verify", false);
@@ -360,10 +368,14 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         System.setErr(origErr);
   
         // Fetch response
-        String errMsg = buffer.toString();
-        AbbozzaLogger.out(errMsg,AbbozzaLogger.INFO);
+        compileErrorMsg = buffer.toString();
+        AbbozzaLogger.out(compileErrorMsg,AbbozzaLogger.INFO);
                 
-        return errMsg;
+        if ( compileErrorMsg.contains("error") ) {
+            return 1;
+        }
+        return 0;
+        
     }
 
     public boolean checkLibrary(String name) {
