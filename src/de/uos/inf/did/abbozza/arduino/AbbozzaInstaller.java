@@ -114,7 +114,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             int result = JOptionPane.showConfirmDialog(this,
                     AbbozzaLocale.entry("MSG.ALREADY_INSTALLED") + "\n"
                     + AbbozzaLocale.entry("MSG.CONTINUE_INSTALLATION") + "\n"
-                    + "(Version " + Abbozza.VERSION + ")",
+                    + "(Version " + Abbozza.getVersion() + ")",
                     AbbozzaLocale.entry("GUI.TITLE"), JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.NO_OPTION) {
                 System.exit(1);
@@ -212,7 +212,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         logoPanel.add(jLabel1, java.awt.BorderLayout.CENTER);
 
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        jLabel4.setText(Abbozza.VERSION);
+        jLabel4.setText(Abbozza.getVersion());
         jLabel4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jLabel4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
