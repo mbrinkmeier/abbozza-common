@@ -91,12 +91,9 @@ import org.xml.sax.SAXException;
 public abstract class AbbozzaServer implements HttpHandler {
 
     // Version
-    public static final int VER_MAJOR = 0;
-    public static final int VER_MINOR = 10;
-    public static final int VER_REV = 0;
-    public static final int VER_HOTFIX = 3;
-    public static final String VER_REM = "";
-    public static final String VERSION = "" + VER_MAJOR + "." + VER_MINOR + "." + VER_REV + "." + VER_HOTFIX + " " + VER_REM;
+    public static final int VER_MAJOR = 0;     // Major version of common core
+    public static final int VER_MINOR = 11;    // Minor version of common core
+    public static final int VER_HOTFIX = 0;    // Minor version of common core
 
     // Instance
     protected static AbbozzaServer instance;
@@ -177,7 +174,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Load the locale
         AbbozzaLocale.setLocale(config.getLocale());
 
-        AbbozzaLogger.info("Version " + VERSION);
+        AbbozzaLogger.info("Version " + getVersion());
 
         // Check for Update
         if (this.getConfiguration().getUpdate()) {
@@ -365,13 +362,16 @@ public abstract class AbbozzaServer implements HttpHandler {
         Runtime runtime = Runtime.getRuntime();
 
         if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
-            String[] cmd = new String[2];
+            String[] cmd = new String[3];
             // cmd[0] =  "\"" + config.getBrowserPath().replace("\"", "\\\"") + "\"";
-            cmd[0] =  expandPath(config.getBrowserPath());
-            cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
+            String opts = config.getProperty("browserOptions");
+            if ( opts == null ) opts = "";
+            cmd[0] = expandPath(config.getBrowserPath());
+            cmd[1] = opts;
+            cmd[2] = "http://localhost:" + serverPort + "/" + system + ".html";
             // String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
             try {
-                AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
+                AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1] + " " + cmd[2] );
                 runtime.exec(cmd);
                 toolToBack();
             } catch (IOException e) {
@@ -967,4 +967,18 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
         return xPath;
     }
+    
+    public static String getVersion() {
+      return getSystemVersion();
+    }
+    
+    public static String getCommonVersion() {
+      return "" + VER_MAJOR + "." + VER_MINOR + "." + VER_HOTFIX;
+    }
+    
+    public static String getSystemVersion() {
+        return "-1.-1 (common)";
+    };
+
+    
 }

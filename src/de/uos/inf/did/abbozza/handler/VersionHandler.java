@@ -42,7 +42,7 @@ public class VersionHandler extends AbstractHandler {
     public void handle(HttpExchange exchg) throws IOException {
         Headers headers = exchg.getResponseHeaders();
         headers.add("Access-Control-Allow-Origin", "*");
-        sendResponse(exchg, 200, "text/plain", "abbozza! " + _abbozzaServer.VERSION);
+        sendResponse(exchg, 200, "text/plain", "abbozza! " + _abbozzaServer.getVersion());
     }
     
 }
