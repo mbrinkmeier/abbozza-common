@@ -968,15 +968,15 @@ public abstract class AbbozzaServer implements HttpHandler {
         return xPath;
     }
     
-    public static String getVersion() {
+    public String getVersion() {
       return getSystemVersion();
     }
     
-    public static String getCommonVersion() {
+    public String getCommonVersion() {
       return "" + VER_MAJOR + "." + VER_MINOR + "." + VER_HOTFIX;
     }
     
-    public static String getSystemVersion() {
+    public String getSystemVersion() {
         return "-1.-1 (common)";
     };
 

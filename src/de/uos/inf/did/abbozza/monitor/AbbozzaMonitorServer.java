@@ -82,7 +82,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
         
         AbbozzaLocale.setLocale(config.getLocale());
 
-        AbbozzaLogger.out("Version " + AbbozzaServer.getVersion(), AbbozzaLogger.INFO);
+        AbbozzaLogger.out("Version " + AbbozzaServer.getInstance().getVersion(), AbbozzaLogger.INFO);
 
         if (this.getConfiguration().getUpdate()) {
             checkForUpdate(false);

@@ -268,10 +268,10 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         logoPanel.add(jLabel1, java.awt.BorderLayout.LINE_START);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        jLabel2.setText(AbbozzaServer.getVersion());
+        jLabel2.setText(AbbozzaServer.getInstance().getVersion());
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         logoPanel.add(jLabel2, java.awt.BorderLayout.LINE_END);
-        jLabel2.getAccessibleContext().setAccessibleName(null);
+        jLabel2.getAccessibleContext().setAccessibleName("");
 
         contentPanel.add(logoPanel, java.awt.BorderLayout.PAGE_START);
 
