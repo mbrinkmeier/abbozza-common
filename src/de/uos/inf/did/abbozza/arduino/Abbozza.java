@@ -55,6 +55,13 @@ import processing.app.packages.UserLibrary;
 
 public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
+    public static final int SYS_MAJOR = 0;
+    public static final int SYS_MINOR= 11;
+    public static final int SYS_REV = 0;
+    public static final int SYS_HOTFIX = 0;
+    public static final String SYS_REMARK = "(arduino)";
+    public static final String SYS_VERSION = SYS_MAJOR + "." + SYS_MINOR + "." + SYS_REV + "." + SYS_HOTFIX + " " + SYS_REMARK;
+    
     public static Color COLOR = new Color(91, 103, 165);
     private static int counter;
 
@@ -386,5 +393,11 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
     public File queryPathToBoard(String path) {
         return new File(path);
     }
+    
+    public static String getSystemVersion() {
+        return SYS_VERSION;
+    };
+
+
 }
 
