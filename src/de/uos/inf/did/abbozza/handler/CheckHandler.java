@@ -56,11 +56,11 @@ public class CheckHandler extends AbstractHandler {
             isr.close();
             String code = buf.toString();
             
-            String response = setCode(code.toString());
-            if (response.equals("")) {
+            int response = setCode(code.toString());
+            if ( response == 0 ) {
                 this.sendResponse(exchg, 200, "text/plain", AbbozzaLocale.entry("msg.done-compiling"));
             } else {
-                this.sendResponse(exchg, 400, "text/plain", response);
+                this.sendResponse(exchg, 400, "text/plain", _abbozzaServer.getCompileErrorMsg() );
             }
         } catch (IOException ioe) {
             this.sendResponse(exchg, 404, "", "");
@@ -68,8 +68,8 @@ public class CheckHandler extends AbstractHandler {
     }
     
     
-    public String setCode(String code) { 
-        String response = _abbozzaServer.compileCode(code);
+    public int setCode(String code) { 
+        int response = _abbozzaServer.compileCode(code);
         return response;
     }
 

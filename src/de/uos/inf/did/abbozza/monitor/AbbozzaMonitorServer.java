@@ -189,13 +189,13 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
     }
 
     @Override
-    public String compileCode(String code) {
-        return "";
+    public int compileCode(String code) {
+        return 0;
     }
 
     @Override
-    public String uploadCode(String code) {
-        return "";
+    public int uploadCode(String code) {
+        return 0;
     }
 
     public boolean open() {

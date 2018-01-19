@@ -134,6 +134,9 @@ public abstract class AbbozzaServer implements HttpHandler {
     
     protected String _boardName;
     
+    protected String compileMsg;
+    protected String compileErrorMsg;
+    
     /**
      * The system independent initialization of the server
      *
@@ -523,7 +526,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      * @return The output produced by the compilation process. The result is
      * empty, if the compilation was successful.
      */
-    public abstract String compileCode(String code);
+    public abstract int compileCode(String code);
 
     /**
      * Compiles and uploads the code to the board.
@@ -532,8 +535,12 @@ public abstract class AbbozzaServer implements HttpHandler {
      * @return The output produced by the compilation process. The result is
      * empty, if the compilation was successful.
      */
-    public abstract String uploadCode(String code);
+    public abstract int uploadCode(String code);
 
+    public String getCompileErrorMsg() { return compileErrorMsg; }
+    
+    public String getCompileMsg() { return compileMsg; }
+    
     /**
      * Detects a connected board.
      * 
@@ -980,5 +987,4 @@ public abstract class AbbozzaServer implements HttpHandler {
         return "-1.-1 (common)";
     };
 
-    
 }

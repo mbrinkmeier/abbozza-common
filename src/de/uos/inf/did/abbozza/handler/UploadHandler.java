@@ -66,12 +66,11 @@ public class UploadHandler extends AbstractHandler {
             isr.close();
             String code = buf.toString();
 
-            String response = uploadCode(code.toString());
-            response = response.trim();
-            if (response.equals("")) {
+            int response = uploadCode(code.toString());
+            if ( response == 0 ) {
                 sendResponse(exchg, 200, "text/plain", AbbozzaLocale.entry("msg.done-compiling"));
             } else {
-                sendResponse(exchg, 400, "text/plain", response);
+                sendResponse(exchg, 400, "text/plain", _abbozzaServer.getCompileErrorMsg() );
             }
         } catch (IOException ioe) {
             try {
@@ -81,8 +80,8 @@ public class UploadHandler extends AbstractHandler {
         }
     }
 
-     public String uploadCode(String code) {     
-         String response = _abbozzaServer.uploadCode(code);         
+     public int uploadCode(String code) {     
+         int response = _abbozzaServer.uploadCode(code);         
          return response;
     }   
      
