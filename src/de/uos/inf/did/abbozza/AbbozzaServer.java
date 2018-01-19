@@ -91,12 +91,11 @@ import org.xml.sax.SAXException;
 public abstract class AbbozzaServer implements HttpHandler {
 
     // Version
-    public static final int VER_MAJOR = 0;
-    public static final int VER_MINOR = 10;
-    public static final int VER_REV = 0;
-    public static final int VER_HOTFIX = 3;
-    public static final String VER_REM = "";
-    public static final String VERSION = "" + VER_MAJOR + "." + VER_MINOR + "." + VER_REV + "." + VER_HOTFIX + " " + VER_REM;
+    public static final int VER_MAJOR = 0;     // Major version of common core
+    public static final int VER_MINOR = 11;    // Minor version of common core
+    public static int VER_REV = -1;            // Has to be defined by the system specific code
+    public static int VER_HOTFIX = -1;         // Has to be defined by the system specific code
+    public static String VER_REM = "";   // Has to be defined by the system specific code
 
     // Instance
     protected static AbbozzaServer instance;
@@ -177,7 +176,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Load the locale
         AbbozzaLocale.setLocale(config.getLocale());
 
-        AbbozzaLogger.info("Version " + VERSION);
+        AbbozzaLogger.info("Version " + getVersion());
 
         // Check for Update
         if (this.getConfiguration().getUpdate()) {
@@ -970,4 +969,9 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
         return xPath;
     }
+    
+    public static String getVersion() {
+      return "" + VER_MAJOR + "." + VER_MINOR + "." + VER_REV + "." + VER_HOTFIX + " " + VER_REM;
+    }
+    
 }

@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -267,10 +268,10 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         logoPanel.add(jLabel1, java.awt.BorderLayout.LINE_START);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        jLabel2.setText(AbbozzaServer.VERSION
-        );
+        jLabel2.setText(AbbozzaServer.getVersion());
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         logoPanel.add(jLabel2, java.awt.BorderLayout.LINE_END);
+        jLabel2.getAccessibleContext().setAccessibleName(null);
 
         contentPanel.add(logoPanel, java.awt.BorderLayout.PAGE_START);
 
@@ -612,7 +613,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                     CheckBoxNode cbn = (CheckBoxNode) node.getUserObject();
                     cbn.storeOption(config);                    
                 }
-                Enumeration<DefaultMutableTreeNode> it = node.children();
+                Enumeration<TreeNode> it = node.children();
                 while (it.hasMoreElements()) {
                     DefaultMutableTreeNode child = (DefaultMutableTreeNode) it.nextElement();
                     queue.addElement(child);

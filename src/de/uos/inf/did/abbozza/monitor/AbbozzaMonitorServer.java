@@ -9,7 +9,6 @@ import de.uos.inf.did.abbozza.AbbozzaConfig;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
-import static de.uos.inf.did.abbozza.AbbozzaServer.VERSION;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
 import java.awt.event.ActionEvent;
@@ -83,7 +82,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
         
         AbbozzaLocale.setLocale(config.getLocale());
 
-        AbbozzaLogger.out("Version " + VERSION, AbbozzaLogger.INFO);
+        AbbozzaLogger.out("Version " + AbbozzaServer.getVersion(), AbbozzaLogger.INFO);
 
         if (this.getConfiguration().getUpdate()) {
             checkForUpdate(false);
