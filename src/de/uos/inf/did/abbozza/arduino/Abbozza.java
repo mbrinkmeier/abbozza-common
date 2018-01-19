@@ -394,7 +394,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         return new File(path);
     }
     
-    public static String getSystemVersion() {
+    public String getSystemVersion() {
         return SYS_VERSION;
     };
 
