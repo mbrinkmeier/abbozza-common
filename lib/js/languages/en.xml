@@ -366,10 +366,10 @@ Continuing?</msg>
         <msg id="parse.COMMAND">If # received</msg>
         <msg id="parse.COMMANDS">Messages</msg>
         <msg id="parse.CMD">On message # do</msg>
-        <msg id="parse.NUMBER">Parse number</msg>
-        <msg id="parse.DECIMAL">Parse decimal</msg>
-        <msg id="parse.WORD">Parse word</msg>
-        <msg id="parse.STRING">Parse string</msg>
+        <msg id="parse.NUMBER">Parse number from message</msg>
+        <msg id="parse.DECIMAL">Parse decimal from message</msg>
+        <msg id="parse.WORD">Parse word from message</msg>
+        <msg id="parse.STRING">Parse string from message</msg>
         <msg id="parse.SEND_RESPONSE">Send response</msg>
     </blocks>
     <errors>

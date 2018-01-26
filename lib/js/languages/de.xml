@@ -368,10 +368,10 @@ Trotzdem fortfahren?</msg>
         <msg id="parse.COMMAND">Falls # empfangen</msg>
         <msg id="parse.COMMANDS">Nachrichten</msg>
         <msg id="parse.CMD">Bei Nachricht # tue</msg>
-        <msg id="parse.NUMBER">Lese Zahl</msg>
+        <msg id="parse.NUMBER">Lese Zahl aus Nachricht</msg>
         <msg id="parse.DECIMAL">Lese Dezimalzahl</msg>
-        <msg id="parse.WORD">Lese Wort</msg>
-        <msg id="parse.STRING">Lese Text</msg>
+        <msg id="parse.WORD">Lese Wort aus Nachricht</msg>
+        <msg id="parse.STRING">Lese Text aus Nachricht</msg>
         <msg id="parse.SEND_RESPONSE">Sende Antwort</msg>
     </blocks>
     <errors>
