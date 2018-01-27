@@ -163,17 +163,20 @@ public class Graph extends javax.swing.JPanel implements TableModelListener {
                 int x = 0;
                 int y = entry.values[i];
                 switch ( myTable.getType(i) ) {
-                    case '0' :
+                    case '0' :  // digital
                         y = (getHeight()-1)*(6-5*y)/7;
                         break;  
-                    case '1' :
+                    case '1' :  // 0 .. 1023
                         y = (getHeight()-1)*(1023-y)/1023;
                         break;
-                    case '3' :
+                    case '2' :  // 0 .. 65535
+                        y = (getHeight()-1)*(65535-y)/65535;
+                        break;
+                    case '3' :  // -32768 .. 32767
                         y = (getHeight()-1)*(32767-y)/65535;
                         break;
-                    default:
-                        y = (getHeight()-1)*(65535-y)/65535;
+                    case '4':  // -1024 .. 1023
+                        y = (getHeight()-1)*(1023-y)/2047;
                 }
                 if ( xType == TIMESTAMP ) {
                     x = (int) (entry.timestamp/100);
