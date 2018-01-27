@@ -47,6 +47,7 @@ import de.uos.inf.did.abbozza.plugin.PluginManager;
 import de.uos.inf.did.abbozza.plugin.Plugin;
 import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -178,7 +179,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         AbbozzaLocale.setLocale(config.getLocale());
 
         AbbozzaLogger.info("Version " + getVersion());
-
+        
         // Check for Update
         if (this.getConfiguration().getUpdate()) {
             checkForUpdate(false);
