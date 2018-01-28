@@ -25,21 +25,12 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
 
 /**
  *
@@ -55,7 +46,7 @@ public class TaskHandler extends AbstractHandler {
     }
    
     @Override
-    public void handle(HttpExchange exchg) throws IOException {
+    protected void myHandle(HttpExchange exchg) throws IOException {
         /**
          * The request has the following form:
          *  task/<path>?<anchor>

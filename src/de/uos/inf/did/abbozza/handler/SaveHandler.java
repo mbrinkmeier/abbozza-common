@@ -59,7 +59,7 @@ public class SaveHandler extends AbstractHandler {
     }
 
     
-    public void handle(HttpExchange exchg) throws IOException {
+    protected void myHandle(HttpExchange exchg) throws IOException {
         try {
             saveSketch(exchg.getRequestBody());
             this.sendResponse(exchg, 200, "text/xml", "saved");

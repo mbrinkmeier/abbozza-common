@@ -45,7 +45,7 @@ public class FeatureHandler extends AbstractHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchg) throws IOException {
+    protected void myHandle(HttpExchange exchg) throws IOException {
         sendResponse(exchg, 200, "text/xml", XMLTool.documentToString(getFeatures()));
     }
 

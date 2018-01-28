@@ -53,7 +53,7 @@ public class LoadHandler extends AbstractHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchg) throws IOException {
+    protected void myHandle(HttpExchange exchg) throws IOException {
         try {
             String query = exchg.getRequestURI().getQuery();
             if ( query == null ) {

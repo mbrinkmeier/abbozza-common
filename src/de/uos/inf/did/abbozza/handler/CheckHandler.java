@@ -24,7 +24,6 @@ package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +40,7 @@ public class CheckHandler extends AbstractHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchg) throws IOException {
+    protected void myHandle(HttpExchange exchg) throws IOException {
         try {            
             InputStreamReader isr =  new InputStreamReader(exchg.getRequestBody());
             BufferedReader br = new BufferedReader(isr);

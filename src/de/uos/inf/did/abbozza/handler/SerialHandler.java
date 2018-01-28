@@ -41,12 +41,12 @@ import java.util.logging.Logger;
 public class SerialHandler extends AbstractHandler {
 
     public SerialHandler(AbbozzaServer abbozza) {
-        super(abbozza);
+        super(abbozza,true);
         AbbozzaLogger.out("SerialHandler registered",AbbozzaLogger.DEBUG);
     }
     
     @Override
-    public void handle(HttpExchange he) throws IOException {
+    protected void myHandle(HttpExchange he) throws IOException {
         String query = he.getRequestURI().getQuery();
         // msg=<msg>&timeout=<time>
         // No timeout means that the request is not waitung

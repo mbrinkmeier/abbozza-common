@@ -108,6 +108,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.use_long">Verwende lange Zahlen (32 Bit)</msg>
         <msg id="gui.use_double">Verwende präzisere Dezimalzahlen (64 Bit)</msg>
         <msg id="gui.usb">USB Kommunikation</msg>        
+        <msg id="gui.parser">Zeilenparser</msg>        
         <msg id="gui.messages">Nachrichten</msg>
         <msg id="gui.log">Protokoll</msg>
         <msg id="gui.is_installed">Installiert</msg>
@@ -125,6 +126,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.log_info">Informationen</msg>
         <msg id="gui.log_debug">Alles</msg>
         <msg id="gui.clean_buildsystem">Bereinigen</msg>
+        <msg id="gui.remote_access">Entfernten Zugriff von # erlauben?</msg>
+        <msg id="gui.remote_access_title">Entfernten Zugriff erlauben?</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
@@ -187,6 +190,12 @@ Trotzdem fortfahren?</msg>
         <msg id="txt.ASCIIFROMTEXT">ASCII-Code von</msg>
         <msg id="txt.LENGTH">Länge von</msg>
         <msg id="txt.SUBSTRING">Teilstring von # von Position # bis</msg>
+
+        <msg id="parser.SET_LINE">Beginne mit dem Zerlegen der Zeile</msg>
+        <msg id="parser.NUMBER">Lese Zahl aus der Zeile</msg>
+        <msg id="parser.DECIMAL">Lese Dezimalzahl aus der Zeile</msg>
+        <msg id="parser.STRING">Lese Text aus der Zeile</msg>
+        <msg id="parser.WORD">Lese einzelnes Wort aus der Zeile</msg>
 		
         <msg id="math.MIN">Minimum</msg>
         <msg id="math.MAX">Maximum</msg>

@@ -108,6 +108,7 @@ Continuing?</msg>
         <msg id="gui.use_long">Use long integers (32 Bit)</msg>
         <msg id="gui.use_double">Use more precise decimals (64 Bit)</msg>
         <msg id="gui.usb">USB communication</msg>
+        <msg id="gui.parser">Lineparser</msg>        
         <msg id="gui.messages">Messages</msg>
         <msg id="gui.log">Log</msg>
         <msg id="gui.is_installed">Installed</msg>
@@ -125,6 +126,8 @@ Continuing?</msg>
         <msg id="gui.log_info">Informations</msg>
         <msg id="gui.log_debug">Everything</msg>
         <msg id="gui.clean_buildsystem">Clean</msg>
+        <msg id="gui.remote_access">Allow remote request from # ?</msg>
+        <msg id="gui.remote_access_title">Allow remote request?</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
@@ -188,6 +191,12 @@ Continuing?</msg>
         <msg id="txt.LENGTH">Length of</msg>
         <msg id="txt.SUBSTRING">Substring of # from # to</msg>
 		
+        <msg id="parser.SET_LINE">Start parsing line</msg>
+        <msg id="parser.NUMBER">Parse number from line</msg>
+        <msg id="parser.DECIMAL">Parse decimal from line</msg>
+        <msg id="parser.STRING">Parse words from line</msg>
+        <msg id="parser.WORD">Parse single word from line</msg>
+         
         <msg id="math.MIN">Minimum</msg>
         <msg id="math.MAX">Maximum</msg>
         <msg id="math.ROUND">rounds</msg>

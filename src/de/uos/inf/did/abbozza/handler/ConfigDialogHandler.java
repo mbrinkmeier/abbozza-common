@@ -37,7 +37,7 @@ public class ConfigDialogHandler extends AbstractHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchg) throws IOException {
+    protected void myHandle(HttpExchange exchg) throws IOException {
         if ( this._abbozzaServer.openConfigDialog() == 0 ) {
             sendResponse(exchg, 200, "text/plain", this._abbozzaServer.getConfiguration().get().toString());
         } else {

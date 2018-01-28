@@ -41,7 +41,7 @@ public class UploadHandler extends AbstractHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchg) throws IOException {
+    protected void myHandle(HttpExchange exchg) throws IOException {
         try {
             /*
             BufferedReader in = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));

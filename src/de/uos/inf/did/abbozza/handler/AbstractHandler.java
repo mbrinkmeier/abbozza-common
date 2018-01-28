@@ -25,10 +25,14 @@ package de.uos.inf.did.abbozza.handler;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.util.LinkedList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -37,11 +41,21 @@ import java.nio.ByteBuffer;
 public abstract class AbstractHandler implements HttpHandler {
 
     protected AbbozzaServer _abbozzaServer;
-    
+    protected boolean _allowRemote;
+    private LinkedList<InetAddress> _allowedInetAddresses;
+            
     public AbstractHandler(AbbozzaServer abbozza) {
         this._abbozzaServer = abbozza;
+        this._allowRemote = false;
+        this._allowedInetAddresses = new LinkedList<InetAddress>();
     }
     
+    public AbstractHandler(AbbozzaServer abbozza, boolean allowRemote) {
+        this._abbozzaServer = abbozza;
+        this._allowRemote = allowRemote;
+        this._allowedInetAddresses = new LinkedList<InetAddress>();
+    }
+
     public void sendResponse(HttpExchange exchg, int code, String type, String response) throws IOException {
         byte[] buf = response.getBytes("UTF-8");
         OutputStream out = exchg.getResponseBody();
@@ -52,4 +66,52 @@ public abstract class AbstractHandler implements HttpHandler {
         out.write(buf);
         out.close();
     }    
+    
+    public boolean remoteAllowed() {
+        return this._allowRemote;
+    }
+    
+    protected final boolean allowRequest(HttpExchange http) {
+      InetSocketAddress remote = http.getRemoteAddress();
+      InetSocketAddress local = http.getLocalAddress();
+      
+      // Allow all local requests
+      if ( remote.getAddress().equals(local.getAddress()) ) {
+        return true;
+      }
+      
+      if ( !this._allowRemote ) {
+        // If remote access is forbidden, deny it.
+        return false;
+      } else {
+        // If remote access is allowed, ask and store the result
+        return addInetAddress(http.getRemoteAddress().getAddress());
+      }
+    }
+    
+    private final boolean addInetAddress(InetAddress addr) {
+       // Check if already listed
+       if ( !this._allowedInetAddresses.contains(addr) ) {
+         // If not, ask wether it should be allowed
+         int result = JOptionPane.showConfirmDialog(null, AbbozzaLocale.entry("gui.remote_access", "\n" + addr.getHostName() + " (" + addr.getHostAddress() + ")"), AbbozzaLocale.entry("gui.remote_Access_title"), JOptionPane.YES_NO_OPTION);         if ( result == JOptionPane.YES_OPTION ) {
+           this._allowedInetAddresses.add(addr);           
+           return true;
+         }
+       } else {
+           return true;
+       }
+       return false;
+    }
+    
+    
+    public final void handle(HttpExchange exchg) throws IOException {
+      if ( allowRequest(exchg) ) {
+          myHandle(exchg);
+      } else {
+          sendResponse(exchg,403,"text/plain","");
+      }
+    }
+
+    protected abstract void myHandle(HttpExchange exchg) throws IOException;    
+    
 }
