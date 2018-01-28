@@ -192,6 +192,7 @@ Continuing?</msg>
         <msg id="txt.SUBSTRING">Substring of # from # to</msg>
 		
         <msg id="parser.SET_LINE">Start parsing line</msg>
+        <msg id="parser.EOL">Parser reached end of line?</msg>
         <msg id="parser.NUMBER">Parse number from line</msg>
         <msg id="parser.DECIMAL">Parse decimal from line</msg>
         <msg id="parser.STRING">Parse words from line</msg>

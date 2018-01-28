@@ -192,6 +192,7 @@ Trotzdem fortfahren?</msg>
         <msg id="txt.SUBSTRING">Teilstring von # von Position # bis</msg>
 
         <msg id="parser.SET_LINE">Beginne mit dem Zerlegen der Zeile</msg>
+        <msg id="parser.EOL">Ende der Zeile erreicht?</msg>
         <msg id="parser.NUMBER">Lese Zahl aus der Zeile</msg>
         <msg id="parser.DECIMAL">Lese Dezimalzahl aus der Zeile</msg>
         <msg id="parser.STRING">Lese Text aus der Zeile</msg>
