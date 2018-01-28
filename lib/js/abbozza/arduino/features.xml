@@ -200,6 +200,16 @@
         </category>
     </feature>
 
+    <!--- String parser -->
+    <feature id="feat.PARSER" option="parser">
+        <category id="cat.TEXT">
+            <block type="parse_set_line"></block>
+            <block type="parse_number"></block>
+            <block type="parse_decimal"></block>
+            <block type="parse_word"></block>
+            <block type="parse_string"></block>
+        </category>        
+    </feature>
 
     <!-- Operations -->		
     <feature id="feat.FUNC" option="operations">

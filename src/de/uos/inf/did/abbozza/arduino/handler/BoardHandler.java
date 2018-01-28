@@ -52,7 +52,7 @@ public class BoardHandler extends AbstractHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchg) throws IOException {
+    protected void myHandle(HttpExchange exchg) throws IOException {
         connectToBoard(exchg, this._query);
     }
     

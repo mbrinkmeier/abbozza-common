@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
     <group name="gui.blocks">
-        <item name="gui.advanced" option="advanced" default="true"/>
+        <item name="gui.advanced" option="advanced" default="true">
+            <item name="gui.parser" option="parser" default="false"/>
+        </item>
         <item name="gui.operations" option="operations" default="true">
             <item name="gui.local_variables" option="localVars" default="true"/>
         </item>
