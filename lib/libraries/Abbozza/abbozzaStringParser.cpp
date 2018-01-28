@@ -30,7 +30,12 @@ AbbozzaStringParser::AbbozzaStringParser() {
 
 
 void AbbozzaStringParser::setLine(String line) {
-    buffer = line;
+    buffer = String(line);
+}
+
+
+boolean AbbozzaStringParser::endOfLine() {
+    return ( buffer.length() == 0 );
 }
 
 

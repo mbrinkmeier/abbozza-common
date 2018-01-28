@@ -29,6 +29,7 @@ class AbbozzaStringParser {
 public:
     AbbozzaStringParser();
     void setLine(String line);
+    boolean endOfLine();
     String parse_word();
     int parse_int();
     long parse_long();
