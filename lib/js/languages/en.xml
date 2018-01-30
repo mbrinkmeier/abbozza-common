@@ -35,6 +35,7 @@ Continuing?</msg>
         <msg id="msg.cleaning_buildsystem">Cleaning buildsystem</msg>
     </messages>
     <gui>
+        <msg id="gui.when">When</msg>
         <msg id="gui.generate_button">Generate Code</msg>
         <msg id="gui.upload_button">Upload Code to Board</msg>
         <msg id="gui.new_button">New Sketch</msg>

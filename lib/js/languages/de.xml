@@ -35,6 +35,7 @@ Trotzdem fortfahren?</msg>
         <msg id="msg.cleaning_buildsystem">Bereinige Kompilierverzeichnis</msg>
     </messages>
     <gui>
+        <msg id="gui.when">Wenn</msg>
         <msg id="gui.generate_button">Erzeuge Code</msg>
         <msg id="gui.upload_button">Lade Code hoch</msg>
         <msg id="gui.new_button">Neuer Sketch</msg>
