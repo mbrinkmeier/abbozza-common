@@ -128,6 +128,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.clean_buildsystem">Bereinigen</msg>
         <msg id="gui.remote_access">Entfernten Zugriff von # erlauben?</msg>
         <msg id="gui.remote_access_title">Entfernten Zugriff erlauben?</msg>
+        <msg id="gui.send_newline">Zeilenumbruch senden</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
