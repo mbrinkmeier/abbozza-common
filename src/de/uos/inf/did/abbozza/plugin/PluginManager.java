@@ -26,12 +26,12 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -110,8 +110,8 @@ public class PluginManager implements HttpHandler {
         });
         
         addJars(jars);
-
     }
+    
     
     private void addDirs(File dirs[]) {
         Plugin plugin;
@@ -157,6 +157,8 @@ public class PluginManager implements HttpHandler {
                             if ( checkRequirements(plugin)) {
                                 AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " loaded",AbbozzaLogger.INFO);
                                 this._plugins.put(plugin.getId(), plugin);
+                            } else {
+                                AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " could not be loaded, due to missing requirements",AbbozzaLogger.INFO);                                
                             }
                         }
                     }
@@ -312,6 +314,7 @@ public class PluginManager implements HttpHandler {
     private boolean checkRequirements(Plugin plugin) {
         String libs = "";
         if ( !plugin.getSystem().equals( this._abbozza.getSystem()) ) {
+            AbbozzaLogger.err("PluginManager: Plugin " + plugin.getId() + " not for this system.");
             return false;
         }
         boolean foundAll = true;
@@ -319,13 +322,29 @@ public class PluginManager implements HttpHandler {
         if ( requirements == null ) return true;
         Node child = requirements.getFirstChild();
         while ( child != null) {
-            if ( child.getNodeName().equals("library")) {
+            if ( child.getNodeName().equals("library") ) {
                 String name = child.getAttributes().getNamedItem("name").getNodeValue();
                 // If a required library is not found, reject the plugin
                 if ( !this._abbozza.checkLibrary(name) ) {
                     AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " : required library " + name + " not found",AbbozzaLogger.INFO);
                     libs = libs + "\n- " + name;
                     foundAll = false;
+                }
+            } else if ( child.getNodeName().equals("install") ) {
+                String name = child.getAttributes().getNamedItem("file").getNodeValue();
+                String targetFile = child.getAttributes().getNamedItem("target").getNodeValue();
+                
+                if ( name != null ) {
+                    InputStream stream = plugin.getStream(name);
+                    if ( stream != null ) {
+                        if ( !_abbozza.installPluginFile(stream, targetFile) ) {
+                            AbbozzaLogger.err("PluginManager: Could not copy " + name + " to " + targetFile);
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                    
                 }
             }
             child = child.getNextSibling();
@@ -335,4 +354,5 @@ public class PluginManager implements HttpHandler {
         }
         return foundAll;
     }
+        
 }

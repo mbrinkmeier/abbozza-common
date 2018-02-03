@@ -53,6 +53,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.InetSocketAddress;
@@ -156,7 +157,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Initialize the logger
         AbbozzaLogger.init();
-        AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
+        AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
         AbbozzaLogger.registerStream(System.out);
 
         // Setting paths
@@ -988,4 +989,5 @@ public abstract class AbbozzaServer implements HttpHandler {
         return "-1.-1 (common)";
     };
 
+    public abstract boolean installPluginFile(InputStream stream, String name);
 }

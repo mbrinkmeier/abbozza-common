@@ -14,6 +14,7 @@ import de.uos.inf.did.abbozza.plugin.PluginManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
@@ -294,6 +295,11 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
     @Override
     public File queryPathToBoard(String path) {
         return null;
+    }
+
+    @Override
+    public boolean installPluginFile(InputStream stream, String name) {
+        return true;
     }
     
 }

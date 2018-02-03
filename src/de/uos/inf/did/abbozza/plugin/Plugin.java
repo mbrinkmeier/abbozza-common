@@ -22,21 +22,16 @@
  */
 package de.uos.inf.did.abbozza.plugin;
 
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.Tools;
 import de.uos.inf.did.abbozza.tools.XMLTool;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,7 +39,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * This class implements a basic plugin for abbozza! 
@@ -106,6 +100,7 @@ public class Plugin {
                 if ( root.getAttributes().getNamedItem("parent") != null ) {
                     this._parentOption = root.getAttributes().getNamedItem("parent").getNodeValue();
                 }
+                
                 NodeList children = root.getChildNodes();
                 Node child;
                 for ( int i = 0; i < children.getLength(); i++) {
@@ -280,4 +275,18 @@ public class Plugin {
     public String getParentOption() {
         return this._parentOption;
     }
+    
+    public InputStream getStream(String fileName) {
+        URL url;
+        File file = null;
+        String content = "";
+        try {
+            url = new URL(this._url.toString() + fileName);
+            return url.openStream();
+        } catch (Exception ex) {
+            AbbozzaLogger.err("Plugin " + getId() + ": Could not access " + fileName);
+        }
+       return null;
+    }
+    
 }
