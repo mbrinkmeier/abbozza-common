@@ -47,12 +47,12 @@ import de.uos.inf.did.abbozza.plugin.PluginManager;
 import de.uos.inf.did.abbozza.plugin.Plugin;
 import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Desktop;
-import java.awt.Font;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.InetSocketAddress;
@@ -988,4 +988,5 @@ public abstract class AbbozzaServer implements HttpHandler {
         return "-1.-1 (common)";
     };
 
+    public abstract boolean installPluginFile(InputStream stream, String name);
 }

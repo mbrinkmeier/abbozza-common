@@ -22,16 +22,13 @@
  */
 package de.uos.inf.did.abbozza.plugin;
 
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.Tools;
 import de.uos.inf.did.abbozza.tools.XMLTool;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Vector;
@@ -44,7 +41,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * This class implements a basic plugin for abbozza! 
@@ -279,5 +275,15 @@ public class Plugin {
 
     public String getParentOption() {
         return this._parentOption;
+    }
+    
+    public InputStream getStream(String name) {
+        try {
+            URL url = new URL(this._url.toString() + name);
+            return url.openStream();
+        } catch (Exception ex) {
+            AbbozzaLogger.err("Plugin " + getId() + " : Could not access " + name);
+            return null;
+        }
     }
 }
