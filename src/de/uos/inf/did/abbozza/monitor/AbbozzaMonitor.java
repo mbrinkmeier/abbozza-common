@@ -73,7 +73,6 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     protected Queue<Message> _msgQueue;
     protected HashMap<String, Message> _waitingMsg;
     private Sender _sender;
-    private boolean sendNewline;
 
     // private AbbozzaMonitorPanel monitor = null;
     /**
@@ -110,9 +109,6 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
         initComponents();
 
-        sendNewline = true;
-        nlCheckBox.setSelected(sendNewline);
-    
         ImageIcon icon = new ImageIcon(AbbozzaMonitor.class.getResource("/img/abbozza_icon_monitor.png"));
         this.setIconImage(icon.getImage());
 
@@ -190,9 +186,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         logoPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        portBox = new javax.swing.JComboBox<>();
-        rateBox = new javax.swing.JComboBox<>();
-        nlCheckBox = new javax.swing.JCheckBox();
+        portBox = new javax.swing.JComboBox<String>();
+        rateBox = new javax.swing.JComboBox<String>();
 
         protocolPopUp.setToolTipText("");
 
@@ -271,22 +266,13 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         });
         jPanel2.add(portBox);
 
-        rateBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "300", "1200", "2400", "4800", "9600", "14400", "19200", "28800", "38400", "57600", "115200", "230400" }));
+        rateBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "300", "1200", "2400", "4800", "9600", "14400", "19200", "28800", "38400", "57600", "115200", "230400" }));
         rateBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rateBoxActionPerformed(evt);
             }
         });
         jPanel2.add(rateBox);
-
-        nlCheckBox.setText(AbbozzaLocale.entry("gui.send_newline"));
-        nlCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nlCheckBoxActionPerformed(evt);
-            }
-        });
-        jPanel2.add(nlCheckBox);
-        nlCheckBox.getAccessibleContext().setAccessibleName("nlCheckBox");
 
         logoPanel.add(jPanel2, java.awt.BorderLayout.WEST);
 
@@ -301,9 +287,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         String msg = (String) this.sendText.getEditor().getItem();
-        if (msg != null && !msg.isEmpty()) {      
-            if ( sendNewline ) msg = msg + "\n";
-            this.sendMessage(msg);
+        if (msg != null && !msg.isEmpty()) {            
+            this.sendMessage(msg + "\n");
             this.sendText.insertItemAt(new String(msg),0);
             this.sendText.setSelectedItem(null);
         }
@@ -336,15 +321,10 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         }
     }//GEN-LAST:event_rateBoxActionPerformed
 
-    private void nlCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nlCheckBoxActionPerformed
-        sendNewline = nlCheckBox.isSelected();
-    }//GEN-LAST:event_nlCheckBoxActionPerformed
-
     private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
         String msg = evt.getActionCommand();
         if (msg != null && !msg.isEmpty()) {
-            if ( sendNewline ) msg = msg + "\n";
-            this.sendMessage(msg);
+            this.sendMessage(msg + "\n");
             this.sendText.insertItemAt(new String(msg),0);
             this.sendText.setSelectedItem(null);
         }
@@ -371,7 +351,6 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel logoPanel;
-    private javax.swing.JCheckBox nlCheckBox;
     private javax.swing.JComboBox<String> portBox;
     private javax.swing.JPopupMenu protocolPopUp;
     private javax.swing.JComboBox<String> rateBox;
@@ -437,7 +416,6 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     public Message sendMessage(String msg) {
         Message mesg = null;
         if (this.boardPort != null) {
-            if ( sendNewline ) msg = msg + "\n";
             mesg = new Message("", msg, null, null, 0);
             _msgQueue.add(mesg);
         }

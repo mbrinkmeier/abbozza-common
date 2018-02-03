@@ -26,12 +26,12 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -325,6 +325,15 @@ public class PluginManager implements HttpHandler {
                 if ( !this._abbozza.checkLibrary(name) ) {
                     AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " : required library " + name + " not found",AbbozzaLogger.INFO);
                     libs = libs + "\n- " + name;
+                    foundAll = false;
+                }
+            } else if ( child.getNodeName().equals("install")) {
+                String name = child.getAttributes().getNamedItem("file").getNodeValue();
+                String targetName = child.getAttributes().getNamedItem("target").getNodeValue();
+                InputStream stream = plugin.getStream(name);
+                
+                if ( (stream == null ) || (!this._abbozza.installPluginFile(stream,targetName))) {
+                    AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " : file " + name + " installed to " + targetName,AbbozzaLogger.INFO);
                     foundAll = false;
                 }
             }
