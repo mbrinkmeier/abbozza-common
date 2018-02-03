@@ -40,10 +40,14 @@ import de.uos.inf.did.abbozza.handler.SerialHandler;
 import de.uos.inf.did.abbozza.plugin.PluginConfigPanel;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -409,6 +413,19 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
     public String getSystemVersion() {
         return SYS_VERSION;
     };
+
+    @Override
+    public boolean installPluginFile(InputStream stream, String name) {
+        File target = new File(sketchbookPath + "/libraries/Abbozza/" + name);
+        try {
+            AbbozzaLogger.info("Copying " + name + " to " + target.toString());
+            Files.copy(stream, target.toPath() , StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            AbbozzaLogger.err("Could not copy " + name + " to " + target.toString());
+            return false;
+        }
+        return true;
+    }
 
 
 }
