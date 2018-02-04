@@ -331,20 +331,13 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.OCTAVE_THREE_LINE">dreigestrichenen Oktave (höher)</msg>
         <msg id="dev.OCTAVE_FOUR_LINE">viergestrichenen Oktave (sehr hoch)</msg>
         
-        <msg id="dev.I2C_MASTER">Aktiviere I2C als Master</msg>
-        <msg id="dev.I2C_SLAVE">Aktiviere I2C als Slave mit Adresse</msg>
-        <msg id="dev.I2C_MASTER_SEND">I2C: Sende Byte # an Adresse</msg>
-        <msg id="dev.I2C_MASTER_SEND_STRING">I2C: Sende # an Adresse</msg>
-        <msg id="dev.I2C_MASTER_REQUEST">I2C: Fordere # Bytes von Adresse</msg>
-        <msg id="dev.I2C_BEGIN">I2C: Beginne Transaktion mit Adresse</msg>
-        <msg id="dev.I2C_END">I2C: Beende Transaktion</msg>
-        <msg id="dev.I2C_WRITE">I2C: Sende Byte # an Adresse</msg>
-        <msg id="dev.I2C_WRITE_STRING">I2C: Sende #  an Adresse</msg>
-        <msg id="dev.I2C_AVAILABLE">I2C: verfügbare Bytes</msg>
-        <msg id="dev.I2C_READ">I2C: Lese Byte</msg>
-        <msg id="dev.I2C_RECEIVE">I2C: Führe # aus, wenn Nachricht empfangen wird</msg>
-        <msg id="dev.I2C_REQUEST">I2C: Führe # aus, wenn angefragt</msg>
-
+        <msg id="i2c.WRITE">I2C: Sende per I2C an Adresse</msg>
+        <msg id="i2c.WRITE_BYTE">Sende Byte</msg>
+        <msg id="i2c.WRITE_SHORT">Sende als 2 Bytes</msg>
+        <msg id="i2c.WRITE_INT">Sende als 4 Bytes</msg>
+        <msg id="i2c.WRITE_TEXT">Sende</msg>
+        <msg id="i2c.READ">I2C: Lese von Adresse # Anzahl Bytes</msg>
+                
         <msg id="AND">und</msg>
         <msg id="MILLIS">Zeit in Millisekunden (ms)</msg>
         <msg id="MICROS">Zeit in Mikroseconden (µs)</msg>
