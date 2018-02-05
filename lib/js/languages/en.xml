@@ -115,6 +115,9 @@ Continuing?</msg>
         <msg id="gui.install">Install</msg>
         <msg id="gui.reinstall">Reinstallieren</msg>
         <msg id="gui.plugin_panel">Plugins</msg>
+        <msg id="gui.plugin_url">URL of plugin list</msg>
+        <msg id="gui.plugin_error">Plugin Installation failed</msg>
+        <msg id="gui.plugin_installed">Plugin installiert.</msg>
         <msg id="gui.no_i2c">No I2C</msg>
         <msg id="gui.i2c_master">I2C Master</msg>
         <msg id="gui.i2c_slave">I2C Slave</msg>

@@ -52,13 +52,6 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JComboBox" name="urlComboBox">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="1">
-            <StringItem index="0" value="http://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/plugins.xml"/>
-          </StringArray>
-        </Property>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="urlComboBoxActionPerformed"/>
       </Events>
