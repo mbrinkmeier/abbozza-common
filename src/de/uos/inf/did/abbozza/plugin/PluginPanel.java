@@ -5,9 +5,9 @@
  */
 package de.uos.inf.did.abbozza.plugin;
 
-import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import java.awt.Color;
 import java.awt.Component;
 import java.net.MalformedURLException;

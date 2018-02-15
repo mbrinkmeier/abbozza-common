@@ -22,9 +22,9 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;

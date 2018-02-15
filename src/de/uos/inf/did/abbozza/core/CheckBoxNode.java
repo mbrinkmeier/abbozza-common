@@ -21,7 +21,7 @@
  * @fileoverview A check box node in the option tree of the abbozza! server 
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.core;
 
 import java.util.Enumeration;
 import javax.swing.AbstractButton;

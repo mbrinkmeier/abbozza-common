@@ -21,7 +21,7 @@
  * @fileoverview A radio button in the option tree of abbozza! 
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.core;
 
 import java.util.Enumeration;
 import javax.swing.AbstractButton;

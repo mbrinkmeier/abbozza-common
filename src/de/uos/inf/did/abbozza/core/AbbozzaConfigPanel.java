@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.core;
 
 import javax.swing.JPanel;
 

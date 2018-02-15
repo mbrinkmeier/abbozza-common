@@ -19,13 +19,31 @@
  * @fileoverview ... @author michael.brinkmeier@uni-osnabrueck.de (Michael
  * Brinkmeier)
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.core;
 
 /**
  *
- * @author mbrinkmeier
+ * @author michael
  */
-public interface AbbozzaLoggerListener {
+public class LocaleEntry {
+
+    private String locale;
+    private String name;
     
-    public void logged(String msg);
+    public LocaleEntry(String n, String l) {
+        name = n;
+        locale = l;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public String getLocale() {
+        return locale;
+    }
+    
+    public String toString() {
+        return name;
+    }
 }

@@ -21,7 +21,7 @@
  * @fileoverview The cell editor for the option tree of abbozza! 
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.core;
 
 import java.awt.Component;
 import java.util.EventObject;

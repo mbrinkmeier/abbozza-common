@@ -5,10 +5,10 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
-import de.uos.inf.did.abbozza.AbbozzaConfig;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaConfig;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
 import java.awt.event.ActionEvent;

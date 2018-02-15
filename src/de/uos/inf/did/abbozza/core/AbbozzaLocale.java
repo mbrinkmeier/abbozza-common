@@ -19,7 +19,7 @@
  * @fileoverview ... @author michael.brinkmeier@uni-osnabrueck.de (Michael
  * Brinkmeier)
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.core;
 
 import org.w3c.dom.*;
 import javax.xml.parsers.*;

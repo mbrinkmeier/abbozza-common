@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.core;
 
 import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Dimension;
@@ -51,10 +51,8 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
-        setMaximumSize(new java.awt.Dimension(320, 200));
         setMinimumSize(new java.awt.Dimension(320, 200));
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(320, 200));
         setResizable(false);
         getContentPane().setLayout(null);
 

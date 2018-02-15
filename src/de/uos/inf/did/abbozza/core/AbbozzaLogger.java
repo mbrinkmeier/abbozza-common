@@ -20,7 +20,7 @@
  * 
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.core;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;

@@ -24,7 +24,7 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
-import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
 import java.io.IOException;
 import java.util.logging.Level;

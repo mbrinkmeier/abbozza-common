@@ -23,7 +23,7 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import java.io.IOException;
 
 /**
