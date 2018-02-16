@@ -221,13 +221,17 @@ page {
 }
 
 abbozza-hint {
-  display: block-inline;
+  display: block;
   background-color: white;
+	background-image: url("/img/hint.png");
+	background-repeat : no-repeat;
   border: 2pt rgb(200,200,200) solid;
 	border-radius: 4pt;
-  padding: 1pt;
-  margin: 3pt;
+  padding: 2px 2px 2px 22px;
   height: 20px;
-  width: 20px;
-	margin: 1pt;
+	margin: 2pt;
+	width: auto;
+	max-height: 24px;
+	max-width: 100%;
+	overflow: hidden;
 }
