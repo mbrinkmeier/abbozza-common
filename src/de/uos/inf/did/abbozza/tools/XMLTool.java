@@ -17,7 +17,7 @@
  */
 package de.uos.inf.did.abbozza.tools;
 
-import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;

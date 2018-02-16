@@ -25,7 +25,7 @@ package de.uos.inf.did.abbozza.plugin;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import java.io.IOException;
 import java.io.OutputStream;
 

@@ -115,6 +115,9 @@ Continuing?</msg>
         <msg id="gui.install">Install</msg>
         <msg id="gui.reinstall">Reinstallieren</msg>
         <msg id="gui.plugin_panel">Plugins</msg>
+        <msg id="gui.plugin_url">URL of plugin list</msg>
+        <msg id="gui.plugin_error">Plugin Installation failed</msg>
+        <msg id="gui.plugin_installed">Plugin installiert.</msg>
         <msg id="gui.no_i2c">No I2C</msg>
         <msg id="gui.i2c_master">I2C Master</msg>
         <msg id="gui.i2c_slave">I2C Slave</msg>
@@ -188,6 +191,7 @@ Continuing?</msg>
         <msg id="txt.FROMNUMBER">Convert # to string</msg>
         <msg id="txt.TEXTFROMASCII">Character with ASCII-code</msg>
         <msg id="txt.ASCIIFROMTEXT">ASCII-code of</msg>
+        <msg id="txt.ASCIIFROMTEXTPOS">ASCII-Code of char # of</msg>
         <msg id="txt.LENGTH">Length of</msg>
         <msg id="txt.SUBSTRING">Substring of # from # to</msg>
 		
@@ -332,21 +336,14 @@ Continuing?</msg>
         <msg id="dev.OCTAVE_TWO_LINE">two-line octave (high)</msg>
         <msg id="dev.OCTAVE_THREE_LINE">three-line octave (higher)</msg>
         <msg id="dev.OCTAVE_FOUR_LINE">four-line octave (very high)</msg>			
-        
-        <msg id="dev.I2C_MASTER">Activate I2C as master</msg>
-        <msg id="dev.I2C_SLAVE">Activate I2C as slave with address</msg>
-        <msg id="dev.I2C_MASTER_SEND">I2C: Send byte # to address</msg>
-        <msg id="dev.I2C_MASTER_SEND_STRING">I2C: Send # an Adresse</msg>
-        <msg id="dev.I2C_MASTER_REQUEST">I2C: Request # bytes from address</msg>
-        <msg id="dev.I2C_BEGIN">I2C: Start transmission to adresse</msg>
-        <msg id="dev.I2C_END">I2C: End transmission</msg>
-        <msg id="dev.I2C_WRITE">I2C: Send byte # to address</msg>
-        <msg id="dev.I2C_WRITE_STRING">I2C: Send # to address</msg>
-        <msg id="dev.I2C_AVAILABLE">I2C: available bytes</msg>
-        <msg id="dev.I2C_READ">I2C: read byte</msg>
-        <msg id="dev.I2C_RECEIVE">I2C: call # if message is received</msg>
-        <msg id="dev.I2C_REQUEST">I2C: call # if on request is received</msg>
 
+        <msg id="i2c.WRITE">I2C: Send to address</msg>
+        <msg id="i2c.WRITE_BYTE">Send Byte</msg>
+        <msg id="i2c.WRITE_SHORT">Send 2 Bytes</msg>
+        <msg id="i2c.WRITE_INT">Send 4 Bytes</msg>
+        <msg id="i2c.WRITE_TEXT">Send</msg>
+        <msg id="i2c.READ">I2C: Request from address # Number of bytes</msg>
+        
         <msg id="SETUP">Setup</msg>
         <msg id="LOOP">Main loop</msg>
         <msg id="DEVICES">Devices</msg>

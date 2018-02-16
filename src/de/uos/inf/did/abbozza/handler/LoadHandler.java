@@ -22,9 +22,9 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
@@ -107,7 +107,7 @@ public class LoadHandler extends AbstractHandler {
         chooser.setAccessory(panel);
         chooser.addPropertyChangeListener(panel);
 
-        chooser.setFileFilter(new FileNameExtensionFilter("abbozza! Sketches und Aufgabenarchive (*.abz, *.abj)", "abz","abj"));
+        chooser.setFileFilter(new FileNameExtensionFilter("abbozza! Sketches und Aufgabenarchive (*.abz, *.abj, *.jar)", "abz","abj","jar"));
         if ( lastSketchFile.isDirectory() ) {
             chooser.setCurrentDirectory(lastSketchFile);            
         } else {
@@ -129,7 +129,7 @@ public class LoadHandler extends AbstractHandler {
             
             this._abbozzaServer.setLastSketchFile(url);
             
-            if ( url.toString().endsWith("abj") ) {
+            if ( url.toString().endsWith("abj") || url.toString().endsWith("jar") ) {
                     result = getStartFromAbj(url);
             } else {
                     result = getSketchFromFile(url); 
@@ -171,7 +171,7 @@ public class LoadHandler extends AbstractHandler {
         try {
             url = new URL(path);
             AbbozzaLogger.out("LoadHandler: loading from given url " + path ,AbbozzaLogger.DEBUG);                
-            if ( path.endsWith("abj")) {
+            if ( path.endsWith("abj") || path.endsWith("jar") ) {
                 path = "jar:" + url.toString() + "!/start.abz";
                 url = new URL(path);
             }

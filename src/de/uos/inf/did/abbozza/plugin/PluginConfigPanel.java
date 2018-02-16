@@ -5,12 +5,12 @@
  */
 package de.uos.inf.did.abbozza.plugin;
 
-import de.uos.inf.did.abbozza.AbbozzaConfig;
-import de.uos.inf.did.abbozza.AbbozzaConfigPanel;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.AbbozzaServer;
-import de.uos.inf.did.abbozza.Tools;
+import de.uos.inf.did.abbozza.core.AbbozzaConfig;
+import de.uos.inf.did.abbozza.core.AbbozzaConfigPanel;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.Tools;
 import de.uos.inf.did.abbozza.install.InstallTool;
 import de.uos.inf.did.abbozza.tools.XMLTool;
 import java.awt.BorderLayout;
@@ -28,9 +28,11 @@ import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
@@ -50,6 +52,9 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
      */
     public PluginConfigPanel() {
         initComponents();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
+        model.addElement(AbbozzaServer.getConfig().getPluginUrl());
+        urlComboBox.setModel(model);        
         reloadPlugins();
     }
 
@@ -62,13 +67,12 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        urlComboBox = new javax.swing.JComboBox<String>();
+        urlComboBox = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         pluginList = new javax.swing.JList<Node>();
         installButton = new javax.swing.JButton();
 
-        urlComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "http://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/plugins.xml" }));
         urlComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlComboBoxActionPerformed(evt);
@@ -254,7 +258,10 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
             File[] jars = new File[1];
             jars[0] = file;
             AbbozzaServer.getPluginManager().addJars(jars);
+            JOptionPane.showMessageDialog(this,AbbozzaLocale.entry("gui.plugin_installed"),AbbozzaLocale.entry("gui.plugin_installed"),JOptionPane.INFORMATION_MESSAGE);
+            reloadPlugins();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this,ex.getLocalizedMessage(),AbbozzaLocale.entry("gui.plugin_error"),JOptionPane.ERROR_MESSAGE);
             AbbozzaLogger.err("Can't write to " + file.getAbsolutePath());
         }
         
