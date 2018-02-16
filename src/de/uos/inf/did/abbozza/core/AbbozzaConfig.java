@@ -81,7 +81,7 @@ public class AbbozzaConfig {
     private boolean config_browserStart = true;
     private String config_browserPath = "";
     private String config_locale = "de";
-    private String config_updateUrl = "http://inf-didaktik.rz.uos.de/abbozza/current/";
+    private String config_updateUrl = "http://inf-didaktik.rz.uos.de/downloads/abbozza/current/";
     private String config_pluginUrl = "http://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/" + AbbozzaServer.getInstance().getSystem() + "/plugins.xml";
     private boolean config_update = false;
     private String config_taskPath = configPath;

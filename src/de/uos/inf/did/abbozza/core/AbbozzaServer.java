@@ -564,9 +564,23 @@ public abstract class AbbozzaServer implements HttpHandler {
      * This operation checks for updates
      * 
      * @param reportNoUpdate True if an update is available.
+     * @param url
      */
     public void checkForUpdate(boolean reportNoUpdate) {
-        String updateUrl = AbbozzaServer.getConfig().getUpdateUrl() + this.system;
+        checkForUpdate(reportNoUpdate, null);
+    }
+
+        /**
+     * This operation checks for updates
+     * 
+     * @param reportNoUpdate True if an update is available.
+     * @param confurl
+     */
+    public void checkForUpdate(boolean reportNoUpdate, String confurl) {
+        String updateUrl = AbbozzaServer.getConfig().getUpdateUrl() + this.system + "/";
+        if ( confurl != null ) {
+            updateUrl = confurl + this.system + "/";
+        }
         String version = "";
 
         int major = 0;
@@ -592,9 +606,9 @@ public abstract class AbbozzaServer implements HttpHandler {
             } catch (NumberFormatException ex) {
             }
             AbbozzaLogger.out("Checking for update at " + updateUrl, AbbozzaLogger.INFO);
-            AbbozzaLogger.out("Update version " + major + "." + minor + "." + rev, AbbozzaLogger.INFO);
+            AbbozzaLogger.out("Update version " + major + "." + minor + "." + rev + "." + hotfix, AbbozzaLogger.INFO);
 
-            String[] sysver = getSystemVersion().split(".");
+            String[] sysver = getSystemVersion().split("[\\ \\.]");
             int sys_major = Integer.parseInt(sysver[0]);
             int sys_minor = Integer.parseInt(sysver[1]);
             int sys_rev = Integer.parseInt(sysver[2]);
@@ -604,7 +618,7 @@ public abstract class AbbozzaServer implements HttpHandler {
             if ((major > sys_major)
                     || ((major == sys_major) && (minor > sys_minor))
                     || ((major == sys_major) && (minor == sys_minor) && (rev > sys_rev))
-                    || ((major == sys_major) && (minor == sys_minor) && (rev > sys_rev) && (hotfix > sys_hotfix))) {
+                    || ((major == sys_major) && (minor == sys_minor) && (rev == sys_rev) && (hotfix > sys_hotfix))) {
                 AbbozzaLogger.out("New version found", AbbozzaLogger.INFO);
                 int res = JOptionPane.showOptionDialog(null, AbbozzaLocale.entry("gui.new_version", version), AbbozzaLocale.entry("gui.new_version_title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (res == JOptionPane.NO_OPTION) {
@@ -614,7 +628,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                 installUpdate(version,updateUrl);
                 
             } else {
-                AbbozzaLogger.out(AbbozzaLocale.entry("gui.no_update"), AbbozzaLogger.INFO);
+                AbbozzaLogger.out("No VERSION found at " + updateUrl , AbbozzaLogger.INFO);
                 if (reportNoUpdate) {
                     JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("gui.no_update"));
                 }
@@ -622,7 +636,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         } catch (MalformedURLException ex) {
             AbbozzaLogger.err("Malformed URL for update: " + updateUrl);
         } catch (IOException ex) {
-            AbbozzaLogger.err("VERSION file not found");
+            AbbozzaLogger.err("VERSION file not found at " + updateUrl);
         }
     }
 

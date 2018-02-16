@@ -513,7 +513,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_browserButtonActionPerformed
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        AbbozzaServer.getInstance().checkForUpdate(true);
+        AbbozzaServer.getInstance().checkForUpdate(true,updateUrlField.getText());
     }//GEN-LAST:event_updateActionPerformed
 
     private void taskPathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskPathButtonActionPerformed
