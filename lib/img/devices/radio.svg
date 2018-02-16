@@ -1,0 +1,20 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="177.166pt" height="177.166pt">
+<defs/>
+<g id="layer0">
+  <path id="shape0" transform="translate(22.1459, 24.5675)" fill="#000000" fill-rule="evenodd" d="M177.166 88.5828C177.166 39.6599 137.506 2.99567e-15 88.5828 0C39.6599 -2.99567e-15 5.99133e-15 39.6599 0 88.5828C-5.99133e-15 137.506 39.6599 177.166 88.5828 177.166C137.506 177.166 177.166 137.506 177.166 88.5828"/>
+  <path id="shape1" transform="translate(31.5391, 34.5074)" fill="#ffffff" fill-rule="evenodd" d="M159.449 79.7245C159.449 35.6939 123.755 2.6961e-15 79.7245 0C35.6939 -2.6961e-15 5.3922e-15 35.6939 0 79.7245C-5.3922e-15 123.755 35.6939 159.449 79.7245 159.449C123.755 159.449 159.449 123.755 159.449 79.7245"/>
+  <path id="shape2" transform="translate(39.8625, 42.2841)" fill="#000000" fill-rule="evenodd" d="M141.733 70.8663C141.733 31.7279 110.005 2.39653e-15 70.8663 0C31.7279 -2.39653e-15 4.79307e-15 31.7279 0 70.8663C-4.79307e-15 110.005 31.7279 141.733 70.8663 141.733C110.005 141.733 141.733 110.005 141.733 70.8663"/>
+  <g id="id2" transform="" fill="none">
+   <g id="bg-id2" transform="" fill="none"/>
+   <g id="bo-id2" transform="" fill="none"/>
+  </g>
+  <path id="shape3" transform="translate(49.2557, 52.224)" fill="#ffffff" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.41732529000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="1.98425540600" d="M124.016 62.008C124.016 27.7619 96.254 2.09697e-15 62.008 0C27.7619 -2.09697e-15 4.19393e-15 27.7619 0 62.008C-4.19393e-15 96.254 27.7619 124.016 62.008 124.016C96.254 124.016 124.016 96.254 124.016 62.008"/>
+  <path id="shape4" transform="translate(57.5791, 60.0007)" fill="#000000" fill-rule="evenodd" d="M106.299 53.1497C106.299 23.7959 82.5035 1.7974e-15 53.1497 0C23.7959 -1.7974e-15 3.5948e-15 23.7959 0 53.1497C-3.5948e-15 82.5035 23.7959 106.299 53.1497 106.299C82.5035 106.299 106.299 82.5035 106.299 53.1497"/>
+  <path id="shape5" transform="translate(66.9723, 69.9405)" fill="#ffffff" fill-rule="evenodd" d="M88.5828 44.2914C88.5828 19.8299 68.7529 1.49783e-15 44.2914 0C19.8299 -1.49783e-15 2.99567e-15 19.8299 0 44.2914C-2.99567e-15 68.7529 19.8299 88.5828 44.2914 88.5828C68.7529 88.5828 88.5828 68.7529 88.5828 44.2914"/>
+  <path id="shape6" transform="matrix(1 -0.00454904 0 1 32.887 124.257)" fill="#ffffff" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.41732529000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="1.98425540600" d="M125.951 97.2558L29.7329 97.2558L0 37.1484L77.8417 7.64e-15L155.683 37.1484Z"/>
+  <ellipse id="shape7" transform="translate(75.4239, 80.2711)" rx="28.24385507246pt" ry="27.07009035409pt" cx="28.24385507246pt" cy="27.07009035409pt" fill="#000000" fill-rule="evenodd" stroke="#000000" stroke-width="1.25000000000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2.00000000000"/>
+ </g><g id="layer1"/>
+</svg>

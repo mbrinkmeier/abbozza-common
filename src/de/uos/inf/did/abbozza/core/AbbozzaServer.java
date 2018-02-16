@@ -564,7 +564,6 @@ public abstract class AbbozzaServer implements HttpHandler {
      * This operation checks for updates
      * 
      * @param reportNoUpdate True if an update is available.
-     * @param url
      */
     public void checkForUpdate(boolean reportNoUpdate) {
         checkForUpdate(reportNoUpdate, null);
@@ -574,7 +573,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      * This operation checks for updates
      * 
      * @param reportNoUpdate True if an update is available.
-     * @param confurl
+     * @param confurl An url overriding the config value
      */
     public void checkForUpdate(boolean reportNoUpdate, String confurl) {
         String updateUrl = AbbozzaServer.getConfig().getUpdateUrl() + this.system + "/";

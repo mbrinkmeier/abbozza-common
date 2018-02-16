@@ -191,6 +191,7 @@ Continuing?</msg>
         <msg id="txt.FROMNUMBER">Convert # to string</msg>
         <msg id="txt.TEXTFROMASCII">Character with ASCII-code</msg>
         <msg id="txt.ASCIIFROMTEXT">ASCII-code of</msg>
+        <msg id="txt.ASCIIFROMTEXTPOS">ASCII-Code of char # of</msg>
         <msg id="txt.LENGTH">Length of</msg>
         <msg id="txt.SUBSTRING">Substring of # from # to</msg>
 		
