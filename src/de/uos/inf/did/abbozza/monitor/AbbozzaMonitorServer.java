@@ -301,5 +301,9 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
     public boolean installPluginFile(InputStream stream, String name) {
         return true;
     }
+
+    @Override
+    public void installUpdate(String version, String updateUrl) {
+    }
     
 }

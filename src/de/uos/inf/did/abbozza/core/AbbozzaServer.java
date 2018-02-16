@@ -47,12 +47,14 @@ import de.uos.inf.did.abbozza.plugin.PluginManager;
 import de.uos.inf.did.abbozza.plugin.Plugin;
 import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.InetSocketAddress;
@@ -93,7 +95,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     // Version
     public static final int VER_MAJOR = 0;     // Major version of common core
-    public static final int VER_MINOR = 11;    // Minor version of common core
+    public static final int VER_MINOR = 12;    // Minor version of common core
     public static final int VER_HOTFIX = 0;    // Minor version of common core
 
     // Instance
@@ -564,9 +566,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      * @param reportNoUpdate True if an update is available.
      */
     public void checkForUpdate(boolean reportNoUpdate) {
-        // TODO !!!
-        /*
-        String updateUrl = AbbozzaServer.getConfig().getUpdateUrl();
+        String updateUrl = AbbozzaServer.getConfig().getUpdateUrl() + this.system;
         String version = "";
 
         int major = 0;
@@ -594,48 +594,25 @@ public abstract class AbbozzaServer implements HttpHandler {
             AbbozzaLogger.out("Checking for update at " + updateUrl, AbbozzaLogger.INFO);
             AbbozzaLogger.out("Update version " + major + "." + minor + "." + rev, AbbozzaLogger.INFO);
 
+            String[] sysver = getSystemVersion().split(".");
+            int sys_major = Integer.parseInt(sysver[0]);
+            int sys_minor = Integer.parseInt(sysver[1]);
+            int sys_rev = Integer.parseInt(sysver[2]);
+            int sys_hotfix = Integer.parseInt(sysver[3]);
+
             // Checking version of update
-            if ((major > VER_MAJOR)
-                    || ((major == VER_MAJOR) && (minor > VER_MINOR))
-                    || ((major == VER_MAJOR) && (minor == VER_MINOR) && (rev > VER_REV))
-                    || ((major == VER_MAJOR) && (minor == VER_MINOR) && (rev > VER_REV) && (hotfix > VER_HOTFIX))) {
+            if ((major > sys_major)
+                    || ((major == sys_major) && (minor > sys_minor))
+                    || ((major == sys_major) && (minor == sys_minor) && (rev > sys_rev))
+                    || ((major == sys_major) && (minor == sys_minor) && (rev > sys_rev) && (hotfix > sys_hotfix))) {
                 AbbozzaLogger.out("New version found", AbbozzaLogger.INFO);
                 int res = JOptionPane.showOptionDialog(null, AbbozzaLocale.entry("gui.new_version", version), AbbozzaLocale.entry("gui.new_version_title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (res == JOptionPane.NO_OPTION) {
                     return;
                 }
-                try {
-                    // Rename current jar
-                    // AbbozzaLogger.out(this.getSketchbookPath(),AbbozzaLogger.ALL);
-                    URL curUrl = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation();
-                    File cur = new File(curUrl.toURI());
-                    AbbozzaLogger.out("Current jar found at " + cur.getAbsolutePath(), AbbozzaLogger.INFO);
-                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-                    String today = format.format(new Date());
-                    File dir = new File(cur.getParentFile().getAbsolutePath());
-                    if (!dir.exists()) {
-                        AbbozzaLogger.out("Creating directory " + dir.getPath(), AbbozzaLogger.INFO);
-                        dir.mkdir();
-                    }
-                    AbbozzaLogger.out("Moving old version to " + dir.getPath() + "/Abbozza." + today + ".jar", AbbozzaLogger.INFO);
-                    cur.renameTo(new File(dir.getPath() + "/Abbozza." + today + ".jar"));
-                    AbbozzaLogger.out("Downloading version " + version, AbbozzaLogger.INFO);
-                    url = new URL(updateUrl + "Abbozza.jar");
-                    URLConnection conn = url.openConnection();
-                    byte buffer[] = new byte[4096];
-                    int n = -1;
-                    InputStream ir = conn.getInputStream();
-                    FileOutputStream ow = new FileOutputStream(new File(curUrl.toURI()));
-                    while ((n = ir.read(buffer)) != -1) {
-                        ow.write(buffer, 0, n);
-                    }
-                    ow.close();
-                    ir.close();
-                    AbbozzaLogger.out("Stopping arduino", AbbozzaLogger.INFO);
-                    System.exit(0);
-                } catch (Exception ex) {
-                    Logger.getLogger(AbbozzaServer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
+                installUpdate(version,updateUrl);
+                
             } else {
                 AbbozzaLogger.out(AbbozzaLocale.entry("gui.no_update"), AbbozzaLogger.INFO);
                 if (reportNoUpdate) {
@@ -647,7 +624,6 @@ public abstract class AbbozzaServer implements HttpHandler {
         } catch (IOException ex) {
             AbbozzaLogger.err("VERSION file not found");
         }
-        */
     }
 
 
@@ -989,4 +965,6 @@ public abstract class AbbozzaServer implements HttpHandler {
     };
 
     public abstract boolean installPluginFile(InputStream stream, String name);
+    public abstract void installUpdate(String version, String updateUrl);
+    
 }
