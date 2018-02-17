@@ -29,7 +29,7 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
      */
     public AbbozzaSplashScreen(String image) {
         super((JFrame) null,false);
-        splashImage = new ImageIcon(this.getClass().getResource(image));
+        splashImage = new ImageIcon(this.getClass().getClassLoader().getResource(image));
         
         initComponents();
         
