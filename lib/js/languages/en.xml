@@ -131,6 +131,7 @@ Continuing?</msg>
         <msg id="gui.clean_buildsystem">Clean</msg>
         <msg id="gui.remote_access">Allow remote request from # ?</msg>
         <msg id="gui.remote_access_title">Allow remote request?</msg>
+        <msg id="gui.delete_page">Delete page?</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
