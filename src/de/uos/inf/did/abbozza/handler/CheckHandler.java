@@ -40,7 +40,7 @@ public class CheckHandler extends AbstractHandler {
     }
 
     @Override
-    protected void myHandle(HttpExchange exchg) throws IOException {
+    protected void handleRequest(HttpExchange exchg) throws IOException {
         try {            
             InputStreamReader isr =  new InputStreamReader(exchg.getRequestBody());
             BufferedReader br = new BufferedReader(isr);

@@ -24,8 +24,9 @@ package de.uos.inf.did.abbozza.plugin;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
+import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -33,18 +34,34 @@ import java.io.OutputStream;
  *
  * @author michael
  */
-public class PluginHandler implements HttpHandler {
+public class PluginHandler extends AbstractHandler {
 
     protected Plugin _plugin;
     
     public PluginHandler() {
+        super();
+        this._plugin = null;
+    }
+
+    public PluginHandler(AbbozzaServer server) {
+        super(server);
         this._plugin = null;
     }
     
+    public PluginHandler(AbbozzaServer server, boolean allowRemote) {
+        super(server,allowRemote);
+        this._plugin = null;
+    }
+
     public void setPlugin(Plugin plugin) {
         this._plugin = plugin;
     }
     
+    protected final boolean isActive() {
+        return this._plugin.isActivated();
+    }
+    
+    /*
     @Override
     final public void handle(HttpExchange exchg) throws IOException {
         // Check if the plugin is activated
@@ -60,8 +77,9 @@ public class PluginHandler implements HttpHandler {
             handleRequest(exchg);
         }
     }
+    */
     
-    public void handleRequest(HttpExchange exchg) throws IOException {
+    protected void handleRequest(HttpExchange exchg) throws IOException {
         OutputStream os = exchg.getResponseBody();
         Headers responseHeaders = exchg.getResponseHeaders();
 
@@ -75,5 +93,6 @@ public class PluginHandler implements HttpHandler {
         os.write(response.getBytes());
         os.close();        
     }
+
     
 }

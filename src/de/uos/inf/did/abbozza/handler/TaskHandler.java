@@ -46,7 +46,7 @@ public class TaskHandler extends AbstractHandler {
     }
    
     @Override
-    protected void myHandle(HttpExchange exchg) throws IOException {
+    protected void handleRequest(HttpExchange exchg) throws IOException {
         /**
          * The request has the following form:
          *  task/<path>?<anchor>

@@ -46,15 +46,17 @@ public class SerialHandler extends AbstractHandler {
     }
     
     @Override
-    protected void myHandle(HttpExchange he) throws IOException {
+    protected void handleRequest(HttpExchange he) throws IOException {
         String query = he.getRequestURI().getQuery();
         // msg=<msg>&timeout=<time>
         // No timeout means that the request is not waitung
+        AbbozzaLogger.debug("SerialHandler: received " + he.getRequestURI().toString());
         query = query.replace("%20"," ");
-        AbbozzaLogger.out("SerialHandler: received " + he.getRequestURI().toString(),AbbozzaLogger.DEBUG);
         query = query.replace('&', '\n');
         Properties props = new Properties();
         props.load(new StringReader(query));
+        AbbozzaLogger.debug("SerialHandler: msg = " + props.get("msg"));
+        AbbozzaLogger.debug("SerialHandler: timeout = " + props.get("timeout"));
         long timeout = 0;
         if ( props.get("timeout") != null ) {
             timeout = Long.parseLong((String) props.get("timeout"));

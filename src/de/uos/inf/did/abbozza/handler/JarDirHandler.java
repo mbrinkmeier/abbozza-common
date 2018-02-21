@@ -22,8 +22,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This HttpHandler handles requests for files which can be in one of several
@@ -52,6 +50,7 @@ public class JarDirHandler implements HttpHandler {
      * @param uri The URI to be added
      */
     public void addURI(URI uri) {
+        AbbozzaLogger.info("JarHandler: Adding " + uri.toString() );
         entries.add(uri);
     }
     
@@ -90,7 +89,7 @@ public class JarDirHandler implements HttpHandler {
         URI uri;
         URI jarUri = new File(path).toURI();
         try {
-            uri = new URI("jar:"+ jarUri.toString() +"!");
+            uri = new URI("jar:"+ jarUri.toString() +"!/");
             AbbozzaLogger.out("JarHandler: " + name + " : " + uri.toString(),AbbozzaLogger.DEBUG);
         } catch (URISyntaxException e) {
             AbbozzaLogger.out("JarHandler: " + name + " not found (" + path + ")",AbbozzaLogger.DEBUG);
@@ -107,7 +106,7 @@ public class JarDirHandler implements HttpHandler {
      */
     public void addJar(URI uri, String name) {
         try {
-            URI jarUri = new URI("jar:"+ uri.toString() + "!");
+            URI jarUri = new URI("jar:"+ uri.toString() + "!/");
             AbbozzaLogger.out("JarHandler: " + name + " : " + jarUri.toString(),AbbozzaLogger.DEBUG);
             entries.add(jarUri);
         } catch (URISyntaxException ex) {
@@ -165,6 +164,50 @@ public class JarDirHandler implements HttpHandler {
         os.close();
     }
 
+    /*
+    public void handle(HttpExchange exchg, String path) throws IOException {
+        
+        OutputStream os = exchg.getResponseBody();
+        
+        byte[] bytearray = getBytes(path);
+
+        if (bytearray == null) {
+            String result = "abbozza! : " + path + " not found!";
+
+            exchg.sendResponseHeaders(400, result.length());
+            os.write(result.getBytes());
+            os.close();
+            return;
+        }
+
+        Headers responseHeaders = exchg.getResponseHeaders();
+        if (path.equals("/")) {
+            responseHeaders.set("Content-Type", "text/html; charset=utf-8");
+        } else if (path.endsWith(".css")) {
+            responseHeaders.set("Content-Type", "text/css; charset=utf-8");
+        } else if (path.endsWith(".js")) {
+            responseHeaders.set("Content-Type", "text/javascript; charset=utf-8");
+        } else if (path.endsWith(".xml")) {
+            responseHeaders.set("Content-Type", "text/xml; charset=utf-8");
+        } else if (path.endsWith(".svg")) {
+            responseHeaders.set("Content-Type", "image/svg+xml");            
+        } else if (path.endsWith(".abz")) {
+            responseHeaders.set("Content-Type", "text/xml; charset=utf-8");            
+        } else if (path.endsWith(".png")) {
+            responseHeaders.set("Content-Type", "image/png");
+        } else if (path.endsWith(".html")) {
+            responseHeaders.set("Content-Type", "text/html; charset=utf-8");
+        } else {
+            responseHeaders.set("Content-Type", "text/text; charset=utf-8");            
+        }
+
+        // ok, we are ready to send the response.
+        exchg.sendResponseHeaders(200, bytearray.length);
+        os.write(bytearray, 0, bytearray.length);
+        os.close();
+    }
+    */
+    
     /**
      * Retreive the byte content of the requested file.
      * It is picked from the list of registered directories and jars.
@@ -173,15 +216,17 @@ public class JarDirHandler implements HttpHandler {
      * @return A bytearray containig the contents of the requesed file or null.
      */
     public byte[] getBytes(String path) {
-        AbbozzaLogger.out("JarDirHandler: Reading " + path, AbbozzaLogger.DEBUG);
+        AbbozzaLogger.info("JarDirHandler: Reading " + path);
+
         byte[] bytearray = null;
         int tries = 0;
 
         if ( path.equals("/") ) {
-            path = "/" + AbbozzaServer.getInstance().getSystem() + ".html";
+            path = AbbozzaServer.getInstance().getSystem() + ".html";
         }
-
-        AbbozzaLogger.out("JarDirHandler: Reading " + path, AbbozzaLogger.INFO);
+        
+        // Strip leading /
+        if ( path.startsWith("/") ) path = path.substring(1);
 
         while ((tries < 3) && (bytearray == null)) {
 
@@ -192,6 +237,8 @@ public class JarDirHandler implements HttpHandler {
                     // The uri contains the base
                     URI uri = uriIt.nextElement();
                     URL fileUrl = new URL(uri.toString() + path);
+            
+                    AbbozzaLogger.debug("JarDirHandler: Checking " + fileUrl.toString() + " (stream)");
                 
                     URLConnection conn = fileUrl.openConnection();
                     InputStream inStream = conn.getInputStream();
@@ -210,7 +257,7 @@ public class JarDirHandler implements HttpHandler {
 
             if (bytearray == null) {
                 tries++;
-                AbbozzaServer.getInstance().findJarsAndDirs(this);
+                // AbbozzaServer.getInstance().findJarsAndDirs(this);
             }
         }
 
@@ -229,7 +276,12 @@ public class JarDirHandler implements HttpHandler {
      * @return An InputStream to the requested file or null.
      */
     public InputStream getInputStream(String path) {
+
         AbbozzaLogger.out("JarDirHandler: Opening Stream " + path, AbbozzaLogger.DEBUG);
+
+        // Strip leading /
+        if ( path.startsWith("/") ) path = path.substring(1);
+
         InputStream inStream = null;
         int tries = 0;
       
@@ -242,6 +294,8 @@ public class JarDirHandler implements HttpHandler {
                     URI uri = uriIt.nextElement();
                     URL fileUrl = new URL(uri.toString() + path);
                     
+                    AbbozzaLogger.debug("JarDirHandler: Checking " + fileUrl.toString() + " (stream)");
+
                     URLConnection conn = fileUrl.openConnection();
                     inStream = conn.getInputStream();                        
                 } catch (IOException ex) {
@@ -250,7 +304,7 @@ public class JarDirHandler implements HttpHandler {
 
                 if (inStream == null) {
                     tries++;
-                    AbbozzaServer.getInstance().findJarsAndDirs(this);
+                    // AbbozzaServer.getInstance().findJarsAndDirs(this);
                 }
             }
             

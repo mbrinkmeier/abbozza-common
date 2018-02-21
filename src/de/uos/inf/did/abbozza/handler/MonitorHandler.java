@@ -42,7 +42,7 @@ public class MonitorHandler extends AbstractHandler {
     }
 
     @Override
-    protected void myHandle(HttpExchange exchg) throws IOException {
+    protected void handleRequest(HttpExchange exchg) throws IOException {
         
         String path = exchg.getRequestURI().getPath();
         boolean result = false;

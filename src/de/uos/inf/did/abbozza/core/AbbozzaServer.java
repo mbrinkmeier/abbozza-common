@@ -158,7 +158,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Initialize the logger
         AbbozzaLogger.init();
-        AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
+        AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
         AbbozzaLogger.registerStream(System.out);
 
         // Setting paths

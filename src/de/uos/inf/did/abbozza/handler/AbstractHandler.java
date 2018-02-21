@@ -44,6 +44,13 @@ public abstract class AbstractHandler implements HttpHandler {
     protected boolean _allowRemote;
     private LinkedList<InetAddress> _allowedInetAddresses;
             
+    public AbstractHandler() {
+        this._abbozzaServer = AbbozzaServer.getInstance();
+        this._allowRemote = false;
+        this._allowedInetAddresses = new LinkedList<InetAddress>();        
+    }
+    
+    
     public AbstractHandler(AbbozzaServer abbozza) {
         this._abbozzaServer = abbozza;
         this._allowRemote = false;
@@ -72,6 +79,9 @@ public abstract class AbstractHandler implements HttpHandler {
     }
     
     protected final boolean allowRequest(HttpExchange http) {
+      // First check if handler is active
+      if ( !isActive() ) return false;
+      
       InetSocketAddress remote = http.getRemoteAddress();
       InetSocketAddress local = http.getLocalAddress();
       
@@ -89,6 +99,12 @@ public abstract class AbstractHandler implements HttpHandler {
       }
     }
     
+    
+    protected boolean isActive() {
+        return true;
+    }
+            
+            
     private final boolean addInetAddress(InetAddress addr) {
        // Check if already listed
        if ( !this._allowedInetAddresses.contains(addr) ) {
@@ -106,12 +122,12 @@ public abstract class AbstractHandler implements HttpHandler {
     
     public final void handle(HttpExchange exchg) throws IOException {
       if ( allowRequest(exchg) ) {
-          myHandle(exchg);
+          handleRequest(exchg);
       } else {
           sendResponse(exchg,403,"text/plain","");
       }
     }
 
-    protected abstract void myHandle(HttpExchange exchg) throws IOException;    
+    protected abstract void handleRequest(HttpExchange exchg) throws IOException;    
     
 }

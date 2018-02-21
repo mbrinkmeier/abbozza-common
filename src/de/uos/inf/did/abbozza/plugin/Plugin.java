@@ -25,10 +25,12 @@ package de.uos.inf.did.abbozza.plugin;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.core.Tools;
-import de.uos.inf.did.abbozza.tools.XMLTool;
+import de.uos.inf.did.abbozza.handler.JarDirHandler;
+import de.uos.inf.did.abbozza.monitor.MonitorListener;
+import de.uos.inf.did.abbozza.monitor.MonitorPanel;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Vector;
@@ -63,9 +65,13 @@ public class Plugin {
     private String _system;
     private String _parentOption;
     private PluginHandler _handler;
+    private PluginMonitorPanel _monitorPanel;    
+    private PluginMonitorListener _monitorListener; 
+    private String _monitorPanelPrefix = "";
+    private String _monitorListenerPrefix = "";
+    private JarDirHandler _fileHandler;
     
    
-        
     /**
      * Instantiate the pugin. 
      * 
@@ -77,10 +83,25 @@ public class Plugin {
         this._url = url;
         this._id = null;
         this._js = new Vector<URL>();
-        // this._feature = null;
-        // this._locales = null;
+        
+        /*
+        this._fileHandler = new JarDirHandler();
+        try {
+            this._fileHandler.addURI(this._url.toURI());
+        } catch (URISyntaxException ex) {
+            AbbozzaLogger.err("Plugin " + this._id + ": malformed URL: " + this._url);
+        }
+        */
+        
         parseXML(xml);
-        AbbozzaLogger.out("Plugin: " + this._id + " (" + this._url + ") added", AbbozzaLogger.INFO);
+        
+        try {
+            AbbozzaServer.getInstance().getJarHandler().addURI(this._url.toURI());
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Plugin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        AbbozzaLogger.out("Plugin " + this._id + " (" + this._url + ") added", AbbozzaLogger.INFO);
     }
     
     /**
@@ -123,6 +144,8 @@ public class Plugin {
                     // Get the option trees
                     } else if (childName.equals("options")) {
                         _options = child.cloneNode(true);
+                      
+                    // Javascript files to be included
                     } else if (childName.equals("js") ) {
                         String fileName = ((Element) child).getAttributes().getNamedItem("file").getNodeValue();
                         if ( fileName != null ) {
@@ -132,11 +155,47 @@ public class Plugin {
                         
                     // Get the handler class
                     } else if (childName.equals("handler")) {
-                        String className = ((Element) child).getAttributes().getNamedItem("class").getNodeValue();                            
+                        String className = ((Element) child).getAttributes().getNamedItem("class").getNodeValue();       
+                        AbbozzaLogger.info("[Plugin " + this._id +"] Loading classes from " + _url.toURI().toURL().toString() );
                         URLClassLoader classLoader = new URLClassLoader(new URL[]{_url.toURI().toURL()}, AbbozzaServer.class.getClassLoader() );
                         Class handlerClass = classLoader.loadClass(className);
-                        this._handler = (PluginHandler) handlerClass.newInstance();
-                        this._handler.setPlugin(this);
+                        try {
+                           this._handler = (PluginHandler) handlerClass.newInstance();
+                           this._handler.setPlugin(this);
+                           AbbozzaLogger.info("Plugin " + this._id + ": Instance of " + className + " used as handler");
+                        } catch (ClassCastException cce) {
+                           AbbozzaLogger.err("Plugin " + this._id + ": Handler class " + className + " does not implement PluginHandler!"); 
+                        }                        
+
+                    // Get the monitor panel class
+                    } else if (childName.equals("monitorpanel")) {
+                        String className = ((Element) child).getAttributes().getNamedItem("class").getNodeValue();                            
+                        this._monitorPanelPrefix = ((Element) child).getAttributes().getNamedItem("prefix").getNodeValue();                            
+                        if ( this._monitorPanelPrefix == null ) this._monitorPanelPrefix = this._id;
+                        URLClassLoader classLoader = new URLClassLoader(new URL[]{_url.toURI().toURL()}, AbbozzaServer.class.getClassLoader() );
+                        Class panelClass = classLoader.loadClass(className);
+                        try {
+                          this._monitorPanel = (PluginMonitorPanel) panelClass.newInstance();
+                          this._monitorPanel.setPlugin(this);
+                          AbbozzaLogger.info("Plugin " + this._id + ": Instance of " + className + " used as monitor panel");
+                        } catch (ClassCastException cce) {
+                           AbbozzaLogger.err("Plugin " + this._id + ": Monitor panel class " + className + " does not implement MonitorPanel!"); 
+                        }
+
+                    // Get the monitor listener class
+                    } else if (childName.equals("monitorlistener")) {
+                        String className = ((Element) child).getAttributes().getNamedItem("class").getNodeValue();                            
+                        this._monitorListenerPrefix = ((Element) child).getAttributes().getNamedItem("prefix").getNodeValue();                            
+                        if ( this._monitorPanelPrefix == null ) this._monitorPanelPrefix = this._id;
+                        URLClassLoader classLoader = new URLClassLoader(new URL[]{_url.toURI().toURL()}, AbbozzaServer.class.getClassLoader() );
+                        Class panelClass = classLoader.loadClass(className);
+                        try {
+                           this._monitorListener = (PluginMonitorListener) panelClass.newInstance();
+                           this._monitorListener.setPlugin(this);
+                           AbbozzaLogger.info("Plugin " + this._id + ": Instance of " + className + " used as monitor listener");
+                        } catch (ClassCastException cce) {
+                           AbbozzaLogger.err("Plugin " + this._id + ": Monitor listener class " + className + " does not implement MonitorListener!"); 
+                        }
 
                     // Get the feature tree
                     } else if (childName.equals("feature")) {
@@ -149,7 +208,7 @@ public class Plugin {
                 }   
             }
         } catch (Exception ex) {
-            AbbozzaLogger.debug(XMLTool.documentToString(pluginXml));
+            // AbbozzaLogger.debug(XMLTool.documentToString(pluginXml));
             AbbozzaLogger.stackTrace(ex);
         }
         
@@ -285,5 +344,25 @@ public class Plugin {
             AbbozzaLogger.err("Plugin " + getId() + " : Could not access " + name);
             return null;
         }
+    }
+    
+    public MonitorPanel getMonitorPanel() {
+        return this._monitorPanel;
+    }
+    
+    public String getMonitorPanelPrefix() {
+        return this._monitorPanelPrefix;
+    }
+    
+    public MonitorListener getMonitorListener() {
+        return this._monitorListener;
+    }
+    
+    public String getMonitorListenerPrefix() {
+        return this._monitorListenerPrefix;
+    }
+    
+    public JarDirHandler getFileHandler() {
+        return this._fileHandler;
     }
 }

@@ -52,7 +52,7 @@ public class LocaleHandler extends AbstractHandler {
     }
 
     @Override
-    protected void myHandle(HttpExchange exchg) throws IOException {
+    protected void handleRequest(HttpExchange exchg) throws IOException {
         String resp = XMLTool.documentToString(AbbozzaLocale.getLocaleXml());
         resp = resp.trim();
         sendResponse(exchg, 200, "text/xml; charset=utf-8", resp);

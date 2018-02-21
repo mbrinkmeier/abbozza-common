@@ -37,7 +37,7 @@ public class ConfigHandler extends AbstractHandler {
     }
 
     @Override
-    protected void myHandle(HttpExchange exchg) throws IOException {
+    protected void handleRequest(HttpExchange exchg) throws IOException {
         sendResponse(exchg, 200, "text/plain", _abbozzaServer.getConfiguration().get().toString());
     }
 
