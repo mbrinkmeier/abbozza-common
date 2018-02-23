@@ -140,6 +140,9 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected String compileMsg;
     protected String compileErrorMsg;
     
+    protected boolean denyRemoteAccess = false;
+    protected String allowedHosts = "";
+    
     /**
      * The system independent initialization of the server
      *
@@ -176,6 +179,10 @@ public abstract class AbbozzaServer implements HttpHandler {
          * <user.home>/.abbozza/<system>/abbozza.cfg
          */
         config = new AbbozzaConfig(configPath);
+        
+        // Check "ndocumented" options
+        denyRemoteAccess = "true".equals(config.getProperty("remote.denyAccess"));
+        allowedHosts = config.getProperty("remote.allowedHosts");
 
         // Load the locale
         AbbozzaLocale.setLocale(config.getLocale());
@@ -979,5 +986,14 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public abstract boolean installPluginFile(InputStream stream, String name);
     public abstract void installUpdate(String version, String updateUrl);
+    
+    public boolean isRemoteAccessDenied() {
+       return denyRemoteAccess;
+    }
+    
+    public boolean isHostAllowed(String host) {
+        if ( allowedHosts == null ) allowedHosts = "";
+        return allowedHosts.contains(host);
+    }
     
 }

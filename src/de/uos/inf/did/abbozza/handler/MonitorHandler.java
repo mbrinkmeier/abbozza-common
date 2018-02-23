@@ -28,6 +28,9 @@ import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import de.uos.inf.did.abbozza.tools.GUITool;
 import java.io.IOException;
+import java.io.StringReader;
+import java.net.URLDecoder;
+import java.util.Properties;
 
 /**
  *
@@ -52,6 +55,13 @@ public class MonitorHandler extends AbstractHandler {
             result = resume();
         }
         if (result) {
+            String query = URLDecoder.decode(exchg.getRequestURI().getQuery(),"UTF-8");
+            if ( query != null ) {
+              query = query.replace('&', '\n');
+              Properties props = new Properties();
+              props.load(new StringReader(query));
+              sendMessage(props.getProperty("msg"));
+            }
             sendResponse(exchg, 200, "text/plain", "");
         } else {
             sendResponse(exchg, 440, "text/plain", "");
@@ -129,4 +139,12 @@ public class MonitorHandler extends AbstractHandler {
     public AbbozzaMonitor getMonitor() {
         return monitor;
     }
+    
+    private void sendMessage(String msg) {
+        if ( msg == null ) return;
+        
+        AbbozzaLogger.debug("MonitorHandler: Send message " + msg + " to monitor");
+        monitor.addToUpdateBuffer(msg + "\n");
+    }
+    
 }

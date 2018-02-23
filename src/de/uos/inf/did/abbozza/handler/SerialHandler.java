@@ -25,14 +25,12 @@ package de.uos.inf.did.abbozza.handler;
 import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
-import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import de.uos.inf.did.abbozza.monitor.Message;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URLDecoder;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -51,7 +49,8 @@ public class SerialHandler extends AbstractHandler {
         // msg=<msg>&timeout=<time>
         // No timeout means that the request is not waitung
         AbbozzaLogger.debug("SerialHandler: received " + he.getRequestURI().toString());
-        query = query.replace("%20"," ");
+        query = URLDecoder.decode(query,"UTF-8");
+        // query = query.replace("%20"," ");
         query = query.replace('&', '\n');
         Properties props = new Properties();
         props.load(new StringReader(query));
