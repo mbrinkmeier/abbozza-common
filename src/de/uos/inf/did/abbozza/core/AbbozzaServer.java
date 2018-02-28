@@ -94,8 +94,8 @@ import org.xml.sax.SAXException;
 public abstract class AbbozzaServer implements HttpHandler {
 
     // Version
-    public static final int VER_MAJOR = 0;     // Major version of common core
-    public static final int VER_MINOR = 12;    // Minor version of common core
+    public static final int VER_MAJOR = 1;     // Major version of common core
+    public static final int VER_MINOR = 0;    // Minor version of common core
     public static final int VER_HOTFIX = 0;    // Minor version of common core
 
     // Instance
