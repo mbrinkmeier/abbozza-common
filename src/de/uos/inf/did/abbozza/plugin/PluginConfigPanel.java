@@ -253,6 +253,10 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         String name = new File(url.getFile()).getName();
         File file = new File(pluginPath + "/" + name);
         try {
+            if ( file.exists() ) {
+              // Change the name if the target already exists
+              file = new File(pluginPath + "/___" + name);
+            }
             Files.copy(url.openConnection().getInputStream(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             // InstallTool.getInstallTool().writeToFile(url.openConnection().getInputStream(),file);
             File[] jars = new File[1];
