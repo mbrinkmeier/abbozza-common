@@ -496,7 +496,14 @@ public class AbbozzaConfig {
     public String getFullTaskPath() {
         String path = config_taskPath;
         if ( config_taskPath.contains("%HOME%")) {
-            path = config_taskPath.replace("%HOME%", System.getProperty("user.home"));
+            // Check if HOMESHARE is defined. Required in windows if the user 
+            // uses a network directory as home.
+            String home = System.getenv("HOMESHARE");
+            if ( home == null ) {
+                path = config_taskPath.replace( "%HOME%", System.getProperty("user.home") );
+            } else {
+                path = config_taskPath.replace( "%HOME%", path );                
+            }
         }
         return path;
     }

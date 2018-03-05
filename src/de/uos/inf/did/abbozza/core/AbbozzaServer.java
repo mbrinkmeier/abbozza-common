@@ -43,6 +43,7 @@ import de.uos.inf.did.abbozza.handler.SaveHandler;
 import de.uos.inf.did.abbozza.handler.TaskHandler;
 import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
+import de.uos.inf.did.abbozza.install.InstallTool;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
 import de.uos.inf.did.abbozza.plugin.Plugin;
 import de.uos.inf.did.abbozza.tools.GUITool;
@@ -971,10 +972,12 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected String expandPath(String path) {
         if ( path == null ) return null;
         
-        String xPath = path;
-        if (path.contains("%HOME%")) {
-            xPath = xPath.replace("%HOME%", System.getProperty("user.home"));
-        }
+        String xPath = InstallTool.expandPath(path);
+        
+        // if (path.contains("%HOME%")) {
+        //     xPath = xPath.replace("%HOME%", System.getProperty("user.home"));
+        // }
+        
         if (xPath.contains("%ABBOZZA%")) {
             xPath = xPath.replace("%ABBOZZA%", abbozzaPath);
         }
