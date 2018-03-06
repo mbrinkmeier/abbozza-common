@@ -204,6 +204,11 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         tabbedPane = new javax.swing.JTabbedPane();
         scrollPane = new javax.swing.JScrollPane();
         featureTree = new javax.swing.JTree();
+        taskPanel = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        taskPathField = new javax.swing.JTextField();
+        taskPathButton = new javax.swing.JButton();
+        editableTasks = new javax.swing.JCheckBox();
         serverPanel = new javax.swing.JPanel();
         autoStartBox = new javax.swing.JCheckBox();
         browserStartBox = new javax.swing.JCheckBox();
@@ -218,11 +223,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         updateUrlField = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        taskPanel = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        taskPathField = new javax.swing.JTextField();
-        taskPathButton = new javax.swing.JButton();
-        editableTasks = new javax.swing.JCheckBox();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -283,6 +283,55 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
 
         tabbedPane.addTab(AbbozzaLocale.entry("gui.feature_title"), scrollPane);
 
+        jLabel7.setText(AbbozzaLocale.entry("gui.task_path"));
+
+        taskPathField.setText(config.getTaskPath());
+
+        taskPathButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/uos/inf/did/abbozza/img/directory24.png"))); // NOI18N
+        taskPathButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                taskPathButtonActionPerformed(evt);
+            }
+        });
+
+        editableTasks.setSelected(config.areTasksEditable());
+        editableTasks.setText(AbbozzaLocale.entry("gui.tasks_editable"));
+        editableTasks.setLabel(AbbozzaLocale.entry("gui.tasks_editable"));
+
+        javax.swing.GroupLayout taskPanelLayout = new javax.swing.GroupLayout(taskPanel);
+        taskPanel.setLayout(taskPanelLayout);
+        taskPanelLayout.setHorizontalGroup(
+            taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, taskPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(editableTasks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(taskPanelLayout.createSequentialGroup()
+                        .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(taskPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 117, Short.MAX_VALUE))
+                            .addComponent(taskPathField))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(taskPathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        taskPanelLayout.setVerticalGroup(
+            taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(taskPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(taskPathField)
+                    .addComponent(taskPathButton, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(editableTasks)
+                .addContainerGap(203, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab(AbbozzaLocale.entry("gui.tasks"), taskPanel);
+
         autoStartBox.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         autoStartBox.setSelected(config.startAutomatically());
         autoStartBox.setText(AbbozzaLocale.entry("gui.start_directly"));
@@ -309,7 +358,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         serverPortSpinner.setModel(new javax.swing.SpinnerNumberModel(config.getServerPort(), 49152, 65535, 1));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jLabel5.setText(AbbozzaLocale.entry("gui.server_port"));
+        jLabel5.setText(AbbozzaLocale.entry("gui.server_port") + " (IP: " + AbbozzaServer.getInstance().getIp4Address() + " )");
 
         localeComboBox.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         localeComboBox.setModel(new DefaultComboBoxModel(AbbozzaServer.getInstance().getLocales()));
@@ -362,18 +411,18 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                             .addComponent(jLabel5)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(serverPanelLayout.createSequentialGroup()
-                                .addComponent(browserPathField, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                                .addComponent(browserPathField, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(browserButton, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(serverPanelLayout.createSequentialGroup()
-                                .addComponent(serverPortSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(serverPortSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(serverPanelLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(updateUrlField, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE))
+                        .addComponent(updateUrlField))
                     .addGroup(serverPanelLayout.createSequentialGroup()
                         .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(serverPanelLayout.createSequentialGroup()
@@ -386,7 +435,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(localeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(updateBox))
-                        .addGap(0, 277, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         serverPanelLayout.setVerticalGroup(
@@ -410,71 +459,22 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                 .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(serverPortSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(18, 18, 18)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(updateBox)
                 .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(serverPanelLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel4))
                     .addGroup(serverPanelLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
+                        .addGap(18, 18, 18)
                         .addComponent(updateUrlField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addGap(50, 50, 50)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
 
         tabbedPane.addTab(AbbozzaLocale.entry("gui.server_and_browser"), serverPanel);
         serverPanel.getAccessibleContext().setAccessibleDescription("");
-
-        jLabel7.setText(AbbozzaLocale.entry("gui.task_path"));
-
-        taskPathField.setText(config.getTaskPath());
-
-        taskPathButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/uos/inf/did/abbozza/img/directory24.png"))); // NOI18N
-        taskPathButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                taskPathButtonActionPerformed(evt);
-            }
-        });
-
-        editableTasks.setSelected(config.areTasksEditable());
-        editableTasks.setText(AbbozzaLocale.entry("gui.tasks_editable"));
-        editableTasks.setLabel(AbbozzaLocale.entry("gui.tasks_editable"));
-
-        javax.swing.GroupLayout taskPanelLayout = new javax.swing.GroupLayout(taskPanel);
-        taskPanel.setLayout(taskPanelLayout);
-        taskPanelLayout.setHorizontalGroup(
-            taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, taskPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(editableTasks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(taskPanelLayout.createSequentialGroup()
-                        .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(taskPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 72, Short.MAX_VALUE))
-                            .addComponent(taskPathField))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(taskPathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        taskPanelLayout.setVerticalGroup(
-            taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(taskPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(taskPathField)
-                    .addComponent(taskPathButton, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(editableTasks)
-                .addContainerGap(203, Short.MAX_VALUE))
-        );
-
-        tabbedPane.addTab(AbbozzaLocale.entry("gui.tasks"), taskPanel);
 
         contentPanel.add(tabbedPane, java.awt.BorderLayout.CENTER);
         tabbedPane.getAccessibleContext().setAccessibleDescription("");

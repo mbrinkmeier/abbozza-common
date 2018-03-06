@@ -62,7 +62,7 @@ public class SerialHandler extends AbstractHandler {
         }
         AbbozzaMonitor monitor = this._abbozzaServer.monitorHandler.getMonitor();
         if ( monitor != null ) {
-           Message msg = monitor.sendMessage((String) props.get("msg"), he, this, timeout);
+           Message msg = monitor.sendMessage((String) props.get("msg") + "\n", he, this, timeout);
            while ( msg.getState() == Message.WAITING ) {
                try {
                    Thread.sleep(100);
