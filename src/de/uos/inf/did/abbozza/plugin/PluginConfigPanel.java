@@ -11,7 +11,10 @@ import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.tools.XMLTool;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -91,7 +94,7 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         });
         jScrollPane1.setViewportView(pluginList);
 
-        installButton.setText(AbbozzaLocale.entry("gui.install"));
+        installButton.setText(AbbozzaLocale.entry("msg.loading"));
         installButton.setEnabled(false);
         installButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -198,12 +201,27 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
     private void reloadPlugins() {
         try {
             String urlString = (String) urlComboBox.getSelectedItem();
+            Graphics gr = pluginList.getGraphics();
+            gr.setColor(Color.BLACK);
+            int w = pluginList.getWidth();
+            int h = pluginList.getHeight();
+            FontMetrics fm = gr.getFontMetrics();
+            String text = AbbozzaLocale.entry("msg.loading");
+            int sw = fm.stringWidth(text);
+            int sh = fm.getHeight();
+            gr.drawString(text,(w-sw)/2,(h-sh)/2);
             AbbozzaLogger.debug("AbbozzaConfigPanel: Reload plugins from " + urlString);
             URL url = new URL(urlString);
-            Document pluginsXml = XMLTool.getXml(url);
+            this.installButton.setText(AbbozzaLocale.entry("msg.loading"));
+            Document pluginsXml = XMLTool.getXml(url,20000);
             if (pluginsXml == null) {
+                JOptionPane.showMessageDialog(this, AbbozzaLocale.entry("msg.plugin_error"),"abbozza!",JOptionPane.ERROR_MESSAGE);
+                this.installButton.setText(AbbozzaLocale.entry("gui.install"));
+                gr.clearRect(0,0,w,h);
                 return;
             }
+            gr.clearRect(0,0,w,h);
+            this.installButton.setText(AbbozzaLocale.entry("gui.install"));
             
             DefaultListModel<Node> list = new DefaultListModel<Node>();
             NodeList plugins = pluginsXml.getElementsByTagName("plugin");

@@ -6,6 +6,7 @@
         <msg id="msg.server_reachable">Server reachable under #</msg> 
         <msg id="msg.not_found"># not found</msg> 
         <msg id="msg.compiling">Compile ...</msg> 
+        <msg id="msg.loading">Loading ...</msg> 
         <msg id="msg.done_compiling">Compilation succesfully finished</msg>
         <msg id="msg.error_compiling">Error during compilation</msg> 
         <msg id="msg.file_overwrite"># already exists! Overwrite the file?</msg> 
@@ -33,6 +34,7 @@ Continuing?</msg>
         <msg id="msg.compile_timeout">Compiling takes to long!</msg>
         <msg id="msg.upload_timeout">Compiling and uploading takes to long!</msg>
         <msg id="msg.cleaning_buildsystem">Cleaning buildsystem</msg>
+        <msg id="msg.plugin_error">Could not load plugin list!</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Generate Code</msg>

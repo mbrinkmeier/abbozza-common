@@ -6,6 +6,7 @@
         <msg id="msg.server_reachable">Server erreichbar unter #</msg> 
         <msg id="msg.not_found"># nicht gefunden</msg> 
         <msg id="msg.compiling">Kompiliere ...</msg> 
+        <msg id="msg.loading">Lade ...</msg> 
         <msg id="msg.done_compiling">Kompilation erfolgreich beendet</msg> 
         <msg id="msg.error_compiling">Kompilation fehlgeschlagen</msg> 
         <msg id="msg.file_overwrite"># existiert bereits! Soll die Datei überschrieben werden?</msg> 
@@ -23,6 +24,7 @@
         <msg id="msg.generate_sketch">Generiere Sketch ...</msg>
         <msg id="msg.code_generated">Code wurde fehlerfrei generiert ...</msg>
         <msg id="msg.error_upload">Fehler beim Upload auf das Board!</msg>
+        <msg id="msg.plugin_error">Konnte Plugin Liste nicht laden!</msg>
         <msg id="msg.drop_sketch">Der Sketch wurde nicht gespeichert.
 Wenn Du fortfährst gehen eventuell Änderungen verloren.
 Trotzdem fortfahren?</msg> 

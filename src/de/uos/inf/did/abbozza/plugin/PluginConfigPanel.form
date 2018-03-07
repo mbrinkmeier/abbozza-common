@@ -102,7 +102,7 @@
     <Component class="javax.swing.JButton" name="installButton">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="AbbozzaLocale.entry(&quot;gui.install&quot;)" type="code"/>
+          <Connection code="AbbozzaLocale.entry(&quot;msg.loading&quot;)" type="code"/>
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
