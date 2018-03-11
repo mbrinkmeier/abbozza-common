@@ -6,6 +6,7 @@
         <msg id="msg.server_reachable">Server erreichbar unter #</msg> 
         <msg id="msg.not_found"># nicht gefunden</msg> 
         <msg id="msg.compiling">Kompiliere ...</msg> 
+        <msg id="msg.loading">Lade ...</msg> 
         <msg id="msg.done_compiling">Kompilation erfolgreich beendet</msg> 
         <msg id="msg.error_compiling">Kompilation fehlgeschlagen</msg> 
         <msg id="msg.file_overwrite"># existiert bereits! Soll die Datei überschrieben werden?</msg> 
@@ -23,6 +24,7 @@
         <msg id="msg.generate_sketch">Generiere Sketch ...</msg>
         <msg id="msg.code_generated">Code wurde fehlerfrei generiert ...</msg>
         <msg id="msg.error_upload">Fehler beim Upload auf das Board!</msg>
+        <msg id="msg.plugin_error">Konnte Plugin Liste nicht laden!</msg>
         <msg id="msg.drop_sketch">Der Sketch wurde nicht gespeichert.
 Wenn Du fortfährst gehen eventuell Änderungen verloren.
 Trotzdem fortfahren?</msg> 
@@ -117,7 +119,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.plugin_panel">Plugins</msg>
         <msg id="gui.plugin_url">URL der Pluginliste</msg>
         <msg id="gui.plugin_error">Plugin Installation fehlgeschlagen</msg>
-        <msg id="gui.plugin_installed">Plugin installiert.</msg>
+        <msg id="gui.plugin_installed">Plugin installiert.&#10;Neustart erforderlich.</msg>
         <msg id="gui.no_i2c">Kein I2C</msg>
         <msg id="gui.i2c_master">I2C Master</msg>
         <msg id="gui.i2c_slave">I2C Slave</msg>

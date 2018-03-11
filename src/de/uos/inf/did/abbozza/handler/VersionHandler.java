@@ -40,9 +40,20 @@ public class VersionHandler extends AbstractHandler {
 
     @Override
     protected void handleRequest(HttpExchange exchg) throws IOException {
-        Headers headers = exchg.getResponseHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
-        sendResponse(exchg, 200, "text/plain", "abbozza! " + _abbozzaServer.getVersion());
+        String path = exchg.getRequestURI().getPath();
+        if (path.endsWith("/version")) {
+            Headers headers = exchg.getResponseHeaders();
+            headers.add("Access-Control-Allow-Origin", "*");
+            sendResponse(exchg, 200, "text/plain", "abbozza! " + _abbozzaServer.getVersion());
+        } else if ( path.endsWith("/ip")) {
+            Headers headers = exchg.getResponseHeaders();
+            headers.add("Access-Control-Allow-Origin", "*");
+            sendResponse(exchg, 200, "text/plain", AbbozzaServer.getInstance().getIp4Address());            
+        } else if ( path.endsWith("/ip6")) {
+            Headers headers = exchg.getResponseHeaders();
+            headers.add("Access-Control-Allow-Origin", "*");
+            sendResponse(exchg, 200, "text/plain", AbbozzaServer.getInstance().getIp6Address());            
+        }
     }
     
 }

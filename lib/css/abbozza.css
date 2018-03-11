@@ -373,8 +373,9 @@ div[role="treeitem"]:hover {
     border-radius: 5px;
     position: absolute;
     background-color: white;
+    font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+    font-size: 12px;
     text-align: left;
-    font-size: 75%;
     border-top: 2px #a0a0a0 solid;
     border-left: 2px #a0a0a0 solid;
     border-bottom: 2px #f0f0f0 solid;

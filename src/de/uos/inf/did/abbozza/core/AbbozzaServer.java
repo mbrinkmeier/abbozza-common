@@ -18,11 +18,11 @@
  */
 /**
  * @fileoverview This class is an abstract abbozza! server
- * 
+ *
  * The server requires sevejbral directories and files:
  * - jarPath: the path of the jar, containing all required files
- * - 
- * 
+ * -
+ *
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
 package de.uos.inf.did.abbozza.core;
@@ -43,6 +43,7 @@ import de.uos.inf.did.abbozza.handler.SaveHandler;
 import de.uos.inf.did.abbozza.handler.TaskHandler;
 import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
+import de.uos.inf.did.abbozza.install.InstallTool;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
 import de.uos.inf.did.abbozza.plugin.Plugin;
 import de.uos.inf.did.abbozza.tools.GUITool;
@@ -57,16 +58,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
@@ -94,8 +101,8 @@ import org.xml.sax.SAXException;
 public abstract class AbbozzaServer implements HttpHandler {
 
     // Version
-    public static final int VER_MAJOR = 0;     // Major version of common core
-    public static final int VER_MINOR = 12;    // Minor version of common core
+    public static final int VER_MAJOR = 1;     // Major version of common core
+    public static final int VER_MINOR = 0;    // Minor version of common core
     public static final int VER_HOTFIX = 0;    // Minor version of common core
 
     // Instance
@@ -107,7 +114,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected String jarPath;           // The parent directory of the jar
     protected String userPath;          // The path to the user directory
     protected String configPath;        // The path to the config file
-    
+
     // Configurable paths
     protected String globalJarPath;     // The directory containing the global jar
     protected String localJarPath;      // The directory containig the local jar
@@ -130,19 +137,22 @@ public abstract class AbbozzaServer implements HttpHandler {
     private URL _lastSketchFile = null;
     private URL _taskContext;
     protected PluginManager pluginManager;
-    
+
     protected JFrame mainFrame = null;     // The main frame
     protected boolean dialogOpen = false;  // Used to prevent multiple open windows
     private int oldState = 0;              // Stores the original state of the mainFrame
-    
+
     protected String _boardName;
-    
+
     protected String compileMsg;
     protected String compileErrorMsg;
-    
+
     protected boolean denyRemoteAccess = false;
     protected String allowedHosts = "";
-    
+
+    protected InetAddress ip4Address = null;
+    protected InetAddress ip6Address = null;
+
     /**
      * The system independent initialization of the server
      *
@@ -164,9 +174,32 @@ public abstract class AbbozzaServer implements HttpHandler {
         AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
         AbbozzaLogger.registerStream(System.out);
 
+        // Find IP address
+        try {
+            Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
+            while (ifaces.hasMoreElements()) {
+                NetworkInterface iface = ifaces.nextElement();
+                if (!iface.isLoopback()) {
+                    Enumeration<InetAddress> iAddrs = iface.getInetAddresses();
+                    while (iAddrs.hasMoreElements()) {
+                        InetAddress iAddr = iAddrs.nextElement();
+                        if (iAddr.getAddress().length == 4) {
+                            AbbozzaLogger.info("Abbozza: IP4 address " + iAddr.getHostAddress());
+                            ip4Address = iAddr;
+                        } else {
+                            AbbozzaLogger.info("Abbozza: IP6 address " + iAddr.getHostAddress());
+                            ip6Address = iAddr;
+                        }
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            Logger.getLogger(AbbozzaServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         // Setting paths
         setPaths();
-        
+
         // Find Jars
         jarHandler = new JarDirHandler();
         findJarsAndDirs(jarHandler);
@@ -179,7 +212,7 @@ public abstract class AbbozzaServer implements HttpHandler {
          * <user.home>/.abbozza/<system>/abbozza.cfg
          */
         config = new AbbozzaConfig(configPath);
-        
+
         // Check "ndocumented" options
         denyRemoteAccess = "true".equals(config.getProperty("remote.denyAccess"));
         allowedHosts = config.getProperty("remote.allowedHosts");
@@ -188,7 +221,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         AbbozzaLocale.setLocale(config.getLocale());
 
         AbbozzaLogger.info("Version " + getVersion());
-        
+
         // Check for Update
         if (this.getConfiguration().getUpdate()) {
             checkForUpdate(false);
@@ -208,7 +241,6 @@ public abstract class AbbozzaServer implements HttpHandler {
         additionalInitialization();
     }
 
-    
     /**
      * This default operation sets the main paths
      */
@@ -218,7 +250,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Check if the user directory exists
         File userDir = new File(userPath);
-        if ( !userDir.exists() ) {
+        if (!userDir.exists()) {
             // Create user dir if it oesn't exist
             try {
                 Files.createDirectories(userDir.toPath());
@@ -228,17 +260,17 @@ public abstract class AbbozzaServer implements HttpHandler {
                 System.exit(1);
             }
         }
-        
+
         // Set config path and read configuration
         configPath = userPath + "/abbozza.cfg";
 
         // Register log file to AbbozzaLogger
         try {
-            AbbozzaLogger.registerStream(new FileOutputStream(userPath + "/abbozza.log",false));
+            AbbozzaLogger.registerStream(new FileOutputStream(userPath + "/abbozza.log", false));
         } catch (FileNotFoundException ex) {
             AbbozzaLogger.err("Can't log to " + userPath + "/abbozza.log");
         }
-        
+
         // Determine the executed jar
         URI uri = null;
         File installFile = new File("/");
@@ -251,14 +283,16 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
         jarPath = installFile.getParentFile().getAbsolutePath();
         abbozzaPath = installFile.getParentFile().getParent();
-        
+
         // These paths have to be set in the subclass
         globalJarPath = "";
         localJarPath = "";
         sketchbookPath = "";
         globalPluginPath = "";
         localPluginPath = "";
-    };
+    }
+
+    ;
     
     
     
@@ -276,6 +310,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     /**
      * Get the global plugin path.
+     *
      * @return The global plugin path
      */
     public String getGlobalPluginPath() {
@@ -284,6 +319,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     /**
      * Get the users plugin path.
+     *
      * @return The users plugin path.
      */
     public String getLocalPluginPath() {
@@ -292,7 +328,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     /**
      * Get the name of the system.
-     * 
+     *
      * @return The name of the system.
      */
     public String getSystem() {
@@ -316,17 +352,22 @@ public abstract class AbbozzaServer implements HttpHandler {
         this.monitorHandler = new MonitorHandler(this);
         httpServer.createContext("/abbozza/monitor", monitorHandler);
         httpServer.createContext("/abbozza/monitorresume", monitorHandler);
-        httpServer.createContext("/abbozza/version", new VersionHandler(this));
-        if (this.pluginManager != null) 
+        VersionHandler vHandler = new VersionHandler(this);
+        httpServer.createContext("/abbozza/version", vHandler);
+        httpServer.createContext("/abbozza/ip", vHandler);
+        httpServer.createContext("/abbozza/ip6", vHandler);
+        
+        if (this.pluginManager != null) {
             httpServer.createContext("/abbozza/plugins", this.pluginManager);
+        }
         httpServer.createContext("/abbozza/", this /* handler */);
         httpServer.createContext("/task/", new TaskHandler(this, jarHandler));
         httpServer.createContext("/", jarHandler);
 
-        if (this.pluginManager != null ) 
+        if (this.pluginManager != null) {
             this.pluginManager.registerPluginHandlers(httpServer);
+        }
     }
-
 
     /**
      * Starts the server.
@@ -364,10 +405,9 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
     }
 
-
     /**
      * Starts the Browser with the given URL.
-     * 
+     *
      * @param url The URL to be opened
      */
     public void startBrowser(String url) {
@@ -375,16 +415,25 @@ public abstract class AbbozzaServer implements HttpHandler {
         Runtime runtime = Runtime.getRuntime();
 
         if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
-            String[] cmd = new String[3];
+            String[] cmd;
+            String line;
             // cmd[0] =  "\"" + config.getBrowserPath().replace("\"", "\\\"") + "\"";
             String opts = config.getProperty("browserOptions");
-            if ( opts == null ) opts = "";
-            cmd[0] = expandPath(config.getBrowserPath());
-            cmd[1] = opts;
-            cmd[2] = "http://localhost:" + serverPort + "/" + system + ".html";
+            if (opts == null) {
+                cmd = new String[2];
+                cmd[0] = expandPath(config.getBrowserPath());
+                cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
+                line = cmd[0] + " " + cmd[1];
+            } else {
+                cmd = new String[3];
+                cmd[0] = expandPath(config.getBrowserPath());
+                cmd[1] = opts;
+                cmd[2] = "http://localhost:" + serverPort + "/" + system + ".html";
+                line = cmd[0] + " " + cmd[1] + " " + cmd[2];
+            }
             // String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
             try {
-                AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1] + " " + cmd[2] );
+                AbbozzaLogger.out("Starting browser: " + line);
                 runtime.exec(cmd);
                 toolToBack();
             } catch (IOException e) {
@@ -418,7 +467,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                                 //         failed = true;
                                 //      }                                    
                                 // } else {
-                                        Desktop.getDesktop().browse(new URI(xurl));
+                                Desktop.getDesktop().browse(new URI(xurl));
                                 // }
                             } else {
                                 failed = true;
@@ -444,7 +493,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                         AbbozzaLocale.setLocale(config.getLocale());
                         config.write();
                         String[] cmd = new String[2];
-                        cmd[0] =  expandPath(config.getBrowserPath());
+                        cmd[0] = expandPath(config.getBrowserPath());
                         cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
                         try {
                             AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
@@ -466,7 +515,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      * Request handling
      *
      * @param exchg The {@link HttpExchange} to be handled.
-     * 
+     *
      * @throws java.io.IOException Thrown if an error occured.
      */
     @Override
@@ -492,27 +541,25 @@ public abstract class AbbozzaServer implements HttpHandler {
     /**
      * Abstract system specific operations
      */
-    
     /**
      * This operation registers additional, system specific handlers, like the
      * board handler.
-     * 
+     *
      */
     public abstract void registerSystemHandlers();
-    
+
     /**
-     * This operation finds the jars and directories to be used by the server and
-     * adds them to the given jarHandler.
-     * 
-     * @param jarHandler The jarHandler to which the jars and directories should be added.
+     * This operation finds the jars and directories to be used by the server
+     * and adds them to the given jarHandler.
+     *
+     * @param jarHandler The jarHandler to which the jars and directories should
+     * be added.
      */
     public abstract void findJarsAndDirs(JarDirHandler jarHandler);
-
 
     /**
      * Abstract operations for Tool handling, compilation etc.
      */
-    
     /**
      * Moves the tool window to the back.
      */
@@ -520,7 +567,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     /**
      * Sets the code in the tool window.
-     * 
+     *
      * @param code The generated code.
      */
     public abstract void toolSetCode(String code);
@@ -531,7 +578,8 @@ public abstract class AbbozzaServer implements HttpHandler {
     public abstract void toolIconify();
 
     /**
-     * Compiles the given code 
+     * Compiles the given code
+     *
      * @param code The code to be compiled.
      * @return The output produced by the compilation process. The result is
      * empty, if the compilation was successful.
@@ -540,51 +588,55 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     /**
      * Compiles and uploads the code to the board.
-     * 
+     *
      * @param code The code to be compiled.
      * @return The output produced by the compilation process. The result is
      * empty, if the compilation was successful.
      */
     public abstract int uploadCode(String code);
 
-    public String getCompileErrorMsg() { return compileErrorMsg; }
-    
-    public String getCompileMsg() { return compileMsg; }
-    
+    public String getCompileErrorMsg() {
+        return compileErrorMsg;
+    }
+
+    public String getCompileMsg() {
+        return compileMsg;
+    }
+
     /**
      * Detects a connected board.
-     * 
+     *
      * @return The string indicating the path or name of the board. Empty if no
      * board was found
      */
     public abstract String findBoard();
-    
+
     /**
-     * This operation  asks the user for to select a board/path.
-     * 
+     * This operation asks the user for to select a board/path.
+     *
      * @param path The preset path/name.
      * @return The path/name selected by the user.
      */
     public abstract File queryPathToBoard(String path);
-    
+
     /**
      * This operation checks for updates
-     * 
+     *
      * @param reportNoUpdate True if an update is available.
      */
     public void checkForUpdate(boolean reportNoUpdate) {
         checkForUpdate(reportNoUpdate, null);
     }
 
-        /**
+    /**
      * This operation checks for updates
-     * 
+     *
      * @param reportNoUpdate True if an update is available.
      * @param confurl An url overriding the config value
      */
     public void checkForUpdate(boolean reportNoUpdate, String confurl) {
         String updateUrl = AbbozzaServer.getConfig().getUpdateUrl() + this.system + "/";
-        if ( confurl != null ) {
+        if (confurl != null) {
             updateUrl = confurl + this.system + "/";
         }
         String version = "";
@@ -630,11 +682,11 @@ public abstract class AbbozzaServer implements HttpHandler {
                 if (res == JOptionPane.NO_OPTION) {
                     return;
                 }
-                
-                installUpdate(version,updateUrl);
-                
+
+                installUpdate(version, updateUrl);
+
             } else {
-                AbbozzaLogger.out("No VERSION found at " + updateUrl , AbbozzaLogger.INFO);
+                AbbozzaLogger.out("No VERSION found at " + updateUrl, AbbozzaLogger.INFO);
                 if (reportNoUpdate) {
                     JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("gui.no_update"));
                 }
@@ -645,8 +697,6 @@ public abstract class AbbozzaServer implements HttpHandler {
             AbbozzaLogger.err("VERSION file not found at " + updateUrl);
         }
     }
-
-
 
     // @TODO Change the path
     /*
@@ -725,7 +775,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                     optionsXml = builder.newDocument();
                     optionsXml.createElement("options");
                 }
-                
+
                 // If successful, add the plugin trees
                 Node root = optionsXml.getElementsByTagName("options").item(0);
                 Enumeration<Plugin> plugins = this.pluginManager.plugins();
@@ -766,22 +816,24 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public int openConfigDialog() {
         // Prevent opening another dialog
-        if ( this.isDialogOpen() ) return 1;
-        
+        if (this.isDialogOpen()) {
+            return 1;
+        }
+
         AbbozzaConfig config = this.getConfiguration();
         Properties props = config.get();
-        
+
         this.bringFrameToFront();
         toolIconify();
-        
+
         AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(props, null, false, true);
-        
+
         adaptConfigDialog(dialog);
         GUITool.centerWindow(dialog);
         dialog.setModal(true);
         dialog.toFront();
         dialog.setVisible(true);
-        
+
         if (dialog.getState() == 0) {
             config.set(dialog.getConfiguration());
             AbbozzaLocale.setLocale(config.getLocale());
@@ -791,9 +843,9 @@ public abstract class AbbozzaServer implements HttpHandler {
         } else {
             return 1;
         }
-        
+
     }
-    
+
     public void adaptConfigDialog(AbbozzaConfigDialog dialog) {
     }
 
@@ -908,16 +960,16 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public boolean checkLibrary(String name) {
         return false;
-    }    
-    
+    }
+
     public void setBoardName(String name) {
         this._boardName = name;
     }
-    
+
     public String getBoardName() {
         return this._boardName;
     }
-    
+
     public void additionalInitialization() {
     }
 
@@ -931,69 +983,95 @@ public abstract class AbbozzaServer implements HttpHandler {
     public void setDialogOpen(boolean dialogOpen) {
         this.dialogOpen = dialogOpen;
     }
-    
+
     public void bringFrameToFront() {
-        if ( mainFrame == null ) return;
+        if (mainFrame == null) {
+            return;
+        }
         oldState = mainFrame.getExtendedState();
         AbbozzaLogger.err("oldState gets " + oldState);
         GUITool.bringToFront(mainFrame);
     }
 
     public void resetFrame() {
-        if ( mainFrame == null ) return;
-        if ((oldState & JFrame.ICONIFIED) > 0 ) {
+        if (mainFrame == null) {
+            return;
+        }
+        if ((oldState & JFrame.ICONIFIED) > 0) {
             AbbozzaLogger.err("oldState was " + oldState);
             AbbozzaLogger.err("was iconified");
             int state = mainFrame.getExtendedState() | JFrame.ICONIFIED;
             mainFrame.setExtendedState(state);
             String osName = System.getProperty("os.name");
-            if ( osName.contains("Mac") ) {
-               // To minimize the mainFrame in Mac OS this seems to be required
-               mainFrame.setVisible(false);
-               mainFrame.setVisible(true);
+            if (osName.contains("Mac")) {
+                // To minimize the mainFrame in Mac OS this seems to be required
+                mainFrame.setVisible(false);
+                mainFrame.setVisible(true);
             }
-        } else { 
+        } else {
             AbbozzaLogger.err("wasn't iconified");
             mainFrame.setExtendedState(oldState);
         }
         // mainFrame.setVisible(true);
     }
- 
+
     protected String expandPath(String path) {
-        if ( path == null ) return null;
-        
-        String xPath = path;
-        if (path.contains("%HOME%")) {
-            xPath = xPath.replace("%HOME%", System.getProperty("user.home"));
+        if (path == null) {
+            return null;
         }
+
+        String xPath = InstallTool.expandPath(path);
+
+        // if (path.contains("%HOME%")) {
+        //     xPath = xPath.replace("%HOME%", System.getProperty("user.home"));
+        // }
         if (xPath.contains("%ABBOZZA%")) {
             xPath = xPath.replace("%ABBOZZA%", abbozzaPath);
         }
         return xPath;
     }
-    
+
     public String getVersion() {
-      return getSystemVersion();
+        return getSystemVersion();
     }
-    
+
     public String getCommonVersion() {
-      return "" + VER_MAJOR + "." + VER_MINOR + "." + VER_HOTFIX;
+        return "" + VER_MAJOR + "." + VER_MINOR + "." + VER_HOTFIX;
     }
-    
+
     public String getSystemVersion() {
         return "-1.-1 (common)";
-    };
+    }
+
+    ;
 
     public abstract boolean installPluginFile(InputStream stream, String name);
+
     public abstract void installUpdate(String version, String updateUrl);
-    
+
     public boolean isRemoteAccessDenied() {
-       return denyRemoteAccess;
+        return denyRemoteAccess;
+    }
+
+    public boolean isHostAllowed(String host) {
+        if (allowedHosts == null) {
+            allowedHosts = "";
+        }
+        return allowedHosts.contains(host);
     }
     
-    public boolean isHostAllowed(String host) {
-        if ( allowedHosts == null ) allowedHosts = "";
-        return allowedHosts.contains(host);
+    public String getIp4Address() {
+        if ( this.ip4Address == null ) {
+            return "???";
+        }
+        return this.ip4Address.getHostAddress();
+    }
+
+    public String getIp6Address() {
+        if ( this.ip6Address == null ) {
+            return "???";
+        }
+        return this.ip6Address.getHostAddress();
     }
     
 }

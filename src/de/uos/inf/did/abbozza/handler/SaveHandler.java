@@ -160,7 +160,7 @@ public class SaveHandler extends AbstractHandler {
 
                 if (!file.equals(lastSketchFile) && file.exists()) {
                     int answer = JOptionPane.showConfirmDialog(null, AbbozzaLocale.entry("msg.file_overwrite", file.getName()), "", JOptionPane.YES_NO_OPTION);
-                    if (answer == JOptionPane.NO_OPTION) {
+                    if ( (answer != JOptionPane.YES_OPTION) && (answer != JOptionPane.OK_OPTION) ) {
                         _abbozzaServer.setDialogOpen(false);
                         _abbozzaServer.resetFrame();        
                         _abbozzaServer.toolIconify();

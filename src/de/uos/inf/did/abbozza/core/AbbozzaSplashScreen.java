@@ -8,7 +8,13 @@ package de.uos.inf.did.abbozza.core;
 import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -16,11 +22,12 @@ import javax.swing.JFrame;
  *
  * @author mbrinkmeier
  */
-public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable {
+public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable, MouseListener, MouseMotionListener {
 
     private static Thread splashThread;
     private static AbbozzaSplashScreen splashScreen;
     private ImageIcon splashImage;
+    private Point dragPoint;
     
     /**
      * Creates new form AbbozzaSplashScreen
@@ -32,6 +39,9 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
         splashImage = new ImageIcon(this.getClass().getClassLoader().getResource(image));
         
         initComponents();
+
+        this.addMouseListener(this);        
+        this.addMouseMotionListener(this);
         
         GUITool.centerWindow(this);
     }
@@ -51,6 +61,7 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
+        setLocationByPlatform(true);
         setMinimumSize(new java.awt.Dimension(320, 200));
         setUndecorated(true);
         setResizable(false);
@@ -101,4 +112,40 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
     public void run() {
         if (splashScreen != null) splashScreen.setVisible(true);
     }
+    
+    public void mousePressed(MouseEvent e) {
+        if(!e.isMetaDown()){
+            dragPoint.x = e.getX();
+            dragPoint.y = e.getY();
+        }
+    }
+    
+    public void mouseDragged(MouseEvent e) {
+        if(!e.isMetaDown()){
+            Point p = this.getLocation();
+            this.setLocation(p.x + e.getX() - dragPoint.x,
+            p.y + e.getY() - dragPoint.y);
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    }
+    
 }
