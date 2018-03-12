@@ -113,6 +113,7 @@ public class XMLTool {
     /**
      * This operation reads an XML-ducument from the given URL
      * @param url The URL of the XML-document
+     * @param timeout The time till the connection times out in ms
      * @return The document
      */
     public static Document getXml(URL url, int timeout) {
