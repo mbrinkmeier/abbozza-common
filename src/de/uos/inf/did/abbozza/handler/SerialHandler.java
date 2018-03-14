@@ -60,14 +60,14 @@ public class SerialHandler extends AbstractHandler {
         if ( props.get("timeout") != null ) {
             timeout = Long.parseLong((String) props.get("timeout"));
         }
-        AbbozzaMonitor monitor = this._abbozzaServer.monitorHandler.getMonitor();
+        AbbozzaMonitor monitor = this._abbozzaServer.getMonitor();
         if ( monitor != null ) {
-           Message msg = monitor.sendMessage((String) props.get("msg") + "\n", he, this, timeout);
+           Message msg = monitor.sendMessage((String) props.get("msg"), he, this, timeout);
            while ( msg.getState() == Message.WAITING ) {
-               try {
-                   Thread.sleep(100);
-               } catch (InterruptedException ex) {
-               }
+              try {
+                  Thread.sleep(100);
+              } catch (InterruptedException ex) {
+              }
            }
            switch ( msg.getState() ) {
                case Message.DONE:

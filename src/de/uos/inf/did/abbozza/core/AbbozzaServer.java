@@ -44,6 +44,7 @@ import de.uos.inf.did.abbozza.handler.TaskHandler;
 import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
 import de.uos.inf.did.abbozza.install.InstallTool;
+import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
 import de.uos.inf.did.abbozza.plugin.Plugin;
 import de.uos.inf.did.abbozza.tools.GUITool;
@@ -103,6 +104,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     // Version
     public static final int VER_MAJOR = 1;     // Major version of common core
     public static final int VER_MINOR = 0;    // Minor version of common core
+    public static final int VER_REV = 1;    // Minor version of common core
     public static final int VER_HOTFIX = 0;    // Minor version of common core
 
     // Instance
@@ -847,6 +849,10 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     public void adaptConfigDialog(AbbozzaConfigDialog dialog) {
+    }
+
+    public AbbozzaMonitor getMonitor() {
+        return this.monitorHandler.getMonitor();
     }
 
     public void monitorIsClosed() {

@@ -303,7 +303,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         String msg = (String) this.sendText.getEditor().getItem();
         if (msg != null && !msg.isEmpty()) {            
-            this.sendMessage(msg + "\n");
+            this.sendMessage(msg);
             this.sendText.insertItemAt(msg,0);  // new String(msg)
             this.sendText.setSelectedItem(null);
         }
@@ -339,7 +339,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
     private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
         String msg = evt.getActionCommand();
         if (msg != null && !msg.isEmpty()) {
-            this.sendMessage(msg + "\n");
+            this.sendMessage(msg);
             this.sendText.insertItemAt(msg,0);    // new String(msg)
             this.sendText.setSelectedItem(null);
         }
@@ -347,12 +347,12 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
 
     public synchronized void addToUpdateBuffer(char buff[], int n) {
         updateBuffer.append(buff, 0, n);
-        AbbozzaLogger.out("buffer: " + updateBuffer.toString());
+        AbbozzaLogger.out("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
     }
 
     public synchronized void addToUpdateBuffer(String buf) {
         updateBuffer.append(buf.toCharArray(), 0, buf.length());
-        AbbozzaLogger.out("buffer: " + updateBuffer.toString());
+        AbbozzaLogger.out("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
     }
 
     private synchronized String consumeUpdateBuffer() {
@@ -414,7 +414,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
      */
     protected void writeMessage(String msg) {
         try {
-            serialPort.writeString(msg);
+            serialPort.writeString(msg + "\n");
             appendText("-> " + msg + "\n");
         } catch (SerialPortException ex) {
             AbbozzaLogger.err("AbbozzaMonitor: Error sending to serial port");
@@ -529,6 +529,9 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
                 }
             }
         } while ((start != -1) && (end != -1));
+        
+        // No [[ and ]] in buffer, remove everything
+        unprocessedMsg.setLength(0);
     }
 
     
@@ -684,6 +687,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
                         SerialPort.DATABITS_8,
                         SerialPort.STOPBITS_1,
                         SerialPort.PARITY_NONE);
+                serialPort.purgePort(SerialPort.PURGE_RXCLEAR | SerialPort.PURGE_TXCLEAR);
             } catch (SerialPortException ex) {
                 AbbozzaLogger.err(ex.getLocalizedMessage());
 
@@ -757,6 +761,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
 
     @Override
     public void serialEvent(SerialPortEvent event) {
+        AbbozzaLogger.debug("AbbozzaMonitor: serialEvent");
         if (event.isRXCHAR() && event.getEventValue() > 0) {
             try {
                 String receivedData = serialPort.readString(event.getEventValue());
@@ -768,7 +773,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
     }
 
     void scanPorts() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

@@ -10,6 +10,7 @@ import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
+import de.uos.inf.did.abbozza.handler.SerialHandler;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -175,6 +176,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
 
     @Override
     public void registerSystemHandlers() {
+        httpServer.createContext("/abbozza/serial", new SerialHandler(this));
     }
 
     @Override
