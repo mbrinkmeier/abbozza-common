@@ -197,6 +197,7 @@ Continuing?</msg>
         <msg id="txt.ASCIIFROMTEXTPOS">ASCII-Code of char # of</msg>
         <msg id="txt.LENGTH">Length of</msg>
         <msg id="txt.SUBSTRING">Substring of # from # to</msg>
+        <msg id="txt.ISEMPTY">is empty</msg>
 		
         <msg id="parser.SET_LINE">Start parsing line</msg>
         <msg id="parser.EOL">Parser reached end of line?</msg>
