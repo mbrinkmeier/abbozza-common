@@ -59,8 +59,8 @@ public class PluginPanel extends javax.swing.JPanel implements ListCellRenderer 
         
         Plugin plugin = AbbozzaServer.getPluginManager().getPlugin(id);
         
-        String text = _name + "\n\n" + _desc + "\n\n";
-
+        String text = _desc + "\n\n";
+        
         if ( plugin != null ) {
             text = text + AbbozzaLocale.entry("gui.is_installed");
         }
@@ -78,10 +78,20 @@ public class PluginPanel extends javax.swing.JPanel implements ListCellRenderer 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        titlePane = new javax.swing.JTextArea();
         descPane = new javax.swing.JTextArea();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        titlePane.setEditable(false);
+        titlePane.setColumns(20);
+        titlePane.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        titlePane.setLineWrap(true);
+        titlePane.setRows(5);
+        titlePane.setText(_name);
+        titlePane.setWrapStyleWord(true);
+        titlePane.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         descPane.setEditable(false);
         descPane.setColumns(20);
@@ -95,22 +105,21 @@ public class PluginPanel extends javax.swing.JPanel implements ListCellRenderer 
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(descPane)
-                .addContainerGap())
+            .addComponent(titlePane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(descPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(descPane)
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(titlePane, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(descPane, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea descPane;
+    private javax.swing.JTextArea titlePane;
     // End of variables declaration//GEN-END:variables
 
     @Override
