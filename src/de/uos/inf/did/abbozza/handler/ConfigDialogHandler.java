@@ -23,7 +23,7 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import java.io.IOException;
 
 /**
@@ -37,7 +37,7 @@ public class ConfigDialogHandler extends AbstractHandler {
     }
 
     @Override
-    protected void myHandle(HttpExchange exchg) throws IOException {
+    protected void handleRequest(HttpExchange exchg) throws IOException {
         if ( this._abbozzaServer.openConfigDialog() == 0 ) {
             sendResponse(exchg, 200, "text/plain", this._abbozzaServer.getConfiguration().get().toString());
         } else {

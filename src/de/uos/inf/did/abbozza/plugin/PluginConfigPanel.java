@@ -5,38 +5,30 @@
  */
 package de.uos.inf.did.abbozza.plugin;
 
-import de.uos.inf.did.abbozza.AbbozzaConfig;
-import de.uos.inf.did.abbozza.AbbozzaConfigPanel;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.AbbozzaServer;
-import de.uos.inf.did.abbozza.Tools;
-import de.uos.inf.did.abbozza.install.InstallTool;
+import de.uos.inf.did.abbozza.core.AbbozzaConfig;
+import de.uos.inf.did.abbozza.core.AbbozzaConfigPanel;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.tools.XMLTool;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
-import javax.swing.ListModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -47,6 +39,9 @@ import org.w3c.dom.NodeList;
  */
 public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRenderer {
 
+    // This flag indicates wether the plugins were loaded already
+    private boolean pluginsLoaded = false;
+    
     /**
      * Creates new form PluginConfigPanel
      */
@@ -55,7 +50,7 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
         model.addElement(AbbozzaServer.getConfig().getPluginUrl());
         urlComboBox.setModel(model);        
-        reloadPlugins();
+        pluginsLoaded = false;
     }
 
     /**
@@ -72,6 +67,12 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         jScrollPane1 = new javax.swing.JScrollPane();
         pluginList = new javax.swing.JList<Node>();
         installButton = new javax.swing.JButton();
+
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         urlComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,7 +94,7 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         });
         jScrollPane1.setViewportView(pluginList);
 
-        installButton.setText(AbbozzaLocale.entry("gui.install"));
+        installButton.setText(AbbozzaLocale.entry("msg.loading"));
         installButton.setEnabled(false);
         installButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,6 +164,14 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         }
     }//GEN-LAST:event_pluginListValueChanged
 
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // Load the plugins if focus is gained
+        if ( !pluginsLoaded ) {
+            reloadPlugins();
+            pluginsLoaded = true;
+        }
+    }//GEN-LAST:event_formComponentShown
+
     public boolean checkPlugin(String id) {
         Plugin plugin = AbbozzaServer.getPluginManager().getPlugin(id);
         if ( plugin != null ) {
@@ -192,11 +201,27 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
     private void reloadPlugins() {
         try {
             String urlString = (String) urlComboBox.getSelectedItem();
+            Graphics gr = pluginList.getGraphics();
+            gr.setColor(Color.BLACK);
+            int w = pluginList.getWidth();
+            int h = pluginList.getHeight();
+            FontMetrics fm = gr.getFontMetrics();
+            String text = AbbozzaLocale.entry("msg.loading");
+            int sw = fm.stringWidth(text);
+            int sh = fm.getHeight();
+            gr.drawString(text,(w-sw)/2,(h-sh)/2);
+            AbbozzaLogger.debug("AbbozzaConfigPanel: Reload plugins from " + urlString);
             URL url = new URL(urlString);
-            Document pluginsXml = XMLTool.getXml(url);
+            this.installButton.setText(AbbozzaLocale.entry("msg.loading"));
+            Document pluginsXml = XMLTool.getXml(url,20000);
             if (pluginsXml == null) {
+                JOptionPane.showMessageDialog(this, AbbozzaLocale.entry("msg.plugin_error"),"abbozza!",JOptionPane.ERROR_MESSAGE);
+                this.installButton.setText(AbbozzaLocale.entry("gui.install"));
+                gr.clearRect(0,0,w,h);
                 return;
             }
+            gr.clearRect(0,0,w,h);
+            this.installButton.setText(AbbozzaLocale.entry("gui.install"));
             
             DefaultListModel<Node> list = new DefaultListModel<Node>();
             NodeList plugins = pluginsXml.getElementsByTagName("plugin");
@@ -253,6 +278,10 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
         String name = new File(url.getFile()).getName();
         File file = new File(pluginPath + "/" + name);
         try {
+            if ( file.exists() ) {
+              // Change the name if the target already exists
+              file = new File(pluginPath + "/___" + name);
+            }
             Files.copy(url.openConnection().getInputStream(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             // InstallTool.getInstallTool().writeToFile(url.openConnection().getInputStream(),file);
             File[] jars = new File[1];

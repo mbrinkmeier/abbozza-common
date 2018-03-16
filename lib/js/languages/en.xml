@@ -6,6 +6,7 @@
         <msg id="msg.server_reachable">Server reachable under #</msg> 
         <msg id="msg.not_found"># not found</msg> 
         <msg id="msg.compiling">Compile ...</msg> 
+        <msg id="msg.loading">Loading ...</msg> 
         <msg id="msg.done_compiling">Compilation succesfully finished</msg>
         <msg id="msg.error_compiling">Error during compilation</msg> 
         <msg id="msg.file_overwrite"># already exists! Overwrite the file?</msg> 
@@ -33,6 +34,7 @@ Continuing?</msg>
         <msg id="msg.compile_timeout">Compiling takes to long!</msg>
         <msg id="msg.upload_timeout">Compiling and uploading takes to long!</msg>
         <msg id="msg.cleaning_buildsystem">Cleaning buildsystem</msg>
+        <msg id="msg.plugin_error">Could not load plugin list!</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Generate Code</msg>
@@ -117,7 +119,7 @@ Continuing?</msg>
         <msg id="gui.plugin_panel">Plugins</msg>
         <msg id="gui.plugin_url">URL of plugin list</msg>
         <msg id="gui.plugin_error">Plugin Installation failed</msg>
-        <msg id="gui.plugin_installed">Plugin installiert.</msg>
+        <msg id="gui.plugin_installed">Plugin installed.&#10;Restart required.</msg>
         <msg id="gui.no_i2c">No I2C</msg>
         <msg id="gui.i2c_master">I2C Master</msg>
         <msg id="gui.i2c_slave">I2C Slave</msg>
@@ -131,6 +133,7 @@ Continuing?</msg>
         <msg id="gui.clean_buildsystem">Clean</msg>
         <msg id="gui.remote_access">Allow remote request from # ?</msg>
         <msg id="gui.remote_access_title">Allow remote request?</msg>
+        <msg id="gui.delete_page">Delete page?</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
@@ -191,8 +194,10 @@ Continuing?</msg>
         <msg id="txt.FROMNUMBER">Convert # to string</msg>
         <msg id="txt.TEXTFROMASCII">Character with ASCII-code</msg>
         <msg id="txt.ASCIIFROMTEXT">ASCII-code of</msg>
+        <msg id="txt.ASCIIFROMTEXTPOS">ASCII-Code of char # of</msg>
         <msg id="txt.LENGTH">Length of</msg>
         <msg id="txt.SUBSTRING">Substring of # from # to</msg>
+        <msg id="txt.ISEMPTY">is empty</msg>
 		
         <msg id="parser.SET_LINE">Start parsing line</msg>
         <msg id="parser.EOL">Parser reached end of line?</msg>

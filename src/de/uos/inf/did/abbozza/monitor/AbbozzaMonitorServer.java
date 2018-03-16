@@ -5,11 +5,12 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
-import de.uos.inf.did.abbozza.AbbozzaConfig;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaConfig;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
+import de.uos.inf.did.abbozza.handler.SerialHandler;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -175,6 +176,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
 
     @Override
     public void registerSystemHandlers() {
+        httpServer.createContext("/abbozza/serial", new SerialHandler(this));
     }
 
     @Override
@@ -300,6 +302,10 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
     @Override
     public boolean installPluginFile(InputStream stream, String name) {
         return true;
+    }
+
+    @Override
+    public void installUpdate(String version, String updateUrl) {
     }
     
 }

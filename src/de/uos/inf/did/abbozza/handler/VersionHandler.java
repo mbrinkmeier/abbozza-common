@@ -24,7 +24,7 @@ package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import java.io.IOException;
 
@@ -39,10 +39,21 @@ public class VersionHandler extends AbstractHandler {
     }
 
     @Override
-    protected void myHandle(HttpExchange exchg) throws IOException {
-        Headers headers = exchg.getResponseHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
-        sendResponse(exchg, 200, "text/plain", "abbozza! " + _abbozzaServer.getVersion());
+    protected void handleRequest(HttpExchange exchg) throws IOException {
+        String path = exchg.getRequestURI().getPath();
+        if (path.endsWith("/version")) {
+            Headers headers = exchg.getResponseHeaders();
+            headers.add("Access-Control-Allow-Origin", "*");
+            sendResponse(exchg, 200, "text/plain", "abbozza! " + _abbozzaServer.getVersion());
+        } else if ( path.endsWith("/ip")) {
+            Headers headers = exchg.getResponseHeaders();
+            headers.add("Access-Control-Allow-Origin", "*");
+            sendResponse(exchg, 200, "text/plain", AbbozzaServer.getInstance().getIp4Address());            
+        } else if ( path.endsWith("/ip6")) {
+            Headers headers = exchg.getResponseHeaders();
+            headers.add("Access-Control-Allow-Origin", "*");
+            sendResponse(exchg, 200, "text/plain", AbbozzaServer.getInstance().getIp6Address());            
+        }
     }
     
 }

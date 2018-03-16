@@ -24,10 +24,11 @@
 package de.uos.inf.did.abbozza.monitor;
 
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
+import de.uos.inf.did.abbozza.plugin.Plugin;
 import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,6 +39,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Queue;
@@ -58,7 +60,7 @@ import jssc.SerialPortList;
  *
  * @author mbrinkmeier
  */
-public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPortEventListener {
+public final class AbbozzaMonitor extends JFrame implements ActionListener, SerialPortEventListener {
 
     private String boardPort;
     private int baudRate = SerialPort.BAUDRATE_115200;
@@ -70,6 +72,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     private SerialPort serialPort;
     private StringBuffer unprocessedMsg;
     private HashMap<String, MonitorPanel> panels;
+    private HashMap<String, MonitorListener> listeners;
     protected Queue<Message> _msgQueue;
     protected HashMap<String, Message> _waitingMsg;
     private Sender _sender;
@@ -115,13 +118,10 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         DefaultCaret caret = (DefaultCaret) textArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
-        this.sendText.getEditor().addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sendTextEditorActionPerformed(evt);
-            }
-        });
+        this.sendText.getEditor().addActionListener(this::sendTextEditorActionPerformed);
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent event) {
                 try {
                     _sender.stopIt();
@@ -145,11 +145,26 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         this.addMonitorPanel(new GraphMonitor(tableMonitor.getTableModel()), "graph");
         this.addMonitorPanel(new LevelMonitor(tableMonitor.getTableModel()), "level");
 
+        listeners = new HashMap<>();
+
+        // Look for plugin panels and listeners
+        AbbozzaLogger.info("AbbozzaMonitor: Checking plugins ...");
+        Plugin plugin;
+        Enumeration<Plugin> plugins = AbbozzaServer.getPluginManager().plugins();
+        while ( plugins.hasMoreElements() ) {
+          plugin = plugins.nextElement();
+          AbbozzaLogger.info("AbbozzaMonitor: Checking plugin " + plugin.getId());
+          this.addMonitorPanel( plugin.getMonitorPanel(), plugin.getMonitorPanelPrefix() );
+          this.addMonitorListener( plugin.getMonitorListener(), plugin.getMonitorListenerPrefix() );
+        }
+        
         textArea.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 maybeShowPopup(e);
             }
 
+            @Override
             public void mouseReleased(MouseEvent e) {
                 maybeShowPopup(e);
             }
@@ -161,7 +176,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
             }
         });
 
-        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);        
+        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         GUITool.centerWindow(this);
     }
 
@@ -288,8 +303,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         String msg = (String) this.sendText.getEditor().getItem();
         if (msg != null && !msg.isEmpty()) {            
-            this.sendMessage(msg + "\n");
-            this.sendText.insertItemAt(new String(msg),0);
+            this.sendMessage(msg);
+            this.sendText.insertItemAt(msg,0);  // new String(msg)
             this.sendText.setSelectedItem(null);
         }
     }//GEN-LAST:event_sendButtonActionPerformed
@@ -324,20 +339,20 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
         String msg = evt.getActionCommand();
         if (msg != null && !msg.isEmpty()) {
-            this.sendMessage(msg + "\n");
-            this.sendText.insertItemAt(new String(msg),0);
+            this.sendMessage(msg);
+            this.sendText.insertItemAt(msg,0);    // new String(msg)
             this.sendText.setSelectedItem(null);
         }
     }
 
     public synchronized void addToUpdateBuffer(char buff[], int n) {
         updateBuffer.append(buff, 0, n);
-        AbbozzaLogger.out("buffer: " + updateBuffer.toString());
+        AbbozzaLogger.out("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
     }
 
     public synchronized void addToUpdateBuffer(String buf) {
         updateBuffer.append(buf.toCharArray(), 0, buf.length());
-        AbbozzaLogger.out("buffer: " + updateBuffer.toString());
+        AbbozzaLogger.out("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
     }
 
     private synchronized String consumeUpdateBuffer() {
@@ -399,7 +414,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
      */
     protected void writeMessage(String msg) {
         try {
-            serialPort.writeString(msg);
+            serialPort.writeString(msg + "\n");
             appendText("-> " + msg + "\n");
         } catch (SerialPortException ex) {
             AbbozzaLogger.err("AbbozzaMonitor: Error sending to serial port");
@@ -434,7 +449,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
      * @return The enqued message object
      */
     public Message sendMessage(String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
-        Message mesg = null;
+        Message mesg;
         if (this.boardPort == null) {
             return null;
         }
@@ -479,7 +494,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         String prefix;
 
         int end = -1;
-        int start = -1;
+        int start;
+        
         do {
             start = unprocessedMsg.indexOf("[[");
             if (start >= 0) {
@@ -490,6 +506,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                     int space = cmd.indexOf(' ');
                     if (space >= 0) {
                         prefix = cmd.substring(0, space);
+                        
+                        // Send message to registered panel
                         MonitorPanel panel = panels.get(prefix);
                         if (panel != null) {
                             cmd = cmd.substring(space + 1, cmd.length());
@@ -497,10 +515,23 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                         } else {
                             respondTo(cmd);
                         }
+                        
+                        // Send message to registered listener
+                        MonitorListener listener = listeners.get(prefix);
+                        if (listener != null) {
+                            cmd = cmd.substring(space + 1, cmd.length());
+                            listener.processMessage(cmd);
+                        } else {
+                            respondTo(cmd);
+                        }
+                        
                     }
                 }
             }
         } while ((start != -1) && (end != -1));
+        
+        // No [[ and ]] in buffer, remove everything
+        unprocessedMsg.setLength(0);
     }
 
     
@@ -545,8 +576,23 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
      */
     private void addMonitorPanel(MonitorPanel panel, String prefix) {
         if (panel != null) {
+            AbbozzaLogger.info("AbbozzaMonitor: Panel for prefix " + prefix + " added");
             tabPanel.add(panel, 0);
             panels.put(prefix, panel);
+        }
+    }
+
+    /**
+     * Add a Listener to the Monitor. Messages enclosed in double brackets of the
+     * form [[ <prefix> <msg> ]] are send to the panel.
+     *
+     * @param panel The panel to be added
+     * @param prefix The prefix of messages handled by the panel
+     */
+    private void addMonitorListener(MonitorListener listener, String prefix) {
+        if (listener != null) {
+            AbbozzaLogger.info("AbbozzaMonitor: Listener for prefix " + prefix + " added");
+            listeners.put(prefix, listener);
         }
     }
 
@@ -595,9 +641,9 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         monitorEnabled = enable;
 
         textArea.setEnabled(enable);
-        for (MonitorPanel panel : panels.values()) {
+        panels.values().forEach((panel) -> {
             panel.setEnabled(enable);
-        }
+        });
     }
 
     // Puts the window in suspend state, closing the serial port
@@ -641,6 +687,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                         SerialPort.DATABITS_8,
                         SerialPort.STOPBITS_1,
                         SerialPort.PARITY_NONE);
+                serialPort.purgePort(SerialPort.PURGE_RXCLEAR | SerialPort.PURGE_TXCLEAR);
             } catch (SerialPortException ex) {
                 AbbozzaLogger.err(ex.getLocalizedMessage());
 
@@ -714,6 +761,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
     @Override
     public void serialEvent(SerialPortEvent event) {
+        AbbozzaLogger.debug("AbbozzaMonitor: serialEvent");
         if (event.isRXCHAR() && event.getEventValue() > 0) {
             try {
                 String receivedData = serialPort.readString(event.getEventValue());
@@ -725,7 +773,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     }
 
     void scanPorts() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

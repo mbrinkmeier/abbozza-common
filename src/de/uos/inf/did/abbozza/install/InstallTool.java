@@ -5,7 +5,7 @@
  */
 package de.uos.inf.did.abbozza.install;
 
-import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.tools.FileTool;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -195,12 +195,18 @@ public abstract class InstallTool {
         );        
     }    
     
-    public String expandPath(String path) {
+    public static String expandPath(String path) {
         if ( path == null ) return null;
         
         String xPath = path;
         if (path.contains("%HOME%")) {
-            xPath = xPath.replace("%HOME%", System.getProperty("user.home"));
+            // Check if HOMESHARE is defined. Required in windows if the user 
+            // uses a network directory as home.
+            String home = System.getenv("HOMESHARE");
+            if ( home == null ) {
+                home = System.getProperty("user.home");
+            }
+            xPath = xPath.replace("%HOME%", home);
         }
         return xPath;
     }

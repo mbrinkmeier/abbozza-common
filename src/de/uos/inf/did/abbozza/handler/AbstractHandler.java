@@ -2,7 +2,7 @@
  * @license
  * abbozza!
  *
- * Copyright 2015 Michael Brinkmeier ( michael.brinkmeier@uni-osnabrueck.de )
+ * Copyright 2015-2018 Michael Brinkmeier ( michael.brinkmeier@uni-osnabrueck.de )
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 /**
- * @fileoverview ...
+ * @fileoverview This is an abstract superclass for all abbozza! handlers.
+ * It enforces to check, wether remote access is allowed.
+ * 
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
 package de.uos.inf.did.abbozza.handler;
@@ -25,8 +27,8 @@ package de.uos.inf.did.abbozza.handler;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -34,16 +36,25 @@ import java.net.InetSocketAddress;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author michael
- */
+
 public abstract class AbstractHandler implements HttpHandler {
 
     protected AbbozzaServer _abbozzaServer;
     protected boolean _allowRemote;
-    private LinkedList<InetAddress> _allowedInetAddresses;
-            
+    private final LinkedList<InetAddress> _allowedInetAddresses;
+
+    
+    /**
+     * The standard constructor.
+     * 
+     */
+    public AbstractHandler() {
+        this._abbozzaServer = AbbozzaServer.getInstance();
+        this._allowRemote = false;
+        this._allowedInetAddresses = new LinkedList<InetAddress>();        
+    }
+    
+    
     public AbstractHandler(AbbozzaServer abbozza) {
         this._abbozzaServer = abbozza;
         this._allowRemote = false;
@@ -58,13 +69,13 @@ public abstract class AbstractHandler implements HttpHandler {
 
     public void sendResponse(HttpExchange exchg, int code, String type, String response) throws IOException {
         byte[] buf = response.getBytes("UTF-8");
-        OutputStream out = exchg.getResponseBody();
-        Headers responseHeaders = exchg.getResponseHeaders();
-        responseHeaders.set("Content-Type", type);
-        responseHeaders.set("Cache-Control","no-cache, no-store, must-revalidate, max-age=0");
-        exchg.sendResponseHeaders(code, buf.length);
-        out.write(buf);
-        out.close();
+        try (OutputStream out = exchg.getResponseBody()) {
+            Headers responseHeaders = exchg.getResponseHeaders();
+            responseHeaders.set("Content-Type", type);
+            responseHeaders.set("Cache-Control","no-cache, no-store, must-revalidate, max-age=0");
+            exchg.sendResponseHeaders(code, buf.length);
+            out.write(buf);
+        }
     }    
     
     public boolean remoteAllowed() {
@@ -72,6 +83,9 @@ public abstract class AbstractHandler implements HttpHandler {
     }
     
     protected final boolean allowRequest(HttpExchange http) {
+      // First check if handler is active
+      if ( !isActive() ) return false;
+      
       InetSocketAddress remote = http.getRemoteAddress();
       InetSocketAddress local = http.getLocalAddress();
       
@@ -89,7 +103,16 @@ public abstract class AbstractHandler implements HttpHandler {
       }
     }
     
-    private final boolean addInetAddress(InetAddress addr) {
+    
+    protected boolean isActive() {
+        return true;
+    }
+            
+            
+    private boolean addInetAddress(InetAddress addr) {
+        if ( this._abbozzaServer.isRemoteAccessDenied() ) {
+            return this._abbozzaServer.isHostAllowed(addr.getHostName()) || this._abbozzaServer.isHostAllowed(addr.getHostAddress());
+        }
        // Check if already listed
        if ( !this._allowedInetAddresses.contains(addr) ) {
          // If not, ask wether it should be allowed
@@ -104,14 +127,15 @@ public abstract class AbstractHandler implements HttpHandler {
     }
     
     
+    @Override
     public final void handle(HttpExchange exchg) throws IOException {
       if ( allowRequest(exchg) ) {
-          myHandle(exchg);
+          handleRequest(exchg);
       } else {
           sendResponse(exchg,403,"text/plain","");
       }
     }
 
-    protected abstract void myHandle(HttpExchange exchg) throws IOException;    
+    protected abstract void handleRequest(HttpExchange exchg) throws IOException;    
     
 }

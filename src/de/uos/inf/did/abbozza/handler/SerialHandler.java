@@ -23,16 +23,14 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.AbbozzaServer;
-import de.uos.inf.did.abbozza.handler.AbstractHandler;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import de.uos.inf.did.abbozza.monitor.Message;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URLDecoder;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -46,27 +44,30 @@ public class SerialHandler extends AbstractHandler {
     }
     
     @Override
-    protected void myHandle(HttpExchange he) throws IOException {
+    protected void handleRequest(HttpExchange he) throws IOException {
         String query = he.getRequestURI().getQuery();
         // msg=<msg>&timeout=<time>
         // No timeout means that the request is not waitung
-        query = query.replace("%20"," ");
-        AbbozzaLogger.out("SerialHandler: received " + he.getRequestURI().toString(),AbbozzaLogger.DEBUG);
+        AbbozzaLogger.debug("SerialHandler: received " + he.getRequestURI().toString());
+        query = URLDecoder.decode(query,"UTF-8");
+        // query = query.replace("%20"," ");
         query = query.replace('&', '\n');
         Properties props = new Properties();
         props.load(new StringReader(query));
+        AbbozzaLogger.debug("SerialHandler: msg = " + props.get("msg"));
+        AbbozzaLogger.debug("SerialHandler: timeout = " + props.get("timeout"));
         long timeout = 0;
         if ( props.get("timeout") != null ) {
             timeout = Long.parseLong((String) props.get("timeout"));
         }
-        AbbozzaMonitor monitor = this._abbozzaServer.monitorHandler.getMonitor();
+        AbbozzaMonitor monitor = this._abbozzaServer.getMonitor();
         if ( monitor != null ) {
            Message msg = monitor.sendMessage((String) props.get("msg"), he, this, timeout);
            while ( msg.getState() == Message.WAITING ) {
-               try {
-                   Thread.sleep(100);
-               } catch (InterruptedException ex) {
-               }
+              try {
+                  Thread.sleep(100);
+              } catch (InterruptedException ex) {
+              }
            }
            switch ( msg.getState() ) {
                case Message.DONE:

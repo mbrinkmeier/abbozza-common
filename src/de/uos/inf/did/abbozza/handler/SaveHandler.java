@@ -22,9 +22,9 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
@@ -59,7 +59,7 @@ public class SaveHandler extends AbstractHandler {
     }
 
     
-    protected void myHandle(HttpExchange exchg) throws IOException {
+    protected void handleRequest(HttpExchange exchg) throws IOException {
         try {
             saveSketch(exchg.getRequestBody());
             this.sendResponse(exchg, 200, "text/xml", "saved");
@@ -160,7 +160,7 @@ public class SaveHandler extends AbstractHandler {
 
                 if (!file.equals(lastSketchFile) && file.exists()) {
                     int answer = JOptionPane.showConfirmDialog(null, AbbozzaLocale.entry("msg.file_overwrite", file.getName()), "", JOptionPane.YES_NO_OPTION);
-                    if (answer == JOptionPane.NO_OPTION) {
+                    if ( (answer != JOptionPane.YES_OPTION) && (answer != JOptionPane.OK_OPTION) ) {
                         _abbozzaServer.setDialogOpen(false);
                         _abbozzaServer.resetFrame();        
                         _abbozzaServer.toolIconify();
