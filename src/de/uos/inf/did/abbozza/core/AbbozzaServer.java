@@ -16,14 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
 /**
  * @fileoverview This class is an abstract abbozza! server
  *
- * The server requires sevejbral directories and files:
- * - jarPath: the path of the jar, containing all required files
- * -
+ * The following directory structure is requirted:
+ * <abbozzaPath> is the path in which all files reside
+ * <abbozzaPath>/lib contains the executable jar and all required files
  *
- * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
+ * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier
  */
 package de.uos.inf.did.abbozza.core;
 
@@ -68,8 +70,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.Executors;
@@ -123,6 +125,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected String sketchbookPath;    // The default path fpr local Sketches
     protected String globalPluginPath;
     protected String localPluginPath;
+    protected ArrayList<URI> additionalURIs;
 
     // several attributes
     protected String system;                // the name of the system (used for paths)
@@ -160,7 +163,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      *
      * @param system The id of the system.
      */
-    public void init(String system) {
+    public void init(String system, String args[]) {
         // If there is already an Abbozza instance, silently die
         if (instance != null) {
             return;
@@ -171,11 +174,17 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Set the system name
         this.system = system;
 
+        additionalURIs = new ArrayList<URI>();
+
         // Initialize the logger
         AbbozzaLogger.init();
         AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
         AbbozzaLogger.registerStream(System.out);
 
+        // Parse command line options
+        AbbozzaLogger.info("Parsing command line");
+        this.parseCommandline(args);
+        
         // Find IP address
         try {
             Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
@@ -244,7 +253,20 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     /**
+     * Initialize the server
+     * 
+     * @param system 
+     */
+    public void init(String system) {
+        this.init(system,null);
+    }
+    
+    /**
      * This default operation sets the main paths
+     * 
+     * The system assumes that the file structure has the following form;
+     * <abbozzaPath> is the path containing the installation
+     * <abbozzaPath>/lib/ contains the executed jar and/or the requires js files
      */
     public void setPaths() {
         // Set user Path to $HOME/.abbozza/<system>
@@ -283,6 +305,8 @@ public abstract class AbbozzaServer implements HttpHandler {
             JOptionPane.showMessageDialog(null, "Unexpected error: Malformed URL " + uri.toString()
                     + "Start installer from jar!", "abbozza! installation error", JOptionPane.ERROR_MESSAGE);
         }
+        // The directory in which the executed jar resides is assumed to be
+        // in a subdirectory lib of the abbozza path
         jarPath = installFile.getParentFile().getAbsolutePath();
         abbozzaPath = installFile.getParentFile().getParent();
 
@@ -413,7 +437,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      * @param url The URL to be opened
      */
     public void startBrowser(String url) {
-        AbbozzaLogger.out("Starting browser");
+        AbbozzaLogger.out("Starting browser ...");
         Runtime runtime = Runtime.getRuntime();
 
         if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
@@ -1080,4 +1104,55 @@ public abstract class AbbozzaServer implements HttpHandler {
         return this.ip6Address.getHostAddress();
     }
     
+    /**
+     * Applies a command line option
+     * 
+     * @param option The option
+     * @param par  The parameter/value of the option or null
+     */
+    protected void applyCommandlineOption(String option, String par) {
+      if ( option.equals("-A") && (par != null) ) {
+        try {
+          additionalURIs.add(new URI(par));
+          AbbozzaLogger.info( "Additional URI : " + par );
+        } catch (URISyntaxException ex) {
+          AbbozzaLogger.err( "Malformed URI after -A : " + par );
+        }
+      }        
+    }
+    
+    /**
+     * Hook for parsing the command line after etabling the logger.
+     * 
+     * @param args The command line arguments
+     */
+    protected void parseCommandline(String args[]) {
+        
+        // Parsing the command line arguments.
+        if ( args != null ) {
+            int i = 0;
+            
+            while ( i < args.length ) {
+                if ( args[i] != null ) {
+                  // Check if argument starts with "-"
+                  if ( args[i].startsWith("-")) {
+                      String option = args[i];
+                      String par = "";
+                      i++;
+                      while ( (i<args.length) && (!args[i].startsWith("-")) ) {
+                        if ( par.isEmpty() ) {
+                            par = args[i];
+                        } else {
+                          par = par + " " + args[i];
+                        }
+                        i++;
+                      }
+                      applyCommandlineOption(option,par);
+                  } else {
+                      AbbozzaLogger.err("Option expected in command line, instead found \"" + args[i] + "\"");
+                  }
+                }
+            }
+        }
+    };   
 }
