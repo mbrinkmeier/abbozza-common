@@ -330,7 +330,7 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.SPEAKER_PLAY_DUR">Spiele auf # Frequenz # Dauer (ms)</msg>
         <msg id="dev.SPEAKER_NOTE">Spiele auf # Ton # Okatve </msg>
         <msg id="dev.SPEAKER_NOTE_DUR">Spiele auf # Ton # Oktave # Dauer (ms)</msg>
-        <msg id="dev.SPEAKER_NOTE_INT">Ton # aus</msg>
+        <msg id="dev.SPEAKER_NOTE_INT">Ton # aus der</msg>
         <msg id="dev.OCTAVE_CONTRA">Kontra-Oktave (sehr tief)</msg>
         <msg id="dev.OCTAVE_GREAT">großen Oktave (tiefer)</msg>
         <msg id="dev.OCTAVE_SMALL">kleinen Oktave (tief)</msg>
