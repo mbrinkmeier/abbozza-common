@@ -309,7 +309,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         // in a subdirectory lib of the abbozza path
         jarPath = installFile.getParentFile().getAbsolutePath();
         abbozzaPath = installFile.getParentFile().getParent();
-
+        
+        AbbozzaLogger.info("jarPath " + jarPath);
+        AbbozzaLogger.info("abbozzaPath " + abbozzaPath);
+        
         // These paths have to be set in the subclass
         globalJarPath = "";
         localJarPath = "";
