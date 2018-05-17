@@ -422,7 +422,7 @@ public class PluginManager implements HttpHandler {
             child = child.getNextSibling();
         }
         if (!foundAll) {
-            JOptionPane.showMessageDialog(null, "Plugin " + plugin.getName() + "deactivated!\n\nRequired libraries are missing:" + libs, "Missing Libraries", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Plugin " + plugin.getName() + " deactivated!\n\nRequired libraries are missing:" + libs, "Missing Libraries", JOptionPane.INFORMATION_MESSAGE);
         }
         return foundAll;
     }

@@ -83,9 +83,6 @@ public abstract class AbstractHandler implements HttpHandler {
     }
     
     protected final boolean allowRequest(HttpExchange http) {
-      // First check if handler is active
-      if ( !isActive() ) return false;
-      
       InetSocketAddress remote = http.getRemoteAddress();
       InetSocketAddress local = http.getLocalAddress();
       
@@ -129,9 +126,17 @@ public abstract class AbstractHandler implements HttpHandler {
     
     @Override
     public final void handle(HttpExchange exchg) throws IOException {
+      // First check if handler is active  
+      if ( !isActive() ) {
+          // Send "Service not available"
+          sendResponse(exchg,503,"text/plain","");
+          return;
+      }      
+      
       if ( allowRequest(exchg) ) {
           handleRequest(exchg);
       } else {
+          // Client is not allowed to issue this request
           sendResponse(exchg,403,"text/plain","");
       }
     }
