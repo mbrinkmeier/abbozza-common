@@ -106,7 +106,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     // Version
     public static final int VER_MAJOR = 1;     // Major version of common core
     public static final int VER_MINOR = 0;    // Minor version of common core
-    public static final int VER_REV = 1;    // Minor version of common core
+    public static final int VER_REV = 2;    // Minor version of common core
     public static final int VER_HOTFIX = 0;    // Minor version of common core
 
     // Instance
@@ -162,6 +162,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      * The system independent initialization of the server
      *
      * @param system The id of the system.
+     * @param args The command line parameters
      */
     public void init(String system, String args[]) {
         // If there is already an Abbozza instance, silently die
@@ -255,7 +256,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     /**
      * Initialize the server
      * 
-     * @param system 
+     * @param system The system id
      */
     public void init(String system) {
         this.init(system,null);
@@ -264,9 +265,9 @@ public abstract class AbbozzaServer implements HttpHandler {
     /**
      * This default operation sets the main paths
      * 
-     * The system assumes that the file structure has the following form;
-     * <abbozzaPath> is the path containing the installation
-     * <abbozzaPath>/lib/ contains the executed jar and/or the requires js files
+     * The system assumes that the file structure has the following form:
+     * abbozzaPath is the path containing the installation
+     * abbozzaPath/lib/ contains the executed jar and/or the requires js files
      */
     public void setPaths() {
         // Set user Path to $HOME/.abbozza/<system>
@@ -309,7 +310,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         // in a subdirectory lib of the abbozza path
         jarPath = installFile.getParentFile().getAbsolutePath();
         abbozzaPath = installFile.getParentFile().getParent();
-
+        
+        AbbozzaLogger.info("jarPath " + jarPath);
+        AbbozzaLogger.info("abbozzaPath " + abbozzaPath);
+        
         // These paths have to be set in the subclass
         globalJarPath = "";
         localJarPath = "";
