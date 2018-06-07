@@ -193,6 +193,7 @@ Continuing?</msg>
         <msg id="txt.LETTERAT">Character no. # from</msg>
         <msg id="txt.FROMNUMBER">Convert # to string</msg>
         <msg id="txt.TEXTFROMASCII">Character with ASCII-code</msg>
+        <msg id="txt.TEXTTONUMBER">Convert # to number</msg>
         <msg id="txt.ASCIIFROMTEXT">ASCII-code of</msg>
         <msg id="txt.ASCIIFROMTEXTPOS">ASCII-Code of char # of</msg>
         <msg id="txt.LENGTH">Length of</msg>
