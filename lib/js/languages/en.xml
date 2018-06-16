@@ -191,7 +191,8 @@ Continuing?</msg>
         <msg id="var.GLOBAL">global</msg>
 		
         <msg id="txt.LETTERAT">Character no. # from</msg>
-        <msg id="txt.FROMNUMBER">Convert # to string</msg>
+        <msg id="txt.FROMNUMBER">As Text:</msg>
+        <msg id="txt.TONUMBER">As Number:</msg>
         <msg id="txt.TEXTFROMASCII">Character with ASCII-code</msg>
         <msg id="txt.ASCIIFROMTEXT">ASCII-code of</msg>
         <msg id="txt.ASCIIFROMTEXTPOS">ASCII-Code of char # of</msg>
@@ -346,7 +347,8 @@ Continuing?</msg>
         <msg id="i2c.WRITE_SHORT">Send 2 Bytes</msg>
         <msg id="i2c.WRITE_INT">Send 4 Bytes</msg>
         <msg id="i2c.WRITE_TEXT">Send</msg>
-        <msg id="i2c.READ">I2C: Request from address # Number of bytes</msg>
+        <msg id="i2c.READ">Request from address # Number of bytes</msg>
+        <msg id="i2c.REQUEST">Read from Adresse # Register # Number of Bytes</msg>
         
         <msg id="SETUP">Setup</msg>
         <msg id="LOOP">Main loop</msg>
