@@ -191,8 +191,8 @@ Trotzdem fortfahren?</msg>
         <msg id="var.GLOBAL">global</msg>
 		
         <msg id="txt.LETTERAT">Zeichen Nr. # aus</msg>
-        <msg id="txt.FROMNUMBER">Wandle # in Text um</msg>
-        <msg id="txt.TONUMBER">Wandle # in Zahl um</msg>
+        <msg id="txt.FROMNUMBER">Als Text:</msg>
+        <msg id="txt.TONUMBER">Als Zahl:</msg>
         <msg id="txt.TEXTFROMASCII">Zeichen mit ASCII-Code</msg>
         <msg id="txt.ASCIIFROMTEXT">ASCII-Code von</msg>
         <msg id="txt.ASCIIFROMTEXTPOS">ASCII-Code von Zeichen # aus</msg>
