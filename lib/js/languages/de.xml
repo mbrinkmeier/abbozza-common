@@ -344,7 +344,8 @@ Trotzdem fortfahren?</msg>
         <msg id="i2c.WRITE_SHORT">Sende als 2 Bytes</msg>
         <msg id="i2c.WRITE_INT">Sende als 4 Bytes</msg>
         <msg id="i2c.WRITE_TEXT">Sende</msg>
-        <msg id="i2c.READ">I2C: Lese von Adresse # Anzahl Bytes</msg>
+        <msg id="i2c.READ">Lese von Adresse # Anzahl Bytes</msg>
+        <msg id="i2c.REQUEST">Lese von Adresse # Register # Anzahl Bytes</msg>
                 
         <msg id="AND">und</msg>
         <msg id="MILLIS">Zeit in Millisekunden (ms)</msg>

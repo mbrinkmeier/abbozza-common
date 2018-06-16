@@ -346,7 +346,8 @@ Continuing?</msg>
         <msg id="i2c.WRITE_SHORT">Send 2 Bytes</msg>
         <msg id="i2c.WRITE_INT">Send 4 Bytes</msg>
         <msg id="i2c.WRITE_TEXT">Send</msg>
-        <msg id="i2c.READ">I2C: Request from address # Number of bytes</msg>
+        <msg id="i2c.READ">Request from address # Number of bytes</msg>
+        <msg id="i2c.REQUEST">Read from Adresse # Register # Number of Bytes</msg>
         
         <msg id="SETUP">Setup</msg>
         <msg id="LOOP">Main loop</msg>
