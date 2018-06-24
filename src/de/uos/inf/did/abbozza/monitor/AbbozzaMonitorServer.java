@@ -9,6 +9,7 @@ import de.uos.inf.did.abbozza.core.AbbozzaConfig;
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
+import de.uos.inf.did.abbozza.core.AbbozzaServerException;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
@@ -93,12 +94,20 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
         AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
 
         
-        this.startServer();
+        // Try to start server on given port
+        int serverPort = config.getServerPort();
+        try {
+          this.startServer(serverPort);
+        } catch (AbbozzaServerException ex) {
+          AbbozzaLogger.err(ex.getMessage());
+          JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("msg. already_running"),"",JOptionPane.ERROR_MESSAGE);
+          System.exit(1);
+        }
+
 
         monitor = new AbbozzaMonitor();
         monitor.setDefaultCloseOperation(JDialog.EXIT_ON_CLOSE);
-        
-        
+              
         initMenu();
         
         monitor.setVisible(true);
@@ -109,16 +118,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
             monitor.setBoardPort(ports[0],115200);
         } else {
             monitor.setRate(115200);            
-        }
-        
-        /*
-        
-        try {
-            monitor.open();
-        } catch (Exception ex) {
-            Logger.getLogger(AbbozzaMonitorServer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
+        }        
     }
 
     private void initMenu() {

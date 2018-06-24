@@ -3,6 +3,8 @@
     <messages>
         <msg id="msg.loaded">Locale de_DE geladen</msg> 
         <msg id="msg.server_started">Server gestartet auf Port #</msg> 
+        <msg id="msg.already_running">abbozza! scheint bereits zu laufen!</msg> 
+        <msg id="msg.port_denied">Konnte abbozza! nicht auf Port # starten.</msg> 
         <msg id="msg.server_reachable">Server erreichbar unter #</msg> 
         <msg id="msg.not_found"># nicht gefunden</msg> 
         <msg id="msg.compiling">Kompiliere ...</msg> 

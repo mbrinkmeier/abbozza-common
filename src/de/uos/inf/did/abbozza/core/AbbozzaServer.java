@@ -61,6 +61,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
@@ -77,6 +78,7 @@ import java.util.Vector;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
@@ -300,7 +302,8 @@ public abstract class AbbozzaServer implements HttpHandler {
         URI uri = null;
         File installFile = new File("/");
         try {
-            uri = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+            // uri = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+            uri = this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
             installFile = new File(uri);
         } catch (URISyntaxException ex) {
             JOptionPane.showMessageDialog(null, "Unexpected error: Malformed URL " + uri.toString()
@@ -400,18 +403,23 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     /**
-     * Starts the server.
+     * Starts the server on the given port.
+     * 
+     * AbbozzaServerException is thrown if the connection to the port is denied.
+     * 
+     * @param serverPort The port on which the server should listen.
+     * @throws de.uos.inf.did.abbozza.core.AbbozzaServerException
      */
-    protected void startServer() {
+    protected void startServer(int serverPort) throws AbbozzaServerException {
 
+        // Do not start a second server in the same VM
         if ((!isStarted) && (AbbozzaServer.getInstance() == this)) {
             this.isStarted = true;
 
-            // AbbozzaLogger.out("Duplexer Started ... ", AbbozzaLogger.INFO);
-            AbbozzaLogger.out("Starting server ... ", AbbozzaLogger.INFO);
+            AbbozzaLogger.out("Trying to start server on port " + serverPort + " ... ", AbbozzaLogger.INFO);
 
-            serverPort = config.getServerPort();
-            while (httpServer == null) {
+            // serverPort = config.getServerPort();
+            // while (httpServer == null) {
                 try {
                     httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
                     registerHandlers();
@@ -419,18 +427,35 @@ public abstract class AbbozzaServer implements HttpHandler {
                     httpServer.start();
                     AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
                 } catch (Exception e) {
-                    // AbbozzaLogger.stackTrace(e);
                     AbbozzaLogger.err(e.getLocalizedMessage());
-                    e.printStackTrace(System.out);
                     AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
-                    serverPort++;
                     httpServer = null;
+                    
+                    try {
+                       // Check if abbozza! is running
+                       URL url = new URL("http://localhost:" + serverPort + "/abbozza/version");
+                       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                       conn.connect();
+                       if ( conn.getResponseCode() < 300 ) {
+                         throw new AbbozzaServerException(AbbozzaServerException.SERVER_RUNNING,"Another server is running on port " + serverPort);
+                       } else {
+                          throw new AbbozzaServerException(AbbozzaServerException.SERVER_PORT_DENIED,"Could not connect to port " + serverPort);
+                       }
+                    } catch (MalformedURLException muex) {
+                       throw new AbbozzaServerException(AbbozzaServerException.SERVER_PORT_DENIED,"Could not connect to port " + serverPort);
+                    } catch (IOException ioex) {
+                       throw new AbbozzaServerException(AbbozzaServerException.SERVER_PORT_DENIED,"Could not connect to port " + serverPort);
+                    }
+
+                    
                 }
-            }
+            // }
 
-            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(config.getServerPort())), 4);
+            this.serverPort = serverPort;
+            
+            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(this.serverPort)), 4);
 
-            String url = "http://localhost:" + config.getServerPort() + "/" + system + ".html";
+            String url = "http://localhost:" + this.serverPort + "/" + system + ".html";
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_reachable", url));
         }
     }
@@ -516,6 +541,8 @@ public abstract class AbbozzaServer implements HttpHandler {
                     break;
                 case "2":
                     AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(config.get(), null, true, true);
+                    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    GUITool.centerWindow(dialog);
                     dialog.setModal(true);
                     dialog.setVisible(true);
                     if (dialog.getState() == 0) {
