@@ -394,9 +394,9 @@ div[role="treeitem"]:hover {
     position: absolute;
     margin: 0px;
     bottom: 8px;
-    left: 8px;
-    right: 20px;
-    height: 20px;
+    left: 10px;
+    right: 24px;
+    height: 24px;
     cursor: default;
     color: black;
     z-index: 42;

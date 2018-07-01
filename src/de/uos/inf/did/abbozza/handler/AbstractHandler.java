@@ -72,7 +72,7 @@ public abstract class AbstractHandler implements HttpHandler {
         try (OutputStream out = exchg.getResponseBody()) {
             Headers responseHeaders = exchg.getResponseHeaders();
             responseHeaders.set("Content-Type", type);
-            responseHeaders.set("Cache-Control","no-cache, no-store, must-revalidate, max-age=0");
+            responseHeaders.set("Cache-Control","private, no-cache, no-store, must-revalidate, max-age=0");
             exchg.sendResponseHeaders(code, buf.length);
             out.write(buf);
         }

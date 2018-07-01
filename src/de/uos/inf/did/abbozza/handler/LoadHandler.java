@@ -48,17 +48,32 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class LoadHandler extends AbstractHandler {
     
+    private String contentLocation;
+    
+    /**
+     * 
+     * @param abbozza 
+     */
     public LoadHandler(AbbozzaServer abbozza) {
         super(abbozza);
     }
 
+    /**
+     * 
+     * @param exchg
+     * @throws IOException 
+     */
     @Override
     protected void handleRequest(HttpExchange exchg) throws IOException {
+        contentLocation = null;
         try {
             String query = exchg.getRequestURI().getQuery();
             if ( query == null ) {
                 String sketch = loadSketch();
                 if ( sketch != null ) {
+                    if ( contentLocation != null) 
+                        exchg.getResponseHeaders().add("Content-Location", contentLocation);
+                    
                     this.sendResponse(exchg, 200, "text/xml; charset=utf-8", sketch);
                 } else {
                     this.sendResponse(exchg, 404, "", "");                    
@@ -66,6 +81,8 @@ public class LoadHandler extends AbstractHandler {
             } else {
                 AbbozzaLogger.out("loadHandler: load " + query, AbbozzaLogger.DEBUG);
                 String sketch = loadSketch(query);
+                if ( contentLocation != null) 
+                   exchg.getResponseHeaders().add("Content-Location", contentLocation);
                 this.sendResponse(exchg, 200, "text/xml; charset=utf-8", sketch);
             }
         } catch (IOException ioe) {
@@ -73,6 +90,12 @@ public class LoadHandler extends AbstractHandler {
         }
     }
 
+    /**
+     * Load sketch chosen by user.
+     * 
+     * @return
+     * @throws IOException 
+     */
     public String loadSketch() throws IOException {
         if ( _abbozzaServer.isDialogOpen() ) return null;
         
@@ -147,6 +170,8 @@ public class LoadHandler extends AbstractHandler {
                 }
             }
             
+            contentLocation = url.toString();
+
             if (panel.applyOptions()) {
                 AbbozzaServer.getConfig().apply(panel.getOptions());
             }            
@@ -162,7 +187,13 @@ public class LoadHandler extends AbstractHandler {
         return result;
     }
 
-    
+    /**
+     * Load sketch from path.
+     *
+     * @param path The URL/Path of the sjetch to be loaded.
+     * @return
+     * @throws IOException 
+     */
     public String loadSketch(String path) throws IOException {
         String result = "";
         URL url;
@@ -194,9 +225,12 @@ public class LoadHandler extends AbstractHandler {
         AbbozzaLogger.out("LoadHandler: load " + url.toString(),AbbozzaLogger.DEBUG);
         AbbozzaLogger.out("LoadHandler: load anchor " + url.toString(),AbbozzaLogger.DEBUG);
         _abbozzaServer.setTaskContext(url);
+        _abbozzaServer.setLastSketchFile(url);
 
         URLConnection conn = url.openConnection();
         InputStream inStream = conn.getInputStream();
+        contentLocation = url.toString();
+
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(inStream,"utf-8"));
         
