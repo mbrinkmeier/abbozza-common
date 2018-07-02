@@ -92,6 +92,12 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.task">Aufgabe</msg>
         <msg id="gui.tasks">Aufgaben</msg>
         <msg id="gui.task_path">Aufgaben Verzeichnis</msg>        
+        <msg id="gui.task_tooltip_prevsketch">Vorherige Aufgabe</msg>        
+        <msg id="gui.task_tooltip_prev">Vorherige Seite</msg>        
+        <msg id="gui.task_tooltip_main">Übersicht</msg>        
+        <msg id="gui.task_tooltip_reload">Von vorne</msg>        
+        <msg id="gui.task_tooltip_next">Nächste Seite</msg>        
+        <msg id="gui.task_tooltip_nextsketch">Nächste Aufgabe</msg>        
         <msg id="gui.go_to_task_path">Zum Aufgaben Verzeichnis</msg>        
         <msg id="gui.go_to_sketchbook_path">Zum Sketchbook Verzeichnis</msg>        
         <msg id="gui.load_from_web">Lade aus dem WWW</msg>        

@@ -331,17 +331,28 @@ div[role="treeitem"]:hover {
     margin-bottom: 3px;
     width: 24px;
     height: 24px;
-    border: 2px white solid;
+    color : white;
+    font-size: 24px;
+    /* border: 2px white solid; */
     border-radius: 5px;
-    background-color: #a0a0a0;
+    background-color: #d0d0d0;
     cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
 }
+
+.taskOverlayButton:hover {
+    color : #d0d0d0;
+    background-color: white;
+}
+
 
 .taskOverlayButton IMG {
     padding:2px;
     margin-left: 1px;
     margin-top: 1px;
 }
+
 
 .taskOverlayTitle {
    float: left;
