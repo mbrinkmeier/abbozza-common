@@ -52,7 +52,7 @@ public class LoadHandler extends AbstractHandler {
     
     /**
      * 
-     * @param abbozza 
+     * @param abbozza The AbbozzaServer.
      */
     public LoadHandler(AbbozzaServer abbozza) {
         super(abbozza);
@@ -60,8 +60,8 @@ public class LoadHandler extends AbstractHandler {
 
     /**
      * 
-     * @param exchg
-     * @throws IOException 
+     * @param exchg The HTTPExchange Object representing the request.
+     * @throws IOException Thrown if an IO Error occured during request handling
      */
     @Override
     protected void handleRequest(HttpExchange exchg) throws IOException {
@@ -93,8 +93,8 @@ public class LoadHandler extends AbstractHandler {
     /**
      * Load sketch chosen by user.
      * 
-     * @return
-     * @throws IOException 
+     * @return The loaded sketch as a string.
+     * @throws IOException thrown if an IO error occured.
      */
     public String loadSketch() throws IOException {
         if ( _abbozzaServer.isDialogOpen() ) return null;
@@ -191,8 +191,8 @@ public class LoadHandler extends AbstractHandler {
      * Load sketch from path.
      *
      * @param path The URL/Path of the sjetch to be loaded.
-     * @return
-     * @throws IOException 
+     * @return The sketch as a String.
+     * @throws IOException  Thrown if an IO Error occured during
      */
     public String loadSketch(String path) throws IOException {
         String result = "";

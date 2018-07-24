@@ -408,7 +408,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      * AbbozzaServerException is thrown if the connection to the port is denied.
      * 
      * @param serverPort The port on which the server should listen.
-     * @throws de.uos.inf.did.abbozza.core.AbbozzaServerException
+     * @throws de.uos.inf.did.abbozza.core.AbbozzaServerException This exception is thrown  if the server coulkd not be started.
      */
     protected void startServer(int serverPort) throws AbbozzaServerException {
 
