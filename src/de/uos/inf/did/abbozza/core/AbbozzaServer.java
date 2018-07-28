@@ -100,7 +100,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * The abstract abbozza! erver class
+ * 
+ * The Server can be started with the follwing  options:
+ * -A &lt;URI$gt; : Adds a URI to the list of locations at which files are searched.
+ *                  The added URI is searched with high priority.
+ * 
  * @author michael
  */
 public abstract class AbbozzaServer implements HttpHandler {
