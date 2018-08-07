@@ -3,11 +3,11 @@
  ***************************/
 
 HTML, BODY {
-	height : 100%;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	border: none;
+    height : 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -17,16 +17,16 @@ HTML, BODY {
 }
 
 BODY.editor {
-	border: none;
+    border: none;
 }
 
 DIV.editor {
-	height: 100%;
+    height: 100%;
 }
 
 IFRAME.editor {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 DIV.menu {
@@ -53,72 +53,72 @@ DIV.menu:hover {
 }
 
 DIV.buttons {
-	position: fixed;
-	bottom: 30px;
-	right: 30px;
-	width: 260px;
-	height: 175px;
-	border: none;
-        
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 260px;
+    height: 175px;
+    border: none;
+
 }
 
 DIV.buttons BUTTON {
-	width: 80px;
-	height: 80px;
-	background-color: #D0D0D0;
-	border: none;
-	margin: 0px;
-	margin-right: 2px;
-	margin-bottom: 5px;
-	padding: 0px;
-	text-align: center;
-	opacity: 0.5;
+    width: 80px;
+    height: 80px;
+    background-color: #D0D0D0;
+    border: none;
+    margin: 0px;
+    margin-right: 2px;
+    margin-bottom: 5px;
+    padding: 0px;
+    text-align: center;
+    opacity: 0.5;
 }
 
 DIV.buttons BUTTON:hover {
-	opacity: 1;
+    opacity: 1;
 }
-	
+
 DIV.buttons BUTTON IMG {
-	width: 50px;
-	height: 50px;
-	padding: 0pt;
-	margin: 0pt;
-	border: 0pt;
-	align: middle;
+    width: 50px;
+    height: 50px;
+    padding: 0pt;
+    margin: 0pt;
+    border: 0pt;
+    align: middle;
 }
 
 
 DIV.topButton {
-	width: 40px;
-	height: 40px;
-	position: fixed;
-	top: 2px;
-	background-color: #e0e0e0;
-	border-radius: 0px;
-	border-bottom-right-radius: 5px;
-	border-bottom-left-radius: 5px;
-	opacity: 0.4;
-        z-index: 41;
-        overflow: hidden;
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    top: 2px;
+    background-color: #e0e0e0;
+    border-radius: 0px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    opacity: 0.4;
+    z-index: 41;
+    overflow: hidden;
 }
 
 DIV.topButton:hover {
-	opacity: 1.0;
-	height: auto;
-        padding-top: 15px;
+    opacity: 1.0;
+    height: auto;
+    padding-top: 15px;
 }
 
 DIV.topButton IMG {
-	width: 30px;
-	height: 30px;
-	padding: 5px;
+    width: 30px;
+    height: 30px;
+    padding: 5px;
 }
 
 DIV.topButton:hover IMG {
-	width: 40px;
-	height: 40px;
-	padding: 0px;
+    width: 40px;
+    height: 40px;
+    padding: 0px;
 }
 
 DIV.toolButton {
@@ -136,9 +136,9 @@ DIV.toolButton IMG {
 }
 
 DIV.topButton:hover DIV.toolButton IMG {
-	padding: 5px;
-	width: 30px;
-	height: 30px;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
 }
 
 DIV.topButton:hover DIV.toolButton:hover IMG {
@@ -148,19 +148,19 @@ DIV.topButton:hover DIV.toolButton:hover IMG {
 }
 
 DIV.status_div IMG {
-   width: 400px;
-   height: 200px;
-   padding: 5px;
-   position: fixed;
-   border: none;
-   bottom: 20px;
-   left: 0px;
-   border:1px gray solid;
-   color: gray;
-   font-family: sans-serif;
-   vertical-align: bottom;
-   overflow: auto;
-   z-index: 10;
+    width: 400px;
+    height: 200px;
+    padding: 5px;
+    position: fixed;
+    border: none;
+    bottom: 20px;
+    left: 0px;
+    border:1px gray solid;
+    color: gray;
+    font-family: sans-serif;
+    vertical-align: bottom;
+    overflow: auto;
+    z-index: 10;
 }   
 
 DIV.license_div {
@@ -179,40 +179,40 @@ DIV.license_div A {
 
 
 #generate {
-  right: 420px;
+    right: 420px;
 }
 
 #upload {
-  right: 370px;
+    right: 370px;
 }
 
 #new {
-  right: 320px;
+    right: 320px;
 }
 
 #load {
-  right: 270px;
+    right: 270px;
 }
 
 #save {
-  right: 220px;
+    right: 220px;
 }
 
 #tools {
-   right: 170px;
+    right: 170px;
 }
 
 #connect {
-	right: 120px;
-	background-color: #d00000;
+    right: 120px;
+    background-color: #d00000;
 }
 
 #config {
-	right: 70px;
+    right: 70px;
 }
 
 #info {
-	right: 20px;
+    right: 20px;
 }
 
 #workspace {
@@ -225,22 +225,22 @@ DIV.license_div A {
  **************************/
 
 .blocklySvg {
-  background-image: url(../img/abbozza.png) !important;
-  background-repeat: no-repeat;
-  background-position: right 90px bottom 40px;
-  background-size: 200px;
+    background-image: url(../img/abbozza.png) !important;
+    background-repeat: no-repeat;
+    background-position: right 90px bottom 40px;
+    background-size: 200px;
 }
 
 .blocklyTreeRow {
-   background-image: url(../img/categoryframe.png);
-   background-size: 100% 110%;
-   background-repeat: no-repeat;
-   background-color: transparent;   
-   padding: 5px;   
+    background-image: url(../img/categoryframe.png);
+    background-size: 100% 110%;
+    background-repeat: no-repeat;
+    background-color: transparent;   
+    padding: 5px;   
 }
 
 .blocklyTreeLabel {
-   font-weight: bold;
+    font-weight: bold;
 }
 
 .blocklyTreeRow:not(.blocklyTreeSelected):hover {
@@ -248,9 +248,9 @@ DIV.license_div A {
 }
 
 .blocklyTreeRow:hover {
-   background-image: url(../img/categoryframehover.png);
-   background-color: transparent;   
-   color: orange;
+    background-image: url(../img/categoryframehover.png);
+    background-color: transparent;   
+    color: orange;
 }
 
 div[role="treeitem"]:hover {
@@ -258,40 +258,40 @@ div[role="treeitem"]:hover {
 }
 
 .blocklyTreeSelected {
-  background-image: url(../img/categoryframehover.png);
-  background-color: white;
+    background-image: url(../img/categoryframehover.png);
+    background-color: white;
 }
 
 
 .goog-slider-vertical,
 .goog-slider-horizontal {
-      background-color: ThreeDFace;
-      position: relative;
-      overflow: hidden;
-    }
-    
+    background-color: ThreeDFace;
+    position: relative;
+    overflow: hidden;
+}
+
 .goog-slider-thumb {
-      position: absolute;
-      background-color: ThreeDShadow;
-      overflow: hidden;
-    }
+    position: absolute;
+    background-color: ThreeDShadow;
+    overflow: hidden;
+}
 
-    .goog-slider-vertical .goog-slider-thumb {
-      left: 0;
-      height: 20px;
-      width: 20px;
-    }
+.goog-slider-vertical .goog-slider-thumb {
+    left: 0;
+    height: 20px;
+    width: 20px;
+}
 
-    .goog-slider-horizontal .goog-slider-thumb {
-      top: 0;
-      width: 20px;
-      height: 20px;
-    }
-    .goog-slider-disabled {
-      background-color: lightgray
-    }
+.goog-slider-horizontal .goog-slider-thumb {
+    top: 0;
+    width: 20px;
+    height: 20px;
+}
+.goog-slider-disabled {
+    background-color: lightgray
+}
 
-    
+
 /***********************
  *     Task Window     *
  ***********************/
@@ -326,11 +326,11 @@ div[role="treeitem"]:hover {
 
 .taskOverlayButton {
     float: right;
-    margin-top: 3px;
+    /* margin-top: 3px; */
     margin-right: 3px;
-    margin-bottom: 3px;
-    width: 24px;
-    height: 24px;
+    /* margin-bottom: 3px; */
+    /* width: 24px; */
+    /* height: 24px; */
     color : white;
     font-size: 24px;
     /* border: 2px white solid; */
@@ -355,17 +355,17 @@ div[role="treeitem"]:hover {
 
 
 .taskOverlayTitle {
-   float: left;
-   font-size: 100%;
-   font-weight: bold;
-   text-align: left;
-   margin: 3px;
-   margin-left: 10px;
-   color: black;
-   opacity: 1;
-   border: 1px black solid;
-   overflow: hidden;
-   height: 24px;
+    float: left;
+    font-size: 100%;
+    font-weight: bold;
+    text-align: left;
+    margin: 3px;
+    margin-left: 10px;
+    color: black;
+    opacity: 1;
+    border: 1px black solid;
+    overflow: hidden;
+    height: 24px;
 }
 
 .taskOverlayContent {
@@ -423,20 +423,20 @@ div[role="treeitem"]:hover {
 }
 
 .taskHint {
-   z-index: 40;
-   background-color: #d0d0d0;
-   font-weight: bold;
-   color: white;
-   font-family: sans-serif;    
-   overflow: auto;
-   opacity: 0.9;
-   -webkit-touch-callout: none;
-   -webkit-user-select: none;
-   -khtml-user-select: none;
-   -moz-user-select: none;
-   -ms-user-select: none;
-   user-select: none;   
- }
+    z-index: 40;
+    background-color: #d0d0d0;
+    font-weight: bold;
+    color: white;
+    font-family: sans-serif;    
+    overflow: auto;
+    opacity: 0.9;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;   
+}
 
 .taskHintButton {
     float: right;
@@ -483,43 +483,43 @@ div[role="treeitem"]:hover {
 }
 
 .taskHintHead {
-   background-color: #d0d0d0;
-   font-weight: bold;
-   color: white;
-   font-family: sans-serif;    
-   overflow: auto;
-   -webkit-touch-callout: none;
-   -webkit-user-select: none;
-   -khtml-user-select: none;
-   -moz-user-select: none;
-   -ms-user-select: none;
-   user-select: none;   
- }
+    background-color: #d0d0d0;
+    font-weight: bold;
+    color: white;
+    font-family: sans-serif;    
+    overflow: auto;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;   
+}
 
- 
- .taskHintContent {
-     font-family: sans-serif;
- }
- 
- 
- /**********************
-  *     Error Icon     *
-  **********************/
+
+.taskHintContent {
+    font-family: sans-serif;
+}
+
+
+/**********************
+ *     Error Icon     *
+ **********************/
 
 .abbozzaError{
-	font-family: sans-serif;
-	stroke: black;
+    font-family: sans-serif;
+    stroke: black;
 }
 
 .abbozzaErrorIconShield{
-	fill: white;
-	stroke: red;
+    fill: white;
+    stroke: red;
 }
 
 .abbozzaErrorIcon{
-	fill: white;
-	stroke: red;
-	font-size: 14px;
+    fill: white;
+    stroke: red;
+    font-size: 14px;
 }
 
 .blocklyDraggable {
@@ -532,19 +532,19 @@ div[role="treeitem"]:hover {
  *******************/
 
 #overlay {
-	width: 100%;
-	height: 100%;
-	opacity: 0.8;
-	background-color: #ffffff;
-	display: none;
-	position: fixed;
-	top : 0px;
-	left: 0px;
-	z-index: 42;
-        text-align : center;
-        font-family : sans-serif;
-        font-size: 120%;
-        color: gray;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+    background-color: #ffffff;
+    display: none;
+    position: fixed;
+    top : 0px;
+    left: 0px;
+    z-index: 42;
+    text-align : center;
+    font-family : sans-serif;
+    font-size: 120%;
+    color: gray;
 }
 
 #overlay_content {
@@ -557,10 +557,10 @@ div[role="treeitem"]:hover {
 }
 
 #overlay_err {
-   text-align: left;
-   font-size: 80%;
-   font: monospace;
-   display: inline-block;
+    text-align: left;
+    font-size: 80%;
+    font: monospace;
+    display: inline-block;
 }
 
 
