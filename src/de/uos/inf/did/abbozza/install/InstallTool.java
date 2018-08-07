@@ -140,12 +140,16 @@ public abstract class InstallTool {
     public boolean copyFromJar(ZipFile file, String fromEntry, String path) {
         try {
             ZipEntry entry = file.getEntry(fromEntry);
-            File target = new File(path);
-            Files.copy(file.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            if ( target.getAbsolutePath().endsWith(".sh") || target.getAbsolutePath().endsWith(".bat")) {
-                target.setExecutable(true);
+            if ( entry != null ) {
+                File target = new File(path);
+                Files.copy(file.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                if ( target.getAbsolutePath().endsWith(".sh") || target.getAbsolutePath().endsWith(".bat")) {
+                    target.setExecutable(true);
+                }
+                return true;
+            } else {
+                return false;
             }
-            return true;
         } catch (IOException ex) {
             System.out.println(ex.getLocalizedMessage());
             ex.printStackTrace(System.out);
