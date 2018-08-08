@@ -38,6 +38,16 @@ public class ConfigHandler extends AbstractHandler {
 
     @Override
     protected void handleRequest(HttpExchange exchg) throws IOException {
+        if ( exchg.getRequestURI().getQuery() != null ) {
+            String query = exchg.getRequestURI().getQuery();
+            int pos = query.indexOf('=');
+            if ( pos >= 0 ) {
+                String key = query.substring(0, pos);
+                String value = query.substring(pos+1);
+                _abbozzaServer.getConfiguration().setProperty(key, value);
+                _abbozzaServer.getConfiguration().write();
+            }
+        }
         sendResponse(exchg, 200, "text/plain", _abbozzaServer.getConfiguration().get().toString());
     }
 

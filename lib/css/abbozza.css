@@ -554,6 +554,7 @@ div[role="treeitem"]:hover {
     width: 100%;
     background-color : #f0f0f0;
     padding: 30px;
+    text-align: center;
 }
 
 #overlay_err {

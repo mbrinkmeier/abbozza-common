@@ -61,6 +61,7 @@ public class SaveHandlerPanel extends javax.swing.JPanel implements PropertyChan
         descriptionPanel = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
 
+        optionBox.setSelected(true);
         optionBox.setText(AbbozzaLocale.entry("gui.saveoptions"));
 
         deletableBox.setText(AbbozzaLocale.entry("gui.saveundeletable"));

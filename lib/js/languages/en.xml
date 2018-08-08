@@ -37,6 +37,10 @@ Continuing?</msg>
         <msg id="msg.upload_timeout">Compiling and uploading takes to long!</msg>
         <msg id="msg.cleaning_buildsystem">Cleaning buildsystem</msg>
         <msg id="msg.plugin_error">Could not load plugin list!</msg>
+        <msg id="MSG.START_TUTORIAL">Möchtest Du das Tutorial durchführen?</msg>
+        <msg id="MSG.YES">Ja</msg>
+        <msg id="MSG.NO">Nein</msg>
+        <msg id="MSG.DONT_ASK_AGAIN">Frag nicht nochmal</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Generate Code</msg>
@@ -48,6 +52,8 @@ Continuing?</msg>
         <msg id="gui.connect_button">Connect to board</msg>
         <msg id="gui.config_button">Settings</msg>
         <msg id="gui.info_button">Tasks and information</msg>        
+        <msg id="gui.tutorial">Tutorial</msg>        
+        <msg id="gui.homepage">abbozza! Homepage</msg>        
         <msg id="gui.language">Language</msg>         
         <msg id="gui.start_directly">Start abbozza! with the IDE</msg>         
         <msg id="gui.start_browser">Open the browser at start</msg>         
