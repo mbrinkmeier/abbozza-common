@@ -73,9 +73,9 @@
     
     <target name="-post-clean">
         <!-- Clean the ckeditor used for abbozza -->
-        <delete>
+        <!-- delete>
             <fileset dir="ckeditor4/dev/builder/release/" includes="**/*" />
-        </delete>
+        </delete -->
     </target>
     
     
