@@ -186,6 +186,10 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         buttonPanel = new javax.swing.JPanel();
         storeButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
@@ -226,6 +230,17 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
         );
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jList1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -288,7 +303,11 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
 
         editableTasks.setSelected(config.areTasksEditable());
         editableTasks.setText(AbbozzaLocale.entry("gui.tasks_editable"));
-        editableTasks.setLabel(AbbozzaLocale.entry("gui.tasks_editable"));
+        editableTasks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editableTasksActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout taskPanelLayout = new javax.swing.GroupLayout(taskPanel);
         taskPanel.setLayout(taskPanelLayout);
@@ -363,7 +382,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         updateBox.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         updateBox.setSelected(AbbozzaServer.getConfig().getUpdate());
         updateBox.setText(AbbozzaLocale.entry("gui.update_option"));
-        updateBox.setLabel(AbbozzaLocale.entry("gui.update_option"));
         updateBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 updateBoxActionPerformed(evt);
@@ -515,6 +533,10 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_taskPathButtonActionPerformed
 
+    private void editableTasksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editableTasksActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editableTasksActionPerformed
+
     
     private void parseOptionNode(Node node, DefaultMutableTreeNode root, String prefix) {
         String type = node.getNodeName();
@@ -654,7 +676,11 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JComboBox localeComboBox;
     private javax.swing.JPanel logoPanel;
     private javax.swing.JScrollPane scrollPane;
