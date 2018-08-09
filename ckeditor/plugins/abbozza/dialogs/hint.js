@@ -26,7 +26,7 @@ CKEDITOR.dialog.add( 'hint', function( editor ) {
           {
             id: 'tab1',
             label: '',
-            tiutle: '',
+            title: '',
             elements: [
             {
                 type: 'textarea',

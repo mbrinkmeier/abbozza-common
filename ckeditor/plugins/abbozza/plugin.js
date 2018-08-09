@@ -71,6 +71,10 @@ CKEDITOR.plugins.add( 'abbozza', {
             }
           }
 
+          // if ( TaskWindow.ckeditor != null ) {
+          //     TaskWindow.ckeditor.fire("abbozza");
+          // }
+          // 
           // If this element is destroyed, remove it from the hint list of the
           // corresponding block.
           this.on("destroy", function(event) {
