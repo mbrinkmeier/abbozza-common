@@ -1,0 +1,1 @@
+﻿CKEDITOR.plugins.setLang("about","bg",{copy:"Copyright \x26copy; $1. All rights reserved.",dlgTitle:"Относно CKEditor 4",moreInfo:"За лицензионна информация моля посетете сайта ни:"});

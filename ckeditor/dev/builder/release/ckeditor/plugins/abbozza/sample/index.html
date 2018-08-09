@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014-2018, CKSource - Frederico Knabben. All rights reserved.
+Licensed under the terms of the MIT License (see LICENSE.md).
+-->
+<html>
+<head>
+	<title>Tutorial &mdash; Timestamp Plugin</title>
+	<meta charset="utf-8">
+	<script src="../../../ckeditor.js"></script>
+</head>
+<body>
+	<h1 class="samples">
+		CKEditor Tutorial &mdash; Timestamp Plugin
+	</h1>
+
+	<p>
+		This sample demonstrates the <strong>Timestamp</strong> plugin that was built in the
+		<a href="http://docs.ckeditor.com/ckeditor4/docs/#!/guide/plugin_sdk_sample">Creating a CKEditor Plugin in 20 Lines of Code</a>
+		tutorial from the Plugin SDK section of the <a href="http://docs.ckeditor.com/ckeditor4/docs/#!/guide">CKEditor Developer's Guide</a>.
+	</p>
+
+	<p>
+		The custom Timestamp plugin created in the tutorial lets the users insert current date and time into the editing area of CKEditor
+		at the caret position. This is an example of a most basic CKEditor plugin that you can create in 20 lines of code.
+	</p>
+
+	<textarea id="editor1" cols="10" rows="10">
+		&lt;p&gt;This is some sample text. You are using &lt;a href=&quot;http://ckeditor.com&quot;&gt;CKEditor&lt;/a&gt;.&lt;/p&gt;
+	</textarea>
+
+	<script>
+		CKEDITOR.replace( 'editor1', {
+			// extraAllowedContent: "abbozza-hint[block,dx,dy,width,height] page",
+			// allowedContent: 'abbozza-hint[block,dx,dy,width,height] page h1 h2 h3 p blockquote strong em; a[!href]; img(left,right)[!src,alt,width,height];',
+			allowedContent: true,
+			pasteFilter: null,
+			extraPlugins: 'abbozza',
+			// Rearrange toolbar groups and remove unnecessary plugins.
+			toolbarGroups: [
+				{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+				{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+				{ name: 'links', groups: [ 'links' ] },
+				{ name: 'insert', groups: [ 'insert'] },
+				{ name: 'abbozza', groups: [ 'abbozza' ] },
+				{ name: 'forms', groups: [ 'forms' ] },
+				{ name: 'tools', groups: [ 'tools' ] },
+				{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+				{ name: 'others', groups: [ 'others' ] },
+				'/',
+				{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+				{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+				{ name: 'styles', groups: [ 'styles' ] },
+				{ name: 'colors', groups: [ 'colors' ] },
+				{ name: 'about', groups: [ 'about' ] }
+			]
+		} );
+	</script>
+
+</body>
+</html>

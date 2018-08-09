@@ -1,0 +1,1 @@
+﻿CKEDITOR.plugins.setLang("about","ug",{copy:"Copyright \x26copy; $1. نەشر ھوقۇقىغا ئىگە",dlgTitle:"CKEditor ھەققىدە",moreInfo:"تور تۇرايىمىزنى زىيارەت قىلىپ كېلىشىمگە ئائىت تېخىمۇ كۆپ ئۇچۇرغا ئېرىشىڭ"});

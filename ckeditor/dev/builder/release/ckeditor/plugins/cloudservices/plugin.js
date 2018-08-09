@@ -1,0 +1,7 @@
+﻿/*
+ Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+*/
+(function(){CKEDITOR.plugins.add("cloudservices",{requires:"filetools",onLoad:function(){function a(b,c,a,f){d.call(this,b,c,a);this.customToken=f}var d=CKEDITOR.fileTools.fileLoader;a.prototype=CKEDITOR.tools.extend({},d.prototype);a.prototype.upload=function(b,a){(b=b||this.editor.config.cloudServices_url)?d.prototype.upload.call(this,b,a):CKEDITOR.error("cloudservices-no-url")};CKEDITOR.plugins.cloudservices.cloudServicesLoader=a},beforeInit:function(a){a.on("fileUploadRequest",function(d){var b=
+d.data.fileLoader,c=d.data.requestData;b instanceof CKEDITOR.plugins.cloudservices.cloudServicesLoader&&(c.file=c.upload,delete c.upload,b.customToken||a.config.cloudServices_token?d.data.fileLoader.xhr.setRequestHeader("Authorization",b.customToken||a.config.cloudServices_token):(CKEDITOR.error("cloudservices-no-token"),d.cancel()))},null,null,6);a.on("fileUploadResponse",function(a){var b=a.data.fileLoader,c=b.xhr,e;if(b instanceof CKEDITOR.plugins.cloudservices.cloudServicesLoader){a.stop();try{e=
+JSON.parse(c.responseText),a.data.response=e}catch(f){CKEDITOR.warn("filetools-response-error",{responseText:c.responseText})}}})}});CKEDITOR.plugins.cloudservices={cloudServicesLoader:null}})();

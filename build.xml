@@ -74,20 +74,20 @@
     <target name="-post-clean">
         <!-- Clean the ckeditor used for abbozza -->
         <!-- delete>
-            <fileset dir="ckeditor4/dev/builder/release/" includes="**/*" />
+            <fileset dir="ckeditor/dev/builder/release/" includes="**/*" />
         </delete -->
     </target>
     
     
     <target name="ckeditor.check">
-        <uptodate property="ckeditor.notRequired" value="true" targetfile="ckeditor4/dev/builder/release/ckeditor/ckeditor.js">
-            <srcfiles dir="ckeditor4/plugins/abbozza" includes="**/*" />
+        <uptodate property="ckeditor.notRequired" value="true" targetfile="ckeditor/dev/builder/release/ckeditor/ckeditor.js">
+            <srcfiles dir="ckeditor/plugins/abbozza" includes="**/*" />
         </uptodate>
     </target>
 
         
     <target name="ckeditor" depends="ckeditor.check" unless="ckeditor.notRequired">
-        <exec executable="bash" dir="ckeditor4/dev/builder/">
+        <exec executable="bash" dir="ckeditor/dev/builder/">
             <arg value="build.sh"/>
         </exec>           
     </target>
@@ -99,7 +99,7 @@
     
     <target name="-pre-jar">
         <copy todir="build/classes/js/ckeditor/">
-            <fileset dir="ckeditor4/dev/builder/release/ckeditor/"/>
+            <fileset dir="ckeditor/dev/builder/release/ckeditor/"/>
         </copy>
         <copy todir="build/classes/js/ckeditor/" overwrite="true">
             <file file="./lib/js/ckeditor/contents.css"/>

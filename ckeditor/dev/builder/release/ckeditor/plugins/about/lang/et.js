@@ -1,0 +1,1 @@
+﻿CKEDITOR.plugins.setLang("about","et",{copy:"Copyright \x26copy; $1. Kõik õigused kaitstud.",dlgTitle:"CKEditorist",moreInfo:"Litsentsi andmed leiab meie veebilehelt:"});
