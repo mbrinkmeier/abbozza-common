@@ -18,15 +18,16 @@ It allows graphical programming with [scratch-like blocks](http://scratch.mit.ed
 
 ## How to use
 
-**abbozza-common** provides classes and files for the platform-specific IDEs. As such it is a prerequisite for the platform specific projects [abbozza-arduino](https://github.com/mbrinkmeier/abbozza-arduino) and 
+**abbozza-common** provides classes and files for the platform-specific IDEs. As such it is a prerequisite for the platform specific projects 
+[abbozza-arduino](https://github.com/mbrinkmeier/abbozza-arduino) and 
 [abbozza-calliope](https://github.com/mbrinkmeier/abbozza-calliope).
 
 ## How to build
 
-**abbozza-common** is a Netbeans Project. It provides the common classes and files for the projects
+**abbozza-common** is a Netbeans/Ant project. It provides the common classes and files for the projects
 [abbozza-arduino](https://github.com/mbrinkmeier/abbozza-arduino) and 
 [abbozza-calliope](https://github.com/mbrinkmeier/abbozza-calliope), which implement the IDEs for
-the specific platforms. The latter additionally requires the installer provided by [abbozza-calliope-install](https://github.com/mbrinkmeier/abbozza-calliope-install).
+the specific platforms.
 
 ### Manual build
 
