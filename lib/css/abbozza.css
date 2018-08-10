@@ -414,13 +414,32 @@ div[role="treeitem"]:hover {
 }
 
 .taskOverlayNavButton {
-    font-size: 100%;
+    font-size: 16px;
     font-weight: bold;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 2px 4px 2px 4px;
+    cursor: pointer;
+    color: white;
+    background-color: black;
+    border-radius: 3px;
+    min-width: 40px;    
+}
+
+.taskOverlayNavPages {
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 2px 4px 2px 4px;
     cursor: default;
     color: black;
+    background-color: white;
+    border-radius: 3px;
+    min-width: 40px;
+    
 }
+
 
 .taskHint {
     z-index: 40;
