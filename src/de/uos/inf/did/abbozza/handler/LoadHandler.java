@@ -198,6 +198,12 @@ public class LoadHandler extends AbstractHandler {
         String result = "";
         URL url;
         
+        // Leading '!' indicates internal sketch
+        if (path.startsWith("!")) {
+            path = path.substring(1);
+            path = this._abbozzaServer.getRootURL() + path;
+        }
+        
         // Check path
         try {
             url = new URL(path);

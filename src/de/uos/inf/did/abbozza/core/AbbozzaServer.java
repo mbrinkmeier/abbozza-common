@@ -438,7 +438,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                     
                     try {
                        // Check if abbozza! is running
-                       URL url = new URL("http://localhost:" + serverPort + "/abbozza/version");
+                       URL url = new URL(getRootURL() + "abbozza/version");
                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                        conn.connect();
                        if ( conn.getResponseCode() < 300 ) {
@@ -460,7 +460,7 @@ public abstract class AbbozzaServer implements HttpHandler {
             
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(this.serverPort)), 4);
 
-            String url = "http://localhost:" + this.serverPort + "/" + system + ".html";
+            String url = getRootURL() + system + ".html";
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_reachable", url));
         }
     }
@@ -482,13 +482,13 @@ public abstract class AbbozzaServer implements HttpHandler {
             if (opts == null) {
                 cmd = new String[2];
                 cmd[0] = expandPath(config.getBrowserPath());
-                cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
+                cmd[1] = getRootURL() + system + ".html";
                 line = cmd[0] + " " + cmd[1];
             } else {
                 cmd = new String[3];
                 cmd[0] = expandPath(config.getBrowserPath());
                 cmd[1] = opts;
-                cmd[2] = "http://localhost:" + serverPort + "/" + system + ".html";
+                cmd[2] = getRootURL() + system + ".html";
                 line = cmd[0] + " " + cmd[1] + " " + cmd[2];
             }
             // String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
@@ -516,7 +516,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                         try {
                             Desktop desktop = Desktop.getDesktop();
                             if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                                String xurl = "localhost:" + serverPort + "/abbozza.html";
+                                String xurl = getRootURL() + system + ".html";
                                 // if (this.getSystem().equals("Mac")) {
                                 //     Runtime runtimeMac = Runtime.getRuntime();
                                 //     String[] args = { "osascript", "-e", "open location \"" + url + "\"" };
@@ -556,7 +556,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                         config.write();
                         String[] cmd = new String[2];
                         cmd[0] = expandPath(config.getBrowserPath());
-                        cmd[1] = "http://localhost:" + serverPort + "/" + system + ".html";
+                        cmd[1] = getRootURL() + system + ".html";
                         try {
                             AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
                             runtime.exec(cmd);
@@ -899,7 +899,6 @@ public abstract class AbbozzaServer implements HttpHandler {
         if (dialog.getState() == 0) {
             config.set(dialog.getConfiguration());
             AbbozzaLocale.setLocale(config.getLocale());
-            AbbozzaLogger.out("closed with " + config.getLocale());
             config.write();
             return 0;
         } else {
@@ -1055,7 +1054,6 @@ public abstract class AbbozzaServer implements HttpHandler {
             return;
         }
         oldState = mainFrame.getExtendedState();
-        AbbozzaLogger.err("oldState gets " + oldState);
         GUITool.bringToFront(mainFrame);
     }
 
@@ -1064,8 +1062,6 @@ public abstract class AbbozzaServer implements HttpHandler {
             return;
         }
         if ((oldState & JFrame.ICONIFIED) > 0) {
-            AbbozzaLogger.err("oldState was " + oldState);
-            AbbozzaLogger.err("was iconified");
             int state = mainFrame.getExtendedState() | JFrame.ICONIFIED;
             mainFrame.setExtendedState(state);
             String osName = System.getProperty("os.name");
@@ -1075,7 +1071,6 @@ public abstract class AbbozzaServer implements HttpHandler {
                 mainFrame.setVisible(true);
             }
         } else {
-            AbbozzaLogger.err("wasn't iconified");
             mainFrame.setExtendedState(oldState);
         }
         // mainFrame.setVisible(true);
@@ -1125,6 +1120,12 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
         return allowedHosts.contains(host);
     }
+    
+    
+    public String getRootURL() {
+        return "http://localhost:" + serverPort + "/";
+    }
+    
     
     public String getIp4Address() {
         if ( this.ip4Address == null ) {

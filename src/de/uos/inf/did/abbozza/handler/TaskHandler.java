@@ -52,7 +52,7 @@ public class TaskHandler extends AbstractHandler {
          *  task/<path>?<anchor>
          * 
          * <anchor> is an anchor path
-         * <path> is a path realtive to the current anchor path
+         * <path> is a path relative to the current anchor path
          **/
         URL url;
         String query = exchg.getRequestURI().getQuery();

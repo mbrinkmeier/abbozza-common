@@ -116,12 +116,22 @@ public class SaveHandler extends AbstractHandler {
             }
             
             // Generate JFileChooser
-            File lastSketchFile = new File(_abbozzaServer.getLastSketchFile().toURI());
+            File lastSketchFile;
+            try {
+                lastSketchFile = new File(_abbozzaServer.getLastSketchFile().toURI());
+            } catch (IllegalArgumentException e) {
+                lastSketchFile = null;
+            }
             String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
+            if ( lastSketchFile == null ) {
+                lastSketchFile = new File(path);
+            }
+            
+            AbbozzaLogger.err(path);
             
             _abbozzaServer.bringFrameToFront();
             _abbozzaServer.setDialogOpen(true);
-            
+           
             JFileChooser chooser = new JFileChooser(path) {
                 protected JDialog createDialog(Component parent)
                         throws HeadlessException {
@@ -131,7 +141,7 @@ public class SaveHandler extends AbstractHandler {
                     return dialog;
                 }
             };
-
+            
             // Prepare accessory-panel
             SaveHandlerPanel panel = new SaveHandlerPanel();
             chooser.setAccessory(panel);
@@ -203,7 +213,7 @@ public class SaveHandler extends AbstractHandler {
                 _abbozzaServer.setLastSketchFile(file.toURI().toURL());
             }
         } catch (Exception ex) {
-            AbbozzaLogger.out(ex.toString(), AbbozzaLogger.DEBUG);
+            AbbozzaLogger.err(ex.toString());
             ex.printStackTrace(System.err);
         }
         _abbozzaServer.setDialogOpen(false);
