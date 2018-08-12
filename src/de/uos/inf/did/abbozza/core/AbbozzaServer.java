@@ -186,7 +186,6 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Initialize the logger
         AbbozzaLogger.init();
-        AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
         AbbozzaLogger.registerStream(System.out);
 
         // Parse command line options
@@ -232,7 +231,9 @@ public abstract class AbbozzaServer implements HttpHandler {
          */
         config = new AbbozzaConfig(configPath);
 
-        // Check "ndocumented" options
+        AbbozzaLogger.setLevel(config.getOptionInt("loglevel"));
+
+        // Check "undocumented" options
         denyRemoteAccess = "true".equals(config.getProperty("remote.denyAccess"));
         allowedHosts = config.getProperty("remote.allowedHosts");
 
