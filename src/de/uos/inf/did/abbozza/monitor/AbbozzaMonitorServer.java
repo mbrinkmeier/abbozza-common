@@ -170,7 +170,6 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
 
     @Override
     public void findJarsAndDirs(JarDirHandler jarHandler) {
-        jarHandler.clear();
         jarHandler.addJar(jarFile, "Jar");
     }
 

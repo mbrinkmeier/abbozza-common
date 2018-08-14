@@ -220,6 +220,13 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Find Jars
         jarHandler = new JarDirHandler();
+        jarHandler.clear();
+
+        // Adding additional uris
+        for ( URI uri : additionalURIs ) {
+            jarHandler.addURI(uri);
+        }
+        
         findJarsAndDirs(jarHandler);
 
         // Load plugins
@@ -261,6 +268,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         additionalInitialization();
     }
 
+    
     /**
      * Initialize the server
      * 
@@ -691,6 +699,50 @@ public abstract class AbbozzaServer implements HttpHandler {
         checkForUpdate(reportNoUpdate, null);
     }
 
+
+    /**
+     * Checks if the current version is newer than the given one.
+     * 
+     * @param version The version to which the current version is compared.
+     * 
+     * @return true if the current version is newer than the given one.
+     */
+    public boolean isNewerThan(String version) {
+        if ( version == null ) return true;
+        
+        int major = 0;
+        int minor = 0;
+        int rev = 0;
+        int hotfix = 0;
+        int pos = version.indexOf('.');
+        try {
+            major = Integer.parseInt(version.substring(0, pos));
+            int pos2 = version.indexOf('.', pos + 1);
+            minor = Integer.parseInt(version.substring(pos + 1, pos2));
+            pos = version.indexOf('.', pos2 + 1);
+            rev = Integer.parseInt(version.substring(pos2 + 1, pos));
+            hotfix = Integer.parseInt(version.substring(pos + 1));
+        } catch (NumberFormatException ex) {
+            return true;
+        }       
+        
+        String[] sysver = getSystemVersion().split("[\\ \\.]");
+        int sys_major = Integer.parseInt(sysver[0]);
+        int sys_minor = Integer.parseInt(sysver[1]);
+        int sys_rev = Integer.parseInt(sysver[2]);
+        int sys_hotfix = Integer.parseInt(sysver[3]);
+        
+        if ((major > sys_major)
+                    || ((major == sys_major) && (minor > sys_minor))
+                    || ((major == sys_major) && (minor == sys_minor) && (rev > sys_rev))
+                    || ((major == sys_major) && (minor == sys_minor) && (rev == sys_rev) && (hotfix > sys_hotfix))) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
     /**
      * This operation checks for updates
      *
@@ -722,8 +774,13 @@ public abstract class AbbozzaServer implements HttpHandler {
                 int pos2 = version.indexOf('.', pos + 1);
                 minor = Integer.parseInt(version.substring(pos + 1, pos2));
                 pos = version.indexOf('.', pos2 + 1);
+                if ( pos == -1 ) { 
+                    pos = version.length();
+                }
                 rev = Integer.parseInt(version.substring(pos2 + 1, pos));
-                hotfix = Integer.parseInt(version.substring(pos + 1));
+                if ( pos < version.length() ) {
+                    hotfix = Integer.parseInt(version.substring(pos + 1));
+                }
             } catch (NumberFormatException ex) {
             }
             AbbozzaLogger.out("Checking for update at " + updateUrl, AbbozzaLogger.INFO);
