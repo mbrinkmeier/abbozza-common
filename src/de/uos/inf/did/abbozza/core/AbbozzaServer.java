@@ -1181,7 +1181,12 @@ public abstract class AbbozzaServer implements HttpHandler {
     
     
     public String getRootURL() {
-        return "http://localhost:" + serverPort + "/";
+        String useIP = this.config.getProperty("useIP");
+        if (  "true".equals(useIP) ) {
+            return "http://127.0.0.1:" + serverPort + "/";            
+        } else {
+            return "http://localhost:" + serverPort + "/";
+        }
     }
     
     
