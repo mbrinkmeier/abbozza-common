@@ -204,8 +204,13 @@ public class TableMonitor extends MonitorPanel {
         return s.shortValue();        
     }
     
+    public long getSysTime(int row) {
+        Long l = (Long) tableModel.getValueAt(row,6);
+        return l.longValue();
+    }
+
     public String getName() {
-        return "Tabelle";
+        return "Table";
     }
 
     @Override

@@ -26,6 +26,10 @@ package de.uos.inf.did.abbozza.monitor;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
@@ -39,25 +43,30 @@ import javax.swing.table.TableModel;
  */
 public class TableMonitorModel implements TableModel {
 
+    
     class Entry {
+        public long sysTime;
         public long timestamp;
         int[] values;
         
-        public Entry(long ts, int[] vs) {
+        public Entry(long ts, int[] vs, long st) {
             timestamp = ts;
             values = vs;           
+            sysTime = st;
         }
         
         public String toString() {
-            return "" + timestamp +"|" + values[0] + "|"+ values[1] + "|"+ values[2] + "|"+ values[3] + "|"+ values[4] + "|";
+            return "" + timestamp +"|" + values[0] + "|"+ values[1] + "|"+ values[2] + "|"+ values[3] + "|"+ values[4] + "|" + sysTime;
         }
     }
+    
     
     private Vector<Entry> entries;
     private Vector<TableModelListener> listeners;
     public long maxTimestamp = 0;
     public long minTimestamp = -1;
     char[] types;
+    
     
     public TableMonitorModel() {
         entries = new Vector<Entry>();
@@ -69,7 +78,8 @@ public class TableMonitorModel implements TableModel {
         types[3] = '2';
         types[4] = '2';
     }
-    
+
+
     public void clear() {
         int size = entries.size();
         entries.clear();
@@ -89,7 +99,8 @@ public class TableMonitorModel implements TableModel {
     }
     
     public void addRow(long ts, int[] vs) {
-        entries.add(new Entry(ts,vs));
+        long recTime = System.currentTimeMillis();
+        entries.add(new Entry(ts,vs,recTime));
         if ( ts > maxTimestamp ) maxTimestamp = ts;
         if ( minTimestamp < 0 ) minTimestamp = ts;
         if ( ts < minTimestamp )  minTimestamp = ts;
@@ -112,14 +123,15 @@ public class TableMonitorModel implements TableModel {
 
     @Override
     public int getColumnCount() {
-        return 6;
+        return 7;
     }
 
     @Override
     public String getColumnName(int columnIndex) {
         switch (columnIndex) {
-            case 0: return "Zeit";
-            default: return "Kanal " + columnIndex;
+            case 6: return "SysTime";
+            case 0: return "Time";
+            default: return "Channel " + columnIndex;
         }
     }
 
@@ -127,6 +139,7 @@ public class TableMonitorModel implements TableModel {
     public Class<?> getColumnClass(int columnIndex) {
         switch (columnIndex) {
             case 0: return Long.class;
+            case 6: return LocalDateTime.class;
             default: return Short.class;
         }
     }
@@ -141,6 +154,7 @@ public class TableMonitorModel implements TableModel {
         Entry entry = entries.get(rowIndex);
         switch (columnIndex) {
             case 0 : return new Long(entry.timestamp);
+            case 6 : return LocalDateTime.ofInstant(Instant.ofEpochMilli(entry.sysTime), ZoneId.systemDefault());
             default : return new Integer(entry.values[columnIndex-1]);
         }
     }
@@ -153,6 +167,11 @@ public class TableMonitorModel implements TableModel {
                 case 0 : 
                     if ( aValue instanceof Long ) {
                         entry.timestamp = ((Long) aValue).longValue();
+                    }
+                    break;
+                case 6 : 
+                    if ( aValue instanceof Long ) {
+                        entry.sysTime = ((Long) aValue).longValue();
                     }
                     break;
                 default :
