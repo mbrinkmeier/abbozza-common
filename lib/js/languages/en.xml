@@ -284,6 +284,7 @@ Continuing?</msg>
         <msg id ="serial.AVAILABLE">Character available at USB</msg>
         <msg id ="serial.READLN">Read line over USB</msg>
         <msg id ="serial.SENDVALUES">Send values over USB</msg>
+        <msg id ="serial.CHANNEL">Channel</msg>
                 
                 
         <msg id ="func.NAME">Name</msg>

@@ -284,6 +284,7 @@ Trotzdem fortfahren?</msg>
         <msg id ="serial.AVAILABLE">Zeichen über USB empfangen</msg>
         <msg id ="serial.READLN">Lese Zeile über USB</msg>
         <msg id ="serial.SENDVALUES">Sende Werte über USB</msg>
+        <msg id ="serial.CHANNEL">Kanal</msg>
                 
         <msg id ="func.NAME">Name</msg>
         <msg id ="func.CALL">Führe # aus</msg>
