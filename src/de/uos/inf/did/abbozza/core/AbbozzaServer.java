@@ -113,7 +113,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     // Version
     public static final int VER_MAJOR = 1;     // Major version of common core
     public static final int VER_MINOR = 1;    // Minor version of common core
-    public static final int VER_REV = 0;    // Minor version of common core
+    public static final int VER_REV = 1;    // Minor version of common core
     public static final int VER_HOTFIX = 0;    // Minor version of common core
 
     // Instance
