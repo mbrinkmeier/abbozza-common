@@ -148,7 +148,7 @@ Continuing?</msg>
         <msg id="gui.remote_access">Allow remote request from # ?</msg>
         <msg id="gui.remote_access_title">Allow remote request?</msg>
         <msg id="gui.delete_page">Delete page?</msg>
-    </gui>
+        <msg id="gui.reset_sketch">Start task all over again?"</msg>    </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
         <msg id="menu.collapse_block">Fold single block</msg>

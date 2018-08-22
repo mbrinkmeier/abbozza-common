@@ -148,6 +148,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.remote_access">Entfernten Zugriff von # erlauben?</msg>
         <msg id="gui.remote_access_title">Entfernten Zugriff erlauben?</msg>
         <msg id="gui.delete_page">Seite löschen?</msg>
+        <msg id="gui.reset_sketch">Aufgabe von vorne beginnen?"</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
