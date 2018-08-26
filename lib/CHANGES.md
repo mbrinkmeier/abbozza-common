@@ -4,5 +4,4 @@
 
 ### Common Blocks
 
-* The sign of the step size in the counting loop is changed for decreasing 
-  direction.
+* Counting loop: Step size is subtracted for decreasing direction.
