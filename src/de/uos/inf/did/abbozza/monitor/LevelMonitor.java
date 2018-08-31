@@ -33,6 +33,7 @@ import java.awt.Rectangle;
 import javax.swing.JPopupMenu;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 
 /**
  *
@@ -89,7 +90,7 @@ public class LevelMonitor extends MonitorPanel implements TableModelListener {
     }
 
     public String getName() {
-        return "Pegel";
+        return AbbozzaLocale.entry("gui.level");
     }
 
     public void paint(Graphics gr) {

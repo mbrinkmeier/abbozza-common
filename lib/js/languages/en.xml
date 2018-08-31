@@ -43,6 +43,9 @@ Continuing?</msg>
         <msg id="MSG.DONT_ASK_AGAIN">Frag nicht nochmal</msg>
     </messages>
     <gui>
+        <msg id="gui.table">Table</msg>
+        <msg id="gui.graph">Graph</msg>
+        <msg id="gui.level">Level</msg>
         <msg id="gui.generate_button">Generate Code</msg>
         <msg id="gui.upload_button">Upload Code to Board</msg>
         <msg id="gui.new_button">New Sketch</msg>
@@ -103,6 +106,8 @@ Continuing?</msg>
         <msg id="gui.task_tooltip_reload">Restart</msg>        
         <msg id="gui.task_tooltip_next">Next page</msg>        
         <msg id="gui.task_tooltip_nextsketch">Next task</msg>        
+        <msg id="gui.task_tooltip_zoomin">Zoom in</msg>        
+        <msg id="gui.task_tooltip_zoomout">Zoom out</msg>        
         <msg id="gui.task_path">Task directory</msg>
         <msg id="gui.go_to_task_path">Go to the task directory</msg>        
         <msg id="gui.go_to_sketchbook_path">Go to the sketchbook directory</msg>        

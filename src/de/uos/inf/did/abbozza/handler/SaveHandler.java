@@ -60,16 +60,22 @@ public class SaveHandler extends AbstractHandler {
 
     
     protected void handleRequest(HttpExchange exchg) throws IOException {
+        String contentLocation = null;
         try {
-            saveSketch(exchg.getRequestBody());
-            this.sendResponse(exchg, 200, "text/xml", "saved");
+            contentLocation = saveSketch(exchg.getRequestBody());
+            if ( contentLocation != null) {
+               exchg.getResponseHeaders().add("Content-Location", contentLocation);
+               this.sendResponse(exchg, 200, "text/xml", "saved");
+            }
         } catch (IOException ioe) {
             this.sendResponse(exchg, 404, "", "");
         }
     }
 
-    public void saveSketch(InputStream stream) throws IOException {
-        if ( _abbozzaServer.isDialogOpen() ) return;
+    public String saveSketch(InputStream stream) throws IOException {
+        if ( _abbozzaServer.isDialogOpen() ) return null;
+        
+        String location = null;
         
         // Read the XML-Document
         // Read in into XML-document
@@ -174,7 +180,7 @@ public class SaveHandler extends AbstractHandler {
                         _abbozzaServer.setDialogOpen(false);
                         _abbozzaServer.resetFrame();        
                         _abbozzaServer.toolIconify();
-                        return;
+                        return null;
                     }
                 }
 
@@ -200,17 +206,10 @@ public class SaveHandler extends AbstractHandler {
                 transformer.setOutputProperty(OutputKeys.INDENT, "yes");
                 transformer.transform(new DOMSource(xml), new StreamResult(file));
 
-                /*
-                 String line;
-                 BufferedReader in = new BufferedReader(new InputStreamReader(stream));
-                 while (in.ready()) {
-                 line = in.readLine();
-                 writer.write(line);
-                 }
-                 */
                 writer.close();
                 in.close();
                 _abbozzaServer.setLastSketchFile(file.toURI().toURL());
+                location = file.toURI().toURL().toString();
             }
         } catch (Exception ex) {
             AbbozzaLogger.err(ex.toString());
@@ -219,6 +218,8 @@ public class SaveHandler extends AbstractHandler {
         _abbozzaServer.setDialogOpen(false);
         _abbozzaServer.resetFrame();        
         _abbozzaServer.toolIconify();
+        
+        return location;
     }
 
 }

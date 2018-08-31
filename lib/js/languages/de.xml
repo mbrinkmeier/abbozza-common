@@ -43,6 +43,9 @@ Trotzdem fortfahren?</msg>
         <msg id="MSG.DONT_ASK_AGAIN">Frag' nicht noch einmal</msg>
     </messages>
     <gui>
+        <msg id="gui.table">Tabelle</msg>
+        <msg id="gui.graph">Graph</msg>
+        <msg id="gui.level">Pegel</msg>
         <msg id="gui.generate_button">Erzeuge Code</msg>
         <msg id="gui.upload_button">Lade Code hoch</msg>
         <msg id="gui.new_button">Neuer Sketch</msg>
@@ -104,6 +107,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.task_tooltip_reload">Von vorne</msg>        
         <msg id="gui.task_tooltip_next">Nächste Seite</msg>        
         <msg id="gui.task_tooltip_nextsketch">Nächste Aufgabe</msg>        
+        <msg id="gui.task_tooltip_zoomin">Vergrößern</msg>        
+        <msg id="gui.task_tooltip_zoomout">Verkleinern</msg>        
         <msg id="gui.go_to_task_path">Zum Aufgaben Verzeichnis</msg>        
         <msg id="gui.go_to_sketchbook_path">Zum Sketchbook Verzeichnis</msg>        
         <msg id="gui.load_from_web">Lade aus dem WWW</msg>        

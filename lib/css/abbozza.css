@@ -327,7 +327,7 @@ div[role="treeitem"]:hover {
 .taskOverlayButton {
     float: right;
     /* margin-top: 3px; */
-    margin-right: 3px;
+    margin-right: 6px;
     /* margin-bottom: 3px; */
     /* width: 24px; */
     /* height: 24px; */
@@ -348,7 +348,7 @@ div[role="treeitem"]:hover {
 
 
 .taskOverlayButton IMG {
-    padding:2px;
+    padding : 2px;
     margin-left: 1px;
     margin-top: 1px;
 }
@@ -401,7 +401,7 @@ div[role="treeitem"]:hover {
 }
 
 .taskOverlayNav {
-    background: rgba(255,255,255,60);
+    background: #d0d0d0;
     position: absolute;
     margin: 0px;
     bottom: 8px;
@@ -425,6 +425,46 @@ div[role="treeitem"]:hover {
     border-radius: 3px;
     min-width: 40px;    
 }
+
+.taskOverlayNavButton:hover {
+    background-color: red;
+}
+
+
+
+.taskOverlayNavButtonDisabled {
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 2px 4px 2px 4px;
+    cursor: pointer;
+    color: white;
+    background-color: #c0c0c0;
+    border-radius: 3px;
+    min-width: 40px;
+    pointer-events: none;
+}
+
+
+.taskOverlayZoomButton {
+    float: left;
+    margin-left: 6px;
+    color : white;
+    font-size: 24px;
+    border-radius: 5px;
+    background-color: #d0d0d0;
+    cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+.taskOverlayZoomButton:hover {
+    color : #d0d0d0;
+    background-color: white;
+}
+
 
 .taskOverlayNavPages {
     font-size: 16px;

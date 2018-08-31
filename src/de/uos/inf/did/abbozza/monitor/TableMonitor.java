@@ -118,11 +118,11 @@ public class TableMonitor extends MonitorPanel {
     private void saveItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveItemActionPerformed
         String path = ((lastSave != null) ? lastSave.getAbsolutePath() : System.getProperty("user.home"));
         JFileChooser chooser = new JFileChooser(path);
-        chooser.setFileFilter(new FileNameExtensionFilter("abbozza! data (*.abd)", "abd"));
+        chooser.setFileFilter(new FileNameExtensionFilter("CSV-File (*.csv)", "csv"));
         if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
-            if (!file.getName().endsWith(".abd") && !file.getName().endsWith(".ABD")) {
-                file = new File(file.getPath() + ".abd");
+            if (!file.getName().endsWith(".csv") && !file.getName().endsWith(".CSV")) {
+                file = new File(file.getPath() + ".csv");
                 lastSave = file;
             }
             
@@ -210,7 +210,7 @@ public class TableMonitor extends MonitorPanel {
     }
 
     public String getName() {
-        return "Table";
+        return AbbozzaLocale.entry("gui.table");
     }
 
     @Override

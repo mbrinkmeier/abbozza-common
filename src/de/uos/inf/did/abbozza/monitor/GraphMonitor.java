@@ -24,7 +24,7 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
-import java.awt.Color;
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import javax.swing.JPopupMenu;
 
 /**
@@ -94,7 +94,7 @@ public class GraphMonitor extends MonitorPanel {
     }
     
     public String getName() {
-        return "Graph";
+        return AbbozzaLocale.entry("gui.graph");
     }
 
 }
