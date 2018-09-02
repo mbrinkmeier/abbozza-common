@@ -42,7 +42,15 @@ import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 public class LevelMonitor extends MonitorPanel implements TableModelListener {
 
     private TableMonitorModel myTable;
-    private Color[] colors;
+    private Color colors[] = {
+        Color.RED,
+        new Color(0,200,0),
+        new Color(0,0,255),
+        Color.ORANGE,
+        Color.MAGENTA
+    };
+    private Color background = Color.WHITE;
+    private Color marks = Color.BLACK;
 
     /**
      * Creates new form GraphMonitor
@@ -53,13 +61,15 @@ public class LevelMonitor extends MonitorPanel implements TableModelListener {
         myTable = table;
         myTable.addTableModelListener(this);
         initComponents();
+        /*
         colors = new Color[5];
         colors[0] = Color.RED;
         colors[1] = Color.GREEN;
         colors[2] = Color.CYAN;
         colors[3] = Color.ORANGE;
         colors[4] = Color.BLACK;
-
+        */
+        
         initComponents();
         // levelPanel.setTableModel(table);
         // levelPanel.addMouseListener(new MonitorMouseListener(this));
@@ -95,11 +105,37 @@ public class LevelMonitor extends MonitorPanel implements TableModelListener {
 
     public void paint(Graphics gr) {
         Graphics2D gr2d = (Graphics2D) gr;
-        gr.setColor(Color.BLACK);
+        gr.setColor(background);
         gr.fillRect(0, 0, getWidth(), getHeight());
 
         Rectangle rect = this.getVisibleRect();
 
+        // Draw marks
+        // Digital marks
+        gr.setColor(marks);
+        gr.drawLine(rect.x, (getHeight()-1)*6/7, rect.x+rect.width, (getHeight()-1)*6/7);
+        gr.drawLine(rect.x, (getHeight()-1)*1/7, rect.x+rect.width, (getHeight()-1)*1/7);
+        gr.drawString("low", rect.x + rect.width - 30, (getHeight()-1)*6/7 - 2);
+        gr.drawString("high", rect.x + rect.width - 30, (getHeight()-1)*1/7 + 13);
+        
+        // 10 and 16 Bit marks
+        int y1 = (getHeight()-1)*(1023-256)/1023;
+        int y2 = (getHeight()-1)*(1023-512)/1023;
+        int y3 = (getHeight()-1)*(1023-768)/1023;
+        for (int i=0; i < rect.width; i=i+20) {
+            gr.drawLine(rect.x+i,y1,rect.x+i+10,y1);
+            gr.drawLine(rect.x+i,y2,rect.x+i+10,y2);
+            gr.drawLine(rect.x+i,y3,rect.x+i+10,y3);
+        }
+        
+        gr.drawString("512",rect.x+5,y2-2);
+        gr.drawString("768",rect.x+5,y3-2);
+        gr.drawString("256",rect.x+5,y1-2);
+        gr.drawString("32768",rect.x+rect.width/2-15,y2-2);
+        gr.drawString("49152",rect.x+rect.width/2-15,y3-2);
+        gr.drawString("16348",rect.x+rect.width/2-15,y1-2);
+
+        // Draw channels
         int channelWidth = getWidth() / 5;
         int lastRow = myTable.getRowCount() - 1;
         int y = 0;
@@ -111,7 +147,6 @@ public class LevelMonitor extends MonitorPanel implements TableModelListener {
             } catch (Exception ex) {
                 value = -1;
             }
-            gr.setColor(colors[col - 1]);
             switch (myTable.getType(col - 1)) {
                 case '0':
                     y = (getHeight() - 20) * (1 - value);
@@ -119,19 +154,28 @@ public class LevelMonitor extends MonitorPanel implements TableModelListener {
                 case '1':
                     y = (getHeight() - 20) * (1023 - value) / 1023;
                     break;
+                case '2':
+                    y = (getHeight() - 20) * (65535 - value) / 65535;
+                    break;
                 case '3' :
-                    y = (getHeight()-20)*(32767-value)/65535;
+                    y = (getHeight() - 20) * (32767-value)/65535;
+                    break;
+                case '4':  // -1024 .. 1023
+                    y = (getHeight() - 20)*(1023-value)/2047;
                     break;
                 default:
                     y = (getHeight() - 20) * (65535 - value) / 65535;
             }
-            gr.setFont(new Font("SansSerif", Font.BOLD, 16));
-            gr.drawLine(channelWidth * (col - 1), y+10, channelWidth, y+10);
-            gr.fillRect(channelWidth * (col - 1)+25, y, channelWidth-50, 20);
-            gr.setColor(Color.WHITE);
-            int w = gr.getFontMetrics().stringWidth("Kanal " + col);
-            int h = gr.getFontMetrics().getHeight();
-            gr.drawString("Kanal " + col, channelWidth * (col - 1) + ((channelWidth - w) / 2), y + 10 + 6);
+            
+            // gr.setFont(new Font("SansSerif", Font.BOLD, 16));
+            gr.setColor(colors[col - 1]);
+            gr.fillRect(channelWidth * (col - 1), y+8, channelWidth , 5);
+            // gr.drawLine(channelWidth * (col - 1), y+10, channelWidth * col , y+10);
+            // gr.fillRect(channelWidth * (col - 1)+25, y, channelWidth-50, 20);
+            // gr.setColor(Color.WHITE);
+            // int w = gr.getFontMetrics().stringWidth("Kanal " + col);
+            // int h = gr.getFontMetrics().getHeight();
+            // gr.drawString("Kanal " + col, channelWidth * (col - 1) + ((channelWidth - w) / 2), y + 10 + 6);
         }
     }
 

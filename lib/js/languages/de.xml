@@ -46,6 +46,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.table">Tabelle</msg>
         <msg id="gui.graph">Graph</msg>
         <msg id="gui.level">Pegel</msg>
+        <msg id="gui.oscillograph">Oszillograph</msg>
         <msg id="gui.generate_button">Erzeuge Code</msg>
         <msg id="gui.upload_button">Lade Code hoch</msg>
         <msg id="gui.new_button">Neuer Sketch</msg>
@@ -284,14 +285,17 @@ Trotzdem fortfahren?</msg>
 		
         <msg id ="serial.BEGINRATE">Setze USB-Datenrate auf # Baud</msg>
         <msg id ="serial.END">Stoppe Kommunikation über USB</msg>
-        <msg id ="serial.WRITEINT">Sende # über USB</msg>
         <msg id ="serial.PRINT">Sende # über USB</msg>-
         <msg id ="serial.PRINTLN">Sende Zeile # über USB</msg>
         <msg id ="serial.AVAILABLE">Zeichen über USB empfangen</msg>
-        <msg id ="serial.READLN">Lese Zeile über USB</msg>
+        <msg id ="serial.READLN">Lies Zeile über USB</msg>
         <msg id ="serial.SENDVALUES">Sende Werte über USB</msg>
         <msg id ="serial.CHANNEL">Kanal</msg>
-                
+        <msg id ="serial.WRITE_BYTE_USB">Sende Byte über USB</msg>
+        <msg id ="serial.READ_BYTE_USB">Lies Byte von USB</msg>
+        <msg id ="serial.WRITE_INT_USB">Sende Zahl über USB</msg>
+        <msg id ="serial.READ_INT_USB">Lies Zahl von USB</msg>
+
         <msg id ="func.NAME">Name</msg>
         <msg id ="func.CALL">Führe # aus</msg>
         <msg id ="func.RETURNS">Antwort von #</msg>
@@ -345,6 +349,8 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.FORWARD">vorwärts</msg>
         <msg id="dev.BACKWARD">rückwärts</msg>
         <msg id="dev.MICROPHONE_GET">Mikrophon Lautstärke</msg>
+        <msg id="dev.SERIAL_WRITE_INT">Schreibe Zahl auf</msg>
+        <msg id="dev.SERIAL_READ_INT">Lese Zahl von</msg>
         
         <msg id="dev.SPEAKER">Lautsprecher</msg>
         <msg id="dev.SPEAKER_MUTE">Lautsprecher # aus</msg>

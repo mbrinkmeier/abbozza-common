@@ -21,31 +21,43 @@ import javax.swing.event.TableModelListener;
 public class LevelPanel extends javax.swing.JPanel implements TableModelListener {
 
     private TableMonitorModel myTable;
-    private Color[] colors;
+    private Color colors[] = {
+        Color.RED,
+        new Color(0,200,0),
+        new Color(0,0,255),
+        Color.ORANGE,
+        Color.MAGENTA
+    };
+    private Color background = Color.WHITE;
+    private Color marks = Color.BLACK;
 
    /**
      * Creates new form LevelPanel
      */
     public LevelPanel() {
         initComponents();
+        /*
         colors = new Color[5];
         colors[0] = Color.RED;
         colors[1] = Color.GREEN;
         colors[2] = Color.CYAN;
         colors[3] = Color.YELLOW;
         colors[4] = Color.BLACK;
+        */
     }
 
     public LevelPanel(TableMonitorModel tab) {
         myTable = tab;
         myTable.addTableModelListener(this);
         initComponents();
+        /*
         colors = new Color[5];
         colors[0] = Color.RED;
         colors[1] = Color.GREEN;
         colors[2] = Color.CYAN;
         colors[3] = Color.YELLOW;
         colors[4] = Color.BLACK;
+        */
         // at most a tenth of a second
         // this.setPreferredSize(new Dimension(512,getHeight()));
 
@@ -78,7 +90,7 @@ public class LevelPanel extends javax.swing.JPanel implements TableModelListener
 
     public void paint(Graphics gr) {
         Graphics2D gr2d = (Graphics2D) gr;
-        gr.setColor(Color.BLACK);
+        gr.setColor(background);
         gr.fillRect(0,0,getWidth(), getHeight());
 
         Rectangle rect = this.getVisibleRect();
@@ -103,13 +115,13 @@ public class LevelPanel extends javax.swing.JPanel implements TableModelListener
                 default:
                     y = (getHeight()-20)*(65535-value)/65535;
             }
-            gr.setFont(new Font("SansSerif",Font.BOLD,16));
+            // gr.setFont(new Font("SansSerif",Font.BOLD,16));
             gr.drawLine(channelWidth*(col-1), y+10, channelWidth,y+10);
-            gr.fillRect(channelWidth*(col-1)+30,y, channelWidth-60,20 );
-            gr.setColor(Color.BLACK);
-            int w = gr.getFontMetrics().stringWidth("Kanal " + col);
-            int h = gr.getFontMetrics().getHeight();
-            gr.drawString("Kanal " + col,channelWidth*(col-1)+((channelWidth-w)/2),y+10+6);
+            // gr.fillRect(channelWidth*(col-1)+30,y, channelWidth-60,20 );
+            gr.setColor(background);
+            // int w = gr.getFontMetrics().stringWidth("Kanal " + col);
+            // int h = gr.getFontMetrics().getHeight();
+            // gr.drawString("Kanal " + col,channelWidth*(col-1)+((channelWidth-w)/2),y+10+6);
         }
     }
         

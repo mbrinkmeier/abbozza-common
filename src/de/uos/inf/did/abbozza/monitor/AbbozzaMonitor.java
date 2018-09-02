@@ -38,12 +38,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.io.PipedOutputStream;
 import java.util.ArrayDeque;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -76,8 +79,10 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
     protected Queue<Message> _msgQueue;
     protected HashMap<String, Message> _waitingMsg;
     private Sender _sender;
-
-    // private AbbozzaMonitorPanel monitor = null;
+        
+    private PipedOutputStream _byteStream;
+    private MonitorPanel _activePanel;
+    
     /**
      * Creates new AbbozzaMonitor and asks for port
      */
@@ -96,12 +101,13 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         setBoardPort(port, rate);
     }
 
-    
+    /**
+     * Initialize the Monitor
+     */
     private void init() {
-        // _msgQueue = new ArrayBlockingQueue<Message>(100);
         _msgQueue = new ArrayDeque<Message>(100);
         _waitingMsg = new HashMap<String, Message>();
-
+        
         if (_sender == null) {
             _sender = new Sender(this);
         }
@@ -109,7 +115,9 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         if ( !_sender.isAlive() ) {
             _sender.start();
         }
-
+        
+        _byteStream = null;
+    
         initComponents();
 
         ImageIcon icon = new ImageIcon(AbbozzaMonitor.class.getResource("/img/abbozza_icon_monitor.png"));
@@ -144,6 +152,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         this.addMonitorPanel(tableMonitor, "table");
         this.addMonitorPanel(new GraphMonitor(tableMonitor.getTableModel()), "graph");
         this.addMonitorPanel(new LevelMonitor(tableMonitor.getTableModel()), "level");
+        this.addMonitorPanel(new OscillographMonitor(), null);
 
         listeners = new HashMap<>();
 
@@ -177,9 +186,11 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         });
 
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        GUITool.centerWindow(this);
+        GUITool.centerWindow(this);        
+        
     }
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -201,8 +212,8 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         logoPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        portBox = new javax.swing.JComboBox<String>();
-        rateBox = new javax.swing.JComboBox<String>();
+        portBox = new javax.swing.JComboBox<>();
+        rateBox = new javax.swing.JComboBox<>();
 
         protocolPopUp.setToolTipText("");
 
@@ -218,6 +229,12 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("abbozza! Monitor");
         setMinimumSize(new java.awt.Dimension(640, 480));
+
+        tabPanel.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabPanelStateChanged(evt);
+            }
+        });
 
         java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
         jPanel1Layout.columnWidths = new int[] {0};
@@ -281,7 +298,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         });
         jPanel2.add(portBox);
 
-        rateBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "300", "1200", "2400", "4800", "9600", "14400", "19200", "28800", "38400", "57600", "115200", "230400" }));
+        rateBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "300", "1200", "2400", "4800", "9600", "14400", "19200", "28800", "38400", "57600", "115200", "230400" }));
         rateBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rateBoxActionPerformed(evt);
@@ -296,10 +313,12 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void resetItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetItemActionPerformed
         textArea.setText("");
     }//GEN-LAST:event_resetItemActionPerformed
 
+    
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         String msg = (String) this.sendText.getEditor().getItem();
         if (msg != null && !msg.isEmpty()) {            
@@ -309,6 +328,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         }
     }//GEN-LAST:event_sendButtonActionPerformed
 
+    
     private void portBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portBoxActionPerformed
         String port = (String) portBox.getSelectedItem();
         try {
@@ -323,11 +343,12 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         }
     }//GEN-LAST:event_portBoxActionPerformed
 
+    
     private void rateBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rateBoxActionPerformed
        String rateString = (String) rateBox.getSelectedItem();
        if ( rateString == null) return;
        baudRate = Integer.parseInt( rateString );
-       AbbozzaLogger.out("AbbozzaMonitor.portBoxActionPerformed: Setting rate to " + rateString);
+       AbbozzaLogger.debug("AbbozzaMonitor.portBoxActionPerformed: Setting rate to " + rateString);
         try {
            this.close();
            this.open();
@@ -336,6 +357,38 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         }
     }//GEN-LAST:event_rateBoxActionPerformed
 
+    private void tabPanelStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPanelStateChanged
+        try {
+            // Check if selected component is an instance of MonitorPanel
+            MonitorPanel panel = (MonitorPanel) this.tabPanel.getSelectedComponent();
+            // If it is an instance of MonitorPanel ...
+            if ( panel != _activePanel ) {
+                // ... and if it differs from the active one ...
+                if ( _activePanel != null) {
+                    // ... disconnect the active one ...
+                    _activePanel.disconnect();
+                    closeByteStream();
+                }
+                // ... set active panel ...
+                _activePanel = panel;
+                if ( _activePanel != null) {
+                    _activePanel.connect(this);
+                }
+            }
+        } catch (ClassCastException ex) {
+            // If its not an instance of Monitor Panel, ...
+            if (_activePanel != null ) {
+                 // ... disconnect the active panel
+                _activePanel.disconnect();
+            }
+            // ... disconnect the stream
+            closeByteStream();
+            // ... and do not set the active panel
+            _activePanel = null;
+        }        
+    }//GEN-LAST:event_tabPanelStateChanged
+
+    
     private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
         String msg = evt.getActionCommand();
         if (msg != null && !msg.isEmpty()) {
@@ -345,22 +398,26 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         }
     }
 
+    
     public synchronized void addToUpdateBuffer(char buff[], int n) {
         updateBuffer.append(buff, 0, n);
-        AbbozzaLogger.out("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
+        AbbozzaLogger.debug("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
     }
 
+    
     public synchronized void addToUpdateBuffer(String buf) {
         updateBuffer.append(buf.toCharArray(), 0, buf.length());
-        AbbozzaLogger.out("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
+        AbbozzaLogger.debug("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
     }
 
+    
     private synchronized String consumeUpdateBuffer() {
         String s = updateBuffer.toString();
         updateBuffer.setLength(0);
         return s;
     }
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -377,6 +434,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
     private javax.swing.JScrollPane textPane;
     // End of variables declaration//GEN-END:variables
 
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         // Check waiting messages for timed out requests
@@ -406,6 +464,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         // Send to all monitor panels
         processMessage(s);
     }
+    
 
     /**
      * Write a message to the serial port
@@ -469,6 +528,17 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         return mesg;
     }
 
+    
+    /**
+     * Add message to message queue.
+     * 
+     * @param msg The message to be added
+     */
+    public void addWaitingMsg(Message msg) {
+        _waitingMsg.put(msg.getID(), msg);
+    }
+
+        
     /**
      * Append a text to the textfield showing the communication.
      *
@@ -476,6 +546,11 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
      */
     protected void appendText(String msg) {
         this.textArea.append(msg);
+        int length = this.textArea.getText().length();
+        if ( length > 1024*512 ) {
+            // cut of last first characters
+            this.textArea.setText( this.textArea.getText().substring( length - 1024*512 ) );
+        }
     }
 
     
@@ -576,9 +651,13 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
      */
     private void addMonitorPanel(MonitorPanel panel, String prefix) {
         if (panel != null) {
-            AbbozzaLogger.info("AbbozzaMonitor: Panel for prefix " + prefix + " added");
             tabPanel.add(panel, 0);
-            panels.put(prefix, panel);
+            if ( prefix != null ) {
+                panels.put(prefix, panel);
+                AbbozzaLogger.info("AbbozzaMonitor: Panel for prefix " + prefix + " added");
+            } else {
+                AbbozzaLogger.info("AbbozzaMonitor: Panel added");                
+            }
         }
     }
 
@@ -698,10 +777,22 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         }
     }
 
+    
+    /**
+     * Check if serial connection is closed.
+     * 
+     * @return 
+     */
     public boolean isClosed() {
         return closed;
     }
 
+    
+    /** 
+     * Open the serial connection
+     * 
+     * @throws Exception 
+     */
     public void open() throws Exception {
         closed = false;
         if (serialPort != null) {
@@ -746,6 +837,11 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         this.setLocation(x, y); */
     }
 
+    /**
+     * Close the serial connection
+     * 
+     * @throws Exception 
+     */
     public void close() throws Exception {
         closed = true;
         this.setVisible(false);
@@ -755,25 +851,70 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         }
     }
 
-    public void addWaitingMsg(Message msg) {
-        _waitingMsg.put(msg.getID(), msg);
-    }
-
+    
+    /**
+     * This handler is called if bytes are received on the serial port.
+     * 
+     * @param event The received event
+     */
     @Override
     public void serialEvent(SerialPortEvent event) {
         AbbozzaLogger.debug("AbbozzaMonitor: serialEvent");
         if (event.isRXCHAR() && event.getEventValue() > 0) {
             try {
-                String receivedData = serialPort.readString(event.getEventValue());
-                this.addToUpdateBuffer(receivedData);
+                if ( _byteStream != null ) {
+                    // If a byte stream is registered, send bytes there ...
+                    try {
+                        byte receivedBytes[] = serialPort.readBytes(event.getEventValue());
+                        _byteStream.write(receivedBytes,0,receivedBytes.length);
+                    } catch (IOException ex) {}
+                } else {
+                    // ... otherwise send bytes to protocol
+                    String receivedData = serialPort.readString(event.getEventValue());
+                    this.addToUpdateBuffer(receivedData);
+                }
             } catch (SerialPortException ex) {
                 AbbozzaLogger.err("AbbozzaMonitor: Error in receiving string from serial port: " + ex);
             }
         }
     }
 
+    
+    /** 
+     * Scanning all ports.
+     */
     void scanPorts() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    
+    
+    /**
+     * Open a new byte stream
+     * 
+     * @return The newly opened byte stream
+     */
+    public PipedOutputStream openByteStream() {
+        // Close old stream
+        closeByteStream();
+        
+        // open new stream
+        _byteStream = new PipedOutputStream();
+        return _byteStream;
+    }
 
+
+    /**
+     * Close the current byte stream
+     */
+    public void closeByteStream() {
+        if ( _byteStream != null ) {
+            try {
+                _byteStream.close();
+            } catch (IOException ex) {
+                AbbozzaLogger.err("AbbozzaMonitor: Cannot close byte stream");
+            }
+            _byteStream = null;
+        }
+    }
 }

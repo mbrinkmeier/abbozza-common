@@ -49,19 +49,30 @@ public class Graph extends javax.swing.JPanel implements TableModelListener {
     private int xZoom = 1;
     private int yZoom = 1;
     
-    private Color[] colors;
+    private Color colors[] = {
+        Color.RED,
+        new Color(0,200,0),
+        new Color(0,0,255),
+        Color.ORANGE,
+        Color.MAGENTA
+    };
+    private Color background = Color.WHITE;
+    private Color marks = Color.BLACK;
+    
   
     private TableMonitorModel myTable;
     
     public Graph() {
         myTable = null;
         initComponents();
+        /*
         colors = new Color[5];
         colors[0] = Color.RED;
         colors[1] = Color.GREEN;
         colors[2] = Color.CYAN;
         colors[3] = Color.ORANGE;
         colors[4] = Color.MAGENTA;
+        */
         this.setPreferredSize(new Dimension(512,getHeight()));
     }
     
@@ -74,12 +85,14 @@ public class Graph extends javax.swing.JPanel implements TableModelListener {
         myTable = table;
         myTable.addTableModelListener(this);
         initComponents();
+        /*
         colors = new Color[5];
         colors[0] = Color.RED;
         colors[1] = Color.GREEN;
         colors[2] = Color.CYAN;
         colors[3] = Color.ORANGE;
         colors[4] = Color.BLACK;
+        */
         // at most a tenth of a second
         this.setPreferredSize(new Dimension(512,getHeight()));
     }
@@ -124,14 +137,14 @@ public class Graph extends javax.swing.JPanel implements TableModelListener {
         
         // Fill background
         Graphics2D gr2d = (Graphics2D) gr;
-        gr.setColor(Color.BLACK);
+        gr.setColor(background);
         gr.fillRect(0,0,getWidth(), getHeight());
 
         Rectangle rect = this.getVisibleRect();
         
         // Draw marks
         // Digital marks
-        gr.setColor(Color.GRAY);
+        gr.setColor(marks);
         gr.drawLine(rect.x, (getHeight()-1)*6/7, rect.x+rect.width, (getHeight()-1)*6/7);
         gr.drawLine(rect.x, (getHeight()-1)*1/7, rect.x+rect.width, (getHeight()-1)*1/7);
         gr.drawString("low", rect.x + rect.width - 30, (getHeight()-1)*6/7 - 2);
