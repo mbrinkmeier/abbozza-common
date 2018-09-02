@@ -46,6 +46,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.table">Tabelle</msg>
         <msg id="gui.graph">Graph</msg>
         <msg id="gui.level">Pegel</msg>
+        <msg id="gui.reset_osci">Lösche Daten</msg>
+        <msg id="gui.reset_osci_scale">Setze Wertebereich zurück</msg>
         <msg id="gui.oscillograph">Oszillograph</msg>
         <msg id="gui.generate_button">Erzeuge Code</msg>
         <msg id="gui.upload_button">Lade Code hoch</msg>

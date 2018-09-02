@@ -47,6 +47,8 @@ Continuing?</msg>
         <msg id="gui.graph">Graph</msg>
         <msg id="gui.level">Level</msg>
         <msg id="gui.oscillograph">Oscillograph</msg>
+        <msg id="gui.reset_osci">Delete data</msg>
+        <msg id="gui.reset_osci_scale">Reset value range</msg>
         <msg id="gui.generate_button">Generate Code</msg>
         <msg id="gui.upload_button">Upload Code to Board</msg>
         <msg id="gui.new_button">New Sketch</msg>

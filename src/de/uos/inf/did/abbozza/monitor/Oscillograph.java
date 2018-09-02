@@ -80,6 +80,7 @@ public class Oscillograph extends javax.swing.JPanel {
        int max = _monitor.getMax();
        int scale = _monitor.getScale();
        int span = max - min;
+       if ( span == 0 ) span = 10;
                
        // clear background
        gr.setColor(Color.WHITE);

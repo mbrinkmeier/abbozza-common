@@ -41,6 +41,7 @@ public class OscillographMonitor extends MonitorPanel {
     private int _maxValue;
     private int _val;
     private int _scale;
+    private boolean _scaleKnown;
     
     // Attributes for the ring buffer
     private final int _bufSize = 2048;
@@ -56,6 +57,7 @@ public class OscillographMonitor extends MonitorPanel {
         _byteStream = null;
         _thread = null;
         _fetchBytes = true;
+        _scaleKnown = false;
         
         // Initialize the ring buffer
         _buf = new int[_bufSize];
@@ -68,6 +70,8 @@ public class OscillographMonitor extends MonitorPanel {
         computeScale();
         
         initComponents();
+        
+       oszi.addMouseListener(new MonitorMouseListener(this));
     }
 
         
@@ -80,7 +84,29 @@ public class OscillographMonitor extends MonitorPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        _popup = new javax.swing.JPopupMenu();
+        resetItem = new javax.swing.JMenuItem();
+        resetScaleItem = new javax.swing.JMenuItem();
         oszi = new de.uos.inf.did.abbozza.monitor.Oscillograph(this);
+
+        resetItem.setText(AbbozzaLocale.entry("gui.reset_osci")
+        );
+        resetItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetItemActionPerformed(evt);
+            }
+        });
+        _popup.add(resetItem);
+
+        resetScaleItem.setText(AbbozzaLocale.entry("gui.reset_osci_scale"));
+        resetScaleItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetScaleItemActionPerformed(evt);
+            }
+        });
+        _popup.add(resetScaleItem);
+
+        oszi.setInheritsPopupMenu(true);
 
         javax.swing.GroupLayout osziLayout = new javax.swing.GroupLayout(oszi);
         oszi.setLayout(osziLayout);
@@ -109,9 +135,22 @@ public class OscillographMonitor extends MonitorPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void resetItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetItemActionPerformed
+        reset();
+        oszi.repaint();
+    }//GEN-LAST:event_resetItemActionPerformed
+
+    private void resetScaleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetScaleItemActionPerformed
+        resetScale();
+        oszi.repaint();
+    }//GEN-LAST:event_resetScaleItemActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPopupMenu _popup;
     private javax.swing.JPanel oszi;
+    private javax.swing.JMenuItem resetItem;
+    private javax.swing.JMenuItem resetScaleItem;
     // End of variables declaration//GEN-END:variables
     
 
@@ -178,7 +217,7 @@ public class OscillographMonitor extends MonitorPanel {
      */
     @Override
     public JPopupMenu getPopUp() {
-        return null;
+        return _popup;
     }
         
     /**
@@ -267,6 +306,8 @@ public class OscillographMonitor extends MonitorPanel {
         if ( _size == 0 ) {
          _minValue = -10;   
          _maxValue = 10;   
+         _scaleKnown = false;
+         _scale = 10;
         } else {
             _maxValue = getInt(0);
             _minValue = getInt(0);
@@ -291,10 +332,12 @@ public class OscillographMonitor extends MonitorPanel {
     private void computeScale() {
         int span = (int) (_maxValue - _minValue);
         if ( span == 0 ) {
+            _scaleKnown = false;
             span = 10;
         }
        int x = (int) Math.round( Math.ceil( Math.log10(span) ) - 2.0 );
        int scale = (int) Math.round( Math.pow(10,x) );
+       if ( scale == 0 ) scale = 1;
        int factor = 20;
        while ( (factor * scale > (span / 5)) && (factor > 1)  ) {
            factor = factor / 2;
@@ -304,7 +347,21 @@ public class OscillographMonitor extends MonitorPanel {
     
     
     public int getScale() {
+        if ( !_scaleKnown ) {
+            resetScale();
+        }
         return _scale;
+    }
+    
+    
+    public void reset() {
+        _head = 0;
+        _tail = 0;
+        _size = 0;
+        _scaleKnown = false;
+        _scale = 10;
+        _minValue = 0;
+        _maxValue = 0;
     }
     
 }
