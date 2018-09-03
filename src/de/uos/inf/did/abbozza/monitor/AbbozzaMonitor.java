@@ -30,6 +30,7 @@ import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
 import de.uos.inf.did.abbozza.plugin.Plugin;
 import de.uos.inf.did.abbozza.tools.GUITool;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -203,6 +204,9 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
 
         protocolPopUp = new javax.swing.JPopupMenu();
         resetItem = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        incFontSize = new javax.swing.JMenuItem();
+        decFontSize = new javax.swing.JMenuItem();
         tabPanel = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         textPane = new javax.swing.JScrollPane();
@@ -225,6 +229,24 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
             }
         });
         protocolPopUp.add(resetItem);
+        protocolPopUp.add(jSeparator1);
+
+        incFontSize.setText(AbbozzaLocale.entry("gui.inc_font_size"));
+        incFontSize.setToolTipText("");
+        incFontSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                incFontSizeActionPerformed(evt);
+            }
+        });
+        protocolPopUp.add(incFontSize);
+
+        decFontSize.setText(AbbozzaLocale.entry("gui.dec_font_size"));
+        decFontSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decFontSizeActionPerformed(evt);
+            }
+        });
+        protocolPopUp.add(decFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("abbozza! Monitor");
@@ -388,6 +410,27 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         }        
     }//GEN-LAST:event_tabPanelStateChanged
 
+    private void incFontSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_incFontSizeActionPerformed
+        Font oldfont = textArea.getFont();
+        int size = ( oldfont.getSize()+1 ) % 80;
+        Font newfont = new Font(oldfont.getFontName(),Font.PLAIN,size);
+        // Font newfont = new Font("Courier New",Font.PLAIN,size);
+        // if ( !newfont.getFontName().equals("Courier New") ) {
+        //    newfont = new Font("DejaVu Sans Mono",Font.PLAIN,size); 
+        // }
+        textArea.setFont(newfont);
+    }//GEN-LAST:event_incFontSizeActionPerformed
+
+    private void decFontSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decFontSizeActionPerformed
+        Font oldfont = textArea.getFont();
+        int size = ( oldfont.getSize()-1 ) % 80;
+        Font newfont = new Font(oldfont.getFontName(),Font.PLAIN,size);
+        // if ( !newfont.getFontName().equals("Courier New") ) {
+        //    newfont = new Font("DejaVu Sans Mono",Font.PLAIN,size); 
+        // }
+        textArea.setFont(newfont);
+    }//GEN-LAST:event_decFontSizeActionPerformed
+
     
     private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
         String msg = evt.getActionCommand();
@@ -419,9 +462,12 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem decFontSize;
+    private javax.swing.JMenuItem incFontSize;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPanel logoPanel;
     private javax.swing.JComboBox<String> portBox;
     private javax.swing.JPopupMenu protocolPopUp;
@@ -545,6 +591,12 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
      * @param msg The text to be appended
      */
     protected void appendText(String msg) {
+        for ( int i = 0; i < msg.length(); i++ ) {
+            char c = msg.charAt(i);
+            if ( Character.isISOControl(c) && (c!='\n') ) {
+                msg = msg.replace(c,(char) (c+0x2400));
+            } 
+        }
         this.textArea.append(msg);
         int length = this.textArea.getText().length();
         if ( length > 1024*512 ) {
@@ -870,7 +922,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
                     } catch (IOException ex) {}
                 } else {
                     // ... otherwise send bytes to protocol
-                    String receivedData = serialPort.readString(event.getEventValue());
+                    String receivedData = serialPort.readString(event.getEventValue());                    
                     this.addToUpdateBuffer(receivedData);
                 }
             } catch (SerialPortException ex) {

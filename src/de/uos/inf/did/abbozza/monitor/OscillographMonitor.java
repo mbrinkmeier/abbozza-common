@@ -334,15 +334,19 @@ public class OscillographMonitor extends MonitorPanel {
         if ( span == 0 ) {
             _scaleKnown = false;
             span = 10;
+        } else {
+            _scaleKnown = true;            
         }
-       int x = (int) Math.round( Math.ceil( Math.log10(span) ) - 2.0 );
+       int x = ((int) Math.round( Math.ceil( Math.log10(span/5) ) )) - 1;
        int scale = (int) Math.round( Math.pow(10,x) );
        if ( scale == 0 ) scale = 1;
-       int factor = 20;
-       while ( (factor * scale > (span / 5)) && (factor > 1)  ) {
-           factor = factor / 2;
+       if ( span / scale <= 1 ) {
+           _scale = 2 * scale;
+       } else if ( 2*span / scale <= 5 ) {
+           _scale = 5 * scale;
+       } else {
+           _scale = 10 * scale;
        }
-       _scale = scale * factor;
     }
     
     
