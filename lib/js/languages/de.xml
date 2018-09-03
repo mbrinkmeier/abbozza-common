@@ -261,6 +261,7 @@ Trotzdem fortfahren?</msg>
         <msg id="loop.WAITFOR">Warte</msg>
         <msg id="loop.WAITFOR_MS">ms</msg>
         <msg id="loop.WAITFOR_MICROS">µs</msg>
+        <msg id="loop.STOPFOR">Stoppe für</msg>
         <msg id="loop.ASCENDING">aufsteigend</msg>
         <msg id="loop.DESCENDING">absteigend</msg>
 		

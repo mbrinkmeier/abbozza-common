@@ -307,7 +307,7 @@ public class OscillographMonitor extends MonitorPanel {
          _minValue = -10;   
          _maxValue = 10;   
          _scaleKnown = false;
-         _scale = 10;
+         _scale = 5;
         } else {
             _maxValue = getInt(0);
             _minValue = getInt(0);
@@ -316,12 +316,12 @@ public class OscillographMonitor extends MonitorPanel {
                 if ( val > _maxValue ) _maxValue = val;
                 if ( val < _minValue ) _minValue = val;
             }
-            if (_minValue == _maxValue ) {
+            if ( _minValue == _maxValue ) {
                 _minValue -= 10;
                 _maxValue += 10;
             }
+            computeScale();
         }
-        computeScale();
     }
     
     /**
@@ -331,7 +331,7 @@ public class OscillographMonitor extends MonitorPanel {
      */
     private void computeScale() {
         int span = (int) (_maxValue - _minValue);
-        if ( span == 0 ) {
+        if ( span < 5 ) {
             _scaleKnown = false;
             span = 10;
         } else {
@@ -363,9 +363,9 @@ public class OscillographMonitor extends MonitorPanel {
         _tail = 0;
         _size = 0;
         _scaleKnown = false;
-        _scale = 10;
-        _minValue = 0;
-        _maxValue = 0;
+        _scale = 5;
+        _minValue = -10;
+        _maxValue = 10;
     }
     
 }

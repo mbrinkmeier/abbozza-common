@@ -118,10 +118,14 @@ public class Oscillograph extends javax.swing.JPanel {
            sidx = size-width;
            off = -sidx;
        }
-       for (int idx = sidx; idx < eidx; idx++) {
-           int val = _monitor.getInt(idx);
+       int val = _monitor.getInt(sidx);
+       int oy = height - ((int) (height * (val-min)/span));
+       for (int idx = sidx+1; idx < eidx; idx++) {
+           val = _monitor.getInt(idx);
            int yc = height - ((int) (height * (val-min)/span));
-           gr.fillRect(idx+off,yc,1,1);
+           gr.drawLine(idx+off-1,oy,idx+off,yc);
+           oy = yc;
+           // gr.fillRect(idx+off,yc,1,1);
        }
         
     }

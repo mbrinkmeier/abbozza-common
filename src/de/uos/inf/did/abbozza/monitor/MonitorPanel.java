@@ -124,6 +124,10 @@ public abstract class MonitorPanel extends JPanel implements Runnable {
             } catch (IOException ex) {
                 AbbozzaLogger.err("MonitorPanel " + getName() + ": Could not read from byte strem");
             }
+            try {
+                _thread.sleep(10);
+            } catch (InterruptedException ex) {
+            }
         }
     }
     

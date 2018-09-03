@@ -66,6 +66,8 @@ public class SaveHandler extends AbstractHandler {
             if ( contentLocation != null) {
                exchg.getResponseHeaders().add("Content-Location", contentLocation);
                this.sendResponse(exchg, 200, "text/xml", "saved");
+            } else {
+                this.sendResponse(exchg, 400, "", "");                
             }
         } catch (IOException ioe) {
             this.sendResponse(exchg, 404, "", "");
