@@ -342,7 +342,7 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.LCD">LCD # Spalten # Reihen</msg>
         <msg id="dev.IRRECEIVER">Infrarot-Empfänger</msg>
         <msg id="dev.SERIAL">Serielle Verbindung # Input Pin (RX) # Output Pin (TX)</msg>
-        <msg id="dev.WRITEBYTE">Schreibe Byte # auf</msg>
+        <msg id="dev.WRITEBYTE">Sende Byte # über</msg>
         <msg id="dev.READFROMLINE">Lies Byte von</msg>
         <msg id="dev.LINEAVAILABLE">Byte an # verfügbar</msg>
         <msg id="dev.LINELISTENING">Verbindung # ist aktiv</msg>
@@ -353,7 +353,7 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.FORWARD">vorwärts</msg>
         <msg id="dev.BACKWARD">rückwärts</msg>
         <msg id="dev.MICROPHONE_GET">Mikrophon Lautstärke</msg>
-        <msg id="dev.SERIAL_WRITE_INT">Schreibe Zahl auf</msg>
+        <msg id="dev.SERIAL_WRITE_INT">Sende Zahl über</msg>
         <msg id="dev.SERIAL_READ_INT">Lese Zahl von</msg>
         
         <msg id="dev.SPEAKER">Lautsprecher</msg>
