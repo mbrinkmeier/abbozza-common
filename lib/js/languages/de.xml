@@ -158,7 +158,10 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.delete_page">Seite löschen?</msg>
         <msg id="gui.reset_sketch">Aufgabe von vorne beginnen?"</msg>
         <msg id="gui.inc_font_size">Schrift vergrößern</msg>
-        <msg id="gui.dec_font_size">Schrift verkleinern</msg>                
+        <msg id="gui.dec_font_size">Schrift verkleinern</msg>       
+        <msg id="gui.serial_busy">Konnte mich nicht mit dem Board verbinden,
+da es bereits sendet! Soll ich es nochmal versuchen?</msg>         
+        <msg id="gui.serial_busy_title">Board bechäftigt</msg>         
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

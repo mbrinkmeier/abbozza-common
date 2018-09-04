@@ -52,6 +52,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.text.DefaultCaret;
 import jssc.SerialPort;
@@ -135,6 +136,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
                 try {
                     _sender.stopIt();
                     closed = true;
+                    closeByteStream();
                     close();
                     AbbozzaServer.getInstance().monitorIsClosed();
                 } catch (Exception e) {
@@ -483,7 +485,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Check waiting messages for timed out requests
+        // Check waiting messages for timed out requests        
         if (!_waitingMsg.isEmpty()) {
             Set<String> keys = _waitingMsg.keySet();
             Iterator<String> it = keys.iterator();
@@ -803,26 +805,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         }
 
         if (boardPort != null) {
-            /* serial = new Serial(boardPort, 9600) {
-                @Override
-                protected void message(char buff[], int n) {
-                    addToUpdateBuffer(buff, n);
-                }
-            };*/
-            AbbozzaLogger.out("AbbozzaMonitor: Opening serial port " + boardPort,AbbozzaLogger.INFO);
-            serialPort = new SerialPort(boardPort);
-            try {
-                serialPort.openPort();
-                serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
-                serialPort.setParams(baudRate,
-                        SerialPort.DATABITS_8,
-                        SerialPort.STOPBITS_1,
-                        SerialPort.PARITY_NONE);
-                serialPort.purgePort(SerialPort.PURGE_RXCLEAR | SerialPort.PURGE_TXCLEAR);
-            } catch (SerialPortException ex) {
-                AbbozzaLogger.err(ex.getLocalizedMessage());
-
-            }
+            openPort();
         } else {
             String msg = AbbozzaLocale.entry("msg.no_board");
             addToUpdateBuffer(msg.toCharArray(), msg.length());
@@ -848,35 +831,12 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
     public void open() throws Exception {
         closed = false;
         if (serialPort != null) {
-            return;
+            serialPort.closePort();
         }
         this.setVisible(true);
 
         if (boardPort != null) {
-            AbbozzaLogger.out("AbbozzaMonitor: Open " + boardPort, AbbozzaLogger.INFO);
-            try {
-//                serial = new Serial(boardPort, 9600) {
-//                    @Override
-//                    protected void message(char buff[], int n) {
-//                        addToUpdateBuffer(buff, n);
-//                    }
-//                };
-                serialPort = new SerialPort(boardPort);
-                try {
-                    serialPort.openPort();
-                    serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
-                    serialPort.setParams(baudRate,
-                            SerialPort.DATABITS_8,
-                            SerialPort.STOPBITS_1,
-                            SerialPort.PARITY_NONE);
-                } catch (SerialPortException ex) {
-                    AbbozzaLogger.err(ex.getLocalizedMessage());
-
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace(System.err);
-                AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.INFO);
-            }
+            openPort();
         } else {
             String msg = "No board connected!\n";
             addToUpdateBuffer(msg.toCharArray(), msg.length());
@@ -895,6 +855,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
      * @throws Exception 
      */
     public void close() throws Exception {
+        AbbozzaLogger.debug("AbbozzaMonitor: Closing monitor");
         closed = true;
         this.setVisible(false);
         if (serialPort != null) {
@@ -904,6 +865,52 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
     }
 
     
+    public void openPort() {
+             AbbozzaLogger.err("AbbozzaMonitor: Open " + boardPort);
+            try {
+                serialPort = new SerialPort(boardPort);
+                boolean retry = true;
+                int MAX_RETRIES = 50;
+                int retries = MAX_RETRIES;
+                while ( (retry) && ( retries > 0) ) {
+                    try {
+                        serialPort.openPort();
+                        serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
+                        serialPort.setParams(baudRate,
+                                SerialPort.DATABITS_8,
+                                SerialPort.STOPBITS_1,
+                                SerialPort.PARITY_NONE);
+                        retry = false;
+                    } catch (SerialPortException ex) {
+                        if ( ex.getExceptionType() == SerialPortException.TYPE_PORT_BUSY ) {
+                            retry = true;
+                            retries --;
+                            if ( retries == 0 ) {
+                                int result = JOptionPane.showConfirmDialog(this, 
+                                        AbbozzaLocale.entry("gui.serial_busy"), 
+                                        AbbozzaLocale.entry("gui.serial_busy_title "), 
+                                        JOptionPane.YES_NO_OPTION,
+                                        JOptionPane.QUESTION_MESSAGE);
+                                if ( result == JOptionPane.YES_OPTION ) {
+                                    retries = MAX_RETRIES;
+                                }
+                            }
+                        } else {
+                            retry = false;
+                        }
+                        AbbozzaLogger.err("AbbozzaMonitor: Opening of port failed");
+                        AbbozzaLogger.err(ex.getLocalizedMessage());
+                    }
+                }
+                if ( retries == 0 ) {
+                    AbbozzaLogger.err("AbbozzaMonitor: Giving up on trying to open serial port after " + MAX_RETRIES + " tries");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace(System.err);
+                AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.INFO);
+            }
+    }
+        
     /**
      * This handler is called if bytes are received on the serial port.
      * 
@@ -911,7 +918,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
      */
     @Override
     public void serialEvent(SerialPortEvent event) {
-        AbbozzaLogger.debug("AbbozzaMonitor: serialEvent");
+        AbbozzaLogger.debug("AbbozzaMonitor: serialEvent received");
         if (event.isRXCHAR() && event.getEventValue() > 0) {
             try {
                 if ( _byteStream != null ) {
@@ -928,6 +935,8 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
             } catch (SerialPortException ex) {
                 AbbozzaLogger.err("AbbozzaMonitor: Error in receiving string from serial port: " + ex);
             }
+        } else if (event.isBREAK()) {
+                AbbozzaLogger.err("AbbozzaMonitor: serial connection broken");
         }
     }
 

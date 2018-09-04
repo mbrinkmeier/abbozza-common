@@ -42,6 +42,8 @@ public class OscillographMonitor extends MonitorPanel {
     private int _val;
     private int _scale;
     private boolean _scaleKnown;
+    private boolean _resetRequested;
+    private boolean _resetScaleRequested;
     
     // Attributes for the ring buffer
     private final int _bufSize = 2048;
@@ -136,13 +138,11 @@ public class OscillographMonitor extends MonitorPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void resetItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetItemActionPerformed
-        reset();
-        oszi.repaint();
+        _resetRequested = true;
     }//GEN-LAST:event_resetItemActionPerformed
 
     private void resetScaleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetScaleItemActionPerformed
-        resetScale();
-        oszi.repaint();
+        _resetScaleRequested = true;
     }//GEN-LAST:event_resetScaleItemActionPerformed
 
 
@@ -171,6 +171,8 @@ public class OscillographMonitor extends MonitorPanel {
      */
     @Override
     public void connect(AbbozzaMonitor monitor) {
+        _resetRequested = false;
+        _resetScaleRequested = false;
         super.connect(monitor);
         _dataStream = new DataInputStream(_byteStream);
         resetScale();
@@ -201,6 +203,17 @@ public class OscillographMonitor extends MonitorPanel {
      */
     @Override
     public void processBytes() {
+        if ( _resetRequested ) {
+            reset();
+            _scaleKnown = false;
+            _resetRequested = false;
+            resetScale();
+        }
+        
+        if ( _resetScaleRequested ) {
+            _resetScaleRequested = false;            
+        }
+        
         try {
            while ( _dataStream.available() >= 4 ) {
                 int val = _dataStream.readInt();
@@ -330,10 +343,11 @@ public class OscillographMonitor extends MonitorPanel {
      * @return 
      */
     private void computeScale() {
+        try { 
         int span = (int) (_maxValue - _minValue);
         if ( span < 5 ) {
             _scaleKnown = false;
-            span = 10;
+            span = 200;
         } else {
             _scaleKnown = true;            
         }
@@ -347,6 +361,10 @@ public class OscillographMonitor extends MonitorPanel {
        } else {
            _scale = 10 * scale;
        }
+        } catch (Exception ex) {
+            AbbozzaLogger.err("OscillographMonitor: Exception");
+            ex.printStackTrace(System.out);
+        }
     }
     
     

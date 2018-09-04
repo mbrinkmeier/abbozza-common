@@ -72,6 +72,7 @@ public class Oscillograph extends javax.swing.JPanel {
     };
     
     public void paint(Graphics graphics) {
+        try { 
        Graphics2D gr = (Graphics2D) graphics;
        
        int width = this.getWidth();
@@ -127,6 +128,10 @@ public class Oscillograph extends javax.swing.JPanel {
            oy = yc;
            // gr.fillRect(idx+off,yc,1,1);
        }
+       } catch (Exception ex) {
+            AbbozzaLogger.err("OscillographMonitor: Exception");
+            ex.printStackTrace(System.out);
+        }
         
     }
     

@@ -159,6 +159,9 @@ Continuing?</msg>
         <msg id="gui.reset_sketch">Start task all over again?"</msg>
         <msg id="gui.inc_font_size">Increase font size</msg>
         <msg id="gui.dec_font_size">Decrease font size</msg>        
+        <msg id="gui.serial_busy">Could not connect to board, since it is busy!
+Should I try it again?</msg>         
+        <msg id="gui.serial_busy_title">Board busy</msg>         
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
