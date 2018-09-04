@@ -347,19 +347,21 @@ public class OscillographMonitor extends MonitorPanel {
         int span = (int) (_maxValue - _minValue);
         if ( span < 5 ) {
             _scaleKnown = false;
-            span = 200;
+            span = 20;
         } else {
             _scaleKnown = true;            
         }
        int x = ((int) Math.round( Math.ceil( Math.log10(span/5) ) )) - 1;
        int scale = (int) Math.round( Math.pow(10,x) );
        if ( scale == 0 ) scale = 1;
-       if ( span / scale <= 1 ) {
-           _scale = 2 * scale;
-       } else if ( 2*span / scale <= 5 ) {
-           _scale = 5 * scale;
-       } else {
+       if ( span / scale >= 50  ) {
            _scale = 10 * scale;
+       } else if ( span / scale >= 25 ) {
+           _scale = 5 * scale;
+       } else if ( span / scale >= 10 ) {
+           _scale = 2 * scale;
+       } else {
+           _scale = scale;
        }
         } catch (Exception ex) {
             AbbozzaLogger.err("OscillographMonitor: Exception");
