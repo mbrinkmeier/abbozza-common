@@ -211,7 +211,8 @@ public class OscillographMonitor extends MonitorPanel {
         }
         
         if ( _resetScaleRequested ) {
-            _resetScaleRequested = false;            
+            _resetScaleRequested = false;
+            resetScale();
         }
         
         try {
@@ -317,22 +318,13 @@ public class OscillographMonitor extends MonitorPanel {
      */
     public void resetScale() {
         if ( _size == 0 ) {
-         _minValue = -10;   
-         _maxValue = 10;   
-         _scaleKnown = false;
-         _scale = 5;
+          _minValue = -10;   
+          _maxValue = 10;   
+          _scaleKnown = false;
+          _scale = 2;
         } else {
-            _maxValue = getInt(0);
-            _minValue = getInt(0);
-            for (int i = 1; i < _size; i++ ) {
-                int val = getInt(i);
-                if ( val > _maxValue ) _maxValue = val;
-                if ( val < _minValue ) _minValue = val;
-            }
-            if ( _minValue == _maxValue ) {
-                _minValue -= 10;
-                _maxValue += 10;
-            }
+            _maxValue = getInt(_size)+10;
+            _minValue = getInt(_size)-10;
             computeScale();
         }
     }
@@ -344,25 +336,25 @@ public class OscillographMonitor extends MonitorPanel {
      */
     private void computeScale() {
         try { 
-        int span = (int) (_maxValue - _minValue);
-        if ( span < 5 ) {
-            _scaleKnown = false;
-            span = 20;
-        } else {
-            _scaleKnown = true;            
-        }
-       int x = ((int) Math.round( Math.ceil( Math.log10(span/5) ) )) - 1;
-       int scale = (int) Math.round( Math.pow(10,x) );
-       if ( scale == 0 ) scale = 1;
-       if ( span / scale >= 50  ) {
-           _scale = 10 * scale;
-       } else if ( span / scale >= 25 ) {
-           _scale = 5 * scale;
-       } else if ( span / scale >= 10 ) {
-           _scale = 2 * scale;
-       } else {
-           _scale = scale;
-       }
+            int span = (int) (_maxValue - _minValue);
+            if ( span < 5 ) {
+                _scaleKnown = false;
+                span = 20;
+            } else {
+                _scaleKnown = true;            
+            }
+           int x = ((int) Math.round( Math.ceil( Math.log10(span/5) ) )) - 1;
+           int scale = (int) Math.round( Math.pow(10,x) );
+           if ( scale == 0 ) scale = 1;
+           if ( span / scale >= 50  ) {
+               _scale = 10 * scale;
+           } else if ( span / scale >= 25 ) {
+               _scale = 5 * scale;
+           } else if ( span / scale >= 10 ) {
+               _scale = 2 * scale;
+           } else {
+               _scale = scale;
+           }
         } catch (Exception ex) {
             AbbozzaLogger.err("OscillographMonitor: Exception");
             ex.printStackTrace(System.out);

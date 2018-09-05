@@ -337,12 +337,20 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    /**
+     * Delete the protocol.
+     * 
+     * @param evt The evnt trioggerd by selecting the menu item
+     */
     private void resetItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetItemActionPerformed
         textArea.setText("");
     }//GEN-LAST:event_resetItemActionPerformed
 
-    
+    /**
+     * Send text from the input line to the serial port
+     * 
+     * @param evt 
+     */
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         String msg = (String) this.sendText.getEditor().getItem();
         if (msg != null && !msg.isEmpty()) {            
@@ -352,7 +360,11 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         }
     }//GEN-LAST:event_sendButtonActionPerformed
 
-    
+    /**
+     * Changing the serial port.
+     * 
+     * @param evt 
+     */
     private void portBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portBoxActionPerformed
         String port = (String) portBox.getSelectedItem();
         try {
@@ -360,22 +372,28 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
             if ( (boardPort != null) && (port.equals(boardPort)) ) return;
             boardPort = port;
             AbbozzaLogger.out("AbbozzaMonitor.portBoxActionPerformed: Switching to " + boardPort);
-            this.close();
+            this.close();  // Close an reopen the monitor
             this.open();
         } catch (Exception ex) {
             AbbozzaLogger.err("AbbozzaMonitor.portBoxActionPerformed: Could not open " + port);
         }
     }//GEN-LAST:event_portBoxActionPerformed
 
-    
+    /**
+     * Changing the baud rate of the selected serial port.
+     * 
+     * @param evt 
+     */
     private void rateBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rateBoxActionPerformed
        String rateString = (String) rateBox.getSelectedItem();
        if ( rateString == null) return;
        baudRate = Integer.parseInt( rateString );
        AbbozzaLogger.debug("AbbozzaMonitor.portBoxActionPerformed: Setting rate to " + rateString);
         try {
-           this.close();
-           this.open();
+            serialPort.setParams(baudRate,
+                                SerialPort.DATABITS_8,
+                                SerialPort.STOPBITS_1,
+                                SerialPort.PARITY_NONE);
         } catch (Exception ex) {
             AbbozzaLogger.err("AbbozzaMonitor.rateBoxActionPerformed: Could not set " + boardPort + " to " + baudRate + " baud");
         }
@@ -768,6 +786,12 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         
     }
     
+    public int getRate() {
+        int rate = Integer.parseInt((String) rateBox.getSelectedItem());
+        return rate;        
+    }
+        
+    
     public void enableWindow(boolean enable) {
         this.setVisible(true);
 
@@ -792,6 +816,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
 
     public void resume() throws Exception {
         // Enable the window
+        portBox.setModel(new DefaultComboBoxModel(SerialPortList.getPortNames()));        
         enableWindow(true);
 
         // If the window is visible, try to open the serial port
@@ -833,6 +858,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
         if (serialPort != null) {
             serialPort.closePort();
         }
+        portBox.setModel(new DefaultComboBoxModel(SerialPortList.getPortNames()));        
         this.setVisible(true);
 
         if (boardPort != null) {
@@ -876,6 +902,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener, Seri
                     try {
                         serialPort.openPort();
                         serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
+                        baudRate = getRate();
                         serialPort.setParams(baudRate,
                                 SerialPort.DATABITS_8,
                                 SerialPort.STOPBITS_1,
