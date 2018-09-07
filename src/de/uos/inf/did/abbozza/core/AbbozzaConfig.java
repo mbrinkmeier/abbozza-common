@@ -54,6 +54,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Properties;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -119,7 +121,7 @@ public class AbbozzaConfig {
         try {
             // Load the configuration
             AbbozzaLogger.out("Reading config from " + configPath, AbbozzaLogger.DEBUG);
-            config.load(new FileInputStream(prefFile));
+            config.load(new InputStreamReader(new FileInputStream(prefFile),"UTF8"));
             set(config);
             AbbozzaLogger.err("Writing configuration to " + configPath);
             write();
@@ -170,7 +172,7 @@ public class AbbozzaConfig {
             try {
                 // Load the configuration
                 AbbozzaLogger.out("Reading default config from " + defaultConfigFile.getAbsolutePath(), AbbozzaLogger.DEBUG);
-                config.load(new FileInputStream(defaultConfigFile));
+                config.load(new InputStreamReader(new FileInputStream(defaultConfigFile),"UTF8"));
                 set(config);
             } catch (IOException ex) {
                 AbbozzaLogger.err("Default configuration file " + defaultConfigFile.getAbsolutePath() + " could not be read!");
@@ -265,7 +267,7 @@ public class AbbozzaConfig {
             prefFile.createNewFile();
             Properties props = get();
             AbbozzaLogger.out("Configuration written to " + configPath, AbbozzaLogger.INFO);
-            props.store(new FileOutputStream(prefFile), "abbozza! preferences (" + AbbozzaServer.getInstance().system + ")");
+            props.store(new OutputStreamWriter(new FileOutputStream(prefFile),"UTF8"), "abbozza! preferences (" + AbbozzaServer.getInstance().system + ")");
 
         } catch (IOException ex) {
             AbbozzaLogger.err("Could not write configuration file " + configPath);
@@ -321,7 +323,7 @@ public class AbbozzaConfig {
         options = options.replace('}', ' ');
         options = options.replace(',', '\n');
         options = options.trim();
-        config.load(new ByteArrayInputStream(options.getBytes()));
+        config.load(new InputStreamReader(new ByteArrayInputStream(options.getBytes()),"UTF8"));
     }
 
     /**

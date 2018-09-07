@@ -106,6 +106,10 @@ public class Oscillograph extends javax.swing.JPanel {
        
        // draw points
        gr.setColor(Color.BLACK);
+       
+       gr.drawString(Integer.toString(max),300,100);
+       gr.drawString(Integer.toString(min),300,150);
+
        int size = _monitor.getBufSize();
        int sidx;
        int eidx;
@@ -119,6 +123,7 @@ public class Oscillograph extends javax.swing.JPanel {
            sidx = size-width;
            off = -sidx;
        }
+       gr.drawString(Integer.toString(_monitor.getInt(eidx-1)),300,125);
        int val = _monitor.getInt(sidx);
        int oy = height - ((int) (height * (val-min)/span));
        for (int idx = sidx+1; idx < eidx; idx++) {

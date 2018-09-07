@@ -17,6 +17,7 @@
  */
 package de.uos.inf.did.abbozza.tools;
 
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -46,6 +47,11 @@ public class FileTool {
     }
  
     public static void copyDirectory(File source, File target, boolean onlyIfNewer) throws IOException {
+        
+        if ( !source.exists() ) {
+            AbbozzaLogger.info("FileTool: source " + source.getAbsolutePath() + " does not exist");
+            return;
+        }
         
         // AbbozzaLogger.out("InstallTool: Copying " + source.getAbsolutePath() + " to " + target.getAbsolutePath());
         // If the source is a directory, copy its content

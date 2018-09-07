@@ -220,7 +220,11 @@ public class OscillographMonitor extends MonitorPanel {
                 int val = _dataStream.readInt();
                 pushInt(val);
            }
+           while ( _dataStream.available() > 0 ) {
+                 _dataStream.read();
+           }
         } catch (IOException ex) {
+            AbbozzaLogger.force(ex.getLocalizedMessage());
         }
         oszi.repaint();
     }

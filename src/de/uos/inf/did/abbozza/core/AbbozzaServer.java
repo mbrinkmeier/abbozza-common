@@ -238,7 +238,7 @@ public abstract class AbbozzaServer implements HttpHandler {
          */
         config = new AbbozzaConfig(configPath);
 
-        AbbozzaLogger.setLevel(config.getOptionInt("loglevel"));
+        AbbozzaLogger.setLevel(Integer.parseInt(config.getProperty("loglevel")));
 
         // Check "undocumented" options
         denyRemoteAccess = "true".equals(config.getProperty("remote.denyAccess"));
