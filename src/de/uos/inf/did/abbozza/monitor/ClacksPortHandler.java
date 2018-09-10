@@ -49,7 +49,7 @@ import jssc.SerialPortException;
  * 
  * @author michael
  */
-public class PortHandler extends Thread implements SerialPortEventListener {
+public class ClacksPortHandler extends Thread implements SerialPortEventListener {
    
     private boolean _stopped;
     private AbbozzaMonitor _monitor;    // The AbbozzaMonitor
@@ -66,7 +66,7 @@ public class PortHandler extends Thread implements SerialPortEventListener {
      * 
      * @param monitor 
      */
-    public PortHandler(AbbozzaMonitor monitor) {
+    public ClacksPortHandler(AbbozzaMonitor monitor) {
         this._monitor = monitor;
         _msgQueue = new ArrayDeque<Message>(100);        
     }
@@ -280,7 +280,7 @@ public class PortHandler extends Thread implements SerialPortEventListener {
                     try {
                         handler.sendResponse(msg.getHttpExchange(), 400, "text/plain", "No board connected!");
                     } catch (IOException ex) {
-                        Logger.getLogger(PortHandler.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ClacksPortHandler.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             } else {        

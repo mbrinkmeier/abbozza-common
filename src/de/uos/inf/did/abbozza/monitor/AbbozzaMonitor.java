@@ -69,7 +69,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
     private HashMap<String, MonitorPanel> panels;
     private HashMap<String, MonitorListener> listeners;
     protected HashMap<String, Message> _waitingMsg;
-    private PortHandler _portHandler;
+    private ClacksPortHandler _portHandler;
 
     private PipedOutputStream _byteStream;
     private MonitorPanel _activePanel;
@@ -99,7 +99,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
         _waitingMsg = new HashMap<String, Message>();
 
         if (_portHandler == null) {
-            _portHandler = new PortHandler(this);
+            _portHandler = new ClacksPortHandler(this);
         }
 
         /*
@@ -182,7 +182,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
     }
 
     /**
-     * Open the Monitor, start the PortHandler
+     * Open the Monitor, start the ClacksPortHandler
      *
      * @throws Exception
      */
