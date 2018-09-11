@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uos.inf.did.abbozza.monitor;
+package de.uos.inf.did.abbozza.monitor.clacks;
 
 /**
  *
  * @author mbrinkmeier
  */
 public interface ClacksSubscriber {
+    
+    public void process(ClacksBytes bytes);
+    
     
 }

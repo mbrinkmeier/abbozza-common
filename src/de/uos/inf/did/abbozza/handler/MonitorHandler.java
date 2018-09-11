@@ -45,8 +45,7 @@ public class MonitorHandler extends AbstractHandler {
     }
 
     @Override
-    protected void handleRequest(HttpExchange exchg) throws IOException {
-        
+    protected void handleRequest(HttpExchange exchg) throws IOException {        
         String path = exchg.getRequestURI().getPath();
         boolean result = false;
         if (path.endsWith("/monitor")) {
@@ -54,6 +53,7 @@ public class MonitorHandler extends AbstractHandler {
         } else {
             result = resume();
         }
+        
         if (result) {
             String query = URLDecoder.decode(exchg.getRequestURI().getQuery(),"UTF-8");
             if ( query != null ) {
@@ -70,9 +70,8 @@ public class MonitorHandler extends AbstractHandler {
     
     
     public boolean open() {    
-        AbbozzaLogger.out("MonitorHandler: Open monitor", AbbozzaLogger.INFO );
         if (monitor != null) {
-            if (resume()) {
+            if ( resume() ) {
                 GUITool.bringToFront(monitor);
                 return true;
             } else {
@@ -80,6 +79,8 @@ public class MonitorHandler extends AbstractHandler {
             }
         }
 
+        AbbozzaLogger.out("MonitorHandler: Open monitor", AbbozzaLogger.INFO );
+        
         String port = this._abbozzaServer.getSerialPort();
         int rate = this._abbozzaServer.getBaudRate();
         
@@ -110,18 +111,23 @@ public class MonitorHandler extends AbstractHandler {
         return true;
     }
 
+    
+    
     public boolean resume() {
-        AbbozzaLogger.out("MonitorHandler: Resume monitor", AbbozzaLogger.INFO );
         if (monitor == null) {
             return false;
         }
+        
         try {
+            AbbozzaLogger.out("MonitorHandler: Resume monitor", AbbozzaLogger.INFO );
             monitor.resume();
         } catch (Exception ex) {
             return false;
         }
         return true;
     }
+    
+    
     
     public void suspend() {
         try {

@@ -1016,15 +1016,15 @@ public abstract class AbbozzaServer implements HttpHandler {
         AbbozzaLogger.out("Fetched serial ports", AbbozzaLogger.INFO);
 
         if (portNames.length == 0) {
-            System.out.println("No serial ports found");
+            AbbozzaLogger.info("No serial ports found");
             return null;
         } else if (portNames.length == 1) {
-            System.out.println("Unique port found: " + portNames[0]);
+            AbbozzaLogger.info("Unique port found: " + portNames[0]);
             return portNames[0];
         } else {
-            System.out.println("Several ports found:");
+            AbbozzaLogger.info("Several ports found:");
             for (int i = 0; i < portNames.length; i++) {
-                System.out.println("\t" + portNames[i]);
+                AbbozzaLogger.info("\t" + portNames[i]);
             }
         }
 

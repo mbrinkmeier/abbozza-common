@@ -28,6 +28,9 @@ import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksBytes;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksService;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksSubscriber;
 import de.uos.inf.did.abbozza.plugin.Plugin;
 import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Font;
@@ -42,8 +45,6 @@ import java.io.IOException;
 import java.io.PipedOutputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -57,7 +58,8 @@ import jssc.SerialPortList;
  *
  * @author mbrinkmeier
  */
-public final class AbbozzaMonitor extends JFrame implements ActionListener {
+public final class AbbozzaMonitor extends JFrame 
+        implements ActionListener, ClacksSubscriber {
 
     private String boardPort;
     private int baudRate = SerialPort.BAUDRATE_115200;
@@ -68,11 +70,13 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
     private StringBuffer unprocessedMsg;
     private HashMap<String, MonitorPanel> panels;
     private HashMap<String, MonitorListener> listeners;
-    protected HashMap<String, Message> _waitingMsg;
-    private ClacksPortHandler _portHandler;
+    // protected HashMap<String, Message> _waitingMsg;
+    // private ClacksPortHandler _portHandler;
 
     private PipedOutputStream _byteStream;
     private MonitorPanel _activePanel;
+    
+    private ClacksService clacksService;
 
     /**
      * Creates new AbbozzaMonitor and asks for port
@@ -96,18 +100,14 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
      * Initialize the Monitor
      */
     private void init() {
-        _waitingMsg = new HashMap<String, Message>();
+        // _waitingMsg = new HashMap<String, Message>();
 
+        /*
         if (_portHandler == null) {
             _portHandler = new ClacksPortHandler(this);
         }
-
-        /*
-        if (!_portHandler.isAlive()) {
-            _portHandler.start();
-        }
         */
-        
+                
         _byteStream = null;
 
         initComponents();
@@ -135,8 +135,8 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
         });
 
         updateBuffer = new StringBuffer(1048576);
-        updateTimer = new Timer(33, this);
-        updateTimer.start();
+        // updateTimer = new Timer(33, this);
+        // updateTimer.start();
         unprocessedMsg = new StringBuffer();
 
         panels = new HashMap<String, MonitorPanel>();
@@ -195,11 +195,17 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
 
         this.setVisible(true);
 
+        // Start ClacksService
+        clacksService = new ClacksService(this);
+        clacksService.execute();
+        
+        /*
         if (!_portHandler.openPort(true)) {
             String msg = "No board connected!\n";
             addToUpdateBuffer(msg.toCharArray(), msg.length());
         }
-
+        */
+        
         GUITool.centerWindow(this);
     }
 
@@ -210,8 +216,9 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
      */
     public void close() throws Exception {
         AbbozzaLogger.debug("AbbozzaMonitor: Closing monitor");
-        _portHandler.closePort();
-
+        // _portHandler.closePort();
+        if ( clacksService != null) clacksService.cancel(true);
+        
         closed = true;
         this.setVisible(false);
     }
@@ -223,7 +230,8 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
      */
     public void suspend() throws Exception {
         enableWindow(false);
-        _portHandler.suspendPort();
+        // _portHandler.suspendPort();
+        clacksService.suspendPort();
     }
 
     /**
@@ -236,8 +244,41 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
         portBox.setModel(new DefaultComboBoxModel(SerialPortList.getPortNames()));
         enableWindow(true);
 
-        _portHandler.resumePort();
+        // _portHandler.resumePort();
+        clacksService.resumePort();
     }
+
+    
+    
+    
+    @Override
+    public void process(ClacksBytes bytes) {
+        addToUpdateBuffer(bytes.getBytes());
+                
+        String s = consumeUpdateBuffer();
+
+        if (!s.isEmpty()) {
+            // Default handling
+            appendText(s);
+        }
+
+        // Send to all monitor panels
+        processMessage(s);
+    }
+
+    
+    
+    /**
+     * Adding Strings to the update buffer. The update buffer is checked for
+     * complete incoming messages of the form [[<msg>]]
+     *
+     * @param buff
+     */
+    public synchronized void addToUpdateBuffer(byte buff[]) {
+        updateBuffer.append(new String(buff));
+        // AbbozzaLogger.debug("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
+    }
+
 
     /**
      * Adding Strings to the update buffer. The update buffer is checked for
@@ -247,8 +288,8 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
      * @param n
      */
     public synchronized void addToUpdateBuffer(char buff[], int n) {
-        updateBuffer.append(buff, 0, n);
-        AbbozzaLogger.debug("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
+        updateBuffer.append(new String(buff), 0, n);
+        // AbbozzaLogger.debug("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
     }
 
     /**
@@ -260,7 +301,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
      */
     public synchronized void addToUpdateBuffer(String buf) {
         updateBuffer.append(buf.toCharArray(), 0, buf.length());
-        AbbozzaLogger.debug("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
+        // AbbozzaLogger.debug("buffer: " + updateBuffer.toString() + "\n<end of buffer>");
     }
 
     /**
@@ -282,6 +323,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // Check waiting messages for timed out requests
+        /*
         if (!_waitingMsg.isEmpty()) {
             Set<String> keys = _waitingMsg.keySet();
             Iterator<String> it = keys.iterator();
@@ -296,7 +338,8 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
                 }
             }
         }
-
+        */
+        
         // Check update buffer
         String s = consumeUpdateBuffer();
 
@@ -469,7 +512,8 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         String msg = (String) this.sendText.getEditor().getItem();
         if (msg != null && !msg.isEmpty()) {
-            _portHandler.sendMessage(msg);
+            // _portHandler.sendMessage(msg);
+            clacksService.sendMessage(msg);
             this.sendText.insertItemAt(msg, 0);  // new String(msg)
             this.sendText.setSelectedItem(null);
         }
@@ -510,7 +554,8 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
         }
         baudRate = Integer.parseInt(rateString);
         AbbozzaLogger.debug("AbbozzaMonitor.portBoxActionPerformed: Setting rate to " + rateString);
-        _portHandler.setBaudRate(baudRate);
+        // if (_portHandler != null) _portHandler.setBaudRate(baudRate);
+        if ( clacksService != null ) clacksService.setRate(baudRate);
     }//GEN-LAST:event_rateBoxActionPerformed
 
 
@@ -570,7 +615,8 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
     private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
         String msg = evt.getActionCommand();
         if (msg != null && !msg.isEmpty()) {
-            _portHandler.sendMessage(msg);
+            // _portHandler.sendMessage(msg);
+            clacksService.sendMessage(msg);
             this.sendText.insertItemAt(msg, 0);    // new String(msg)
             this.sendText.setSelectedItem(null);
         }
@@ -633,9 +679,11 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
         }
         if (timeout > 0) {
             String id = "_" + Long.toHexString(System.currentTimeMillis());
-            return _portHandler.sendMessage(id, msg, exchg, handler, timeout);
+            // return _portHandler.sendMessage(id, msg, exchg, handler, timeout);
+            return clacksService.sendMessage(id, msg, exchg, handler, timeout);
         } else {
-            mesg = _portHandler.sendMessage(msg);
+            // mesg = _portHandler.sendMessage(msg);
+            mesg = clacksService.sendMessage(msg);
             try {
                 handler.sendResponse(exchg, 200, "text/plain", "ok");
             } catch (IOException ex) {
@@ -650,16 +698,18 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
      *
      * @param msg The message to be added
      */
+    /*
     public void addWaitingMsg(Message msg) {
         _waitingMsg.put(msg.getID(), msg);
     }
+    */
 
     /**
      * Append a text to the textfield showing the communication.
      *
      * @param msg The text to be appended
      */
-    protected void appendText(String msg) {
+    public void appendText(String msg) {
         for (int i = 0; i < msg.length(); i++) {
             char c = msg.charAt(i);
             if (Character.isISOControl(c) && (c != '\n')) {
@@ -717,12 +767,12 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
      */
     private void processMessage(String s) {
         unprocessedMsg.append(s);
-
+        
         String cmd;
         String prefix;
 
         int end = -1;
-        int start;
+        int start = -1;
 
         do {
             start = unprocessedMsg.indexOf("[[");
@@ -741,7 +791,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
                             cmd = cmd.substring(space + 1, cmd.length());
                             panel.processMessage(cmd);
                         } else {
-                            respondTo(cmd);
+                            clacksService.sendResponse(cmd);
                         }
 
                         // Send message to registered listener
@@ -750,16 +800,16 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
                             cmd = cmd.substring(space + 1, cmd.length());
                             listener.processMessage(cmd);
                         } else {
-                            respondTo(cmd);
+                            clacksService.sendResponse(cmd);
                         }
 
                     }
                 }
             }
-        } while ((start != -1) && (end != -1));
+        } while ((start >= 0) && (end >= 0));
 
         // No [[ and ]] in buffer, remove everything
-        unprocessedMsg.setLength(0);
+        if ( start < 0 ) unprocessedMsg.setLength(0);
     }
 
 
@@ -768,6 +818,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
      *
      * @param msg The message
      */
+    /*
     private void respondTo(String msg) {
         int pos;
         Message _msg;
@@ -793,7 +844,8 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
             }
         }
     }
-
+    */
+    
     /**
      * Add a Panel to the Monitor. Messages enclosed in double brackets of the
      * form [[ <prefix> <msg> ]] are send to the panel.
@@ -874,6 +926,7 @@ public final class AbbozzaMonitor extends JFrame implements ActionListener {
     void scanPorts() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     
     /******

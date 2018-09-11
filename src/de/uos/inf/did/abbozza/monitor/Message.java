@@ -129,7 +129,7 @@ public class Message {
         return false;
     }
 
-    String getIdPostfix() {
+    public String getIdPostfix() {
         return this._idPostfix;
     }
     
