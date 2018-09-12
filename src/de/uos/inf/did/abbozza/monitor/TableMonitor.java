@@ -25,6 +25,7 @@
 package de.uos.inf.did.abbozza.monitor;
 
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksBytes;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -217,5 +218,14 @@ public class TableMonitor extends MonitorPanel {
     public JPopupMenu getPopUp() {
         return popup;
     }
+
+    @Override
+    public void process(ClacksBytes bytes) {}
+
+    @Override
+    public void connect(AbbozzaMonitor monitor) {}
+
+    @Override
+    public void disconnect(AbbozzaMonitor monitor) {}
     
 }

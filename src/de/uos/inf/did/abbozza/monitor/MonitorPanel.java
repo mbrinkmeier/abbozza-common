@@ -25,11 +25,8 @@
 
 package de.uos.inf.did.abbozza.monitor;
 
-import de.uos.inf.did.abbozza.core.AbbozzaLogger;
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksBytes;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksSubscriber;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
@@ -37,13 +34,8 @@ import javax.swing.JPopupMenu;
  *
  * @author michael
  */
-public abstract class MonitorPanel extends JPanel implements Runnable {
+public abstract class MonitorPanel extends JPanel implements ClacksSubscriber {
      
-    protected PipedInputStream _byteStream; // The byte stream 
-    protected Thread _thread;               // The thread started for monitoring the byte stream
-    protected boolean _fetchBytes = false;  // An internal flag, indicating if the byte stream should be fetched
-    private boolean _stopped = false;       // A flag to stop the thread
-
     /**
      * Return a popup menu.
      * 
@@ -56,106 +48,23 @@ public abstract class MonitorPanel extends JPanel implements Runnable {
      * 
      * @param msg The received message
      */
-    public void processMessage(String msg) {}
+    public abstract void processMessage(String msg);
     
     /**
      * Process bytes in the byte stream buffer.
      */
-    public void processBytes() {}
+    public abstract void process(ClacksBytes bytes);
     
     /**
-     * The return value of this operation inidcates if the byte stream should
-     * be fetched.
-     * 
-     * @return 
+     * Called if the panel is added to the monitor
+     * @param monitor 
      */
-    public boolean fetchBytes() {
-        return _fetchBytes;
-    }
+    public abstract void connect(AbbozzaMonitor monitor);
     
     /**
-     * Connect to the byte stream of the given monitor
-     * 
-     * @param monitor The monitor whose byte stream should be fetched
+     * Called if the panel is removed from the monitor
+     * @param monitor 
      */
-    public void connect(AbbozzaMonitor monitor) {
-        // If the panel does not fetch the bytes, close the byte stream
-        if ( !fetchBytes() ) {
-            closeByteStream();
-            stopThread();
-            return;
-        }
-        
-        try {
-            // Create a new byte stream        
-            _byteStream = new PipedInputStream();
-            _byteStream.connect( monitor.openByteStream() );
-            startThread();
-        } catch (IOException ex) {
-            closeByteStream();
-            stopThread();
-        }
-        
-        AbbozzaLogger.debug("MonitorPanel " + getName() + ": activated");
-    };
+    public abstract void disconnect(AbbozzaMonitor monitor);
 
-    
-    /**
-     * Disconnect frrom the byte stream.
-     */
-    public void disconnect() {
-        // If the panel does not fetch the bytes, do nothing
-        closeByteStream();
-        stopThread();
-
-        AbbozzaLogger.debug("MonitorPanel " + getName() + ": deactivated");
-    };
-    
-    
-    /**
-     * If the bytes are fetched, this operation calls proccessBytes()
-     */
-    public void run() {
-        while (!_stopped) {
-            try {
-                if ( _byteStream.available() > 0 ) {
-                    processBytes();
-                }
-            } catch (IOException ex) {
-                AbbozzaLogger.err("MonitorPanel " + getName() + ": Could not read from byte strem");
-            }
-            try {
-                _thread.sleep(10);
-            } catch (InterruptedException ex) {
-            }
-        }
-    }
-    
-    /**
-     * Close byte stream
-     */
-    private void closeByteStream() {
-        if (_byteStream != null ) {
-            try {
-                _byteStream.close();
-            } catch (IOException ex) {
-                AbbozzaLogger.err("MonitorPanel " + getName() + ": Cannot close byte stream");
-            }
-            _byteStream = null;    
-        }
-    }
-    
-    
-    private void startThread() {
-        _thread = new Thread(this);
-        _stopped = false;
-        _thread.start();        
-    }
-
-
-    private void stopThread() {
-        _stopped = true;
-        _thread = null;
-    }
-    
 }

@@ -33,7 +33,7 @@ import javax.swing.SwingWorker;
  *
  * @author mbrinkmeier
  */
-public class ClacksService extends SwingWorker<List<ClacksBytes>, ClacksBytes> {
+public class ClacksService extends SwingWorker<List<ClacksMessage>, ClacksMessage> {
 
     // The queue for the bytes received froim the serial port
     protected ConcurrentLinkedQueue<ClacksBytes> incoming;
@@ -50,13 +50,37 @@ public class ClacksService extends SwingWorker<List<ClacksBytes>, ClacksBytes> {
     protected ClacksSerialPort serialPort;
     protected AbbozzaMonitor monitor;
     protected Thread serialThread;
+    protected ClacksMsgParser parser;
 
+    private String portName = null;
+    private int portRate = 0;
+    
     private LinkedList<ClacksSubscriber> subscribers;
 
+    /**
+     * The constructor
+     * 
+     * @param mon 
+     */
     public ClacksService(AbbozzaMonitor mon) {
-        monitor = mon;
+        monitor = mon;        
+        
+        // Initialize the various queues
+        incoming = new ConcurrentLinkedQueue<>();
+        outgoing = new ConcurrentLinkedQueue<>();
+        messages = new ConcurrentLinkedQueue<>();
+        waitingMessages = new HashMap<>();
+
+        // Add the monitor to the list of subscribers
+        subscribers = new LinkedList<>();
+
+        // Initialize and open the serial Port
+        serialPort = new ClacksSerialPort(incoming, outgoing);
+        
+        parser = new ClacksMsgParser();
     }
 
+    
     /**
      * The work done in the background.
      *
@@ -64,34 +88,55 @@ public class ClacksService extends SwingWorker<List<ClacksBytes>, ClacksBytes> {
      * @throws Exception
      */
     @Override
-    protected List<ClacksBytes> doInBackground() throws Exception {
+    protected List<ClacksMessage> doInBackground() throws Exception {
 
-        incoming = new ConcurrentLinkedQueue<>();
-        outgoing = new ConcurrentLinkedQueue<>();
-        messages = new ConcurrentLinkedQueue<>();
-        waitingMessages = new HashMap<>();
+        AbbozzaLogger.err("ClacksService starting");
 
-        serialPort = new ClacksSerialPort(incoming, outgoing);
-
-        // Open the serial port
-        serialPort.open(monitor.getPort(), monitor.getRate());
-
-        subscribers = new LinkedList<>();
-        subscribe(monitor);
-
+        // Get port and rate if not known already
+        if ( portName == null ) {
+            portName = serialPort.getSerialPort();
+        }
+        
+        // No port found
+        if ( portName == null ) {
+            AbbozzaLogger.err("ClacksService : No serial port found");
+            return null;
+        }
+        
+        if ( portRate == 0 ) {
+            portRate = serialPort.getBaudRate();
+        }
+        
+        monitor.setBoardPort(portName, portRate);
+        
+        // Open the port
+        serialPort.open(portName, portRate);
+        
         // Start the thread
         serialThread = new Thread(serialPort);
         serialThread.start();
 
+        // Here the real work is done
         while ((serialPort != null) && !isCancelled()) {
-            // Here the real work is done:
-            while (!incoming.isEmpty()) {
+
+            // Always treat at most ten packages
+            // The byte chunks are published to the gui
+            int count = 0;
+            if ( (!incoming.isEmpty()) && ( count < 10) ) {
                 ClacksBytes bytes = incoming.poll();
-                publish(bytes);
+                
+                parser.addBytes(bytes.getBytes());
+                ClacksMessage cMsg;
+                while ( (cMsg = parser.parse()) != null  ) {
+                    publish(cMsg);
+                }
+                
+                publish(new ClacksMessage(bytes));
+                count++;
             }
 
             // Check the message queue and send them to the serial port
-            while (!messages.isEmpty()) {
+            while ( !messages.isEmpty() ) {                
                 handleMessage(messages.poll());
             }
 
@@ -106,8 +151,12 @@ public class ClacksService extends SwingWorker<List<ClacksBytes>, ClacksBytes> {
                     }
                 }
             }
+      
+            // Now sleep a bit, so that other get the chance to do their work
+            Thread.sleep(0,100);
 
         }
+        AbbozzaLogger.err("ClacksService stopped");
 
         return null;
     }
@@ -116,23 +165,39 @@ public class ClacksService extends SwingWorker<List<ClacksBytes>, ClacksBytes> {
      * Suspend the serial connection
      */
     public void suspendPort() {
-        serialPort.suspend();
+        if ( serialPort != null ) serialPort.suspend();
     }
 
     /**
      * resume the serial connection
      */
     public void resumePort() {
-        serialPort.resume();
+        if ( serialPort != null ) serialPort.resume();
     }
 
+    
+    public void setPort(String port) {
+        portName = port;
+        if ( serialPort != null && serialPort.isOpen() ) {
+            serialPort.close();
+        }
+        if ( serialPort != null ) {
+            serialPort.open(portName,portRate);
+        }
+        
+    }
+    
+    
     /**
      * Set the baud rate of the connection
      *
      * @param rate
      */
     public void setRate(int rate) {
-        serialPort.setRate(rate);
+        if ( rate != portRate ) {
+            portRate = rate;           
+            if ( serialPort != null ) serialPort.setRate(rate);
+        }
     }
 
     /**
@@ -141,16 +206,17 @@ public class ClacksService extends SwingWorker<List<ClacksBytes>, ClacksBytes> {
      * @param chunks
      */
     @Override
-    protected void process(List<ClacksBytes> chunks) {
-        for (ClacksBytes bytes : chunks) {
-            for (ClacksSubscriber subscriber : subscribers) {
-                ClacksBytes cl = bytes.clone();
-                subscriber.process(cl);
+    protected void process(List<ClacksMessage> chunks) {  
+        for (ClacksMessage msg : chunks) {
+
+            if ( msg.getPrefix() == null ) {
+                for (ClacksSubscriber subscriber : subscribers) {
+                    subscriber.process(msg.getBytes());
+                }
+            } else {
+                // Messages with prefix are only send to the monitor
+                monitor.process(msg);
             }
-            // For testing
-            // monitor.appendText(new String(bytes.getBytes()));
-            // @TODO
-            // Here the bytes ar distributed to the subscribers
         }
     }
 
@@ -164,9 +230,9 @@ public class ClacksService extends SwingWorker<List<ClacksBytes>, ClacksBytes> {
         // Check if web message
         if (msg.getHandler() == null) {
             // If not, simply write it
-            AbbozzaLogger.out("ClacksService: Sending message " + msg.toString() + " to board", AbbozzaLogger.DEBUG);
+            AbbozzaLogger.err("ClacksService: Sending message " + msg.toString() + " to board");
             // Append a newline
-            outgoing.add(new ClacksBytes(msg.toString() + "\n"));
+            outgoing.add(new ClacksBytes(msg.toString()));
         } else {
             // Otherwise it is a message retreived from the http handler
 
@@ -185,11 +251,11 @@ public class ClacksService extends SwingWorker<List<ClacksBytes>, ClacksBytes> {
                 AbbozzaLogger.out("ClacksService: Sending message " + msg.toString() + " to board", AbbozzaLogger.DEBUG);
                 // Append a newline
                 if (msg.getTimeout() > 0) {
-                    outgoing.add(new ClacksBytes(msg.toString() + "\n"));
+                    outgoing.add(new ClacksBytes(msg.toString()));
                     msg.startTimeOut();
                     waitingMessages.put(msg.getID(),msg);
                 } else {
-                    outgoing.add(new ClacksBytes(msg.toString() + "\n"));
+                    outgoing.add(new ClacksBytes(msg.toString()));
                 }
             }
         }
@@ -263,10 +329,10 @@ public class ClacksService extends SwingWorker<List<ClacksBytes>, ClacksBytes> {
      */
     @Override
     protected void done() {
-        AbbozzaLogger.info("ClacksService: Stopping");
         // close the serial port
         serialPort.close();
         serialPort.stopIt();
+        AbbozzaLogger.info("ClacksService: Stopped");
     }
 
     public void subscribe(ClacksSubscriber subscriber) {
@@ -278,8 +344,8 @@ public class ClacksService extends SwingWorker<List<ClacksBytes>, ClacksBytes> {
     }
     
     
-    public void unsusbscribe(ClacksSubscriber subscriber) {
+    public void unsubscribe(ClacksSubscriber subscriber) {
         subscribers.remove(subscriber);
     }
-
+        
 }

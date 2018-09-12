@@ -23,5 +23,4 @@ public interface ClacksSubscriber {
     
     public void process(ClacksBytes bytes);
     
-    
 }

@@ -47,4 +47,17 @@ public class ClacksBytes {
         ClacksBytes c = new ClacksBytes(this.timestamp, Arrays.copyOf(this.buffer,this.buffer.length));
         return c;
     }
+    
+    
+    public String toString() {
+        String rep = "";
+        for ( int i = 0; i < buffer.length; i++ ) {
+            rep = rep + buffer[i] + " ";
+        }
+        return rep;
+    }
+    
+    public int getLength() {
+        return buffer.length;
+    }
 }

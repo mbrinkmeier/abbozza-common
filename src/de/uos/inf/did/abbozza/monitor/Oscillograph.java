@@ -107,10 +107,10 @@ public class Oscillograph extends javax.swing.JPanel {
        // draw points
        gr.setColor(Color.BLACK);
        
-       gr.drawString(Integer.toString(max),300,100);
-       gr.drawString(Integer.toString(min),300,150);
 
        int size = _monitor.getBufSize();
+       if ( size == 0 ) return;
+       
        int sidx;
        int eidx;
        int off;
@@ -123,7 +123,6 @@ public class Oscillograph extends javax.swing.JPanel {
            sidx = size-width;
            off = -sidx;
        }
-       gr.drawString(Integer.toString(_monitor.getInt(eidx-1)),300,125);
        int val = _monitor.getInt(sidx);
        int oy = height - ((int) (height * (val-min)/span));
        for (int idx = sidx+1; idx < eidx; idx++) {
@@ -133,7 +132,16 @@ public class Oscillograph extends javax.swing.JPanel {
            oy = yc;
            // gr.fillRect(idx+off,yc,1,1);
        }
-       } catch (Exception ex) {
+       String sval = Integer.toString(_monitor.getInt(eidx-1));
+       gr.drawString(sval , width - gr.getFontMetrics().stringWidth(sval), oy - gr.getFontMetrics().getHeight()/2 );
+       
+       sval = Integer.toString(max);
+       gr.drawString(sval, width - gr.getFontMetrics().stringWidth(sval), gr.getFontMetrics().getHeight() );
+
+       sval = Integer.toString(min);
+       gr.drawString(sval, width - gr.getFontMetrics().stringWidth(sval), height);
+       
+        } catch (Exception ex) {
             AbbozzaLogger.err("OscillographMonitor: Exception");
             ex.printStackTrace(System.out);
         }

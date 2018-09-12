@@ -25,6 +25,7 @@
 package de.uos.inf.did.abbozza.monitor;
 
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksBytes;
 import javax.swing.JPopupMenu;
 
 /**
@@ -85,8 +86,7 @@ public class GraphMonitor extends MonitorPanel {
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void processMessage(String s) {
-    }
+    public void processMessage(String s) {}
 
     @Override
     public JPopupMenu getPopUp() {
@@ -96,5 +96,14 @@ public class GraphMonitor extends MonitorPanel {
     public String getName() {
         return AbbozzaLocale.entry("gui.graph");
     }
+
+    @Override
+    public void process(ClacksBytes bytes) {}
+
+    @Override
+    public void connect(AbbozzaMonitor monitor) {}
+
+    @Override
+    public void disconnect(AbbozzaMonitor monitor) {}
 
 }

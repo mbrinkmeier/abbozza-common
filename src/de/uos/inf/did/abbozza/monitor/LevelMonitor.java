@@ -34,6 +34,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksBytes;
 
 /**
  *
@@ -190,5 +191,14 @@ public class LevelMonitor extends MonitorPanel implements TableModelListener {
         this.revalidate();
         this.repaint();
     }
+
+    @Override
+    public void process(ClacksBytes bytes) {}
+
+    @Override
+    public void connect(AbbozzaMonitor monitor) {}
+
+    @Override
+    public void disconnect(AbbozzaMonitor monitor) {}
 
 }

@@ -20,54 +20,54 @@ import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.swing.JOptionPane;
 import jssc.SerialPort;
-import jssc.SerialPortEvent;
-import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
+import jssc.SerialPortList;
+import jssc.SerialPortTimeoutException;
 
 /**
  *
  * @author mbrinkmeier
  */
-public class ClacksSerialPort implements Runnable, SerialPortEventListener {
+public class ClacksSerialPort implements Runnable {
+
+    private final int TIMEOUT = 10;
 
     // The serialPort
     private SerialPort serialPort;
     private boolean stopped;
     private String port;
     private int rate;
-    
+
     // The queue for the bytes received froim the serial port
     protected ConcurrentLinkedQueue<ClacksBytes> incoming;
-    
+
     // The queue for messages to be send via the serial port
     protected ConcurrentLinkedQueue<ClacksBytes> outgoing;
-    
-    
-    public ClacksSerialPort(ConcurrentLinkedQueue<ClacksBytes> in, 
-                            ConcurrentLinkedQueue<ClacksBytes> out) {
+
+    public ClacksSerialPort(ConcurrentLinkedQueue<ClacksBytes> in,
+            ConcurrentLinkedQueue<ClacksBytes> out) {
         incoming = in;
         outgoing = out;
     }
-    
-    
+
     public void stopIt() {
         stopped = true;
     }
-    
+
     /**
      * Open the given port.
-     * 
+     *
      * @param p The name of the port
      * @param r The baud rate
-     * 
+     *
      * @return true if successful
      */
-    public boolean open(String p, int r) {        
+    public boolean open(String p, int r) {
         port = p;
-        rate  = r;
-        
+        rate = r;
+
         AbbozzaLogger.debug("ClacksSerialPort: Opening " + port + " at " + rate + " baud");
-        
+
         try {
             serialPort = new SerialPort(port);
             boolean retry = true;
@@ -76,7 +76,7 @@ public class ClacksSerialPort implements Runnable, SerialPortEventListener {
             while ((retry) && (retries > 0)) {
                 try {
                     serialPort.openPort();
-                    serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
+                    // serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);                   
                     serialPort.setParams(rate,
                             SerialPort.DATABITS_8,
                             SerialPort.STOPBITS_1,
@@ -108,28 +108,28 @@ public class ClacksSerialPort implements Runnable, SerialPortEventListener {
                 return false;
             }
         } catch (Exception ex) {
-            ex.printStackTrace(System.err);
-            AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.INFO);
+            AbbozzaLogger.stackTrace(ex);
             return false;
         }
-        return true;        
+        return true;
     }
-    
+
     /**
      * Close the port
      */
     public void close() {
         try {
             // Close the serial port
-            serialPort.closePort();            
+            if ( (serialPort != null) && serialPort.isOpened() ) {
+                serialPort.closePort();
+            }
         } catch (SerialPortException ex) {
-            ex.printStackTrace(System.out);
+            AbbozzaLogger.stackTrace(ex);
             AbbozzaLogger.err("ClacksSerialPort: Could not close port");
         }
     }
-    
-    
-        /**
+
+    /**
      * Temporarily close the port, but keep the thread running
      */
     public void suspend() {
@@ -140,9 +140,9 @@ public class ClacksSerialPort implements Runnable, SerialPortEventListener {
         } catch (SerialPortException ex) {
             AbbozzaLogger.err("ClacksSerialPort: Could not close port");
         }
-        */
+         */
     }
-    
+
     /**
      * Reopens the port
      */
@@ -151,34 +151,34 @@ public class ClacksSerialPort implements Runnable, SerialPortEventListener {
         if ( serialPort.isOpened() ) { 
             return; 
         }
-        */
-        
+         */
+
         AbbozzaLogger.debug("ClacksSerialPort: resume port");
         /*
         // Open the port, but do not start the thread again.
         open(port,rate);
-        */
+         */
     }
-
 
     public boolean isOpen() {
-        if ( serialPort == null ) return false;
+        if (serialPort == null) {
+            return false;
+        }
         return serialPort.isOpened();
     }
-    
-    
+
     /**
      * Set the rate of the port
-     * 
-     * @param r 
+     *
+     * @param r
      */
     public void setRate(int r) {
         rate = r;
-        if ( serialPort.isOpened() ) {
+        if ((serialPort != null) && (serialPort.isOpened())) {
             try {
                 serialPort.setParams(rate,
                         SerialPort.DATABITS_8,
-                        SerialPort.STOPBITS_1,        
+                        SerialPort.STOPBITS_1,
                         SerialPort.PARITY_NONE);
             } catch (SerialPortException ex) {
                 AbbozzaLogger.err("ClacksSerialPort: Could not change rate");
@@ -186,40 +186,80 @@ public class ClacksSerialPort implements Runnable, SerialPortEventListener {
         }
     }
     
-    
+
     @Override
     public void run() {
         stopped = false;
-        
-        while ( !stopped ) {
-            if ( !outgoing.isEmpty() ) {
+        long timeoutStart = System.currentTimeMillis();
+
+        while (!stopped) {
+
+            // Send bytes
+            while (!outgoing.isEmpty()) {
                 // If there is a message in the outgoing queue, send it
                 ClacksBytes bytes = outgoing.poll();
                 try {
-                    AbbozzaLogger.err("ClacksSerialPort: Sending bytes " + new String(bytes.getBytes()) + " to port");
                     serialPort.writeBytes(bytes.getBytes());
                 } catch (SerialPortException ex) {
+                    AbbozzaLogger.stackTrace(ex);
                     AbbozzaLogger.err("ClacksSerialPort: Could not send bytes to port");
                 }
-            }            
-        }
-    }
-
-    
-    
-    @Override
-    public void serialEvent(SerialPortEvent event) {
-        if (event.isRXCHAR() && event.getEventValue() > 0) {
-            try {
-                byte receivedBytes[] = serialPort.readBytes(event.getEventValue());
-                ClacksBytes bytes = new ClacksBytes(System.currentTimeMillis(),receivedBytes);
-                incoming.add(bytes);
-            } catch (SerialPortException ex) {
-                AbbozzaLogger.err("ClacksSerialPort: Error whiles receiving data from serial port: " + ex);
             }
-        } else if (event.isBREAK()) {
-                AbbozzaLogger.err("ClacksSerialPort: serial connection broken");
+
+            // Check for incoming bytes
+            try {
+                long currentTime = System.currentTimeMillis();
+                int available = serialPort.getInputBufferBytesCount();
+                if ((available >= 32) || (currentTime - timeoutStart > TIMEOUT)) {
+                    Thread.sleep(0, 100);
+                    if (serialPort.getInputBufferBytesCount() > 0) {
+                        ClacksBytes bytes = new ClacksBytes(currentTime, serialPort.readBytes(serialPort.getInputBufferBytesCount(),10));
+                        timeoutStart = currentTime;
+                        incoming.add(bytes);
+                    }
+                } else {
+                    Thread.sleep(0, 100);
+                }
+            } catch (SerialPortException ex) {
+                AbbozzaLogger.stackTrace(ex);
+                AbbozzaLogger.err("ClacksSerialPort: Error reading from port");
+            } catch (SerialPortTimeoutException ex) {
+                AbbozzaLogger.stackTrace(ex);
+                AbbozzaLogger.err("ClacksSerialPort: Error reading from port");
+            } catch (InterruptedException ex) {
+            }
         }
     }
+    
+    
+    public String getSerialPort() {
+        AbbozzaLogger.out("ClacksService: Checking serial ports", AbbozzaLogger.INFO);
 
+        String[] portNames = SerialPortList.getPortNames();
+
+        AbbozzaLogger.out("ClacksService: Fetched serial ports", AbbozzaLogger.INFO);
+
+        if (portNames.length == 0) {
+            AbbozzaLogger.info("ClacksService: No serial ports found");
+            return null;
+        } else if (portNames.length == 1) {
+            AbbozzaLogger.info("ClacksService: Unique port found: " + portNames[0]);
+            return portNames[0];
+        } else {
+            AbbozzaLogger.info("ClacksService: Several ports found:");
+            for (int i = 0; i < portNames.length; i++) {
+                AbbozzaLogger.info("\t" + portNames[i]);
+            }
+        }
+        return portNames[0];
+    }
+
+    
+    public int getBaudRate() {
+        return SerialPort.BAUDRATE_115200;
+    }
+
+
+
+    
 }
