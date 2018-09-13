@@ -11,3 +11,5 @@
 * File extension for table export changed to *.csv
 * Zoom in and out added to TaskWindow
 * Added Oscillograph to monitor
+* Storing and retreiving sketches improved
+* Current page is stored in tasks
