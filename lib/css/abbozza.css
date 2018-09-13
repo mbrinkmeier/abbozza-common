@@ -233,7 +233,7 @@ DIV.license_div A {
 
 .blocklyTreeRow {
     background-image: url(../img/categoryframe.png);
-    background-size: 100% 110%;
+    background-size: 101% 110%;
     background-repeat: no-repeat;
     background-color: transparent;   
     padding: 5px;   
@@ -328,6 +328,7 @@ div[role="treeitem"]:hover {
     float: right;
     /* margin-top: 3px; */
     margin-right: 6px;
+    margin-top: 2px;
     /* margin-bottom: 3px; */
     /* width: 24px; */
     /* height: 24px; */
@@ -338,16 +339,18 @@ div[role="treeitem"]:hover {
     background-color: #d0d0d0;
     cursor: pointer;
     text-align: center;
-    vertical-align: middle;
+    vertical-align: text-top;
+    height: 24px;
 }
 
 .taskOverlayButton:hover {
     color : #d0d0d0;
-    background-color: white;
+    background-color: red;
 }
 
 
 .taskOverlayButton IMG {
+    height: 20px;
     padding : 2px;
     margin-left: 1px;
     margin-top: 1px;
@@ -378,7 +381,7 @@ div[role="treeitem"]:hover {
     overflow-x: visible;
     overflow-y: scroll;
     top: 30px;
-    bottom: 3px;
+    bottom: 30px;
     left: 3px;
     right: 3px;
     border-radius: 5px;
@@ -404,7 +407,7 @@ div[role="treeitem"]:hover {
     background: #d0d0d0;
     position: absolute;
     margin: 0px;
-    bottom: 8px;
+    bottom: 4px;
     left: 10px;
     right: 24px;
     height: 24px;
@@ -414,7 +417,7 @@ div[role="treeitem"]:hover {
 }
 
 .taskOverlayNavButton {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
     margin-left: 2px;
     margin-right: 2px;
@@ -426,6 +429,11 @@ div[role="treeitem"]:hover {
     min-width: 40px;    
 }
 
+.taskOverlayNavButton IMG {
+    height: 20px;
+    vertical-align: text-top;
+}    
+
 .taskOverlayNavButton:hover {
     background-color: red;
 }
@@ -433,7 +441,7 @@ div[role="treeitem"]:hover {
 
 
 .taskOverlayNavButtonDisabled {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
     margin-left: 2px;
     margin-right: 2px;
@@ -446,6 +454,10 @@ div[role="treeitem"]:hover {
     pointer-events: none;
 }
 
+.taskOverlayNavButtonDisabled IMG {
+    height: 20px;
+    vertical-align: text-top;
+}
 
 .taskOverlayZoomButton {
     float: left;
@@ -457,14 +469,20 @@ div[role="treeitem"]:hover {
     cursor: pointer;
     text-align: center;
     vertical-align: middle;
+    margin-top: 6px;
+    height: 22px;
 }
 
 
 .taskOverlayZoomButton:hover {
     color : #d0d0d0;
-    background-color: white;
+    background-color: red;
 }
 
+.taskOverlayZoomButton IMG {
+    height: 22px;
+    vertical-align: text-top;
+}
 
 .taskOverlayNavPages {
     font-size: 16px;
@@ -654,4 +672,26 @@ abbozza-hint {
     border-bottom: 2px #f0f0f0 solid;
     border-right: 2px #f0f0f0 solid;    
     cursor: text;    
+}
+
+
+
+@-webkit-keyframes fadeinout {
+    0% {opacity: 0; visibility: visible;}
+    10% {opacity: 1;}
+    90% {opacity: 1;}
+    100% {opacity: 0; visiblitiy: hidden;}
+}
+
+@keyframes fadeinout {
+    0% {opacity: 0; visibility: visible;}
+    10% {opacity: 1;}
+    90% {opacity: 1;}
+    100% {opacity: 0; visiblitiy: hidden;}
+}
+
+.fadeinout {
+    visibility: hidden;
+    opacity: 0;
+    animation-name: fadeinout;    
 }

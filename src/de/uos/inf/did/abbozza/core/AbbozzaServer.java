@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 /**
  * @fileoverview This class is an abstract abbozza! server
  *
@@ -101,11 +99,11 @@ import org.xml.sax.SAXException;
 
 /**
  * The abstract abbozza! erver class
- * 
- * The Server can be started with the follwing  options:
- * -A &lt;URI$gt; : Adds a URI to the list of locations at which files are searched.
- *                  The added URI is searched with high priority.
- * 
+ *
+ * The Server can be started with the follwing options: -A &lt;URI$gt; : Adds a
+ * URI to the list of locations at which files are searched. The added URI is
+ * searched with high priority.
+ *
  * @author michael
  */
 public abstract class AbbozzaServer implements HttpHandler {
@@ -191,7 +189,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Parse command line options
         AbbozzaLogger.info("Parsing command line");
         this.parseCommandline(args);
-        
+
         // Find IP address
         try {
             Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
@@ -223,10 +221,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         jarHandler.clear();
 
         // Adding additional uris
-        for ( URI uri : additionalURIs ) {
+        for (URI uri : additionalURIs) {
             jarHandler.addURI(uri);
         }
-        
+
         findJarsAndDirs(jarHandler);
 
         // Load plugins
@@ -268,22 +266,21 @@ public abstract class AbbozzaServer implements HttpHandler {
         additionalInitialization();
     }
 
-    
     /**
      * Initialize the server
-     * 
+     *
      * @param system The system id
      */
     public void init(String system) {
-        this.init(system,null);
+        this.init(system, null);
     }
-    
+
     /**
      * This default operation sets the main paths
-     * 
+     *
      * The system assumes that the file structure has the following form:
-     * abbozzaPath is the path containing the installation
-     * abbozzaPath/lib/ contains the executed jar and/or the requires js files
+     * abbozzaPath is the path containing the installation abbozzaPath/lib/
+     * contains the executed jar and/or the requires js files
      */
     public void setPaths() {
         // Set user Path to $HOME/.abbozza/<system>
@@ -327,10 +324,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         // in a subdirectory lib of the abbozza path
         jarPath = installFile.getParentFile().getAbsolutePath();
         abbozzaPath = installFile.getParentFile().getParent();
-        
+
         AbbozzaLogger.info("jarPath " + jarPath);
         AbbozzaLogger.info("abbozzaPath " + abbozzaPath);
-        
+
         // These paths have to be set in the subclass
         globalJarPath = "";
         localJarPath = "";
@@ -403,7 +400,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/abbozza/version", vHandler);
         httpServer.createContext("/abbozza/ip", vHandler);
         httpServer.createContext("/abbozza/ip6", vHandler);
-        
+
         if (this.pluginManager != null) {
             httpServer.createContext("/abbozza/plugins", this.pluginManager);
         }
@@ -418,11 +415,12 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     /**
      * Starts the server on the given port.
-     * 
+     *
      * AbbozzaServerException is thrown if the connection to the port is denied.
-     * 
+     *
      * @param serverPort The port on which the server should listen.
-     * @throws de.uos.inf.did.abbozza.core.AbbozzaServerException This exception is thrown  if the server coulkd not be started.
+     * @throws de.uos.inf.did.abbozza.core.AbbozzaServerException This exception
+     * is thrown if the server coulkd not be started.
      */
     protected void startServer(int serverPort) throws AbbozzaServerException {
 
@@ -434,39 +432,38 @@ public abstract class AbbozzaServer implements HttpHandler {
 
             // serverPort = config.getServerPort();
             // while (httpServer == null) {
-                try {
-                    httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
-                    registerHandlers();
-                    httpServer.setExecutor(Executors.newFixedThreadPool(20)); // ATTENTION
-                    httpServer.start();
-                    AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
-                } catch (Exception e) {
-                    AbbozzaLogger.err(e.getLocalizedMessage());
-                    AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
-                    httpServer = null;
-                    
-                    try {
-                       // Check if abbozza! is running
-                       URL url = new URL(getRootURL() + "abbozza/version");
-                       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                       conn.connect();
-                       if ( conn.getResponseCode() < 300 ) {
-                         throw new AbbozzaServerException(AbbozzaServerException.SERVER_RUNNING,"Another server is running on port " + serverPort);
-                       } else {
-                          throw new AbbozzaServerException(AbbozzaServerException.SERVER_PORT_DENIED,"Could not connect to port " + serverPort);
-                       }
-                    } catch (MalformedURLException muex) {
-                       throw new AbbozzaServerException(AbbozzaServerException.SERVER_PORT_DENIED,"Could not connect to port " + serverPort);
-                    } catch (IOException ioex) {
-                       throw new AbbozzaServerException(AbbozzaServerException.SERVER_PORT_DENIED,"Could not connect to port " + serverPort);
-                    }
+            try {
+                httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
+                registerHandlers();
+                httpServer.setExecutor(Executors.newFixedThreadPool(20)); // ATTENTION
+                httpServer.start();
+                AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
+            } catch (Exception e) {
+                AbbozzaLogger.err(e.getLocalizedMessage());
+                AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
+                httpServer = null;
 
-                    
+                try {
+                    // Check if abbozza! is running
+                    URL url = new URL(getRootURL() + "abbozza/version");
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.connect();
+                    if (conn.getResponseCode() < 300) {
+                        throw new AbbozzaServerException(AbbozzaServerException.SERVER_RUNNING, "Another server is running on port " + serverPort);
+                    } else {
+                        throw new AbbozzaServerException(AbbozzaServerException.SERVER_PORT_DENIED, "Could not connect to port " + serverPort);
+                    }
+                } catch (MalformedURLException muex) {
+                    throw new AbbozzaServerException(AbbozzaServerException.SERVER_PORT_DENIED, "Could not connect to port " + serverPort);
+                } catch (IOException ioex) {
+                    throw new AbbozzaServerException(AbbozzaServerException.SERVER_PORT_DENIED, "Could not connect to port " + serverPort);
                 }
+
+            }
             // }
 
             this.serverPort = serverPort;
-            
+
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(this.serverPort)), 4);
 
             String url = getRootURL() + system + ".html";
@@ -699,17 +696,18 @@ public abstract class AbbozzaServer implements HttpHandler {
         checkForUpdate(reportNoUpdate, null);
     }
 
-
     /**
      * Checks if the current version is newer than the given one.
-     * 
+     *
      * @param version The version to which the current version is compared.
-     * 
+     *
      * @return true if the current version is newer than the given one.
      */
     public boolean isNewerThan(String version) {
-        if ( version == null ) return true;
-        
+        if (version == null) {
+            return true;
+        }
+
         int major = 0;
         int minor = 0;
         int rev = 0;
@@ -724,25 +722,24 @@ public abstract class AbbozzaServer implements HttpHandler {
             hotfix = Integer.parseInt(version.substring(pos + 1));
         } catch (NumberFormatException ex) {
             return true;
-        }       
-        
+        }
+
         String[] sysver = getSystemVersion().split("[\\ \\.]");
         int sys_major = Integer.parseInt(sysver[0]);
         int sys_minor = Integer.parseInt(sysver[1]);
         int sys_rev = Integer.parseInt(sysver[2]);
         int sys_hotfix = Integer.parseInt(sysver[3]);
-        
+
         if ((major > sys_major)
-                    || ((major == sys_major) && (minor > sys_minor))
-                    || ((major == sys_major) && (minor == sys_minor) && (rev > sys_rev))
-                    || ((major == sys_major) && (minor == sys_minor) && (rev == sys_rev) && (hotfix > sys_hotfix))) {
+                || ((major == sys_major) && (minor > sys_minor))
+                || ((major == sys_major) && (minor == sys_minor) && (rev > sys_rev))
+                || ((major == sys_major) && (minor == sys_minor) && (rev == sys_rev) && (hotfix > sys_hotfix))) {
             return false;
         }
-        
+
         return true;
     }
-    
-    
+
     /**
      * This operation checks for updates
      *
@@ -774,11 +771,11 @@ public abstract class AbbozzaServer implements HttpHandler {
                 int pos2 = version.indexOf('.', pos + 1);
                 minor = Integer.parseInt(version.substring(pos + 1, pos2));
                 pos = version.indexOf('.', pos2 + 1);
-                if ( pos == -1 ) { 
+                if (pos == -1) {
                     pos = version.length();
                 }
                 rev = Integer.parseInt(version.substring(pos2 + 1, pos));
-                if ( pos < version.length() ) {
+                if (pos < version.length()) {
                     hotfix = Integer.parseInt(version.substring(pos + 1));
                 }
             } catch (NumberFormatException ex) {
@@ -996,7 +993,11 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     public void setTaskContext(URL context) {
-        _taskContext = context;
+        try {
+            _taskContext = new URL(context,".");
+        } catch (MalformedURLException ex) {
+            _taskContext = context;
+        }
         AbbozzaLogger.out("Task context set to " + _taskContext, AbbozzaLogger.DEBUG);
     }
 
@@ -1004,6 +1005,81 @@ public abstract class AbbozzaServer implements HttpHandler {
         return _taskContext;
     }
 
+    /**
+     * This operation expands the given path according to the rules of the load
+     * handler. But it does NOT change the task context.
+     *
+     * If the path has the form !&lt;<path&gt;, then the sketch isloaded from
+     * the URL &lt;server_root&gt;/&lt;path&gt>. Ie.e an internal sketch is
+     * loaded.
+     *
+     * If the path ends with 'abj' or 'jar', the sketch start.abz inside it is
+     * loaded.
+     *
+     * If the path starts with '/' it is loaded from the corresponding file with
+     * the URL 'file://&lt;path&gt;'.
+     *
+     * In all other cases the path is treated relative to the task context.
+     *
+     * @param path
+     * @return
+     */
+    public URL expandSketchURL(String path) {
+        URL url;
+
+        // Leading '!' indicates internal sketch
+        if (path.startsWith("!")) {
+            try {
+                // Add the server root to the url
+                path = path.substring(1);
+                path = getRootURL() + path;
+                return new URL(path);
+            } catch (MalformedURLException ex) {
+                return null;
+            }
+        }
+
+        // If path is a correct URL, return it
+        try {
+            url = new URL(path);
+            AbbozzaLogger.out("AbbozzaServer: loading from given url " + path, AbbozzaLogger.DEBUG);
+            if (path.endsWith("abj") || path.endsWith("jar")) {
+                path = "jar:" + url.toString() + "!/start.abz";
+                url = new URL(path);
+            }
+        } catch (MalformedURLException ex) {
+            // Interpret path as path to local file
+            // If path is absolute
+            if (path.startsWith("/")) {
+                try {
+                    AbbozzaLogger.out("LoadHandler: loading from absolute path " + path, AbbozzaLogger.DEBUG);
+                    url = new URL("file://" + path);
+                } catch (MalformedURLException ex1) {
+                    return null;
+                }
+            } else {
+                try {
+                    AbbozzaLogger.out("LoadHandler: loading from relative path " + path, AbbozzaLogger.DEBUG);
+                    URL context = getTaskContext();
+                    if (context == null) {
+                        context = new File(getSketchbookPath()).toURI().toURL();
+                    }
+                    AbbozzaLogger.out("LoadHandler: using anchor " + context.toString(), AbbozzaLogger.DEBUG);
+                    url = new URL(context, path);
+                } catch (MalformedURLException ex1) {
+                    return null;
+                }
+            }
+        }
+        return url;
+    }
+
+    
+    /**
+     * Return the registered jar handler.
+     *
+     * @return The jar handler
+     */
     public JarDirHandler getJarHandler() {
         return jarHandler;
     }
@@ -1178,81 +1254,80 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
         return allowedHosts.contains(host);
     }
-    
-    
+
     public String getRootURL() {
         String useIP = this.config.getProperty("useIP");
-        if (  "true".equals(useIP) ) {
-            return "http://127.0.0.1:" + serverPort + "/";            
+        if ("true".equals(useIP)) {
+            return "http://127.0.0.1:" + serverPort + "/";
         } else {
             return "http://localhost:" + serverPort + "/";
         }
     }
-    
-    
+
     public String getIp4Address() {
-        if ( this.ip4Address == null ) {
+        if (this.ip4Address == null) {
             return "???";
         }
         return this.ip4Address.getHostAddress();
     }
 
     public String getIp6Address() {
-        if ( this.ip6Address == null ) {
+        if (this.ip6Address == null) {
             return "???";
         }
         return this.ip6Address.getHostAddress();
     }
-    
+
     /**
      * Applies a command line option
-     * 
+     *
      * @param option The option
-     * @param par  The parameter/value of the option or null
+     * @param par The parameter/value of the option or null
      */
     protected void applyCommandlineOption(String option, String par) {
-      if ( option.equals("-A") && (par != null) ) {
-        try {
-          additionalURIs.add(new URI(par));
-          AbbozzaLogger.info( "Additional URI : " + par );
-        } catch (URISyntaxException ex) {
-          AbbozzaLogger.err( "Malformed URI after -A : " + par );
+        if (option.equals("-A") && (par != null)) {
+            try {
+                additionalURIs.add(new URI(par));
+                AbbozzaLogger.info("Additional URI : " + par);
+            } catch (URISyntaxException ex) {
+                AbbozzaLogger.err("Malformed URI after -A : " + par);
+            }
         }
-      }        
     }
-    
+
     /**
      * Hook for parsing the command line after etabling the logger.
-     * 
+     *
      * @param args The command line arguments
      */
     protected void parseCommandline(String args[]) {
-        
+
         // Parsing the command line arguments.
-        if ( args != null ) {
+        if (args != null) {
             int i = 0;
-            
-            while ( i < args.length ) {
-                if ( args[i] != null ) {
-                  // Check if argument starts with "-"
-                  if ( args[i].startsWith("-")) {
-                      String option = args[i];
-                      String par = "";
-                      i++;
-                      while ( (i<args.length) && (!args[i].startsWith("-")) ) {
-                        if ( par.isEmpty() ) {
-                            par = args[i];
-                        } else {
-                          par = par + " " + args[i];
-                        }
+
+            while (i < args.length) {
+                if (args[i] != null) {
+                    // Check if argument starts with "-"
+                    if (args[i].startsWith("-")) {
+                        String option = args[i];
+                        String par = "";
                         i++;
-                      }
-                      applyCommandlineOption(option,par);
-                  } else {
-                      AbbozzaLogger.err("Option expected in command line, instead found \"" + args[i] + "\"");
-                  }
+                        while ((i < args.length) && (!args[i].startsWith("-"))) {
+                            if (par.isEmpty()) {
+                                par = args[i];
+                            } else {
+                                par = par + " " + args[i];
+                            }
+                            i++;
+                        }
+                        applyCommandlineOption(option, par);
+                    } else {
+                        AbbozzaLogger.err("Option expected in command line, instead found \"" + args[i] + "\"");
+                    }
                 }
             }
         }
-    };   
+    }
+;
 }

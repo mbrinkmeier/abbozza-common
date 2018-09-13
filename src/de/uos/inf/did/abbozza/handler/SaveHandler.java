@@ -32,6 +32,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import static java.lang.System.in;
+import java.net.URL;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -60,9 +61,21 @@ public class SaveHandler extends AbstractHandler {
 
     
     protected void handleRequest(HttpExchange exchg) throws IOException {
+        String path;
         String contentLocation = null;
+        URL url = null;
+        
         try {
-            contentLocation = saveSketch(exchg.getRequestBody());
+            // Check if a query is given
+            path = exchg.getRequestURI().getQuery();
+            if ( path != null ) {
+                url = _abbozzaServer.expandSketchURL(path);
+                if ( (url == null) || (!"file".equals(url.getProtocol())) ) {
+                    url = null;
+                }
+            }
+            
+            contentLocation = saveSketch(exchg.getRequestBody(), url);
             if ( contentLocation != null) {
                exchg.getResponseHeaders().add("Content-Location", contentLocation);
                this.sendResponse(exchg, 200, "text/xml", "saved");
@@ -74,13 +87,21 @@ public class SaveHandler extends AbstractHandler {
         }
     }
 
-    public String saveSketch(InputStream stream) throws IOException {
+    /**
+     * Save the sketch.
+     * 
+     * @param stream A stream containing the sketch
+     * @param url
+     * @return The location where the sketch is saved
+     * 
+     * @throws IOException 
+     */
+    public String saveSketch(InputStream stream, URL url) throws IOException {
         if ( _abbozzaServer.isDialogOpen() ) return null;
         
         String location = null;
         
         // Read the XML-Document
-        // Read in into XML-document
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
 
@@ -134,9 +155,7 @@ public class SaveHandler extends AbstractHandler {
             if ( lastSketchFile == null ) {
                 lastSketchFile = new File(path);
             }
-            
-            AbbozzaLogger.err(path);
-            
+                        
             _abbozzaServer.bringFrameToFront();
             _abbozzaServer.setDialogOpen(true);
            
@@ -162,10 +181,14 @@ public class SaveHandler extends AbstractHandler {
 
             // Prepare File filters
             chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz", "ABZ"));
-            if ( lastSketchFile.isDirectory() ) {
-                chooser.setCurrentDirectory(lastSketchFile);            
+            if ( url != null ) {
+                chooser.setSelectedFile(new File(url.toURI()));
             } else {
-                chooser.setSelectedFile(lastSketchFile);
+                if ( lastSketchFile.isDirectory() ) {
+                    chooser.setCurrentDirectory(lastSketchFile);
+                } else {
+                    chooser.setSelectedFile(lastSketchFile);
+                }
             }
 
             // Show FileChooser
