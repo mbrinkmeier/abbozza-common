@@ -19,9 +19,6 @@
 package de.uos.inf.did.abbozza.monitor.clacks;
 
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jssc.SerialPortException;
 
 /**
  *
@@ -29,43 +26,35 @@ import jssc.SerialPortException;
  */
 
 
-public class ClacksMessage implements ClacksPacket {
-    
-    private String prefix;
+public class ClacksStatus implements ClacksPacket {
+
     private String msg;
+    private String type;
     
-    
-    public ClacksMessage(String p, String m) {
-        prefix = p;
+    public ClacksStatus(String m, String t) {
         msg = m;
+        type = t;
     }
     
-    public String getPrefix() {
-        return prefix;
-    }
-    
-    
-    public String getMsg() {
+    public String getMessage() {
         return msg;
     }
+            
     
+    public String getType() {
+        return type;
+    }
     
+            
     @Override
     public void process(AbbozzaMonitor monitor) {
-        // send the packet to the receiving panel
-        monitor.process(this);
+        // The status packet is displayed inside the protocol
+        monitor.appendText(msg + "\n",type);
     }
 
     @Override
     public void process(ClacksSerialPort serialPort) {
-        ClacksStatus status;
-        try {
-            serialPort.writeBytes(msg.getBytes());
-            status = new ClacksStatus("-> " + msg,"output");
-        } catch (SerialPortException ex) {
-            status = new ClacksStatus("Error writing to port","error");
-        }
-        serialPort.incoming.add(status);
+        // Do nothing
     }
 
     @Override
@@ -75,18 +64,13 @@ public class ClacksMessage implements ClacksPacket {
 
     @Override
     public void processFromPort(ClacksService service) {
-        // This message was parsed from the invcoming bytes and should be published
-        // Check if the prefix is an id
-        if ( prefix.startsWith("_") ) {
-            service.sendResponse(this);   
-        } else {
-            service.publishPacket(this);
-        }
+        // relay it to the monitor
+        service.publishPacket(this);
     }
 
     @Override
     public void processToPort(ClacksService service) {
-        service.outgoing.add(this);
+        // Do nothing
     }
     
 }

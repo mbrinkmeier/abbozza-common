@@ -1,11 +1,14 @@
-/*
- * Copyright 2018 mbrinkmeier.
+/**
+ * @license
+ * abbozza!
+ *
+ * Copyright 2015 Michael Brinkmeier ( michael.brinkmeier@uni-osnabrueck.de )
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,12 +19,13 @@
 package de.uos.inf.did.abbozza.monitor.clacks;
 
 /**
- * A Clacks subscriber only can receive byte packets.
- * 
- * @author mbrinkmeier
+ *
+ * @author michael
  */
-public interface ClacksSubscriber {
+
+
+public class ClacksParseNANException extends Exception {
     
-    public void process(ClacksBytes bytes);
+    public ClacksParseNANException() {}
     
 }

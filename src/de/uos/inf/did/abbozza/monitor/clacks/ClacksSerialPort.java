@@ -38,14 +38,14 @@ public class ClacksSerialPort implements Runnable {
     private String port;
     private int rate;
 
-    // The queue for the bytes received froim the serial port
-    protected ConcurrentLinkedQueue<ClacksBytes> incoming;
+    // The queue for the bytes received from the serial port
+    protected ConcurrentLinkedQueue<ClacksPacket> incoming;
 
     // The queue for messages to be send via the serial port
-    protected ConcurrentLinkedQueue<ClacksBytes> outgoing;
+    protected ConcurrentLinkedQueue<ClacksPacket> outgoing;
 
-    public ClacksSerialPort(ConcurrentLinkedQueue<ClacksBytes> in,
-            ConcurrentLinkedQueue<ClacksBytes> out) {
+    public ClacksSerialPort(ConcurrentLinkedQueue<ClacksPacket> in,
+            ConcurrentLinkedQueue<ClacksPacket> out) {
         incoming = in;
         outgoing = out;
     }
@@ -99,6 +99,8 @@ public class ClacksSerialPort implements Runnable {
                     } else {
                         retry = false;
                     }
+                    ClacksStatus status = new ClacksStatus("Could not open port " + port,"error");
+                    incoming.add(status);                                
                     AbbozzaLogger.err("ClacksSerialPort: Opening of port " + port + " failed");
                     AbbozzaLogger.err(ex.getLocalizedMessage());
                 }
@@ -111,6 +113,8 @@ public class ClacksSerialPort implements Runnable {
             AbbozzaLogger.stackTrace(ex);
             return false;
         }
+        ClacksStatus status = new ClacksStatus("Opened port " + port,"info");
+        incoming.add(status);                                
         return true;
     }
 
@@ -124,6 +128,8 @@ public class ClacksSerialPort implements Runnable {
                 serialPort.closePort();
             }
         } catch (SerialPortException ex) {
+                ClacksStatus status = new ClacksStatus("Could not close port","error");
+                incoming.add(status);                
             AbbozzaLogger.stackTrace(ex);
             AbbozzaLogger.err("ClacksSerialPort: Could not close port");
         }
@@ -181,6 +187,8 @@ public class ClacksSerialPort implements Runnable {
                         SerialPort.STOPBITS_1,
                         SerialPort.PARITY_NONE);
             } catch (SerialPortException ex) {
+                ClacksStatus status = new ClacksStatus("Could not change baud rate","error");
+                incoming.add(status);                
                 AbbozzaLogger.err("ClacksSerialPort: Could not change rate");
             }
         }
@@ -194,19 +202,8 @@ public class ClacksSerialPort implements Runnable {
 
         while (!stopped) {
 
-            // Send bytes
-            while (!outgoing.isEmpty()) {
-                // If there is a message in the outgoing queue, send it
-                ClacksBytes bytes = outgoing.poll();
-                try {
-                    serialPort.writeBytes(bytes.getBytes());
-                } catch (SerialPortException ex) {
-                    AbbozzaLogger.stackTrace(ex);
-                    AbbozzaLogger.err("ClacksSerialPort: Could not send bytes to port");
-                }
-            }
-
-            // Check for incoming bytes
+            // First, check for incoming bytes, put them into a byte packet
+            // and send them to the clacks service.
             try {
                 long currentTime = System.currentTimeMillis();
                 int available = serialPort.getInputBufferBytesCount();
@@ -221,12 +218,23 @@ public class ClacksSerialPort implements Runnable {
                     Thread.sleep(0, 100);
                 }
             } catch (SerialPortException ex) {
+                ClacksStatus status = new ClacksStatus("Error reading from port","error");
+                incoming.add(status);
                 AbbozzaLogger.stackTrace(ex);
                 AbbozzaLogger.err("ClacksSerialPort: Error reading from port");
             } catch (SerialPortTimeoutException ex) {
+                ClacksStatus status = new ClacksStatus("Timeout during reading from port","error");
+                incoming.add(status);
                 AbbozzaLogger.stackTrace(ex);
-                AbbozzaLogger.err("ClacksSerialPort: Error reading from port");
+                AbbozzaLogger.err("ClacksSerialPort: Timeout during reading from port");
             } catch (InterruptedException ex) {
+            }
+            
+            // Send bytes
+            while (!outgoing.isEmpty()) {
+                // If there is a message in the outgoing queue, send it
+                ClacksPacket packet = outgoing.poll();
+                packet.process(this);
             }
         }
     }
@@ -260,6 +268,16 @@ public class ClacksSerialPort implements Runnable {
     }
 
 
-
+    /**
+     * Write the bytes to the serial port.
+     * 
+     * @param buffer
+     * @return
+     * @throws SerialPortException 
+     */
+    public boolean writeBytes(byte[] buffer) throws SerialPortException {
+        return serialPort.writeBytes(buffer);
+    }
+    
     
 }

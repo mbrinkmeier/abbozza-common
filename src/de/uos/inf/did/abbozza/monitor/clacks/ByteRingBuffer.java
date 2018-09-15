@@ -115,6 +115,44 @@ public class ByteRingBuffer {
         }
     }
     
+    public int getClacksInt() throws ClacksParseNANException {
+        if ( _size >= 6 ) {
+            
+            byte start = get();
+            if ( start != 42 ) {
+                throw new ClacksParseNANException();
+            }
+                        
+            byte d0 = _buf[_tail];
+            byte d1 = _buf[(_tail + 1) % _capacity];
+            byte d2 = _buf[(_tail + 2) % _capacity];           
+            byte d3 = _buf[(_tail + 3) % _capacity];
+                    
+            int val = ( d0 & 0xFF ) << 24
+                    | ( d1 & 0xFF ) << 16
+                    | ( d2 & 0xFF ) << 8
+                    | ( d3 & 0xFF );
+            _tail = (_tail + 4) % _capacity;
+            _size = _size - 4;
+            if ( _size == 0 ) {
+                _tail = 0;
+                _head = 0;
+                // The checksum is missing
+                throw new ClacksParseNANException();
+            }
+            
+            byte checksum = get();
+            if ( checksum != (d0 ^ d1 ^ d2 ^ d3) ) {
+                throw new ClacksParseNANException();
+            }
+            
+            return val;
+        } else {
+            throw new ClacksParseNANException();
+        }
+    }
+    
+
     
     public String toString() {
         StringBuffer res = new StringBuffer(_size);

@@ -15,7 +15,10 @@
  */
 package de.uos.inf.did.abbozza.monitor.clacks;
 
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
+import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import java.util.Arrays;
+import jssc.SerialPortException;
 
 
 /**
@@ -24,7 +27,7 @@ import java.util.Arrays;
  * 
  * @author mbrinkmeier
  */
-public class ClacksBytes {
+public class ClacksBytes implements ClacksPacket {
    
     private long timestamp; // The time the bytes were received
     private byte[] buffer;  // The received bytes
@@ -60,4 +63,62 @@ public class ClacksBytes {
     public int getLength() {
         return buffer.length;
     }
+    
+    /**
+     * The serial port simply writes the bytes without echo
+     * 
+     * @param serialPort 
+     */
+    @Override
+    public void process(ClacksSerialPort serialPort) {
+        // Send the bytes
+        try {
+            serialPort.writeBytes(this.buffer);
+        } catch (SerialPortException ex) {
+            AbbozzaLogger.stackTrace(ex);
+            AbbozzaLogger.err("ClacksSerialPort: Could not send bytes to port");
+        }
+    }
+
+    
+    @Override
+    public void process(ClacksSubscriber subscriber) {
+        // Clone yourself and let the subscriber handle it
+        ClacksBytes clone = this.clone();
+        subscriber.process(clone);
+    }
+    
+    /**
+     * The monitor handles the packet itself
+     * 
+     * @param monitor 
+     */
+    @Override
+    public void process(AbbozzaMonitor monitor) {
+        monitor.process(this);
+    }
+
+    @Override
+    public void processFromPort(ClacksService service) {
+        // First publish the byte packet
+        service.publishPacket(this);
+        
+        // Then parse them an publish the resulting packets
+        // Then run them through the parser
+        ClacksPacketParser parser = service.getParser();
+        parser.addBytes(buffer);
+        
+        // The parser parses clacks packets from the byte sequence
+        ClacksPacket packet;
+        while ( ( packet = parser.parse() ) != null  ) {
+            packet.processFromPort(service);
+        }               
+    }
+
+    
+    @Override
+    public void processToPort(ClacksService service) {
+        service.outgoing.add(this);
+    }
+
 }

@@ -64,8 +64,7 @@ import jssc.SerialPortList;
  *
  * @author mbrinkmeier
  */
-public final class AbbozzaMonitor extends JFrame
-        implements ClacksSubscriber {
+public final class AbbozzaMonitor extends JFrame {
 
     private final int MAXLEN = 1024 * 32;
 
@@ -136,7 +135,7 @@ public final class AbbozzaMonitor extends JFrame
             }
         });
 
-        clacksService.subscribe(this);
+        // clacksService.subscribe(this);
 
         panels = new HashMap<String, MonitorPanel>();
         TableMonitor tableMonitor = new TableMonitor();
@@ -199,6 +198,11 @@ public final class AbbozzaMonitor extends JFrame
         s = protocolDocument.addStyle("output", regular);
         StyleConstants.setBold(s, true);
         StyleConstants.setForeground(s, Color.blue);
+
+        s = protocolDocument.addStyle("info", regular);
+        StyleConstants.setBold(s, true);
+        StyleConstants.setForeground(s, Color.green);
+
     }
 
     /**
@@ -270,6 +274,13 @@ public final class AbbozzaMonitor extends JFrame
         clacksService.unsubscribe(panel);
     }
 
+    /**
+     * Process a byte packet.
+     * 
+     * This operation is called by a ClacksBytes object to process itself
+     * 
+     * @param bytes The byte package
+     */
     public void process(ClacksBytes bytes) {
         // Fetch the new bytes from the protocol
         protocolUpdateBuffer.put(bytes.getBytes());
@@ -279,7 +290,7 @@ public final class AbbozzaMonitor extends JFrame
                 public void run() {
                     String update = getProtocolUpdate();
                     if (update.length() > 1024 * 16) {
-                        appendText("<< zu schnell für das Protokoll >>\n", "error");
+                        appendText("<< zu schnell für das Protokoll, " + update.length() + " Bytes überprungen>>\n", "error");
                     } else {
                         appendText(update, "input");
                     }
@@ -288,7 +299,7 @@ public final class AbbozzaMonitor extends JFrame
             lastUpdate = cur;
         }
     }
-
+    
     public synchronized void process(ClacksMessage msg) {
         String prefix = msg.getPrefix();
         String cmd = msg.getMsg();
@@ -296,19 +307,18 @@ public final class AbbozzaMonitor extends JFrame
         MonitorPanel panel = panels.get(prefix);
         if (panel != null) {
             panel.processMessage(cmd);
-        } else {
-            clacksService.sendResponse(cmd);
+        // } else {
+        //     clacksService.sendResponse(cmd);
         }
 
         // Send message to registered listener
         MonitorListener listener = listeners.get(prefix);
         if (listener != null) {
             listener.processMessage(cmd);
-        } else {
-            clacksService.sendResponse(cmd);
+        // } else {
+        //    clacksService.sendResponse(cmd);
         }
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -471,8 +481,7 @@ public final class AbbozzaMonitor extends JFrame
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         String msg = (String) this.sendText.getEditor().getItem();
         if (msg != null && !msg.isEmpty()) {
-            clacksService.sendMessage(msg + "\n");
-            appendText(msg + "\n", "output");
+            clacksService.sendPacket(new ClacksMessage("",msg + "\n"));
             this.sendText.insertItemAt(msg, 0);
             this.sendText.setSelectedItem(null);
         }
@@ -494,8 +503,6 @@ public final class AbbozzaMonitor extends JFrame
             }
             boardPort = port;
             AbbozzaLogger.out("AbbozzaMonitor.portBoxActionPerformed: Switching to " + boardPort);
-            // this.close();  // Close an reopen the monitor
-            // this.open();
             if ( clacksService != null ) clacksService.setPort(boardPort);
         } catch (Exception ex) {
             AbbozzaLogger.err("AbbozzaMonitor.portBoxActionPerformed: Could not open " + port);
@@ -541,8 +548,8 @@ public final class AbbozzaMonitor extends JFrame
     private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
         String msg = evt.getActionCommand();
         if (msg != null && !msg.isEmpty()) {
-            clacksService.sendMessage(msg + "\n");
-            appendText(msg + "\n", "output");
+            clacksService.sendPacket(new ClacksMessage("",msg + "\n"));
+            // appendText(msg + "\n", "output");
             this.sendText.insertItemAt(msg, 0);    // new String(msg)
             this.sendText.setSelectedItem(null);
         }
@@ -598,6 +605,7 @@ public final class AbbozzaMonitor extends JFrame
      *
      * @return The enqued message object
      */
+    /*
     public Message sendMessage(String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
         Message mesg;
         if (this.boardPort == null) {
@@ -618,6 +626,7 @@ public final class AbbozzaMonitor extends JFrame
         }
         return mesg;
     }
+    */
 
     /**
      * Append a text to the textfield showing the communication.
@@ -745,6 +754,10 @@ public final class AbbozzaMonitor extends JFrame
         String update = protocolUpdateBuffer.toString();
         protocolUpdateBuffer.clear();
         return update;
+    }
+
+    public ClacksService getClacksService() {
+        return clacksService;
     }
 
 }

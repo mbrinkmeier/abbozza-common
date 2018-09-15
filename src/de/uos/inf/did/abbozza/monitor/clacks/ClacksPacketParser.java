@@ -22,22 +22,23 @@ package de.uos.inf.did.abbozza.monitor.clacks;
  *
  * @author michael
  */
-public class ClacksMsgParser {
+public class ClacksPacketParser {
 
     private StringBuffer unprocessed;
 
-    public ClacksMsgParser() {
+    public ClacksPacketParser() {
         unprocessed = new StringBuffer();
     }
 
     public void addBytes(byte[] bytes) {
         unprocessed.append(new String(bytes));
     }
+    
 
-    public ClacksMessage parse() {
+    public ClacksPacket parse() {
         String cmd;
         String prefix;
-        ClacksMessage cMsg = null;
+        ClacksPacket packet = null;
 
         int end = -1;
         int start = -1;
@@ -51,36 +52,16 @@ public class ClacksMsgParser {
                 int space = cmd.indexOf(' ');
                 if (space >= 0) {
                     prefix = cmd.substring(0, space);
+                    
                     cmd = cmd.substring(space + 1, cmd.length());
-
-                    cMsg = new ClacksMessage(prefix, cmd);
-
-                    // Send message to registered panel
-                    /*
-                        MonitorPanel panel = panels.get(prefix);
-                        if (panel != null) {
-                            cmd = cmd.substring(space + 1, cmd.length());
-                            panel.processMessage(cmd);
-                        } else {
-                            clacksService.sendResponse(cmd);
-                        }
-
-                        // Send message to registered listener
-                        MonitorListener listener = listeners.get(prefix);
-                        if (listener != null) {
-                            cmd = cmd.substring(space + 1, cmd.length());
-                            listener.processMessage(cmd);
-                        } else {
-                            clacksService.sendResponse(cmd);
-                        }
-                     */
+                    packet = new ClacksMessage(prefix, cmd);
                 }
             }
         } else {
             // Remove everything
             unprocessed.setLength(0);
         }       
-        return cMsg;
+        return packet;
     }
 
 }

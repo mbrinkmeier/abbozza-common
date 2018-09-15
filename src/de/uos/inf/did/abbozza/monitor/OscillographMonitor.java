@@ -23,6 +23,9 @@ import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.monitor.clacks.ByteRingBuffer;
 import de.uos.inf.did.abbozza.monitor.clacks.ClacksBytes;
 import de.uos.inf.did.abbozza.monitor.clacks.ClacksMessage;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksParseNANException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPopupMenu;
 
 /**
@@ -209,9 +212,14 @@ public class OscillographMonitor extends MonitorPanel {
             resetScale();
         }
                 
-        while ( _byteBuffer.getSize() >= 4 ) {
-            int v = _byteBuffer.getInt();
-            pushInt(v);
+        // Parse 4 byte values using the clacks format
+        while ( _byteBuffer.getSize() >= 6 ) {
+            try {
+                int v = _byteBuffer.getClacksInt();
+                pushInt(v);
+            } catch (ClacksParseNANException ex) {
+                // Just ignore it and tr the next one
+            }
         }
         
         oszi.repaint();
