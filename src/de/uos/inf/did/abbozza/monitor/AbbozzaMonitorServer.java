@@ -219,7 +219,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
             AbbozzaLogger.out("Port discovered: " + port, AbbozzaLogger.INFO);
             AbbozzaLogger.out("Initializing ... ", AbbozzaLogger.INFO);
             try {
-                monitor = new AbbozzaMonitor(port, rate);
+                monitor = new AbbozzaMonitor();
             } catch (Exception ex) {
                 AbbozzaLogger.err(ex.getLocalizedMessage());
             }

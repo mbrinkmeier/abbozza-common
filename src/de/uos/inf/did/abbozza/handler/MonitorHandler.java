@@ -26,7 +26,6 @@ import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
-import de.uos.inf.did.abbozza.tools.GUITool;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URLDecoder;
@@ -45,8 +44,7 @@ public class MonitorHandler extends AbstractHandler {
     }
 
     @Override
-    protected void handleRequest(HttpExchange exchg) throws IOException {
-        
+    protected void handleRequest(HttpExchange exchg) throws IOException {        
         String path = exchg.getRequestURI().getPath();
         boolean result = false;
         if (path.endsWith("/monitor")) {
@@ -54,13 +52,14 @@ public class MonitorHandler extends AbstractHandler {
         } else {
             result = resume();
         }
+        
         if (result) {
             String query = URLDecoder.decode(exchg.getRequestURI().getQuery(),"UTF-8");
             if ( query != null ) {
               query = query.replace('&', '\n');
               Properties props = new Properties();
               props.load(new StringReader(query));
-              sendMessage(props.getProperty("msg"));
+              // sendMessage(props.getProperty("msg"));
             }
             sendResponse(exchg, 200, "text/plain", "");
         } else {
@@ -71,31 +70,25 @@ public class MonitorHandler extends AbstractHandler {
     
     public boolean open() {    
         AbbozzaLogger.out("MonitorHandler: Open monitor", AbbozzaLogger.INFO );
-        if (monitor != null) {
-            if (resume()) {
-                GUITool.bringToFront(monitor);
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        String port = this._abbozzaServer.getSerialPort();
-        int rate = this._abbozzaServer.getBaudRate();
         
-        if (port != null) {
-            AbbozzaLogger.out("MonitorHandler: Port discovered: " + port , AbbozzaLogger.INFO);
-            AbbozzaLogger.out("MonitorHandler: Initializing ... " , AbbozzaLogger.INFO);        
-            try {
-                monitor = new AbbozzaMonitor(port,rate);
-            } catch (Exception ex) {
-                AbbozzaLogger.err(ex.getLocalizedMessage());
+        // String port = this._abbozzaServer.getSerialPort();
+        // int rate = this._abbozzaServer.getBaudRate();
+        
+        
+        // if (port != null) {
+            // AbbozzaLogger.out("MonitorHandler: Port discovered: " + port , AbbozzaLogger.INFO);
+            // AbbozzaLogger.out("MonitorHandler: Initializing ... " , AbbozzaLogger.INFO);        
+            if ( monitor == null ) {
+                // monitor = new AbbozzaMonitor(port,rate);
+                monitor = new AbbozzaMonitor();
+            } else {
+                // monitor.setBoardPort(port, rate);
             }
             AbbozzaLogger.out("MonitorHandler: Monitor initialized" , AbbozzaLogger.INFO);
-        } else {
-            AbbozzaLogger.out("MonitorHandler: No board discovered" , AbbozzaLogger.INFO);
-            monitor = new AbbozzaMonitor();
-        }
+        // } else {
+        //     AbbozzaLogger.out("MonitorHandler: No board discovered" , AbbozzaLogger.INFO);
+        //     monitor = new AbbozzaMonitor();
+        // }
         
         try {
             monitor.open();
@@ -110,18 +103,23 @@ public class MonitorHandler extends AbstractHandler {
         return true;
     }
 
+    
+    
     public boolean resume() {
-        AbbozzaLogger.out("MonitorHandler: Resume monitor", AbbozzaLogger.INFO );
         if (monitor == null) {
             return false;
         }
+        
         try {
+            AbbozzaLogger.out("MonitorHandler: Resume monitor", AbbozzaLogger.INFO );
             monitor.resume();
         } catch (Exception ex) {
             return false;
         }
         return true;
     }
+    
+    
     
     public void suspend() {
         try {
@@ -139,12 +137,14 @@ public class MonitorHandler extends AbstractHandler {
     public AbbozzaMonitor getMonitor() {
         return monitor;
     }
-    
+
+    /*
     private void sendMessage(String msg) {
         if ( msg == null ) return;
         
         AbbozzaLogger.debug("MonitorHandler: Send message " + msg + " to monitor");
         monitor.addToUpdateBuffer(msg + "\n");
     }
+    */
     
 }

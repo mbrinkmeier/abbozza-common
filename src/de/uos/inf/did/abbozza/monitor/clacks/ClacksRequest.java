@@ -20,16 +20,24 @@
  * @fileoverview ...
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
-package de.uos.inf.did.abbozza.monitor;
+package de.uos.inf.did.abbozza.monitor.clacks;
 
 import com.sun.net.httpserver.HttpExchange;
+import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
+import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksPacket;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksSerialPort;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksService;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksSubscriber;
+import java.io.IOException;
+import jssc.SerialPortException;
 
 /**
  *
  * @author michael
  */
-public class Message {
+public class ClacksRequest implements ClacksPacket {
                 
     private String _id;
     private String _idPostfix;
@@ -56,7 +64,7 @@ public class Message {
     }
     */
     
-    public Message(String id, String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
+    public ClacksRequest(String id, String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
         _id = id;
         _msg = msg;
         int a = _msg.indexOf('_');
@@ -139,5 +147,38 @@ public class Message {
     
     public void setResponse(String resp) {
         _response = resp;
+    }
+
+    @Override
+    public void process(ClacksSubscriber subscriber) {
+        // Do nothing
+    }
+
+    @Override
+    public void process(AbbozzaMonitor monitor) {
+        // Do nothing
+    }
+
+    @Override
+    public void process(ClacksSerialPort serialPort) {
+        ClacksStatus status;
+        String msg = "[[" + _id + " " + _msg + "]]\n";
+        try {
+            serialPort.writeBytes(msg.getBytes());
+            status = new ClacksStatus("-> " + msg,"output");
+        } catch (SerialPortException ex) {
+            status = new ClacksStatus("Error writing to port","error");
+        }
+        serialPort.incoming.add(status);
+    }
+
+    @Override
+    public void processFromPort(ClacksService service) {
+        // Do nothing
+    }
+
+    @Override
+    public void processToPort(ClacksService service) {
+        // Do nothing
     }
 }

@@ -20,10 +20,10 @@ package de.uos.inf.did.abbozza.monitor;
 
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.nio.ByteBuffer;
+import de.uos.inf.did.abbozza.monitor.clacks.ByteRingBuffer;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksBytes;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksMessage;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksParseNANException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPopupMenu;
@@ -32,10 +32,7 @@ import javax.swing.JPopupMenu;
  *
  * @author mbrinkmeier
  */
-public class OscillographMonitor extends MonitorPanel {
-    
-    private DataInputStream _dataStream;
-    
+public class OscillographMonitor extends MonitorPanel {   
     // Attributes for the view
     private int _minValue;
     private int _maxValue;
@@ -44,6 +41,7 @@ public class OscillographMonitor extends MonitorPanel {
     private boolean _scaleKnown;
     private boolean _resetRequested;
     private boolean _resetScaleRequested;
+    private ByteRingBuffer _byteBuffer;
     
     // Attributes for the ring buffer
     private final int _bufSize = 2048;
@@ -56,9 +54,6 @@ public class OscillographMonitor extends MonitorPanel {
      * Creates new form OszillosgraphMonitor
      */
     public OscillographMonitor() {
-        _byteStream = null;
-        _thread = null;
-        _fetchBytes = true;
         _scaleKnown = false;
         
         // Initialize the ring buffer
@@ -71,9 +66,11 @@ public class OscillographMonitor extends MonitorPanel {
         _maxValue = 63;
         computeScale();
         
+        _byteBuffer = new ByteRingBuffer(2048);
+        
         initComponents();
         
-       oszi.addMouseListener(new MonitorMouseListener(this));
+        oszi.addMouseListener(new MonitorMouseListener(this));
     }
 
         
@@ -173,23 +170,16 @@ public class OscillographMonitor extends MonitorPanel {
     public void connect(AbbozzaMonitor monitor) {
         _resetRequested = false;
         _resetScaleRequested = false;
-        super.connect(monitor);
-        _dataStream = new DataInputStream(_byteStream);
+        monitor.subscribeToClacks(this);
         resetScale();
         oszi.repaint();
+        AbbozzaLogger.err("Oscillograph connected");
     }
     
     /**
      * Disconnect from byte stream
      */
-    @Override
-    public void disconnect() { 
-        super.disconnect();
-        try {
-            _dataStream.close();
-        } catch (IOException ex) {
-        }
-    }
+    public void disconnect() { }
 
     /**
      * Do nothing if a message is received
@@ -198,36 +188,43 @@ public class OscillographMonitor extends MonitorPanel {
     public void processMessage(String s) {}
     
     
-    /**
-     * Add int to buffer
-     */
+    public void process(ClacksMessage msg) {
+        // Do nothing
+    }
+    
     @Override
-    public void processBytes() {
+    public void process(ClacksBytes bytes) {
+        byte buf[] = bytes.getBytes();
+        
+        for ( int i = 0; i < buf.length; i++ ) {
+            _byteBuffer.put(buf[i]);
+        }
+        
         if ( _resetRequested ) {
             reset();
             _scaleKnown = false;
             _resetRequested = false;
-            resetScale();
+            _resetScaleRequested = true;
         }
         
         if ( _resetScaleRequested ) {
             _resetScaleRequested = false;
             resetScale();
         }
-        
-        try {
-           while ( _dataStream.available() >= 4 ) {
-                int val = _dataStream.readInt();
-                pushInt(val);
-           }
-           while ( _dataStream.available() > 0 ) {
-                 _dataStream.read();
-           }
-        } catch (IOException ex) {
-            AbbozzaLogger.force(ex.getLocalizedMessage());
+                
+        // Parse 4 byte values using the clacks format
+        while ( _byteBuffer.getSize() >= 6 ) {
+            try {
+                int v = _byteBuffer.getClacksInt();
+                pushInt(v);
+            } catch (ClacksParseNANException ex) {
+                // Just ignore it and tr the next one
+            }
         }
+        
         oszi.repaint();
     }
+
     
     /**
      * No popup mneu
@@ -383,5 +380,9 @@ public class OscillographMonitor extends MonitorPanel {
         _minValue = -10;
         _maxValue = 10;
     }
+
+
+    @Override
+    public void disconnect(AbbozzaMonitor monitor) {}
     
 }

@@ -5,6 +5,7 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksBytes;
 import javax.swing.JPopupMenu;
 
 /**
@@ -52,6 +53,15 @@ public class TFTMonitor extends MonitorPanel {
 
     @Override
     public JPopupMenu getPopUp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
+
+    @Override
+    public void process(ClacksBytes bytes) {}
+
+    @Override
+    public void connect(AbbozzaMonitor monitor) {}
+
+    @Override
+    public void disconnect(AbbozzaMonitor monitor) {}
 }

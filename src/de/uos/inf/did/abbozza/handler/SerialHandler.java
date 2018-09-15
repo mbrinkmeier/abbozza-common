@@ -27,6 +27,8 @@ import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import de.uos.inf.did.abbozza.monitor.Message;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksMessage;
+import de.uos.inf.did.abbozza.monitor.clacks.ClacksRequest;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URLDecoder;
@@ -62,7 +64,7 @@ public class SerialHandler extends AbstractHandler {
         }
         AbbozzaMonitor monitor = this._abbozzaServer.getMonitor();
         if ( monitor != null ) {
-           Message msg = monitor.sendMessage((String) props.get("msg"), he, this, timeout);
+           ClacksRequest msg = monitor.getClacksService().processRequest((String) props.get("msg"), he, this, timeout);
            while ( msg.getState() == Message.WAITING ) {
               try {
                   Thread.sleep(100);
