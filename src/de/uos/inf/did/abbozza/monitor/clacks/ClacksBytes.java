@@ -67,7 +67,7 @@ public class ClacksBytes implements ClacksPacket {
     /**
      * The serial port simply writes the bytes without echo
      * 
-     * @param serialPort 
+     * @param serialPort The Clacks serial port that should process this packet
      */
     @Override
     public void process(ClacksSerialPort serialPort) {
@@ -91,7 +91,7 @@ public class ClacksBytes implements ClacksPacket {
     /**
      * The monitor handles the packet itself
      * 
-     * @param monitor 
+     * @param monitor The Monitor that should procvess this packet
      */
     @Override
     public void process(AbbozzaMonitor monitor) {

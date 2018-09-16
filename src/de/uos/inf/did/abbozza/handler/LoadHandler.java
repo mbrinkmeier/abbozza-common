@@ -214,8 +214,8 @@ public class LoadHandler extends AbstractHandler {
      *
      * Depending on the form of the path, the requested URL is constructed.
      *
-     * If the path has the form !&lt;<path&gt;, then the sketch isloaded from
-     * the URL &lt;server_root&gt;/&lt;path&gt>. Ie.e an internal sketch is
+     * If the path has the form !&lt;path&gt;, then the sketch isloaded from
+     * the URL &lt;server_root&gt;/&lt;path&gt;. Ie.e an internal sketch is
      * loaded.
      *
      * If the path ends with 'abj' or 'jar', the sketch start.abz inside it is

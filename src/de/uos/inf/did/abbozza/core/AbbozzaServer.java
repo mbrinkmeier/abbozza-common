@@ -1009,8 +1009,8 @@ public abstract class AbbozzaServer implements HttpHandler {
      * This operation expands the given path according to the rules of the load
      * handler. But it does NOT change the task context.
      *
-     * If the path has the form !&lt;<path&gt;, then the sketch isloaded from
-     * the URL &lt;server_root&gt;/&lt;path&gt>. Ie.e an internal sketch is
+     * If the path has the form !&lt;path&gt;, then the sketch isloaded from
+     * the URL &lt;server_root&gt;/&lt;path&gt;. Ie.e an internal sketch is
      * loaded.
      *
      * If the path ends with 'abj' or 'jar', the sketch start.abz inside it is

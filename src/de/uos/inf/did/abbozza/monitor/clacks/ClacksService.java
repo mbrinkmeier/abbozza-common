@@ -60,7 +60,7 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
     /**
      * The constructor
      *
-     * @param mon
+     * @param mon The monito to which the service blongs
      */
     public ClacksService(AbbozzaMonitor mon) {
         monitor = mon;
@@ -83,11 +83,10 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
     /**
      * The work done in the background.
      *
-     * @return nothing
-     * @throws Exception
+     * @return Null
      */
     @Override
-    protected List<ClacksPacket> doInBackground() throws Exception {
+    protected List<ClacksPacket> doInBackground() throws InterruptedException {
 
         AbbozzaLogger.err("ClacksService starting");
 
@@ -189,7 +188,7 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
     /**
      * Set the baud rate of the connection
      *
-     * @param rate
+     * @param rate The new baud rate
      */
     public void setRate(int rate) {
         if (rate != portRate) {
@@ -203,7 +202,7 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
     /**
      * Distribute clacks packets to subscribers
      *
-     * @param chunks
+     * @param chunks The list of packets to be processed
      */
     @Override
     protected void process(List<ClacksPacket> chunks) {
@@ -353,8 +352,6 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
      * Enque a message for sending without timeout and without waiting for it.
      *
      * @param msg The message
-     *
-     * @return The enqued message object
      */
     /*
     public synchronized Message sendMessage(String id, String msg, HttpExchange exchg, SerialHandler handler, long timeout) {

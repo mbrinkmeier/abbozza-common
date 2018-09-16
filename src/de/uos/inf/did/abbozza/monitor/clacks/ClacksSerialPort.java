@@ -176,7 +176,7 @@ public class ClacksSerialPort implements Runnable {
     /**
      * Set the rate of the port
      *
-     * @param r
+     * @param r The new baud rate
      */
     public void setRate(int r) {
         rate = r;
@@ -271,9 +271,9 @@ public class ClacksSerialPort implements Runnable {
     /**
      * Write the bytes to the serial port.
      * 
-     * @param buffer
-     * @return
-     * @throws SerialPortException 
+     * @param buffer The bytes to bewritten
+     * @return Ture if the write was succesfull
+     * @throws SerialPortException Thi exception is thrown if an error occured.
      */
     public boolean writeBytes(byte[] buffer) throws SerialPortException {
         return serialPort.writeBytes(buffer);

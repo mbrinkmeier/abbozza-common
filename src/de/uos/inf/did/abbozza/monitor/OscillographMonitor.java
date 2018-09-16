@@ -291,7 +291,7 @@ public class OscillographMonitor extends MonitorPanel {
      * Return the int at the given index, counted from _head.
      * 
      * @param index
-     * @return 
+     * @return  Returns the integer at the given index of the buffer.
      */
     public int getInt(int index) {
         int pos = (index + _head) % _bufSize;
