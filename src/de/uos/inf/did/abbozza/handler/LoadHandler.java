@@ -248,7 +248,7 @@ public class LoadHandler extends AbstractHandler {
         // Check path
         try {
             url = new URL(path);
-            AbbozzaLogger.out("LoadHandler: loading from given url " + path, AbbozzaLogger.DEBUG);
+                AbbozzaLogger.out("LoadHandler: loading from given url " + path, AbbozzaLogger.DEBUG);
             if (path.endsWith("abj") || path.endsWith("jar") || path.endsWith("JAR") || path.endsWith("zip") || path.endsWith("ZIP")) {
                 path = "jar:" + url.toString() + "!/start.abz";
                 url = new URL(path);
@@ -280,6 +280,12 @@ public class LoadHandler extends AbstractHandler {
         URLConnection conn = url.openConnection();
         InputStream inStream = conn.getInputStream();
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inStream, "utf-8"));
+
+        while (reader.ready()) {
+            result = result + reader.readLine() + "\n";
+        }
+
         if (contentLocation == null) {
             try {
                 URL con = _abbozzaServer.getTaskContext();
@@ -291,12 +297,6 @@ public class LoadHandler extends AbstractHandler {
             } catch (URISyntaxException ex) {
                 contentLocation = url.toString();
             }
-        }
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inStream, "utf-8"));
-
-        while (reader.ready()) {
-            result = result + reader.readLine() + "\n";
         }
 
         return result;

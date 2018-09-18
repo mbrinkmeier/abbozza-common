@@ -675,7 +675,6 @@ abbozza-hint {
 }
 
 
-
 @-webkit-keyframes fadeinout {
     0% {opacity: 0; visibility: visible;}
     10% {opacity: 1;}
@@ -689,6 +688,19 @@ abbozza-hint {
     90% {opacity: 1;}
     100% {opacity: 0; visiblitiy: hidden;}
 }
+
+@-webkit-keyframes pulsing {
+    0% { background-color : #d0d0d0; }
+    50% { background-color : #00ff00; }
+    100% { background-color : #d0d0d0; }
+}
+
+@keyframes pulsing {
+    0% { background-color : #d0d0d0; }
+    50% { background-color : #00ff00; }
+    100% { background-color : #d0d0d0; }
+}
+
 
 .fadeinout {
     visibility: hidden;
