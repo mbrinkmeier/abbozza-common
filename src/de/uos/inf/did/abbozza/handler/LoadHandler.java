@@ -159,8 +159,10 @@ public class LoadHandler extends AbstractHandler {
             contentLocation = null;
             if (url.toString().endsWith("abj") || url.toString().endsWith("jar") || url.toString().endsWith("zip")) {
                 result = getStartFromAbj(url);
+                // _abbozzaServer.setTaskContext(url);
             } else {
                 result = getSketchFromFile(url);
+                _abbozzaServer.setTaskContext(url);
             }
 
             if ((!panel.getSystem().equals(this._abbozzaServer.getSystem())) && (!panel.getSystem().equals(""))) {
@@ -246,7 +248,7 @@ public class LoadHandler extends AbstractHandler {
                 AbbozzaLogger.out("LoadHandler: loading from given url " + path, AbbozzaLogger.DEBUG);
             if (path.endsWith("abj") || path.endsWith("jar") || path.endsWith("JAR") || path.endsWith("zip") || path.endsWith("ZIP")) {
                 result = getStartFromAbj(url);
-                _abbozzaServer.setTaskContext(url);
+                // _abbozzaServer.setTaskContext(url);
             } else {
                 result = getSketchFromFile(url);
             }
@@ -312,8 +314,8 @@ public class LoadHandler extends AbstractHandler {
                 result = result + reader.readLine() + '\n';
             }
             reader.close();
-            _abbozzaServer.setTaskContext(url);
             contentLocation = url.toString();
+            _abbozzaServer.setTaskContext(url);
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
             AbbozzaLogger.err("LoadHandler: Could not open " + abj.toString());
@@ -329,8 +331,8 @@ public class LoadHandler extends AbstractHandler {
             result = result + reader.readLine() + '\n';
         }
         reader.close();
-        // _abbozzaServer.setLastSketchFile(file);
-        _abbozzaServer.setTaskContext(abz);
+        _abbozzaServer.setLastSketchFile(abz);
+        // _abbozzaServer.setTaskContext(abz);
         contentLocation = abz.toString();
         return result;
     }
@@ -364,7 +366,7 @@ public class LoadHandler extends AbstractHandler {
         }
         reader.close();
         _abbozzaServer.setLastSketchFile(file.toURI().toURL());
-        _abbozzaServer.setTaskContext(new URL("file:" + file.getParentFile().getCanonicalPath()));
+        // _abbozzaServer.setTaskContext(new URL("file:" + file.getParentFile().getCanonicalPath()));
         contentLocation = "file:" + file.getParentFile().getCanonicalPath();
         return result;
     }
