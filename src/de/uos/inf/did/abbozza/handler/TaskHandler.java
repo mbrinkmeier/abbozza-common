@@ -83,11 +83,26 @@ public class TaskHandler extends AbstractHandler {
         AbbozzaLogger.out("TaskHandler: " + sketch.toString() + " requested", AbbozzaLogger.INFO);
 
         OutputStream os = exchg.getResponseBody();
-        InputStream is = sketch.openStream();
+        InputStream is; 
+        
+        try {
+            is = sketch.openStream();
+        } catch (IOException ex) {
+            // Try the absolute version, if possible
+            String taskPath = taskContext.toString();
+            if ( taskPath.startsWith("jar:") && (taskPath.indexOf('!') != -1) ) {
+                taskPath = taskPath.substring(0,taskPath.indexOf('!')+1) + "/" + path.substring(6);
+                sketch = new URL(taskPath);
+                is = sketch.openStream();
+            } else {
+                is = null;
+            }
+            
+        }
 
         byte[] bytearray = null;
 
-        if ( is != null) {
+        if ( is != null ) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             int reads = is.read(); 
             while(reads != -1){ 
