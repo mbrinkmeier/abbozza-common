@@ -144,7 +144,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
     
     
     public void setPaths() {
-        userPath = System.getProperty("user.home") + "/.abbozza/" + system;
+        userPath = System.getProperty("user.home") + "/.abbozza/" + getSystem();
         configPath = userPath + "/abbozza.cfg";
 
         URI uri = null;

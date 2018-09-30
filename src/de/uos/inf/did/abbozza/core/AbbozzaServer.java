@@ -284,7 +284,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      */
     public void setPaths() {
         // Set user Path to $HOME/.abbozza/<system>
-        userPath = System.getProperty("user.home") + "/.abbozza/" + system;
+        userPath = System.getProperty("user.home") + "/.abbozza/" + getSystem();
 
         // Check if the user directory exists
         File userDir = new File(userPath);
@@ -352,6 +352,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         return sketchbookPath;
     }
 
+    
     /**
      * Get the global plugin path.
      *
@@ -377,6 +378,11 @@ public abstract class AbbozzaServer implements HttpHandler {
      */
     public String getSystem() {
         return this.system;
+    }
+    
+    
+    public String getOptionsPath() {
+        return "/js/abbozza/" + getSystem() + "/options.xml";
     }
 
     /**
@@ -466,7 +472,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(this.serverPort)), 4);
 
-            String url = getRootURL() + system + ".html";
+            String url = getRootURL() + getSystem() + ".html";
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_reachable", url));
         }
     }
@@ -488,13 +494,13 @@ public abstract class AbbozzaServer implements HttpHandler {
             if (opts == null) {
                 cmd = new String[2];
                 cmd[0] = expandPath(config.getBrowserPath());
-                cmd[1] = getRootURL() + system + ".html";
+                cmd[1] = getRootURL() + getSystem() + ".html";
                 line = cmd[0] + " " + cmd[1];
             } else {
                 cmd = new String[3];
                 cmd[0] = expandPath(config.getBrowserPath());
                 cmd[1] = opts;
-                cmd[2] = getRootURL() + system + ".html";
+                cmd[2] = getRootURL() + getSystem() + ".html";
                 line = cmd[0] + " " + cmd[1] + " " + cmd[2];
             }
             // String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
@@ -522,7 +528,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                         try {
                             Desktop desktop = Desktop.getDesktop();
                             if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                                String xurl = getRootURL() + system + ".html";
+                                String xurl = getRootURL() + getSystem() + ".html";
                                 // if (this.getSystem().equals("Mac")) {
                                 //     Runtime runtimeMac = Runtime.getRuntime();
                                 //     String[] args = { "osascript", "-e", "open location \"" + url + "\"" };
@@ -562,7 +568,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                         config.write();
                         String[] cmd = new String[2];
                         cmd[0] = expandPath(config.getBrowserPath());
-                        cmd[1] = getRootURL() + system + ".html";
+                        cmd[1] = getRootURL() + getSystem() + ".html";
                         try {
                             AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
                             runtime.exec(cmd);
@@ -593,7 +599,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         AbbozzaLogger.out(path + " requested", AbbozzaLogger.DEBUG);
 
-        if (!path.startsWith("/" + system)) {
+        if (!path.startsWith("/" + getSystem())) {
             String result = AbbozzaLocale.entry("msg.not_found", path);
             exchg.sendResponseHeaders(400, result.length());
             os.write(result.getBytes());
@@ -747,9 +753,9 @@ public abstract class AbbozzaServer implements HttpHandler {
      * @param confurl An url overriding the config value
      */
     public void checkForUpdate(boolean reportNoUpdate, String confurl) {
-        String updateUrl = AbbozzaServer.getConfig().getUpdateUrl() + this.system + "/";
+        String updateUrl = AbbozzaServer.getConfig().getUpdateUrl() + this.getSystem() + "/";
         if (confurl != null) {
-            updateUrl = confurl + this.system + "/";
+            updateUrl = confurl + this.getSystem() + "/";
         }
         String version = "";
 
@@ -876,7 +882,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
             // Retreive the global option tree
             try {
-                byte[] bytes = jarHandler.getBytes("/js/abbozza/" + system + "/options.xml");
+                byte[] bytes = jarHandler.getBytes(getOptionsPath());
                 if (bytes != null) {
                     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                     DocumentBuilder builder;
@@ -1175,6 +1181,15 @@ public abstract class AbbozzaServer implements HttpHandler {
     public void setAdditionalPaths() {
     }
 
+    /**
+     * Add additonal locale entries.
+     * 
+     * @param locale The locale
+     * @param root The Element ot which the entries should be added
+     */
+    public void addAdditionalLocale(String locale, Element root) {    
+    }
+    
     public boolean isDialogOpen() {
         return dialogOpen;
     }

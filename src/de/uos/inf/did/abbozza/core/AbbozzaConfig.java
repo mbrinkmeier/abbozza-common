@@ -166,7 +166,7 @@ public class AbbozzaConfig {
         // Check if default configuration in <runtimePath>/lib/ exists
         // and load it.
         AbbozzaServer abbozza = AbbozzaServer.getInstance();
-        File defaultConfigFile = new File(abbozza.abbozzaPath+ "/lib/" + abbozza.system + ".cfg");
+        File defaultConfigFile = new File(abbozza.abbozzaPath+ "/lib/" + abbozza.getSystem() + ".cfg");
         AbbozzaLogger.out("Cheking for default configuration in " + defaultConfigFile.getAbsolutePath());
         if ( defaultConfigFile.exists() ) {
             try {
@@ -267,7 +267,7 @@ public class AbbozzaConfig {
             prefFile.createNewFile();
             Properties props = get();
             AbbozzaLogger.out("Configuration written to " + configPath, AbbozzaLogger.INFO);
-            props.store(new OutputStreamWriter(new FileOutputStream(prefFile),"UTF8"), "abbozza! preferences (" + AbbozzaServer.getInstance().system + ")");
+            props.store(new OutputStreamWriter(new FileOutputStream(prefFile),"UTF8"), "abbozza! preferences (" + AbbozzaServer.getInstance().getSystem() + ")");
 
         } catch (IOException ex) {
             AbbozzaLogger.err("Could not write configuration file " + configPath);

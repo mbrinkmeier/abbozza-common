@@ -114,7 +114,7 @@ public class AbbozzaLocale {
             Document systemLocale = fetchLocale("/js/abbozza/" + AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");
             
             foundElement = null;
-            if ( globalLocale != null ) {
+            if ( (globalLocale != null) && (systemLocale != null) ) {
                 NodeList languages = systemLocale.getElementsByTagName("language");
                 for ( int i = 0; i < languages.getLength(); i++ ) {
                     Element element = (Element) languages.item(i);
@@ -129,6 +129,9 @@ public class AbbozzaLocale {
                     child.setAttribute("id",AbbozzaServer.getInstance().getSystem() + "_" + locale);
                 }
             }
+
+            // Add server specific locales
+            AbbozzaServer.getInstance().addAdditionalLocale(locale,root);
             
             // Add locales from Plugins
             if ( AbbozzaServer.getPluginManager() != null )

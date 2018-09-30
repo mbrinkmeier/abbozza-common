@@ -37,11 +37,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,8 +65,7 @@ public class PluginManager implements HttpHandler {
         this.detectPlugins();
     }
 
-    private void detectPlugins() {
-        
+    private void detectPlugins() {       
         // Check local dir
         File path = new File(this._abbozza.getGlobalPluginPath());
         AbbozzaLogger.out("PluginManager: Checking global dir " + path, AbbozzaLogger.INFO);
