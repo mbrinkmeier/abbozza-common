@@ -482,10 +482,12 @@ public abstract class AbbozzaServer implements HttpHandler {
      *
      * @param url The URL to be opened
      */
-    public void startBrowser(String url) {
+    public void startBrowser(String path) {
         AbbozzaLogger.out("Starting browser ...");
         Runtime runtime = Runtime.getRuntime();
 
+        if ( path == null )
+            path = getSystem() + ".html";
         if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
             String[] cmd;
             String line;
@@ -494,13 +496,13 @@ public abstract class AbbozzaServer implements HttpHandler {
             if (opts == null) {
                 cmd = new String[2];
                 cmd[0] = expandPath(config.getBrowserPath());
-                cmd[1] = getRootURL() + getSystem() + ".html";
+                cmd[1] = getRootURL() + path;
                 line = cmd[0] + " " + cmd[1];
             } else {
                 cmd = new String[3];
                 cmd[0] = expandPath(config.getBrowserPath());
                 cmd[1] = opts;
-                cmd[2] = getRootURL() + getSystem() + ".html";
+                cmd[2] = getRootURL() + path;
                 line = cmd[0] + " " + cmd[1] + " " + cmd[2];
             }
             // String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
