@@ -166,7 +166,8 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
         <msg id="menu.collapse_block">Falte Block zusammen</msg>
-        <msg id="menu.add_comment">Kommentar hinzufügen</msg>		
+        <msg id="menu.add_comment">Kommentar hinzufügen</msg>
+        <msg id="menu.remove_comment">Kommentar entfernen</msg>		
         <msg id="menu.delete_block">Block löschen</msg>
         <msg id="menu.duplicate_block">Kopieren</msg>
         <msg id="menu.expand_all">Entfalte Blöcke</msg>

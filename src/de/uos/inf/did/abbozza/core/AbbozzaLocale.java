@@ -1,4 +1,4 @@
-    /**
+/**
  * @license abbozza!
  *
  * Copyright 2015 Michael Brinkmeier ( michael.brinkmeier@uni-osnabrueck.de )

@@ -167,6 +167,7 @@ Should I try it again?</msg>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
         <msg id="menu.collapse_block">Fold single block</msg>
         <msg id="menu.add_comment">Add comment</msg>		
+        <msg id="menu.remove_comment">Remove comment</msg>		
         <msg id="menu.delete_block">Delete block</msg>
         <msg id="menu.duplicate_block">Copy</msg>
         <msg id="menu.expand_all">Unfold blocks</msg>
