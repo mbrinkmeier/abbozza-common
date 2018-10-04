@@ -243,10 +243,10 @@ public class JarDirHandler implements HttpHandler {
                     URLConnection conn = fileUrl.openConnection();
                     InputStream inStream = conn.getInputStream();
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    int reads = inStream.read(); 
-                    while(reads != -1){ 
-                        baos.write(reads); 
-                        reads = inStream.read(); 
+                    byte buf[] = new byte[1024];
+                    while(inStream.available() > 0 ){
+                        int count = inStream.read(buf,0,1024);
+                        baos.write(buf,0,count); 
                     } 
                     bytearray = baos.toByteArray();   
                                         

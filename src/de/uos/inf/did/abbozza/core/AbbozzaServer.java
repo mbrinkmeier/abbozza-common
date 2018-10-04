@@ -472,7 +472,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(this.serverPort)), 4);
 
-            String url = getRootURL() + getSystem() + ".html";
+            String url = getRootURL() + getSystemPath();
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_reachable", url));
         }
     }
@@ -487,7 +487,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         Runtime runtime = Runtime.getRuntime();
 
         if ( path == null )
-            path = getSystem() + ".html";
+            path = getSystemPath();
         if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
             String[] cmd;
             String line;
@@ -514,6 +514,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                 AbbozzaLogger.err("Browser could not be started: " + e.getMessage());
             }
         } else {
+            AbbozzaSplashScreen.hideSplashScreen();
             Object[] options = {AbbozzaLocale.entry("msg.cancel"), AbbozzaLocale.entry("msg.open_standard_browser"), AbbozzaLocale.entry("msg.give_browser")};
             Object selected = JOptionPane.showOptionDialog(null, AbbozzaLocale.entry("msg.no_browser_given"),
                     AbbozzaLocale.entry("msg.no_browser_given"),
@@ -530,19 +531,8 @@ public abstract class AbbozzaServer implements HttpHandler {
                         try {
                             Desktop desktop = Desktop.getDesktop();
                             if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                                String xurl = getRootURL() + getSystem() + ".html";
-                                // if (this.getSystem().equals("Mac")) {
-                                //     Runtime runtimeMac = Runtime.getRuntime();
-                                //     String[] args = { "osascript", "-e", "open location \"" + url + "\"" };
-                                //     try {
-                                //         Process process = runtimeMac.exec(args);
-                                //     }
-                                //     catch (IOException e) {
-                                //         failed = true;
-                                //      }                                    
-                                // } else {
+                                String xurl = getRootURL() + getSystemPath();
                                 Desktop.getDesktop().browse(new URI(xurl));
-                                // }
                             } else {
                                 failed = true;
                             }
@@ -570,7 +560,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                         config.write();
                         String[] cmd = new String[2];
                         cmd[0] = expandPath(config.getBrowserPath());
-                        cmd[1] = getRootURL() + getSystem() + ".html";
+                        cmd[1] = getRootURL() + getSystemPath();
                         try {
                             AbbozzaLogger.out("Starting browser: " + cmd[0] + " " + cmd[1]);
                             runtime.exec(cmd);
@@ -1280,6 +1270,12 @@ public abstract class AbbozzaServer implements HttpHandler {
             return "http://localhost:" + serverPort + "/";
         }
     }
+    
+    
+    public String getSystemPath() {
+        return this.system + ".html";
+    }
+    
 
     public String getIp4Address() {
         if (this.ip4Address == null) {
