@@ -17,151 +17,177 @@
  * limitations under the License.
  */
 
-CKEDITOR.plugins.add( 'abbozza', {
+CKEDITOR.plugins.add('abbozza', {
 
-  requires: 'widget',
+    requires: 'widget',
 
-  icons: 'newabzpage,delabzpage,hint,abznav',
+    icons: 'newabzpage,delabzpage,hint,abznav,taskscript,pagescript',
 
-  init: function( editor ) {
+    init: function (editor) {
 
-    /**
-     * Add the hint widget
-     */
-    editor.widgets.add( 'hint' , {
-       draggable: false,
+        /**
+         * Add the hint widget
+         */
+        editor.widgets.add('hint', {
+            draggable: false,
 
-       // The template for the widget
-       template:
-          '<abbozza-hint block="block_id" dx="0" dy="0" width="20em" height="3em">' +
-          'Text ...' +
-          '</abbozza-hint>',
+            // The template for the widget
+            template:
+                    '<abbozza-hint block="block_id" dx="0" dy="0" width="20em" height="3em">' +
+                    'Text ...' +
+                    '</abbozza-hint>',
 
-      dialog: 'hint',
+            dialog: 'hint',
 
-      upcast: function( element, data ) {
-        return element.name == "abbozza-hint";
-      },
+            upcast: function (element, data) {
+                return element.name == "abbozza-hint";
+            },
 
-      init: function() {
-        this.setData('text', this.element.getText());
-        this.setData('block', this.element.getAttribute("block"));
-        this.setData('dx', this.element.getAttribute("dx"));
-        this.setData('dy', this.element.getAttribute("dy"));
-        this.setData('width', this.element.getAttribute("width"));
-        this.setData('height', this.element.getAttribute("height"));
+            init: function () {
+                this.setData('text', this.element.getText());
+                this.setData('block', this.element.getAttribute("block"));
+                this.setData('dx', this.element.getAttribute("dx"));
+                this.setData('dy', this.element.getAttribute("dy"));
+                this.setData('width', this.element.getAttribute("width"));
+                this.setData('height', this.element.getAttribute("height"));
 
-        // Add this element as a connected hint to the warning icon of
-        // the corresponding block.
-        if ( Abbozza ) {
-          var blocks = Abbozza.getBlocksById(this.element.getAttribute("block"));
-          this.element.$.iconResized = function(icon) {
-            var dx = icon.shiftX_;
-            var dy = icon.shiftY_;
-            var width = icon.width_;
-            var height = icon.height_;
-            this.setAttribute("dx",dx);
-            this.setAttribute("dy",dy);
-            this.setAttribute("width",width);
-            this.setAttribute("height",height);
-          };
-          for ( var i = 0; i < blocks.length; i++) {
-            if ( blocks[i].warning  && (blocks[i].warning.addHint != "undefined") ) {
-              blocks[i].warning.addHint(this.element.$);
-            }
-          }
+                // Add this element as a connected hint to the warning icon of
+                // the corresponding block.
+                if (Abbozza) {
+                    var blocks = Abbozza.getBlocksById(this.element.getAttribute("block"));
+                    this.element.$.iconResized = function (icon) {
+                        var dx = icon.shiftX_;
+                        var dy = icon.shiftY_;
+                        var width = icon.width_;
+                        var height = icon.height_;
+                        this.setAttribute("dx", dx);
+                        this.setAttribute("dy", dy);
+                        this.setAttribute("width", width);
+                        this.setAttribute("height", height);
+                    };
+                    for (var i = 0; i < blocks.length; i++) {
+                        if (blocks[i].warning && (blocks[i].warning.addHint != "undefined")) {
+                            blocks[i].warning.addHint(this.element.$);
+                        }
+                    }
 
-          // if ( TaskWindow.ckeditor != null ) {
-          //     TaskWindow.ckeditor.fire("abbozza");
-          // }
-          // 
-          // If this element is destroyed, remove it from the hint list of the
-          // corresponding block.
-          this.on("destroy", function(event) {
-            if ( Abbozza ) {
-              var blocks = Abbozza.getBlocksById(this.element.getAttribute("block"));
-              for ( var i = 0; i < blocks.length; i++) {
-                if ( blocks[i].warning  && (blocks[i].warning.removeHint != "undefined") ) {
-                  blocks[i].warning.removeHint(this.element.$);
+                    // if ( TaskWindow.ckeditor != null ) {
+                    //     TaskWindow.ckeditor.fire("abbozza");
+                    // }
+                    // 
+                    // If this element is destroyed, remove it from the hint list of the
+                    // corresponding block.
+                    this.on("destroy", function (event) {
+                        if (Abbozza) {
+                            var blocks = Abbozza.getBlocksById(this.element.getAttribute("block"));
+                            for (var i = 0; i < blocks.length; i++) {
+                                if (blocks[i].warning && (blocks[i].warning.removeHint != "undefined")) {
+                                    blocks[i].warning.removeHint(this.element.$);
+                                }
+                            }
+                        }
+                    });
                 }
-              }
+            },
+
+            data: function () {
+                this.element.setText(this.data.text);
+                this.element.setAttribute("block", this.data.block);
+                this.element.setAttribute("dx", this.data.dx);
+                this.element.setAttribute("dy", this.data.dy);
+                this.element.setAttribute("width", this.data.width);
+                this.element.setAttribute("height", this.data.height);
             }
-          });
-        }
-      },
 
-      data: function() {
-        this.element.setText(this.data.text);
-        this.element.setAttribute("block",this.data.block);
-        this.element.setAttribute("dx",this.data.dx);
-        this.element.setAttribute("dy",this.data.dy);
-        this.element.setAttribute("width",this.data.width);
-        this.element.setAttribute("height",this.data.height);
-      }
+        });
 
-    });
 
-    /**
-     * The hint command
-     */
-    editor.addCommand( 'abznav', new CKEDITOR.dialogCommand( 'abznav' ) );
-    CKEDITOR.dialog.add('hint', this.path + 'dialogs/hint.js');
-    CKEDITOR.dialog.add('abznav',this.path + 'dialogs/abznav.js');
-    
-    /**
-     * The newpage command inserts anew page.
-     */
-    editor.addCommand( 'newabzpage', {
-      exec:
-         function( editor ) {
-           if ( !TaskWindow ) return;
-           TaskWindow.insertPage();
-         }
-    });
+        /**
+         * The hint command
+         */
+        editor.addCommand('abznav', new CKEDITOR.dialogCommand('abznav'));
+        editor.addCommand('taskscript', new CKEDITOR.dialogCommand('taskscript'));
+        editor.addCommand('pagescript', new CKEDITOR.dialogCommand('pagescript'));
+        CKEDITOR.dialog.add('hint', this.path + 'dialogs/hint.js');
+        CKEDITOR.dialog.add('abznav', this.path + 'dialogs/abznav.js');
+        CKEDITOR.dialog.add('taskscript', this.path + 'dialogs/taskscript.js');
+        CKEDITOR.dialog.add('pagescript', this.path + 'dialogs/pagescript.js');
 
-    editor.addCommand( 'delabzpage', {
-      exec:
-         function( editor ) {
-           if ( !TaskWindow ) return;
-           TaskWindow.deletePage();
-         }
-     });
-     
-    /**
-     * Adding the newpage Button
-     */
-    editor.ui.addButton( 'newabzpage', {
-      label: 'Insert abbozza! Page',
-      command: 'newabzpage',
-      toolbar: 'abbozza'
-    });
+        /**
+         * The newpage command inserts anew page.
+         */
+        editor.addCommand('newabzpage', {
+            exec:
+                    function (editor) {
+                        if (!TaskWindow)
+                            return;
+                        TaskWindow.insertPage();
+                    }
+        });
 
-    /**
-     * Adding the newpage Button
-     */
-    editor.ui.addButton( 'delabzpage', {
-      label: 'Delete abbozza! Page',
-      command: 'delabzpage',
-      toolbar: 'abbozza'
-    });
+        editor.addCommand('delabzpage', {
+            exec:
+                    function (editor) {
+                        if (!TaskWindow)
+                            return;
+                        TaskWindow.deletePage();
+                    }
+        });
 
-    /**
-     * Adding the hint Button
-     */
-    editor.ui.addButton( 'hint', {
-      label: 'Create an abbozza! Hint',
-      command: 'hint',
-      toolbar: 'abbozza'
-    });
+        /**
+         * Adding the newpage Button
+         */
+        editor.ui.addButton('newabzpage', {
+            label: 'Insert abbozza! Page',
+            command: 'newabzpage',
+            toolbar: 'abbozza'
+        });
 
-    /**
-     * Adding the nav Button
-     */
-    editor.ui.addButton( 'abznav', {
-      label: 'Set abbozza! navigation',
-      command: 'abznav',
-      toolbar: 'abbozza'
-    });
-  }
+        /**
+         * Adding the newpage Button
+         */
+        editor.ui.addButton('delabzpage', {
+            label: 'Delete abbozza! Page',
+            command: 'delabzpage',
+            toolbar: 'abbozza'
+        });
+
+        /**
+         * Adding the hint Button
+         */
+        editor.ui.addButton('hint', {
+            label: 'Create an abbozza! Hint',
+            command: 'hint',
+            toolbar: 'abbozza'
+        });
+
+        /**
+         * Adding the nav Button
+         */
+        editor.ui.addButton('abznav', {
+            label: 'Set abbozza! navigation',
+            command: 'abznav',
+            toolbar: 'abbozza'
+        });
+
+        /**
+         * Adding the hint Button
+         */
+        editor.ui.addButton('taskscript', {
+            label: 'Edit the abbozza! Task Script',
+            command: 'taskscript',
+            toolbar: 'abbozza'
+        });
+
+        /**
+         * Adding the hint Button
+         */
+        editor.ui.addButton('pagescript', {
+            label: 'Edit the abbozza! Page Script',
+            command: 'pagescript',
+            toolbar: 'abbozza'
+        });
+
+    }
 
 });

@@ -650,6 +650,14 @@ abbozza-hint {
     display: none;
 }
 
+pagescript {
+    display: none;
+}
+
+taskscript {
+    display: none;
+}
+
 /**
  **  CKEditor
  **/
