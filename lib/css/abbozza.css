@@ -715,3 +715,60 @@ taskscript {
     opacity: 0;
     animation-name: fadeinout;    
 }
+
+.overlayScript {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+}
+
+.overlayScriptTitle {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.overlayScriptEditor {
+    position: absolute;
+    top: 30px;
+    left: 0px;
+    width: 100%;
+    bottom: 30px;
+    background-color: rgba(255,255,200,1);
+    resize: none;
+    border: 2px black solid;
+    z-index: 43;
+}
+
+.overlayScript .CodeMirror{
+    position: absolute;
+    top: 30px;
+    left: 0px;
+    width: 100%;
+    bottom: 30px;
+    background-color: rgba(255,255,220,1);
+    resize: none;
+    border: 2px rgb(200,200,165) solid;
+    z-index: 43;
+    text-align: left;
+}
+
+.overlayScriptOkButton {
+    position: absolute;
+    height: 20px;
+    bottom: 0px;
+    right: 80px;
+    width: 60px;
+}
+
+.overlayScriptCancelButton {
+    position: absolute;
+    height: 20px;
+    bottom: 0px;
+    right: 0px;
+    width: 60px;
+}

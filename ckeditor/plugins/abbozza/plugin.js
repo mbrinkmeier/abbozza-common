@@ -106,12 +106,50 @@ CKEDITOR.plugins.add('abbozza', {
          * The hint command
          */
         editor.addCommand('abznav', new CKEDITOR.dialogCommand('abznav'));
-        editor.addCommand('taskscript', new CKEDITOR.dialogCommand('taskscript'));
-        editor.addCommand('pagescript', new CKEDITOR.dialogCommand('pagescript'));
         CKEDITOR.dialog.add('hint', this.path + 'dialogs/hint.js');
         CKEDITOR.dialog.add('abznav', this.path + 'dialogs/abznav.js');
-        CKEDITOR.dialog.add('taskscript', this.path + 'dialogs/taskscript.js');
-        CKEDITOR.dialog.add('pagescript', this.path + 'dialogs/pagescript.js');
+        // CKEDITOR.dialog.add('taskscript', this.path + 'dialogs/taskscript.js');
+        // CKEDITOR.dialog.add('pagescript', this.path + 'dialogs/pagescript.js');
+
+        editor.addCommand('taskscript', {
+            exec:   function(editor) {
+                        if ( TaskWindow ) {
+                            var content = TaskWindow.getTaskScript();
+                            if ( !content ) content = "";
+                            Abbozza.openScriptEditorOverlay(
+                                "Taskscript",
+                                content,
+                                function(text) {
+                                    if ( text != "" ) {
+                                        TaskWindow.setTaskScript(text);
+                                    } else {
+                                        TaskWindow.setTaskScript(null);
+                                    }
+                                }
+                            )
+                        }
+                    }
+        });
+
+        editor.addCommand('pagescript', {
+            exec:   function(editor) {
+                        if ( TaskWindow ) {
+                            var content = TaskWindow.getPageScript();
+                            if ( !content ) content = "";
+                            Abbozza.openScriptEditorOverlay(
+                                "Pagescript",
+                                content,
+                                function(text) {
+                                    if ( text != "" ) {
+                                        TaskWindow.setPageScript(text);
+                                    } else {
+                                        TaskWindow.setPageScript(null);
+                                    }
+                                }
+                            )
+                        }
+                    }
+        });
 
         /**
          * The newpage command inserts anew page.

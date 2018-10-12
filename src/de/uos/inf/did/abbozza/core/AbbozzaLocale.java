@@ -24,6 +24,7 @@ package de.uos.inf.did.abbozza.core;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
+import java.util.Locale;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import javax.xml.XMLConstants;
@@ -280,7 +281,7 @@ public class AbbozzaLocale {
      * @param value The replacement for '#' in the found string
      * @return The changed entry.
      */
-    public static String entry(String key, String value) {
+    public static String entry(String key, String value) {        
         String res = entry(key);
         res = res.replace("#", value);
         return res;
