@@ -52,6 +52,8 @@ public class AbbozzaLocale {
         NodeList nodes = localeXml.getElementsByTagName("msg");
         for (int i = 0; i < nodes.getLength(); i++ ) {
             Element node = (Element) nodes.item(i);
+            String id = node.getAttribute("id").toLowerCase();
+            node.setAttribute("id", id);
             node.setIdAttribute("id", true);
         }        
     }
@@ -70,6 +72,8 @@ public class AbbozzaLocale {
         NodeList nodes = localeXml.getElementsByTagName("msg");
         for (int i = 0; i < nodes.getLength(); i++ ) {
             Element node = (Element) nodes.item(i);
+            String id = node.getAttribute("id").toLowerCase();
+            node.setAttribute("id", id);
             node.setIdAttribute("id", true);
         }        
     }
@@ -267,6 +271,7 @@ public class AbbozzaLocale {
      * @return The value of the requested entry.
      */
     public static String entry(String key) {
+        key = key.toLowerCase();
         if ( localeXml == null ) return key;
         Element el = localeXml.getElementById(key);
         if ( el == null ) return key;
@@ -281,7 +286,7 @@ public class AbbozzaLocale {
      * @param value The replacement for '#' in the found string
      * @return The changed entry.
      */
-    public static String entry(String key, String value) {        
+    public static String entry(String key, String value) {   
         String res = entry(key);
         res = res.replace("#", value);
         return res;

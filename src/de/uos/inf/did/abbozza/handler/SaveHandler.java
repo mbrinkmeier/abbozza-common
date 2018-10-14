@@ -117,7 +117,7 @@ public class SaveHandler extends AbstractHandler {
             Element desc;
             if (descriptions.getLength() == 0) {
                 desc = xml.createElement("description");
-                desc.setTextContent("abbozza! sketch.");
+                desc.setTextContent("abbozza! sketch");
                 root.appendChild(desc);
             } else {
                 desc = (Element) descriptions.item(0);
