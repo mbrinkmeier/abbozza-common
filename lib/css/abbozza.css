@@ -772,3 +772,7 @@ taskscript {
     right: 0px;
     width: 60px;
 }
+
+.CodeMirror {
+    height: auto;
+}
