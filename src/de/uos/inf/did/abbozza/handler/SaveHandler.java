@@ -135,6 +135,7 @@ public class SaveHandler extends AbstractHandler {
             }
             
             // Find system
+            /*
             NodeList systems = xml.getElementsByTagName("system");
             Element sysXml;
             if (systems.getLength() == 0) {
@@ -143,6 +144,7 @@ public class SaveHandler extends AbstractHandler {
             } else {
                 sysXml = (Element) systems.item(0);
             }
+            */
             
             // Generate JFileChooser
             File lastSketchFile;
@@ -218,8 +220,8 @@ public class SaveHandler extends AbstractHandler {
                 opts.setAttribute("apply", panel.isOptionSelected() ? "yes" : "no");
                 // 3rd step: Set attribute "protected"
                 opts.setAttribute("protected", panel.isUndeletableSelected() ? "yes" : "no");
-                // 4th step: Set system
-                sysXml.setTextContent(this._abbozzaServer.getSystem());
+                // 4th step: Set system MOVED INTO JS PART
+                // sysXml.setTextContent(this._abbozzaServer.getSystem());
 
                 
                 // Write DOM to file via Transformer
