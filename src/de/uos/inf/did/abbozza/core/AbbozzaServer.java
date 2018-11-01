@@ -59,6 +59,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -68,6 +69,7 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -144,8 +146,8 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected HttpServer httpServer;
     private int serverPort;
     public MonitorHandler monitorHandler;
-    private URL _lastSketchFile = null;
-    private URL _taskContext;
+    private URI _lastSketchFile = null;
+    private URI _taskContext;
     protected PluginManager pluginManager;
 
     protected JFrame mainFrame = null;     // The main frame
@@ -253,11 +255,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
 
         // Set the initial taskContext, if a task path is given
-        try {
-            this._taskContext = new File(this.getConfiguration().getFullTaskPath()).toURI().toURL();
-        } catch (MalformedURLException ex) {
-            this._taskContext = null;
-        }
+        this._taskContext = new File(this.getConfiguration().getFullTaskPath()).toURI();
 
         AbbozzaLogger.info(AbbozzaLocale.entry("msg.loaded"));
 
@@ -975,31 +973,31 @@ public abstract class AbbozzaServer implements HttpHandler {
         return config;
     }
 
-    public URL getLastSketchFile() {
+    public URI getLastSketchFile() {
         if (_lastSketchFile == null) {
-            try {
-                _lastSketchFile = new File(this.sketchbookPath).toURI().toURL();
-            } catch (MalformedURLException ex) {
-                _lastSketchFile = null;
-            }
+            _lastSketchFile = new File(this.sketchbookPath).toURI();
         }
         return _lastSketchFile;
     }
 
-    public void setLastSketchFile(URL lastSketchFile) {
+    public void setLastSketchFile(URI lastSketchFile) {
         this._lastSketchFile = lastSketchFile;
     }
 
-    public void setTaskContext(URL context) {
+    public void setTaskContext(URI context) {
+        URL url = null;
         try {
-            _taskContext = new URL(context,".");
+            url = new URL(context.toURL(),".");
+            _taskContext = url.toURI();
+            AbbozzaLogger.out("Task context set to " + _taskContext, AbbozzaLogger.DEBUG);
         } catch (MalformedURLException ex) {
-            _taskContext = context;
+            AbbozzaLogger.err("setTaskContext: Malformed URL");
+        } catch (URISyntaxException ex) {
+            AbbozzaLogger.err("setTaskContext: Malformed URISyntaxException : " + url);
         }
-        AbbozzaLogger.out("Task context set to " + _taskContext, AbbozzaLogger.DEBUG);
     }
 
-    public URL getTaskContext() {
+    public URI getTaskContext() {
         return _taskContext;
     }
 
@@ -1022,54 +1020,68 @@ public abstract class AbbozzaServer implements HttpHandler {
      * @param path
      * @return
      */
-    public URL expandSketchURL(String path) {
-        URL url;
-
+    public URI expandSketchURI(String path) {
+        URI uri = null;
+        /*
+        try {
+            path = URLEncoder.encode(path,"UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            AbbozzaLogger.err("Unsupported URL encoding");
+        }
+        */
+        
         // Leading '!' indicates internal sketch
         if (path.startsWith("!")) {
             try {
                 // Add the server root to the url
                 path = path.substring(1);
                 path = getRootURL() + path;
-                return new URL(path);
-            } catch (MalformedURLException ex) {
-                return null;
+                return new URI(path);
+            } catch (URISyntaxException ex) {
+                AbbozzaLogger.err("expandSketchURI: Wrong URI syntax : " + path);
             }
         }
 
         // If path is a correct URL, return it
         try {
-            url = new URL(path);
+            uri = new URI(path);
             AbbozzaLogger.out("AbbozzaServer: loading from given url " + path, AbbozzaLogger.DEBUG);
             if (path.endsWith("abj") || path.endsWith("jar")) {
-                path = "jar:" + url.toString() + "!/start.abz";
-                url = new URL(path);
+                path = "jar:" + uri.toString() + "!/start.abz";
+                uri = new URI(path);
             }
-        } catch (MalformedURLException ex) {
+        } catch (URISyntaxException ex) {
             // Interpret path as path to local file
             // If path is absolute
             if (path.startsWith("/")) {
                 try {
                     AbbozzaLogger.out("LoadHandler: loading from absolute path " + path, AbbozzaLogger.DEBUG);
-                    url = new URL("file://" + path);
-                } catch (MalformedURLException ex1) {
+                    uri = new URI("file://" + path);
+                } catch (URISyntaxException ex1) {
                     return null;
                 }
             } else {
                 try {
                     AbbozzaLogger.out("LoadHandler: loading from relative path " + path, AbbozzaLogger.DEBUG);
-                    URL context = getTaskContext();
+                    URI context = getTaskContext();
                     if (context == null) {
-                        context = new File(getSketchbookPath()).toURI().toURL();
+                        context = new File(getSketchbookPath()).toURI();
                     }
                     AbbozzaLogger.out("LoadHandler: using anchor " + context.toString(), AbbozzaLogger.DEBUG);
-                    url = new URL(context, path);
+                    URL url = new URL(context.toURL(),path);
+                    uri = url.toURI();
                 } catch (MalformedURLException ex1) {
+                    AbbozzaLogger.err("expandSketchUrl: Malformed URL");
+                    return null;
+                } catch (URISyntaxException ex1) {
+                    AbbozzaLogger.err("expandSketchUrl: Malformed URL");
                     return null;
                 }
             }
+        
+            Logger.getLogger(AbbozzaServer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return url;
+        return uri;
     }
 
     

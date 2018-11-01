@@ -32,7 +32,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import static java.lang.System.in;
+import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -63,19 +65,19 @@ public class SaveHandler extends AbstractHandler {
     protected void handleRequest(HttpExchange exchg) throws IOException {
         String path;
         String contentLocation = null;
-        URL url = null;
+        URI uri = null;
         
         try {
             // Check if a query is given
             path = exchg.getRequestURI().getQuery();
             if ( path != null ) {
-                url = _abbozzaServer.expandSketchURL(path);
-                if ( (url == null) || (!"file".equals(url.getProtocol())) ) {
-                    url = null;
+                uri = _abbozzaServer.expandSketchURI(path);
+                if ( (uri == null) || (!"file".equals(uri.toURL().getProtocol())) ) {
+                    uri = null;
                 }
             }
             
-            contentLocation = saveSketch(exchg.getRequestBody(), url);
+            contentLocation = saveSketch(exchg.getRequestBody(), uri);
             if ( contentLocation != null) {
                exchg.getResponseHeaders().add("Content-Location", contentLocation);
                this.sendResponse(exchg, 200, "text/xml", "saved");
@@ -96,7 +98,7 @@ public class SaveHandler extends AbstractHandler {
      * 
      * @throws IOException 
      */
-    public String saveSketch(InputStream stream, URL url) throws IOException {
+    public String saveSketch(InputStream stream, URI uri) throws IOException {
         if ( _abbozzaServer.isDialogOpen() ) return null;
         
         String location = null;
@@ -148,9 +150,10 @@ public class SaveHandler extends AbstractHandler {
             
             // Generate JFileChooser
             File lastSketchFile;
-            try {
-                lastSketchFile = new File(_abbozzaServer.getLastSketchFile().toURI());
-            } catch (IllegalArgumentException e) {
+            URI lastUri = _abbozzaServer.getLastSketchFile();
+            if ( lastUri != null ) {
+                lastSketchFile = new File(lastUri);
+            } else {
                 lastSketchFile = null;
             }
             String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
@@ -183,8 +186,8 @@ public class SaveHandler extends AbstractHandler {
 
             // Prepare File filters
             chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz", "ABZ"));
-            if ( url != null ) {
-                chooser.setSelectedFile(new File(url.toURI()));
+            if ( uri != null ) {
+                chooser.setSelectedFile(new File(uri));
             } else {
                 if ( lastSketchFile.isDirectory() ) {
                     chooser.setCurrentDirectory(lastSketchFile);
@@ -235,7 +238,7 @@ public class SaveHandler extends AbstractHandler {
 
                 writer.close();
                 in.close();
-                _abbozzaServer.setLastSketchFile(file.toURI().toURL());
+                _abbozzaServer.setLastSketchFile(file.toURI());
                 location = file.toURI().toURL().toString();
             }
         } catch (Exception ex) {

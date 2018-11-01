@@ -30,7 +30,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -54,23 +59,27 @@ public class TaskHandler extends AbstractHandler {
          * <anchor> is an anchor path
          * <path> is a path relative to the current anchor path
          **/
-        URL url;
+        URI uri;
         String query = exchg.getRequestURI().getQuery();
         String path = exchg.getRequestURI().getPath();
-        URL taskContext;
+        URI taskContext = null;
         
         // If an anchor path is given, change it
         if (query != null) {
             AbbozzaLogger.out("TaskHandler: New task-anchor path given: " + query,AbbozzaLogger.DEBUG);
             try {
                 // If the query is a wellformed URL use it as anchor
-                url = new URL(query);
-                _abbozzaServer.setTaskContext(url);
-                taskContext = url;
+                uri = new URI(URLEncoder.encode(query,"UTF-8"));
+                _abbozzaServer.setTaskContext(uri);
+                taskContext = uri;
                 AbbozzaLogger.out("TaskHandler: loading from given url " + path ,AbbozzaLogger.DEBUG);                
-            } catch (MalformedURLException ex) {
-                // If it isn't a wellformed URL reset the anchor to the standard task path
-                taskContext = new URL("file://" + this._abbozzaServer.getConfiguration().getFullTaskPath());
+            } catch (URISyntaxException ex) {
+                try {
+                    // If it isn't a wellformed URL reset the anchor to the standard task path
+                    taskContext = new URI("file://" + URLEncoder.encode(this._abbozzaServer.getConfiguration().getFullTaskPath(),"UTF-8"));
+                } catch (URISyntaxException ex1) {
+                    AbbozzaLogger.err("TaskHandler: Wrong URI Syntax : file://" + this._abbozzaServer.getConfiguration().getFullTaskPath());
+                }
                 _abbozzaServer.setTaskContext(taskContext);
             }
         } else {
@@ -79,7 +88,7 @@ public class TaskHandler extends AbstractHandler {
         }
         
         // Use the new anchor path 
-        URL sketch = new URL(taskContext,path.substring(6));
+        URL sketch = new URL(taskContext.toURL(),path.substring(6));
         AbbozzaLogger.out("TaskHandler: " + sketch.toString() + " requested", AbbozzaLogger.INFO);
 
         OutputStream os = exchg.getResponseBody();

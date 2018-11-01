@@ -30,15 +30,15 @@ import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
@@ -93,6 +93,8 @@ public class LoadHandler extends AbstractHandler {
             }
         } catch (IOException ioe) {
             this.sendResponse(exchg, 404, "", "");
+        } catch (URISyntaxException ex) {
+            AbbozzaLogger.err("LoadHandler: Wrong URI Syntax");
         }
     }
 
@@ -102,19 +104,19 @@ public class LoadHandler extends AbstractHandler {
      * @return The loaded sketch as a string.
      * @throws IOException thrown if an IO error occured.
      */
-    public String loadSketch() throws IOException {
+    public String loadSketch() throws IOException, URISyntaxException {
         if (_abbozzaServer.isDialogOpen()) {
             return null;
         }
 
         String result = "";
         File lastSketchFile = null;
-        URL last = _abbozzaServer.getLastSketchFile();
+        URI last = _abbozzaServer.getLastSketchFile();
         if (last == null) {
             lastSketchFile = new File(".");
         } else {
             try {
-                lastSketchFile = new File(last.toURI());
+                lastSketchFile = new File(last);
             } catch (Exception ex) {
                 lastSketchFile = new File(".");
             }
@@ -148,23 +150,23 @@ public class LoadHandler extends AbstractHandler {
 
         int choice = chooser.showOpenDialog(null);
         if ((choice == JFileChooser.APPROVE_OPTION) || (panel.getUrl() != null)) {
-            URL url;
+            URI uri;
             if (panel.getUrl() != null) {
-                url = new URL(panel.getUrl());
+                uri = new URI(URLEncoder.encode(panel.getUrl().toString(),"UTF-8"));
             } else {
                 File file = chooser.getSelectedFile();
-                url = file.toURI().toURL();
+                uri = file.toURI();
             }
 
-            this._abbozzaServer.setLastSketchFile(url);
+            this._abbozzaServer.setLastSketchFile(uri);
 
             contentLocation = null;
-            if (url.toString().endsWith("abj") || url.toString().endsWith("jar") || url.toString().endsWith("zip")) {
-                result = getStartFromAbj(url);
+            if (uri.toString().endsWith("abj") || uri.toString().endsWith("jar") || uri.toString().endsWith("zip")) {
+                result = getStartFromAbj(uri);
                 // _abbozzaServer.setTaskContext(url);
             } else {
-                result = getSketchFromFile(url);
-                _abbozzaServer.setTaskContext(url);
+                result = getSketchFromFile(uri);
+                _abbozzaServer.setTaskContext(uri);
             }
 
             if ((!panel.getSystem().equals(this._abbozzaServer.getSystem())) && (!panel.getSystem().equals(""))) {
@@ -181,14 +183,13 @@ public class LoadHandler extends AbstractHandler {
 
             if (contentLocation == null) {
                 try {
-                    URL con = _abbozzaServer.getTaskContext();
-                    URL absolute = new URL(con, url.toString());
+                    URI con = _abbozzaServer.getTaskContext();
+                    URL absolute = new URL(con.toURL(), uri.toString());
                     URI conUri;
-                    conUri = con.toURI();
                     URI abs = absolute.toURI();
-                    contentLocation = conUri.relativize(abs).toString();
+                    contentLocation = con.relativize(abs).toString();
                 } catch (URISyntaxException ex) {
-                    contentLocation = url.toString();
+                    contentLocation = uri.toString();
                 }
             }
 
@@ -235,7 +236,7 @@ public class LoadHandler extends AbstractHandler {
      */
     public String loadSketch(String path) throws IOException {
         String result = "";
-        URL url;
+        URI uri = null;
         contentLocation = null;
 
         // Leading '!' indicates internal sketch
@@ -246,37 +247,50 @@ public class LoadHandler extends AbstractHandler {
 
         // Check path
         try {
-            url = new URL(path);
-                AbbozzaLogger.out("LoadHandler: loading from given url " + path, AbbozzaLogger.DEBUG);
+            uri = new URI(path);
+            AbbozzaLogger.out("LoadHandler: loading from given url " + path, AbbozzaLogger.DEBUG);
             if (path.endsWith("abj") || path.endsWith("jar") || path.endsWith("JAR") || path.endsWith("zip") || path.endsWith("ZIP")) {
-                result = getStartFromAbj(url);
+                result = getStartFromAbj(uri);
                 // _abbozzaServer.setTaskContext(url);
             } else {
-                result = getSketchFromFile(url);
+                result = getSketchFromFile(uri);
             }
         } catch (MalformedURLException ex) {
             // Interpret path as path to local file
             // If path is absolute
             if (path.startsWith("/")) {
                 AbbozzaLogger.out("LoadHandler: loading from absolute path " + path, AbbozzaLogger.DEBUG);
-                url = new URL("file:" + path);
-                // _abbozzaServer.setTaskContext(url);
-                result = getSketchFromFile(url);
+                try {
+                    uri = new URI("file:" + path);
+                    // _abbozzaServer.setTaskContext(url);
+                    result = getSketchFromFile(uri);
+                } catch (URISyntaxException ex1) {
+                    AbbozzaLogger.err("LoadHandler: Wrong URI Syntax : file:"+path);
+                    result = "";
+                }
             } else {
                 AbbozzaLogger.out("LoadHandler: loading from relative path " + path, AbbozzaLogger.DEBUG);
-                URL context = _abbozzaServer.getTaskContext();
+                URI context = _abbozzaServer.getTaskContext();
                 if (context == null) {
-                    context = new File(_abbozzaServer.getSketchbookPath()).toURI().toURL();
+                    context = new File(_abbozzaServer.getSketchbookPath()).toURI();
                 }
                 AbbozzaLogger.out("LoadHandler: using anchor " + context.toString(), AbbozzaLogger.DEBUG);
-                url = new URL(context, path);
-                result = getSketchFromFile(url);
+                URL url = new URL(context.toURL(), path);
+                try {
+                    uri = url.toURI();
+                    result = getSketchFromFile(uri);
+                } catch (URISyntaxException ex1) {
+                    AbbozzaLogger.err("LoadHandler: Wrong URI Syntax : file:"+path);
+                    result = "";
+                }
             }
+        } catch (URISyntaxException ex) {
+            AbbozzaLogger.err("LoadHandler: Wrong URI Syntax : "+path);
         }
         
         // AbbozzaLogger.out("LoadHandler: load " + url.toString(), AbbozzaLogger.DEBUG);
         // AbbozzaLogger.out("LoadHandler: load anchor " + url.toString(), AbbozzaLogger.DEBUG);
-        _abbozzaServer.setLastSketchFile(url);
+        _abbozzaServer.setLastSketchFile(uri);
 
         // URLConnection conn = url.openConnection();
         // InputStream inStream = conn.getInputStream();
@@ -289,14 +303,13 @@ public class LoadHandler extends AbstractHandler {
 
         if (contentLocation == null) {
             try {
-                URL con = _abbozzaServer.getTaskContext();
-                URL absolute = new URL(con, url.toString());
+                URI con = _abbozzaServer.getTaskContext();
+                URL absolute = new URL(con.toURL(), uri.toString());
                 URI conUri;
-                conUri = con.toURI();
                 URI abs = absolute.toURI();
-                contentLocation = conUri.relativize(abs).toString();
+                contentLocation = con.relativize(abs).toString();
             } catch (URISyntaxException ex) {
-                contentLocation = url.toString();
+                contentLocation = uri.toString();
             }
         }
 
@@ -305,19 +318,19 @@ public class LoadHandler extends AbstractHandler {
 
     
     
-    private String getStartFromAbj(URL abj) {
+    private String getStartFromAbj(URI abj) {
         String result = "";
         try {
-            URL url = new URL("jar:" + abj.toString() + "!/start.abz");
-            AbbozzaLogger.out("LoadHandler: Open abj " + url.toString(), AbbozzaLogger.DEBUG);
-            URLConnection conn = url.openConnection();
+            URI uri = new URI("jar:" + abj.toString() + "!/start.abz");
+            AbbozzaLogger.out("LoadHandler: Open abj " + uri.toString(), AbbozzaLogger.DEBUG);
+            URLConnection conn = uri.toURL().openConnection();
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
             while (reader.ready()) {
                 result = result + reader.readLine() + '\n';
             }
             reader.close();
-            contentLocation = url.toString();
-            _abbozzaServer.setTaskContext(url);
+            contentLocation = uri.toString();
+            _abbozzaServer.setTaskContext(uri);
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
             AbbozzaLogger.err("LoadHandler: Could not open " + abj.toString());
@@ -328,23 +341,18 @@ public class LoadHandler extends AbstractHandler {
     
     
     private String getStartFromAbj(File file) {
-        try {
-            return getStartFromAbj(file.toURI().toURL());
-        } catch (MalformedURLException ex) {
-            AbbozzaLogger.err("LoadHandler: Could not open " + file.getAbsolutePath());
-        }
-        return null;
+        return getStartFromAbj(file.toURI());
     }    
 
     
-    private String getSketchFromFile(URL abz) throws FileNotFoundException, IOException {
+    private String getSketchFromFile(URI abz) throws FileNotFoundException, IOException {
         String result = "";
-        BufferedReader reader = new BufferedReader(new InputStreamReader(abz.openStream(), "utf-8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(abz.toURL().openStream(), "utf-8"));
         while (reader.ready()) {
             result = result + reader.readLine() + '\n';
         }
         reader.close();
-        _abbozzaServer.setLastSketchFile(abz);
+        // _abbozzaServer.setLastSketchFile(abz);
         _abbozzaServer.setTaskContext(abz);
         contentLocation = abz.toString();
         return result;
@@ -352,7 +360,7 @@ public class LoadHandler extends AbstractHandler {
 
 
     private String getSketchFromFile(File file) throws FileNotFoundException, IOException {
-        return getSketchFromFile(file.toURI().toURL());
+        return getSketchFromFile(file.toURI());
     }
 
 }
