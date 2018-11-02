@@ -102,7 +102,11 @@ public class AbbozzaConfig {
      */
     public AbbozzaConfig() {
         configPath = null;
-        setDefault("");
+        if ( System.getProperty("os.name").toLowerCase().contains("mac") ) {
+            setDefault("open");
+        } else {        
+            setDefault("");
+        }
     }
 
     
@@ -128,7 +132,11 @@ public class AbbozzaConfig {
         } catch (IOException ex) {
             // Create a new configuration file
             AbbozzaLogger.err("Configuration file " + configPath + " not found! Creating one!");
-            setDefault("");
+            if ( System.getProperty("os.name").toLowerCase().contains("mac") ) {
+                setDefault("open");
+            } else {        
+                setDefault("");
+            }
             write();
         }
     }
