@@ -250,9 +250,9 @@ public abstract class AbbozzaServer implements HttpHandler {
         AbbozzaLogger.info("Version " + getVersion());
 
         // Check for Update
-        if (this.getConfiguration().getUpdate()) {
-            checkForUpdate(false);
-        }
+        // if (this.getConfiguration().getUpdate()) {
+        //     checkForUpdate(false);
+        // }
 
         // Set the initial taskContext, if a task path is given
         this._taskContext = new File(this.getConfiguration().getFullTaskPath()).toURI();
