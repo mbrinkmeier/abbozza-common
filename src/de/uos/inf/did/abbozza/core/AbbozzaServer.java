@@ -476,7 +476,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     /**
      * Starts the Browser with the given URL.
      *
-     * @param url The URL to be opened
+     * @param path The path witch which the browser should be opened
      */
     public void startBrowser(String path) {
         AbbozzaLogger.out("Starting browser ...");
@@ -1017,7 +1017,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      * In all other cases the path is treated relative to the task context.
      *
      * @param path The path to be expanded
-     * @return
+     * @return The URI of the resulting ressource
      */
     public URI expandSketchURI(String path) {
         URI uri = null;

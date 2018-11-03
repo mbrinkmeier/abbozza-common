@@ -103,6 +103,7 @@ public class LoadHandler extends AbstractHandler {
      *
      * @return The loaded sketch as a string.
      * @throws IOException thrown if an IO error occured.
+     * @throws java.net.URISyntaxException
      */
     public String loadSketch() throws IOException, URISyntaxException {
         if (_abbozzaServer.isDialogOpen()) {

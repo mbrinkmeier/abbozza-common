@@ -57,13 +57,13 @@ public abstract class MonitorPanel extends JPanel implements ClacksSubscriber {
     
     /**
      * Called if the panel is added to the monitor
-     * @param monitor 
+     * @param monitor The Monitor to which the panel is connected
      */
     public abstract void connect(AbbozzaMonitor monitor);
     
     /**
      * Called if the panel is removed from the monitor
-     * @param monitor 
+     * @param monitor The Monitor from which the panel is disconnected
      */
     public abstract void disconnect(AbbozzaMonitor monitor);
 
