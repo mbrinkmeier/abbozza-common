@@ -37,10 +37,12 @@ Continuing?</msg>
         <msg id="msg.upload_timeout">Compiling and uploading takes to long!</msg>
         <msg id="msg.cleaning_buildsystem">Cleaning buildsystem</msg>
         <msg id="msg.plugin_error">Could not load plugin list!</msg>
-        <msg id="MSG.START_TUTORIAL">Möchtest Du das Tutorial durchführen?</msg>
-        <msg id="MSG.YES">Ja</msg>
-        <msg id="MSG.NO">Nein</msg>
-        <msg id="MSG.DONT_ASK_AGAIN">Frag nicht nochmal</msg>
+        <msg id="MSG.START_TUTORIAL">Would you like to do the tutorial?</msg>
+        <msg id="MSG.YES">Yes</msg>
+        <msg id="MSG.NO">No</msg>
+        <msg id="MSG.DONT_ASK_AGAIN">Don't ask again!</msg>
+        <msg id="err.ERROR_SAVING_SKETCH">Sketch could not be saved!</msg>
+        <msg id="err.ERROR">Error!</msg>
     </messages>
     <gui>
         <msg id="gui.table">Table</msg>

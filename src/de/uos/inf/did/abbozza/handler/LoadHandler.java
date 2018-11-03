@@ -84,7 +84,7 @@ public class LoadHandler extends AbstractHandler {
                     this.sendResponse(exchg, 404, "", "");
                 }
             } else {
-                AbbozzaLogger.out("loadHandler: load " + query, AbbozzaLogger.DEBUG);
+                AbbozzaLogger.out("LoadHandler: load " + query, AbbozzaLogger.DEBUG);
                 String sketch = loadSketch(query);
                 if (contentLocation != null) {
                     exchg.getResponseHeaders().add("Content-Location", contentLocation);
@@ -239,67 +239,13 @@ public class LoadHandler extends AbstractHandler {
         URI uri = null;
         contentLocation = null;
 
-        // Leading '!' indicates internal sketch
-        if (path.startsWith("!")) {
-            path = path.substring(1);
-            path = this._abbozzaServer.getRootURL() + path;
-        }
-
-        // Check path
-        try {
-            uri = new URI(path);
-            AbbozzaLogger.out("LoadHandler: loading from given url " + path, AbbozzaLogger.DEBUG);
-            if (path.endsWith("abj") || path.endsWith("jar") || path.endsWith("JAR") || path.endsWith("zip") || path.endsWith("ZIP")) {
-                result = getStartFromAbj(uri);
-                // _abbozzaServer.setTaskContext(url);
-            } else {
-                result = getSketchFromFile(uri);
-            }
-        } catch (MalformedURLException ex) {
-            // Interpret path as path to local file
-            // If path is absolute
-            if (path.startsWith("/")) {
-                AbbozzaLogger.out("LoadHandler: loading from absolute path " + path, AbbozzaLogger.DEBUG);
-                try {
-                    uri = new URI("file:" + path);
-                    // _abbozzaServer.setTaskContext(url);
-                    result = getSketchFromFile(uri);
-                } catch (URISyntaxException ex1) {
-                    AbbozzaLogger.err("LoadHandler: Wrong URI Syntax : file:"+path);
-                    result = "";
-                }
-            } else {
-                AbbozzaLogger.out("LoadHandler: loading from relative path " + path, AbbozzaLogger.DEBUG);
-                URI context = _abbozzaServer.getTaskContext();
-                if (context == null) {
-                    context = new File(_abbozzaServer.getSketchbookPath()).toURI();
-                }
-                AbbozzaLogger.out("LoadHandler: using anchor " + context.toString(), AbbozzaLogger.DEBUG);
-                URL url = new URL(context.toURL(), path);
-                try {
-                    uri = url.toURI();
-                    result = getSketchFromFile(uri);
-                } catch (URISyntaxException ex1) {
-                    AbbozzaLogger.err("LoadHandler: Wrong URI Syntax : file:"+path);
-                    result = "";
-                }
-            }
-        } catch (URISyntaxException ex) {
-            AbbozzaLogger.err("LoadHandler: Wrong URI Syntax : "+path);
-        }
+        uri = _abbozzaServer.expandSketchURI(path);
+        result = getSketchFromFile(uri);
+        
         
         // AbbozzaLogger.out("LoadHandler: load " + url.toString(), AbbozzaLogger.DEBUG);
         // AbbozzaLogger.out("LoadHandler: load anchor " + url.toString(), AbbozzaLogger.DEBUG);
         _abbozzaServer.setLastSketchFile(uri);
-
-        // URLConnection conn = url.openConnection();
-        // InputStream inStream = conn.getInputStream();
-        // 
-        // BufferedReader reader = new BufferedReader(new InputStreamReader(inStream, "utf-8"));
-
-        // while (reader.ready()) {
-        //     result = result + reader.readLine() + "\n";
-        // }
 
         if (contentLocation == null) {
             try {

@@ -41,6 +41,8 @@ Trotzdem fortfahren?</msg>
         <msg id="MSG.YES">Ja</msg>
         <msg id="MSG.NO">Nein</msg>
         <msg id="MSG.DONT_ASK_AGAIN">Frag' nicht noch einmal</msg>
+        <msg id="err.ERROR_SAVING_SKETCH">Sketch konnte nicht gespeichert werden!</msg>
+        <msg id="err.ERROR">Fehler!</msg>
     </messages>
     <gui>
         <msg id="gui.table">Tabelle</msg>

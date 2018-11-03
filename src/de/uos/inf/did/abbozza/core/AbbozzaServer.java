@@ -59,7 +59,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -69,7 +68,6 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -1003,84 +1001,86 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     /**
      * This operation expands the given path according to the rules of the load
-     * handler. But it does NOT change the task context.
+     * handler. The resulting UIR is an absolute URI pointing to the 
+     * corresponding resource. But it does NOT change the task context.
      *
-     * If the path has the form !&lt;path&gt;, then the sketch isloaded from
-     * the URL &lt;server_root&gt;/&lt;path&gt;. Ie.e an internal sketch is
+     * If the path has the form !&lt;path&gt;, then the sketch is loaded from
+     * the URL &lt;server_root&gt;/&lt;path&gt;. Ie. an internal sketch is
      * loaded.
      *
-     * If the path ends with 'abj' or 'jar', the sketch start.abz inside it is
-     * loaded.
+     * If the path ends with 'abj', 'zip' or 'jar', the sketch start.abz inside 
+     * it is loaded.
      *
-     * If the path starts with '/' it is loaded from the corresponding file with
-     * the URL 'file://&lt;path&gt;'.
+     * If the path starts with '/' it is loaded from the local file system
+     * with the URL 'file://&lt;path&gt;'.
      *
      * In all other cases the path is treated relative to the task context.
      *
-     * @param path
+     * @param path The path to be expanded
      * @return
      */
     public URI expandSketchURI(String path) {
         URI uri = null;
-        /*
-        try {
-            path = URLEncoder.encode(path,"UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            AbbozzaLogger.err("Unsupported URL encoding");
-        }
-        */
+        String uriPath = "";
+        
+        AbbozzaLogger.debug("AbbozzaServer: Expanding path " + path);
         
         // Leading '!' indicates internal sketch
         if (path.startsWith("!")) {
             try {
-                // Add the server root to the url
-                path = path.substring(1);
-                path = getRootURL() + path;
-                return new URI(path);
+                // Remove the exclamation mark and prepend the server root
+                uriPath = getRootURL() + path.substring(1);
+                return new URI(uriPath);
             } catch (URISyntaxException ex) {
-                AbbozzaLogger.err("expandSketchURI: Wrong URI syntax : " + path);
+                AbbozzaLogger.err("AbbozzaServer: Error during expansion of path " + path);
+                AbbozzaLogger.err(ex.getLocalizedMessage());
             }
         }
 
-        // If path is a correct URL, return it
-        try {
-            uri = new URI(path);
-            AbbozzaLogger.out("AbbozzaServer: loading from given url " + path, AbbozzaLogger.DEBUG);
-            if (path.endsWith("abj") || path.endsWith("jar")) {
-                path = "jar:" + uri.toString() + "!/start.abz";
-                uri = new URI(path);
+        // Check if the path is absolute, i.e. starts with '/'
+        if (path.startsWith("/")) {
+            AbbozzaLogger.debug("AbbozzaServer: expanding absolute path " + path);
+            try {
+                uri = new URI("file://" + path);
+                return uri;
+            } catch (URISyntaxException ex) {
+                AbbozzaLogger.err("AbbozzaServer: Trying to expand misformed absolute path " + path);
+                return null;
             }
-        } catch (URISyntaxException ex) {
-            // Interpret path as path to local file
-            // If path is absolute
-            if (path.startsWith("/")) {
-                try {
-                    AbbozzaLogger.out("LoadHandler: loading from absolute path " + path, AbbozzaLogger.DEBUG);
-                    uri = new URI("file://" + path);
-                } catch (URISyntaxException ex1) {
-                    return null;
-                }
-            } else {
-                try {
-                    AbbozzaLogger.out("LoadHandler: loading from relative path " + path, AbbozzaLogger.DEBUG);
-                    URI context = getTaskContext();
-                    if (context == null) {
-                        context = new File(getSketchbookPath()).toURI();
-                    }
-                    AbbozzaLogger.out("LoadHandler: using anchor " + context.toString(), AbbozzaLogger.DEBUG);
-                    URL url = new URL(context.toURL(),path);
-                    uri = url.toURI();
-                } catch (MalformedURLException ex1) {
-                    AbbozzaLogger.err("expandSketchUrl: Malformed URL");
-                    return null;
-                } catch (URISyntaxException ex1) {
-                    AbbozzaLogger.err("expandSketchUrl: Malformed URL");
-                    return null;
-                }
-            }
-        
-            Logger.getLogger(AbbozzaServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        // Otherwise interpret the path in the context of the current task context.
+        URI context = getTaskContext();
+        if (context == null) {
+            context = new File(getSketchbookPath()).toURI();
+        }
+        AbbozzaLogger.debug("AbbozzaServer: Using context " + context.toString());
+        URL url = null;
+        try {
+            url = new URL(context.toURL(),path);
+        } catch (MalformedURLException ex) {
+            AbbozzaLogger.err("AbbozzaServer: Trying to build malformed URL from path " + path);
+            return null;
+        }
+        try {
+            uri = url.toURI();
+        } catch (URISyntaxException ex) {
+            AbbozzaLogger.err("AbbozzaServer: Wrong syntax of URI " + url.toString());
+            return null;
+        }
+        
+        AbbozzaLogger.debug("AbbozzaServer: Checking if url is a task archive");
+        String p = uri.toString().toLowerCase();
+        if ( p.endsWith("abj") || p.endsWith("jar") || p.endsWith("zip") ) {
+            String newpath = "jar:" + uri.toString() + "!/start.abz";
+            try { 
+               uri = new URI(newpath);
+            } catch (URISyntaxException ex) {
+                AbbozzaLogger.err("AbbozzaServer: Wrong syntax of URI " + url.toString());
+                return null;            
+            }
+        }
+        AbbozzaLogger.debug("AbbozaServer: Expanded path to " + uri.toString());
         return uri;
     }
 

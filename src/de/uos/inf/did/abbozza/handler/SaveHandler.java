@@ -33,8 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import static java.lang.System.in;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLDecoder;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -61,23 +59,35 @@ public class SaveHandler extends AbstractHandler {
         super(abbozza);
     }
 
-    
+    /**
+     * Handle a save request. The request may contain a query as a preset
+     * path. The body of the request contains the xml-representation of the
+     * sketch to be stored.
+     * 
+     * @param exchg The HttpExchange object representing the request
+     * @throws IOException This is thrown if an error occurs.
+     */
+    @Override
     protected void handleRequest(HttpExchange exchg) throws IOException {
         String path;
-        String contentLocation = null;
+        String contentLocation;
         URI uri = null;
         
         try {
             // Check if a query is given
             path = exchg.getRequestURI().getQuery();
             if ( path != null ) {
+                // Expand the given path to the current, absolute path
                 uri = _abbozzaServer.expandSketchURI(path);
-                if ( (uri == null) || (!"file".equals(uri.toURL().getProtocol())) ) {
+                // We can only save to files
+                if ( (uri == null) || (!"file".equals(uri.getScheme())) ) {
                     uri = null;
                 }
             }
             
             contentLocation = saveSketch(exchg.getRequestBody(), uri);
+            AbbozzaLogger.debug("SaveHandler: Setting sketch location to " + contentLocation);
+            
             if ( contentLocation != null) {
                exchg.getResponseHeaders().add("Content-Location", contentLocation);
                this.sendResponse(exchg, 200, "text/xml", "saved");
@@ -91,14 +101,17 @@ public class SaveHandler extends AbstractHandler {
 
     /**
      * Save the sketch.
+     * The xl is read from the body of the request.
      * 
      * @param stream A stream containing the sketch
-     * @param url
+     * @param uri The URI of a preset file, or null is none is given.
+     * 
      * @return The location where the sketch is saved
      * 
      * @throws IOException 
      */
-    public String saveSketch(InputStream stream, URI uri) throws IOException {
+    private String saveSketch(InputStream stream, URI uri) throws IOException {
+        File file;
         if ( _abbozzaServer.isDialogOpen() ) return null;
         
         String location = null;
@@ -123,7 +136,6 @@ public class SaveHandler extends AbstractHandler {
                 root.appendChild(desc);
             } else {
                 desc = (Element) descriptions.item(0);
-
             }
 
             // Find options
@@ -136,8 +148,7 @@ public class SaveHandler extends AbstractHandler {
                 opts = (Element) options.item(0);
             }
             
-            // Find system
-            /*
+            // Find the system tag. Add one if missing.
             NodeList systems = xml.getElementsByTagName("system");
             Element sysXml;
             if (systems.getLength() == 0) {
@@ -146,12 +157,18 @@ public class SaveHandler extends AbstractHandler {
             } else {
                 sysXml = (Element) systems.item(0);
             }
-            */
             
-            // Generate JFileChooser
+            // Set the preset URI
             File lastSketchFile;
-            URI lastUri = _abbozzaServer.getLastSketchFile();
-            if ( lastUri != null ) {
+            // Take the given one
+            URI lastUri = uri;
+            // If none is given, use the one last accessed by the server
+            if ( lastUri == null ) {
+                lastUri = _abbozzaServer.getLastSketchFile();
+            }
+            
+            // Set the file
+            if (( lastUri != null ) && ( lastUri.getScheme() == "file" )) {
                 lastSketchFile = new File(lastUri);
             } else {
                 lastSketchFile = null;
@@ -198,10 +215,13 @@ public class SaveHandler extends AbstractHandler {
 
             // Show FileChooser
             if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                File file = chooser.getSelectedFile();
+                file = chooser.getSelectedFile();
                 if (!file.getName().endsWith(".abz") && !file.getName().endsWith(".ABZ")) {
                     file = new File(file.getPath() + ".abz");
                 }
+                
+                AbbozzaLogger.debug("SaveHandler: Saving sketch to " + file.toURI());
+                
                 FileWriter writer;
 
                 if (!file.equals(lastSketchFile) && file.exists()) {
@@ -240,10 +260,16 @@ public class SaveHandler extends AbstractHandler {
                 in.close();
                 _abbozzaServer.setLastSketchFile(file.toURI());
                 location = file.toURI().toURL().toString();
+                
+                AbbozzaLogger.debug("SaveHandler: Successfully saved sketch to " + file.toURI());
+
             }
         } catch (Exception ex) {
-            AbbozzaLogger.err(ex.toString());
-            ex.printStackTrace(System.err);
+            AbbozzaLogger.err("SaveHandler: Could not save sketch!");
+            AbbozzaLogger.err(ex.getLocalizedMessage());
+            JOptionPane.showMessageDialog(null,
+                    AbbozzaLocale.entry("err.ERROR_SAVING_SKETCH") + "\n" + ex.getLocalizedMessage(),
+                    AbbozzaLocale.entry("err.ERROR"),JOptionPane.ERROR_MESSAGE);
         }
         _abbozzaServer.setDialogOpen(false);
         _abbozzaServer.resetFrame();        
