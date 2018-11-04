@@ -209,6 +209,7 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="cat.I2C_MASTER">I2C Master</msg>
         <msg id="cat.I2C_SLAVE">I2C Slave</msg>
         <msg id="cat.EVENTS">Ereignisse</msg>
+        <msg id="cat.DATASTRUCTURES">Datenstrukturen</msg>
     </categories>
     <blocks>
         <msg id="STRING">Text</msg>
@@ -424,6 +425,21 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="parse.WORD">Lese Wort aus Nachricht</msg>
         <msg id="parse.STRING">Lese Text aus Nachricht</msg>
         <msg id="parse.SEND_RESPONSE">Sende Antwort</msg>
+        
+        <msg id="obj.new">Erzeuge</msg>
+        <msg id="obj.stack">Stack für</msg>
+        <msg id="obj.stack_is_empty">ist leer</msg>
+        <msg id="obj.stack_push">lege drauf</msg>
+        <msg id="obj.stack_pop">nehme runter</msg>
+        <msg id="obj.stack_top">hole Erstes</msg>
+                
+        <msg id="obj.queue">Warteschlange für</msg>
+        <msg id="obj.queue_is_empty">ist leer</msg>
+        <msg id="obj.queue_enqueue">füge ein</msg>
+        <msg id="obj.queue_dequeue">entferne Nächstes</msg>
+        <msg id="obj.queue_head">hole Nächstes</msg>
+
+        <msg id="obj.list">Liste für</msg>
     </blocks>
     <errors>
         <msg id="default.NAME">&lt;name&gt;</msg>
