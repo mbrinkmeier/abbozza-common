@@ -171,6 +171,8 @@ DIV.license_div {
     right: 90px;
     bottom: 25px;
     z-index: 0;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 DIV.license_div A {

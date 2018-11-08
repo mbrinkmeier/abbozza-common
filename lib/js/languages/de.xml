@@ -163,7 +163,11 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.dec_font_size">Schrift verkleinern</msg>       
         <msg id="gui.serial_busy">Konnte mich nicht mit dem Board verbinden,
 da es bereits sendet! Soll ich es nochmal versuchen?</msg>         
-        <msg id="gui.serial_busy_title">Board bechäftigt</msg>         
+        <msg id="gui.serial_busy_title">Board bechäftigt</msg>     
+        <msg id="gui.stacks">Stacks</msg>    
+        <msg id="gui.queues">Queues</msg>
+        <msg id="gui.lists">Listen</msg>
+        <msg id="gui.bintrees">Binärbäume</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
