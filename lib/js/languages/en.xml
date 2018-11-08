@@ -431,15 +431,22 @@ Should I try it again?</msg>
         <msg id="obj.stack_is_empty">is empty</msg>
         <msg id="obj.stack_push">push</msg>
         <msg id="obj.stack_pop">pop</msg>
-        <msg id="obj.stack_top">get top</msg>
+        <msg id="obj.stack_top">top</msg>
         
         <msg id="obj.queue">Queue of</msg>
         <msg id="obj.queue_is_empty">is empty</msg>
         <msg id="obj.queue_enqueue">enqueue</msg>
         <msg id="obj.queue_dequeue">dequeue</msg>
-        <msg id="obj.queue_head">get next</msg>
+        <msg id="obj.queue_head">head</msg>
 
         <msg id="obj.list">List of</msg>         
+        <msg id="obj.list_is_empty">is empty</msg>
+        <msg id="obj.list_get_item">value at index</msg>
+        <msg id="obj.list_append">append</msg>
+        <msg id="obj.list_insert_at">insert # at index</msg>
+        <msg id="obj.list_set_item">replace value at index # by</msg>
+        <msg id="obj.list_delete">delete value at index</msg>
+        <msg id="obj.list_get_length">length</msg>
     </blocks>
     <errors>
         <msg id="default.NAME">&lt;name&gt;</msg>

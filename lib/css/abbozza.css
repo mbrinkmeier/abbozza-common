@@ -167,7 +167,7 @@ DIV.license_div {
     font-family: sans-serif;
     font-size: 90%;
     color: gray;
-    position: fixed;
+    position: absolute;
     right: 90px;
     bottom: 25px;
     z-index: 0;

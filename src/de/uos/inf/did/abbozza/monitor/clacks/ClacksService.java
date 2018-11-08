@@ -60,7 +60,7 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
     /**
      * The constructor
      *
-     * @param mon The monito to which the service blongs
+     * @param mon The monitor to which the service belongs
      */
     public ClacksService(AbbozzaMonitor mon) {
         monitor = mon;
@@ -166,7 +166,7 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
     }
 
     /**
-     * resume the serial connection
+     * Resume the serial connection
      */
     public void resumePort() {
         if (serialPort != null) {

@@ -429,17 +429,24 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="obj.new">Erzeuge</msg>
         <msg id="obj.stack">Stack für</msg>
         <msg id="obj.stack_is_empty">ist leer</msg>
-        <msg id="obj.stack_push">lege drauf</msg>
-        <msg id="obj.stack_pop">nehme runter</msg>
-        <msg id="obj.stack_top">hole Erstes</msg>
+        <msg id="obj.stack_push">push</msg>
+        <msg id="obj.stack_pop">pop</msg>
+        <msg id="obj.stack_top">top</msg>
                 
         <msg id="obj.queue">Warteschlange für</msg>
         <msg id="obj.queue_is_empty">ist leer</msg>
-        <msg id="obj.queue_enqueue">füge ein</msg>
-        <msg id="obj.queue_dequeue">entferne Nächstes</msg>
-        <msg id="obj.queue_head">hole Nächstes</msg>
+        <msg id="obj.queue_enqueue">enqueue</msg>
+        <msg id="obj.queue_dequeue">dequeue</msg>
+        <msg id="obj.queue_head">head</msg>
 
         <msg id="obj.list">Liste für</msg>
+        <msg id="obj.list_is_empty">ist leer</msg>
+        <msg id="obj.list_get_item">Wert an Index</msg>
+        <msg id="obj.list_append">anhängen</msg>
+        <msg id="obj.list_insert_at">füge ein # an Index</msg>
+        <msg id="obj.list_set_item">ersetze Wert an Index # durch</msg>
+        <msg id="obj.list_delete">Lösche Wert an Index</msg>
+        <msg id="obj.list_get_length">Länge</msg>
     </blocks>
     <errors>
         <msg id="default.NAME">&lt;name&gt;</msg>
