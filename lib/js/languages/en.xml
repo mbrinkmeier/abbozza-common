@@ -451,6 +451,18 @@ Should I try it again?</msg>
         <msg id="obj.list_set_item">replace value at index # by</msg>
         <msg id="obj.list_delete">delete value at index</msg>
         <msg id="obj.list_get_length">length</msg>
+        
+        <msg id="obj.bintree">Binary tree of</msg>
+        <msg id="obj.bintree_is_leaf">is leaf</msg>
+        <msg id="obj.bintree_has">has</msg>
+        <msg id="obj.bintree_set">set</msg>
+        <msg id="obj.bintree_get">get</msg>
+        <msg id="obj.bintree_del">delete</msg>
+        <msg id="obj.bintree_left_child">left child</msg>
+        <msg id="obj.bintree_right_child">right child</msg>
+        <msg id="obj.bintree_parent">parent</msg>
+        <msg id="obj.bintree_set_data">set value</msg>
+        <msg id="obj.bintree_get_data">get value</msg>
     </blocks>
     <errors>
         <msg id="default.NAME">&lt;name&gt;</msg>

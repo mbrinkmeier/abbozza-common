@@ -451,6 +451,18 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="obj.list_set_item">ersetze Wert an Index # durch</msg>
         <msg id="obj.list_delete">Lösche Wert an Index</msg>
         <msg id="obj.list_get_length">Länge</msg>
+        
+        <msg id="obj.bintree">Binärbaum für</msg>
+        <msg id="obj.bintree_is_leaf">ist Blatt</msg>
+        <msg id="obj.bintree_has">hat</msg>
+        <msg id="obj.bintree_set">setze</msg>
+        <msg id="obj.bintree_get">hole</msg>
+        <msg id="obj.bintree_del">lösche</msg>
+        <msg id="obj.bintree_left_child">linkes Kind</msg>
+        <msg id="obj.bintree_right_child">rechtes Kind</msg>
+        <msg id="obj.bintree_parent">Elternknoten</msg>
+        <msg id="obj.bintree_set_data">setze Wert</msg>
+        <msg id="obj.bintree_get_data">hole Wert</msg>
     </blocks>
     <errors>
         <msg id="default.NAME">&lt;name&gt;</msg>

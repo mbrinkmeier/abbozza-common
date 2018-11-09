@@ -204,7 +204,12 @@ public class SaveHandler extends AbstractHandler {
             // Prepare File filters
             chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz", "ABZ"));
             if ( uri != null ) {
-                chooser.setSelectedFile(new File(uri));
+                try {
+                    chooser.setSelectedFile(new File(uri));
+                } catch (IndexOutOfBoundsException iobex) {
+                    AbbozzaLogger.err(iobex.getLocalizedMessage());
+                    AbbozzaLogger.err(uri.toASCIIString());
+                }
             } else {
                 if ( lastSketchFile.isDirectory() ) {
                     chooser.setCurrentDirectory(lastSketchFile);
@@ -267,8 +272,11 @@ public class SaveHandler extends AbstractHandler {
         } catch (Exception ex) {
             AbbozzaLogger.err("SaveHandler: Could not save sketch!");
             AbbozzaLogger.err(ex.getLocalizedMessage());
+            AbbozzaLogger.err(uri.toASCIIString());
+            AbbozzaLogger.stackTrace(ex);
+            
             JOptionPane.showMessageDialog(null,
-                    AbbozzaLocale.entry("err.ERROR_SAVING_SKETCH") + "\n" + ex.getLocalizedMessage(),
+                    AbbozzaLocale.entry("err.ERROR_SAVING_SKETCH") + "\n" + ex.toString(),
                     AbbozzaLocale.entry("err.ERROR"),JOptionPane.ERROR_MESSAGE);
         }
         _abbozzaServer.setDialogOpen(false);
