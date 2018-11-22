@@ -103,14 +103,15 @@ public class TaskHandler extends AbstractHandler {
             }
         }
         
-        // Use the new anchor path 
-        URL sketch = new URL(taskContext.toURL(),path.substring(6));
-        AbbozzaLogger.debug("TaskHandler: taskContext = " + taskContext.toString());        
-        AbbozzaLogger.debug("TaskHandler: requested path = " + path.substring(6));        
-        AbbozzaLogger.debug("TaskHandler: " + sketch.toString() + " requested");
-
         OutputStream os = exchg.getResponseBody();
-        InputStream is; 
+        InputStream is = null; 
+
+        // Use the new anchor path 
+        String taskPath = path.substring(6);
+        URL sketch = new URL(taskContext.toURL(), taskPath);
+        AbbozzaLogger.debug("TaskHandler: taskContext = " + taskContext.toString());        
+        AbbozzaLogger.debug("TaskHandler: requested path = " + taskPath);        
+        AbbozzaLogger.debug("TaskHandler: " + sketch.toString() + " requested");
 
         if ( sketch.toString().length() == 0 ) {
             URI context = _abbozzaServer.getTaskContext();
@@ -123,16 +124,18 @@ public class TaskHandler extends AbstractHandler {
         try {
             is = sketch.openStream();
         } catch (IOException ex) {
+            AbbozzaLogger.err("TaskHandler: Could not open " + sketch.toString());
+            AbbozzaLogger.err("TaskHandler: " + ex.getLocalizedMessage());
             // Try the absolute version, if possible
-            String taskPath = taskContext.toString();
+            taskPath = taskContext.toString();
             if ( taskPath.startsWith("jar:") && (taskPath.indexOf('!') != -1) ) {
                 taskPath = taskPath.substring(0,taskPath.indexOf('!')+1) + "/" + path.substring(6);
                 sketch = new URL(taskPath);
+                AbbozzaLogger.info("TaskHandler: Trying " + sketch.toString());
                 is = sketch.openStream();
             } else {
                 is = null;
             }
-            
         }
 
         byte[] bytearray = null;
