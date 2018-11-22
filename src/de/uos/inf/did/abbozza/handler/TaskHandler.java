@@ -64,6 +64,17 @@ public class TaskHandler extends AbstractHandler {
         String path = exchg.getRequestURI().getPath();
         URI taskContext = null;
         
+        
+        URI refererURI;
+        try {
+            refererURI = new URI(exchg.getRequestHeaders().getFirst("referer"));
+            AbbozzaLogger.debug("TaskHandler: referer query = " + refererURI.getQuery() );
+        } catch (URISyntaxException ex) {
+            AbbozzaLogger.err("TaskHandler: could not determine referer for request " + exchg.getRequestURI().toString() );
+            refererURI = _abbozzaServer.getTaskContext();
+        }
+        
+        
         // If an anchor path is given, change it
         if (query != null) {
             AbbozzaLogger.out("TaskHandler: New task-anchor path given: " + query,AbbozzaLogger.DEBUG);
@@ -84,15 +95,30 @@ public class TaskHandler extends AbstractHandler {
             }
         } else {
             AbbozzaLogger.out("TaskHandler: using anchor : " + _abbozzaServer.getTaskContext().toString(),AbbozzaLogger.DEBUG);            
-            taskContext = _abbozzaServer.getTaskContext();
+            try {
+                // taskContext = _abbozzaServer.getTaskContext();
+                taskContext = new URI(refererURI.getQuery());
+            } catch (URISyntaxException ex) {
+                AbbozzaLogger.err("TaskHandler: could not determine referer for request " + exchg.getRequestURI().toString() );
+            }
         }
         
         // Use the new anchor path 
         URL sketch = new URL(taskContext.toURL(),path.substring(6));
-        AbbozzaLogger.out("TaskHandler: " + sketch.toString() + " requested", AbbozzaLogger.INFO);
+        AbbozzaLogger.debug("TaskHandler: taskContext = " + taskContext.toString());        
+        AbbozzaLogger.debug("TaskHandler: requested path = " + path.substring(6));        
+        AbbozzaLogger.debug("TaskHandler: " + sketch.toString() + " requested");
 
         OutputStream os = exchg.getResponseBody();
         InputStream is; 
+
+        if ( sketch.toString().length() == 0 ) {
+            URI context = _abbozzaServer.getTaskContext();
+            exchg.sendResponseHeaders(200, context.toString().length() );
+            os.write(context.toString().getBytes(), 0, context.toString().length());
+            os.close();
+            return;
+        }
         
         try {
             is = sketch.openStream();
@@ -110,13 +136,13 @@ public class TaskHandler extends AbstractHandler {
         }
 
         byte[] bytearray = null;
+        byte[] buf = new byte[1024];
 
         if ( is != null ) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            int reads = is.read(); 
-            while(reads != -1){ 
-                baos.write(reads); 
-                reads = is.read(); 
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();            
+            while(is.available() > 0){
+                int count = is.read(buf);
+                baos.write(buf, 0, count);
             } 
             bytearray = baos.toByteArray();   
                     
