@@ -1055,9 +1055,11 @@ public abstract class AbbozzaServer implements HttpHandler {
             context = new File(getSketchbookPath()).toURI();
         }
         AbbozzaLogger.debug("AbbozzaServer: Using context " + context.toString());
+        AbbozzaLogger.debug("AbbozzaServer: Expanding path " + path);
         URL url = null;
         try {
             url = new URL(context.toURL(),path);
+            AbbozzaLogger.debug("AbbozzaServer: Expanded to  " + url.toString());
         } catch (MalformedURLException ex) {
             AbbozzaLogger.err("AbbozzaServer: Trying to build malformed URL from path " + path);
             return null;
@@ -1080,7 +1082,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                 return null;            
             }
         }
-        AbbozzaLogger.debug("AbbozaServer: Expanded path to " + uri.toString());
+        AbbozzaLogger.debug("AbbozzaServer: Expanded path to " + uri.toString());
         return uri;
     }
 

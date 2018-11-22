@@ -242,6 +242,7 @@ public class LoadHandler extends AbstractHandler {
 
         uri = _abbozzaServer.expandSketchURI(path);
         result = getSketchFromFile(uri);
+        AbbozzaLogger.debug(result);
         
         
         // AbbozzaLogger.out("LoadHandler: load " + url.toString(), AbbozzaLogger.DEBUG);

@@ -19,8 +19,6 @@
 package de.uos.inf.did.abbozza.monitor.clacks;
 
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jssc.SerialPortException;
 
 /**
