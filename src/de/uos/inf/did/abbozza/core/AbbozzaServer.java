@@ -971,13 +971,26 @@ public abstract class AbbozzaServer implements HttpHandler {
         return config;
     }
 
+    
     public URI getLastSketchFile() {
         if (_lastSketchFile == null) {
             _lastSketchFile = new File(this.sketchbookPath).toURI();
         }
+        
+        if ( _lastSketchFile.getScheme().equals("jar") ) {
+            // If it is a abj file return the uri of the jar
+            try {
+                String path = _lastSketchFile.getSchemeSpecificPart();
+                path = path.substring(0,path.indexOf('!'));
+                return new URI(path);
+            } catch (URISyntaxException ex) {
+                return new File(this.sketchbookPath).toURI();
+            }
+        }
         return _lastSketchFile;
     }
 
+    
     public void setLastSketchFile(URI lastSketchFile) {
         this._lastSketchFile = lastSketchFile;
     }
@@ -1001,7 +1014,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     /**
      * This operation expands the given path according to the rules of the load
-     * handler. The resulting UIR is an absolute URI pointing to the 
+     * handler. The resulting URI is absolute, pointing to the 
      * corresponding resource. But it does NOT change the task context.
      *
      * If the path has the form !&lt;path&gt;, then the sketch is loaded from
@@ -1070,19 +1083,24 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
         
         AbbozzaLogger.debug("AbbozzaServer: Checking if url is a task archive");
-        String p = uri.toString().toLowerCase();
-        if ( p.endsWith("abj") || p.endsWith("jar") || p.endsWith("zip") ) {
-            String newpath = "jar:" + uri.toString() + "!/start.abz";
-            try { 
-               uri = new URI(newpath);
-            } catch (URISyntaxException ex) {
-                AbbozzaLogger.err("AbbozzaServer: Wrong syntax of URI " + url.toString());
-                return null;            
+        String p = uri.getPath();
+        if ( p != null ) {
+            p = p.toLowerCase();
+            if ( p.endsWith("abj") || p.endsWith("jar") || p.endsWith("zip") ) {
+                String newpath = "jar:" + uri.toString() + "!/start.abz";
+                try { 
+                    uri = new URI(newpath);
+                } catch (URISyntaxException ex) {
+                    AbbozzaLogger.err("AbbozzaServer: Wrong syntax of URI " + url.toString());
+                    return null;            
+                }
             }
         }
         AbbozzaLogger.debug("AbbozaServer: Expanded path to " + uri.toString());
         return uri;
     }
+    
+    
 
     
     /**

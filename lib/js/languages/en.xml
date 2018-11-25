@@ -41,8 +41,6 @@ Continuing?</msg>
         <msg id="MSG.YES">Yes</msg>
         <msg id="MSG.NO">No</msg>
         <msg id="MSG.DONT_ASK_AGAIN">Don't ask again!</msg>
-        <msg id="err.ERROR_SAVING_SKETCH">Sketch could not be saved!</msg>
-        <msg id="err.ERROR">Error!</msg>
     </messages>
     <gui>
         <msg id="gui.table">Table</msg>
@@ -483,6 +481,9 @@ Should I try it again?</msg>
         <msg id="err.WRONG_SYSTEM_TITLE">Wrong system!</msg>
         <msg id="err.WRONG_NAME">Unknown</msg>
         <msg id="err.INCOMPATIBLE_SYSTEM">Block not usable with current system.</msg>
+        <msg id="err.ERROR_SAVING_SKETCH">Sketch could not be saved!</msg>
+        <msg id="err.ERROR_Loading_SKETCH">Sketch could not be loaded!</msg>
+        <msg id="err.ERROR">Error!</msg>
 </errors>
     <names>
         <msg id="arduino">Arduino compatible</msg>

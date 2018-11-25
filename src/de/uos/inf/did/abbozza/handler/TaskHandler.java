@@ -29,13 +29,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -57,21 +54,30 @@ public class TaskHandler extends AbstractHandler {
          *  task/<path>?<anchor>
          * 
          * <anchor> is an anchor path
-         * <path> is a path relative to the current anchor path
+         * 
+         * <path> is a path relative to the query of the refering uri
          **/
+        
         URI uri;
         String query = exchg.getRequestURI().getQuery();
         String path = exchg.getRequestURI().getPath();
         URI taskContext = null;
         
         
-        URI refererURI;
+        URI refererURI; // The referring uri
         try {
+            // Get the referer from the equest
             refererURI = new URI(exchg.getRequestHeaders().getFirst("referer"));
             AbbozzaLogger.debug("TaskHandler: referer query = " + refererURI.getQuery() );
         } catch (URISyntaxException ex) {
             AbbozzaLogger.err("TaskHandler: could not determine referer for request " + exchg.getRequestURI().toString() );
-            refererURI = _abbozzaServer.getTaskContext();
+            // refererURI = _abbozzaServer.getTaskContext();
+            try {
+                refererURI = new URI(_abbozzaServer.getRootURL());
+            } catch (URISyntaxException ex1) {
+                AbbozzaLogger.err("TaskHandler: could not determine root URL" );
+                refererURI = exchg.getRequestURI();
+            }
         }
         
         
@@ -94,12 +100,16 @@ public class TaskHandler extends AbstractHandler {
                 _abbozzaServer.setTaskContext(taskContext);
             }
         } else {
-            AbbozzaLogger.out("TaskHandler: using anchor : " + _abbozzaServer.getTaskContext().toString(),AbbozzaLogger.DEBUG);            
             try {
-                // taskContext = _abbozzaServer.getTaskContext();
                 taskContext = new URI(refererURI.getQuery());
+                AbbozzaLogger.debug("TaskHandler: using anchor : " + taskContext);            
             } catch (URISyntaxException ex) {
                 AbbozzaLogger.err("TaskHandler: could not determine referer for request " + exchg.getRequestURI().toString() );
+                try {
+                    taskContext = new URI(_abbozzaServer.getSketchbookPath());
+                } catch (URISyntaxException ex1) {
+                    taskContext = null;
+                }
             }
         }
         
@@ -114,13 +124,14 @@ public class TaskHandler extends AbstractHandler {
         AbbozzaLogger.debug("TaskHandler: " + sketch.toString() + " requested");
 
         if ( sketch.toString().length() == 0 ) {
-            URI context = _abbozzaServer.getTaskContext();
-            exchg.sendResponseHeaders(200, context.toString().length() );
-            os.write(context.toString().getBytes(), 0, context.toString().length());
+            // URI context = _abbozzaServer.getTaskContext();
+            exchg.sendResponseHeaders(404, taskContext.toString().length() );
+            os.write(taskContext.toString().getBytes(), 0, taskContext.toString().length());
             os.close();
             return;
         }
         
+        // Open the requested uri
         try {
             is = sketch.openStream();
         } catch (IOException ex) {
