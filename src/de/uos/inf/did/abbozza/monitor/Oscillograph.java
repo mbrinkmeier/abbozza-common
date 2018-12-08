@@ -35,6 +35,8 @@ public class Oscillograph extends javax.swing.JPanel {
     
     /**
      * Creates new form Oszillosgraph
+     * 
+     * @param monitor The OscillographMonitor to which this view belongs
      */
     public Oscillograph(OscillographMonitor monitor) {
         _monitor = monitor;

@@ -164,7 +164,7 @@ public class OscillographMonitor extends MonitorPanel {
     /**
      * Connect to byte stream
      * 
-     * @param monitor 
+     * @param monitor The AbbozzaMonitor to which this MoniorPanel should be connected
      */
     @Override
     public void connect(AbbozzaMonitor monitor) {
@@ -228,7 +228,8 @@ public class OscillographMonitor extends MonitorPanel {
     
     /**
      * No popup mneu
-     * @return 
+     * 
+     * @return  Returns the popuo menu for this MonitorPanel
      */
     @Override
     public JPopupMenu getPopUp() {
@@ -290,7 +291,7 @@ public class OscillographMonitor extends MonitorPanel {
     /**
      * Return the int at the given index, counted from _head.
      * 
-     * @param index
+     * @param index The index of the value to be fetched
      * @return  Returns the integer at the given index of the buffer.
      */
     public int getInt(int index) {

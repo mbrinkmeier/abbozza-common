@@ -166,6 +166,7 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="gui.queues">Queues</msg>
         <msg id="gui.lists">Listen</msg>
         <msg id="gui.bintrees">Binärbäume</msg>
+        <msg id="gui.fontsize">Schriftgröße</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

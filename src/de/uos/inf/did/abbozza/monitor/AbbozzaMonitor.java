@@ -208,7 +208,7 @@ public final class AbbozzaMonitor extends JFrame {
     /**
      * Open the Monitor, start the ClacksPortHandler
      *
-     * @throws Exception
+     * @throws Exception An exception is thrown if an error occurs
      */
     public void open() throws Exception {
         AbbozzaLogger.err("AbbozzaMonitor: Open Window");
@@ -231,7 +231,7 @@ public final class AbbozzaMonitor extends JFrame {
     /**
      * Close the monitor.
      *
-     * @throws Exception
+     * @throws Exception An exception is thrown, if an error occurs
      */
     public void close() throws Exception {
         AbbozzaLogger.debug("AbbozzaMonitor: Closing monitor");
@@ -247,6 +247,7 @@ public final class AbbozzaMonitor extends JFrame {
      * Puts the window in suspend state, closing the serial port to allow other
      * entity (the programmer) to use it
      *
+     * @throws Exception An exception is thrown if an error occurs
      */
     public void suspend() throws Exception {
         enableWindow(false);
@@ -256,7 +257,7 @@ public final class AbbozzaMonitor extends JFrame {
     /**
      * Reopen the port
      *
-     * @throws Exception
+     * @throws Exception An exception is thrown if an error occurs
      */
     public void resume() throws Exception {
         // Enable the window
@@ -632,6 +633,7 @@ public final class AbbozzaMonitor extends JFrame {
      * Append a text to the textfield showing the communication.
      *
      * @param update The text to be appended
+     * @param style The style of the text
      */
     public synchronized void appendText(String update, String style) {
 
@@ -695,7 +697,7 @@ public final class AbbozzaMonitor extends JFrame {
     /**
      * Set the board port
      * 
-     * @param port 
+     * @param port The selected port
      */
     public void setBoardPort(String port) {
         this.boardPort = port;
@@ -712,9 +714,9 @@ public final class AbbozzaMonitor extends JFrame {
     
     
     /**
-     * Set the rate
+     * Set the rate selected in the rate box.
      * 
-     * @param rate 
+     * @param rate The rate to be set
      */
     public void setRate(int rate) {
         for (int i = 0; i < rateBox.getItemCount(); i++) {
@@ -730,7 +732,8 @@ public final class AbbozzaMonitor extends JFrame {
     
     /**
      * Enable the window
-     * @param enable 
+     * 
+     * @param enable The flag inidcates wether the window should be enabled or disabled
      */
     public void enableWindow(boolean enable) {
         this.setVisible(true);

@@ -131,8 +131,6 @@ public class LoadHandler extends AbstractHandler {
      * has to select the file to be opened.
      *
      * @return The loaded sketch as a string.
-     * @throws IOException thrown if an IO error occured.
-     * @throws java.net.URISyntaxException
      */
     public String loadSketch() {
         if (_abbozzaServer.isDialogOpen()) {
@@ -280,7 +278,6 @@ public class LoadHandler extends AbstractHandler {
      *
      * @param path The URL/Path of the sjetch to be loaded.
      * @return The sketch as a String.
-     * @throws IOException Thrown if an IO Error occured during
      */
     public String loadSketch(String path) {
         String result = "";
