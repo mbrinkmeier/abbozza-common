@@ -80,7 +80,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
          */
         // System.out.println("Reading config from " + configPath);
         config = new AbbozzaConfig(configPath);
-
+        
         AbbozzaLogger.info("Setting locale");
         
         AbbozzaLocale.setLocale(config.getLocale());
@@ -90,10 +90,9 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
         if (this.getConfiguration().getUpdate()) {
             checkForUpdate(false);
         }
-
+        
         AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
 
-        
         // Try to start server on given port
         int serverPort = config.getServerPort();
         try {
@@ -104,10 +103,9 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
           System.exit(1);
         }
 
-
         monitor = new AbbozzaMonitor();
         monitor.setDefaultCloseOperation(JDialog.EXIT_ON_CLOSE);
-              
+
         initMenu();
         
         monitor.setVisible(true);

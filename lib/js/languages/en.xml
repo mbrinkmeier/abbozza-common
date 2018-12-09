@@ -166,6 +166,7 @@ Should I try it again?</msg>
         <msg id="gui.queues">Queues</msg>
         <msg id="gui.lists">Lists</msg>
         <msg id="gui.bintrees">Binary trees</msg>
+        <msg id="gui.fontsize">Font size</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>

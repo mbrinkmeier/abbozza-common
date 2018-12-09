@@ -91,11 +91,10 @@ CKEDITOR.editorConfig = function (config) {
     config.extraPlugins = 'abbozza';
     config.extraAllowedContent = 'abbozza-hint page pagescript taskscript';
     config.resize_enabled = true;
-    // config.removePlugins = "resize";
     config.toolbarCanCollapse = true;
     config.toolbarStartupExpanded = true;
     config.width = "100%";
-    config.height = "100%";
+    config.height = "400px";
 
     config.toolbarGroups = [
         {name: 'document', groups: ['mode', 'document', 'doctools']},

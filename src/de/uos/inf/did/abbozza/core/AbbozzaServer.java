@@ -108,11 +108,9 @@ import org.xml.sax.SAXException;
  */
 public abstract class AbbozzaServer implements HttpHandler {
 
-    // Version
-    public static final int VER_MAJOR = 1;     // Major version of common core
-    public static final int VER_MINOR = 1;    // Minor version of common core
-    public static final int VER_REV = 4;    // Minor version of common core
-    public static final int VER_HOTFIX = 0;    // Minor version of common core
+    static {
+        AbbozzaVersion.setCommonVersion(1,1,6);
+    }
 
     // Instance
     protected static AbbozzaServer instance;
@@ -1265,19 +1263,17 @@ public abstract class AbbozzaServer implements HttpHandler {
         return xPath;
     }
 
-    public String getVersion() {
-        return getSystemVersion();
-    }
-
     public String getCommonVersion() {
-        return "" + VER_MAJOR + "." + VER_MINOR + "." + VER_HOTFIX;
+        return AbbozzaVersion.getCommonVersion();
     }
 
     public String getSystemVersion() {
-        return "-1.-1 (common)";
+        return AbbozzaVersion.getSystemVersion();
     }
 
-    ;
+    public String getVersion() {
+        return AbbozzaVersion.asString();        
+    }
 
     public abstract boolean installPluginFile(InputStream stream, String name);
 
