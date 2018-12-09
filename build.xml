@@ -96,7 +96,6 @@
     <target name="-pre-compile" depends="ckeditor">
     </target>
     
-    
     <target name="-pre-jar">
         <copy todir="build/classes/js/ckeditor/">
             <fileset dir="ckeditor/dev/builder/release/ckeditor/"/>

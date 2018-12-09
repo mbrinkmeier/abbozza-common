@@ -24,7 +24,6 @@ package de.uos.inf.did.abbozza.core;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
-import java.util.Locale;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import javax.xml.XMLConstants;

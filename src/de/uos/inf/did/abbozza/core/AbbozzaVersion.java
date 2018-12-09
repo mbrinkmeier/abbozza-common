@@ -15,6 +15,13 @@
  */
 package de.uos.inf.did.abbozza.core;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Michael Brinkmeier <michael.brinkmeier@uni-osnabrueck.de>
@@ -28,7 +35,8 @@ public class AbbozzaVersion {
     private static int minorSystem;
     private static int hotfixSystem;
     
-    private static String codeName;
+    private static String systemName;
+    
     
     /**
      * 
@@ -36,7 +44,7 @@ public class AbbozzaVersion {
      * @param minor
      * @param hotfix 
      */
-    protected static void setCommonVersion(int major, int minor, int hotfix) {
+    public static void setCommonVersion(int major, int minor, int hotfix) {
         majorCommon = major;
         minorCommon = minor;
         hotfixCommon = hotfix;
@@ -48,7 +56,7 @@ public class AbbozzaVersion {
      * @param minor
      * @param hotfix 
      */
-    protected static void setSystemVersion(int major, int minor, int hotfix) {
+    public static void setSystemVersion(int major, int minor, int hotfix) {
         majorSystem = major;
         minorSystem = minor;
         hotfixSystem = hotfix;
@@ -58,8 +66,8 @@ public class AbbozzaVersion {
      * 
      * @param codename 
      */
-    protected static void setCodeName(String codename) {
-        codeName = codename;
+    public static void setSystemName(String systemname) {
+        systemName = systemname;
     }
 
     /**
@@ -68,7 +76,15 @@ public class AbbozzaVersion {
      */
     public static String asString() {
         return majorSystem + "." + minorSystem + "." + hotfixSystem + " (" +
-                majorCommon + "." + minorCommon + "." + hotfixCommon + " " + codeName + ")";
+                majorCommon + "." + minorCommon + "." + hotfixCommon + " " + systemName + ")";
+    }
+    
+    public static String getCommonVersion() {
+        return majorCommon + "." + minorCommon + "." + hotfixCommon;        
+    }
+    
+    public static String getSystemVersion() {
+        return majorSystem + "." + minorSystem + "." + hotfixSystem + " (" + systemName+ ")";        
     }
     
     /**
@@ -105,6 +121,7 @@ public class AbbozzaVersion {
        if ( hotfixSystem > hotfix ) return true;
        return true;
     }
+    
     
 }
  
