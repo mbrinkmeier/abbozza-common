@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Michael Brinkmeier <michael.brinkmeier@uni-osnabrueck.de>
+ * @author Michael Brinkmeier (michael.brinkmeier@uni-osnabrueck.de)
  */
 public class AbbozzaVersion {
     
@@ -36,6 +36,47 @@ public class AbbozzaVersion {
     private static int hotfixSystem;
     
     private static String systemName;
+    
+    static {
+        int major = -1;
+        int minor = -1;
+        int revision = -1;
+        String system = "null";
+        Properties version;
+        InputStream in;
+        try {
+            version = new Properties();
+            in = AbbozzaVersion.class.getResourceAsStream("/de/uos/inf/did/abbozza/VERSION_COMMON");
+            version.load(in);
+            in.close();
+            major = Integer.parseInt(version.getProperty("MAJOR"));
+            minor = Integer.parseInt(version.getProperty("MINOR"));
+            revision = Integer.parseInt(version.getProperty("REVISION"));
+        } catch (IOException ex) {
+            Logger.getLogger(AbbozzaVersion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        AbbozzaVersion.setCommonVersion(major,minor,revision);
+        major = -1;
+        minor = -1;
+        revision = -1;
+        system = "null";
+        try {
+            version = new Properties();
+            in = AbbozzaVersion.class.getResourceAsStream("/de/uos/inf/did/abbozza/VERSION_SYSTEM");
+            version.load(in);
+            in.close();
+            major = Integer.parseInt(version.getProperty("MAJOR"));
+            minor = Integer.parseInt(version.getProperty("MINOR"));
+            revision = Integer.parseInt(version.getProperty("REVISION"));
+            system = version.getProperty("SYSTEM");
+        } catch (IOException ex) {
+            AbbozzaVersion.setSystemVersion(major,minor,revision);
+        }
+        AbbozzaVersion.setSystemVersion(major,minor,revision);
+        AbbozzaVersion.setSystemName(system);
+        
+        System.out.println("abbozza! Version " + AbbozzaVersion.asString());
+    }
     
     
     /**
@@ -64,7 +105,7 @@ public class AbbozzaVersion {
     
     /**
      * 
-     * @param codename 
+     * @param systemname 
      */
     public static void setSystemName(String systemname) {
         systemName = systemname;

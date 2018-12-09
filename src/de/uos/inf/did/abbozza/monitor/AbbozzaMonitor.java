@@ -23,11 +23,9 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
-import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
-import de.uos.inf.did.abbozza.handler.SerialHandler;
 import de.uos.inf.did.abbozza.monitor.clacks.ByteRingBuffer;
 import de.uos.inf.did.abbozza.monitor.clacks.ClacksBytes;
 import de.uos.inf.did.abbozza.monitor.clacks.ClacksMessage;
@@ -42,7 +40,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -104,13 +101,12 @@ public final class AbbozzaMonitor extends JFrame {
      * Initialize the Monitor
      */
     private void init() {
+        
         initProtocolDocument();
 
+        SerialPortList.getPortNames();
         initComponents();
-
-        // Init ClacksService
-        clacksService = new ClacksService(this);
-
+        
         // protocol = new StringBuffer();
         protocolUpdateBuffer = new ByteRingBuffer(1024 * 512);
 
@@ -135,6 +131,8 @@ public final class AbbozzaMonitor extends JFrame {
             }
         });
 
+        // Init ClacksService
+        clacksService = new ClacksService(this);
         // clacksService.subscribe(this);
 
         panels = new HashMap<String, MonitorPanel>();
@@ -416,8 +414,6 @@ public final class AbbozzaMonitor extends JFrame {
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(sendButton, gridBagConstraints);
-        sendButton.getAccessibleContext().setAccessibleName("sendButton");
-        sendButton.getAccessibleContext().setAccessibleDescription("");
 
         sendText.setEditable(true);
         sendText.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
