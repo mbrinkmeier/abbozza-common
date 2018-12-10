@@ -136,7 +136,7 @@ public class AbbozzaVersion {
      * @param hotfix
      * @return 
      */
-    public boolean isCommonNewerAs(int major, int minor, int hotfix) {
+    public static boolean isCommonNewerAs(int major, int minor, int hotfix) {
        if ( majorCommon < major ) return false;
        if ( majorCommon > major ) return true;
        if ( minorCommon < minor ) return false;
@@ -153,7 +153,7 @@ public class AbbozzaVersion {
      * @param hotfix
      * @return 
      */
-    public boolean isSystemNewerAs(int major, int minor, int hotfix) {
+    public static boolean isSystemNewerAs(int major, int minor, int hotfix) {
        if ( majorSystem < major ) return false;
        if ( majorSystem > major ) return true;
        if ( minorSystem < minor ) return false;

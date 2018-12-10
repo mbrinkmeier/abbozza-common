@@ -108,10 +108,6 @@ import org.xml.sax.SAXException;
  */
 public abstract class AbbozzaServer implements HttpHandler {
 
-    static {
-        AbbozzaVersion.setCommonVersion(1,1,6);
-    }
-
     // Instance
     protected static AbbozzaServer instance;
 
@@ -709,27 +705,13 @@ public abstract class AbbozzaServer implements HttpHandler {
             major = Integer.parseInt(version.substring(0, pos));
             int pos2 = version.indexOf('.', pos + 1);
             minor = Integer.parseInt(version.substring(pos + 1, pos2));
-            pos = version.indexOf('.', pos2 + 1);
+            pos = version.indexOf(' ', pos2 + 1);
             rev = Integer.parseInt(version.substring(pos2 + 1, pos));
-            hotfix = Integer.parseInt(version.substring(pos + 1));
         } catch (NumberFormatException ex) {
             return true;
         }
 
-        String[] sysver = getSystemVersion().split("[\\ \\.]");
-        int sys_major = Integer.parseInt(sysver[0]);
-        int sys_minor = Integer.parseInt(sysver[1]);
-        int sys_rev = Integer.parseInt(sysver[2]);
-        int sys_hotfix = Integer.parseInt(sysver[3]);
-
-        if ((major > sys_major)
-                || ((major == sys_major) && (minor > sys_minor))
-                || ((major == sys_major) && (minor == sys_minor) && (rev > sys_rev))
-                || ((major == sys_major) && (minor == sys_minor) && (rev == sys_rev) && (hotfix > sys_hotfix))) {
-            return false;
-        }
-
-        return true;
+        return AbbozzaVersion.isSystemNewerAs(major, minor,rev);
     }
 
     /**
