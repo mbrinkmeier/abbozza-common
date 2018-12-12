@@ -101,11 +101,11 @@ public class InstallToolWin extends InstallTool {
     }
 
     @Override
-    public String getInstallPath(boolean global) {
+    public String getInstallPath(boolean global, String system) {
         if ( global ) {
             return "C:/Program Files (x86)/abbozza";            
         } else {
-            return System.getProperty("user.home") + "/abbozza";
+            return System.getProperty("user.home") + "/abbozza" + system;
         }
     }
     

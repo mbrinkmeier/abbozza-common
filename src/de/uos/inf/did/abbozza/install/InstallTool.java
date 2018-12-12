@@ -55,7 +55,7 @@ public abstract class InstallTool {
         return tool;
     }
 
-    public abstract String getInstallPath(boolean global);
+    public abstract String getInstallPath(boolean global, String system);
 
 
     /**

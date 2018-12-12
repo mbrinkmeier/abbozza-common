@@ -55,11 +55,11 @@ public class InstallToolMac extends InstallTool {
     }
 
     @Override
-    public String getInstallPath(boolean global) {
+    public String getInstallPath(boolean global, String system) {
         if ( global ) {
             return "/Applications/abbozza.app";            
         } else {
-            return System.getProperty("user.home") + "/Applications/abbozza.app";
+            return System.getProperty("user.home") + "/Applications/abbozza" + system + ".app";
         }
     }
     

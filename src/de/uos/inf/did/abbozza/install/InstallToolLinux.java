@@ -103,11 +103,11 @@ public class InstallToolLinux extends InstallTool {
     }
 
     @Override
-    public String getInstallPath(boolean global) {
+    public String getInstallPath(boolean global, String system) {
         if ( global ) {
             return "/usr/local/lib/abbozza";            
         } else {
-            return System.getProperty("user.home") + "/abbozza";
+            return System.getProperty("user.home") + "/abbozza" + system;
         }
     }
     
