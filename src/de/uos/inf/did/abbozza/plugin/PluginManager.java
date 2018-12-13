@@ -58,6 +58,11 @@ public class PluginManager implements HttpHandler {
     private AbbozzaServer _abbozza;
     private Hashtable<String, Plugin> _plugins;
 
+    /**
+     * Initialize a PluginMAnager and connect it to the Server.
+     * 
+     * @param server 
+     */
     public PluginManager(AbbozzaServer server) {
         AbbozzaLogger.out("PluginManager: Started", AbbozzaLogger.INFO);
         this._abbozza = server;
@@ -65,6 +70,9 @@ public class PluginManager implements HttpHandler {
         this.detectPlugins();
     }
 
+    /**
+     * Find all installed plugins.
+     */
     private void detectPlugins() {       
         // Check local dir
         File path = new File(this._abbozza.getGlobalPluginPath());
@@ -109,6 +117,11 @@ public class PluginManager implements HttpHandler {
         
     }
 
+    /**
+     * Add plugins form directories.
+     * 
+     * @param dirs 
+     */
     private void addDirs(File dirs[]) {
         Plugin plugin;
         Document pluginXml;
@@ -125,6 +138,7 @@ public class PluginManager implements HttpHandler {
                             if (checkRequirements(plugin)) {
                                 AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " loaded", AbbozzaLogger.INFO);
                                 this._plugins.put(plugin.getId(), plugin);
+                                this._abbozza.registerPlugin(plugin);
                             } else {
 
                             }
@@ -137,6 +151,11 @@ public class PluginManager implements HttpHandler {
         }
     }
 
+    /**
+     * Add a plugin from jar files.
+     * 
+     * @param jars 
+     */
     protected void addJars(File jars[]) {
         Plugin plugin;
         Document pluginXml;
@@ -155,6 +174,7 @@ public class PluginManager implements HttpHandler {
                             if (checkRequirements(plugin)) {
                                 AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " loaded", AbbozzaLogger.INFO);
                                 this._plugins.put(plugin.getId(), plugin);
+                                this._abbozza.registerPlugin(plugin);
                             }
                         }
                     }

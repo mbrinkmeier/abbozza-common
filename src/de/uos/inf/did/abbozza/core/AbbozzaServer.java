@@ -1132,6 +1132,14 @@ public abstract class AbbozzaServer implements HttpHandler {
     public static AbbozzaServer getInstance() {
         return instance;
     }
+    
+    /**
+     * This operation provides a hook to register plugins or components.
+     * In the default implementation it does nothing.
+     * 
+     * @param plugin 
+     */
+    public void registerPlugin(Plugin plugin) {}
 
     public static AbbozzaConfig getConfig() {
         return getInstance().config;

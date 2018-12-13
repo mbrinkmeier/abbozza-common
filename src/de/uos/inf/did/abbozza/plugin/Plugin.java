@@ -365,4 +365,8 @@ public class Plugin {
     public JarDirHandler getFileHandler() {
         return this._fileHandler;
     }
+    
+    public Document getXml() {
+        return this._xml;
+    }
 }
