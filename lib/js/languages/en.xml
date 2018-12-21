@@ -224,6 +224,9 @@ Should I try it again?</msg>
 
         <msg id="var.SET">Set # to</msg>
         <msg id="var.GLOBAL">global</msg>
+        <msg id="var.INT_STEP_UP">Increase</msg>
+        <msg id="var.INT_STEP_DOWN">Decrease</msg>
+        <msg id="var.INT_CHANGE_BY">Change # by</msg>
 		
         <msg id="txt.LETTERAT">Character no. # from</msg>
         <msg id="txt.FROMNUMBER">As Text:</msg>

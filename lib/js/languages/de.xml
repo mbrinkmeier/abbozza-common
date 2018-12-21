@@ -224,6 +224,9 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
 
         <msg id="var.SET">Setze # auf</msg>
         <msg id="var.GLOBAL">global</msg>
+        <msg id="var.INT_STEP_UP">Erhöhe</msg>
+        <msg id="var.INT_STEP_DOWN">Verringere</msg>
+        <msg id="var.INT_CHANGE_BY">Ändere # um</msg>
 		
         <msg id="txt.LETTERAT">Zeichen Nr. # aus</msg>
         <msg id="txt.FROMNUMBER">Als Text:</msg>
