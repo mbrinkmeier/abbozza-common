@@ -55,6 +55,9 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JComboBox" name="urlComboBox">
+      <Properties>
+        <Property name="editable" type="boolean" value="true"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="urlComboBoxActionPerformed"/>
       </Events>

@@ -76,8 +76,8 @@ public class AbbozzaConfig {
     private boolean config_browserStart = true;
     private String config_browserPath = "";
     private String config_locale = "de";
-    private String config_updateUrl = "http://inf-didaktik.rz.uos.de/downloads/abbozza/current/";
-    private String config_pluginUrl = "http://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/" + AbbozzaServer.getInstance().getSystem() + "/plugins.xml";
+    private String config_updateUrl = "https://inf-didaktik.rz.uos.de/downloads/abbozza/current/";
+    private String config_pluginUrl = "https://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/" + AbbozzaServer.getInstance().getSystem() + "/plugins.xml";
     private boolean config_update = false;
     private String config_taskPath = configPath;
     private boolean config_tasksEditable = true;
@@ -159,8 +159,8 @@ public class AbbozzaConfig {
         config_browserStart = true;
         config_browserPath = browserPath;
         config_locale = System.getProperty("user.language");
-        config_updateUrl = "http://inf-didaktik.rz.uos.de/downloads/abbozza/current/";
-        config_pluginUrl = "http://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/" + AbbozzaServer.getInstance().getSystem() + "/plugins.xml";
+        config_updateUrl = "https://inf-didaktik.rz.uos.de/downloads/abbozza/current/";
+        config_pluginUrl = "https://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/" + AbbozzaServer.getInstance().getSystem() + "/plugins.xml";
         config_update = false;
         config_taskPath = System.getProperty("user.home");
         config_tasksEditable = true;
@@ -239,8 +239,8 @@ public class AbbozzaConfig {
         // change the config value to the language part (downward compatibility)
         if (config_locale.length() > 2) config_locale = config_locale.substring(0,2);
         
-        config_pluginUrl = properties.getProperty("pluginUrl", "http://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/" + AbbozzaServer.getInstance().getSystem()) + "/plugins.xml";
-        config_updateUrl = properties.getProperty("updateUrl", "http://inf-didaktik.rz.uos.de/downloads/abbozza/current/");
+        config_pluginUrl = properties.getProperty("pluginUrl", "https://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/" + AbbozzaServer.getInstance().getSystem()) + "/plugins.xml";
+        config_updateUrl = properties.getProperty("updateUrl", "https://inf-didaktik.rz.uos.de/downloads/abbozza/current/");
         config_update = "true".equals(properties.getProperty("update", "false"));
         if (AbbozzaServer.getInstance() != null) {
             config_taskPath = properties.getProperty("taskPath", AbbozzaServer.getInstance().getSketchbookPath());

@@ -74,6 +74,7 @@ public class PluginConfigPanel extends AbbozzaConfigPanel implements ListCellRen
             }
         });
 
+        urlComboBox.setEditable(true);
         urlComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlComboBoxActionPerformed(evt);
