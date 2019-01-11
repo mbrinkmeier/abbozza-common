@@ -99,7 +99,7 @@ public class InstallToolLinux extends InstallTool {
 
     @Override
     public String getIconSuffix() {
-        return "";
+        return ".png";
     }
 
     @Override
