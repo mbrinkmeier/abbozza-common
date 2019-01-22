@@ -26,8 +26,10 @@ import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.util.Properties;
 
@@ -61,7 +63,10 @@ public class MonitorHandler extends AbstractHandler {
               props.load(new StringReader(query));
               // sendMessage(props.getProperty("msg"));
             }
-            sendResponse(exchg, 200, "text/plain", "");
+            InetSocketAddress addr = monitor.getWebSocketAddress();
+            String adr = "";
+            if ( addr != null ) adr = addr.toString();
+            sendResponse(exchg, 200, "text/plain", adr);
         } else {
             sendResponse(exchg, 440, "text/plain", "");
         }
@@ -93,7 +98,8 @@ public class MonitorHandler extends AbstractHandler {
         try {
             monitor.open();
             monitor.setVisible(true);
-            monitor.toFront();
+            // monitor.toFront();
+            GUITool.bringToFront(monitor);
             
             // monitor.setAlwaysOnTop(true);
         } catch (Exception ex) {

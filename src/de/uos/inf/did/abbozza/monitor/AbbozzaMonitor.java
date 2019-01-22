@@ -40,6 +40,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.InetSocketAddress;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -73,7 +74,9 @@ public final class AbbozzaMonitor extends JFrame {
     private HashMap<String, MonitorListener> listeners;
     private DefaultStyledDocument protocolDocument;
     protected ByteRingBuffer protocolUpdateBuffer;
-
+    protected AbbozzaWebSocketServer webSocketServer = null;
+    protected Thread webSocketServerThread = null;
+    
     private ClacksService clacksService;
     private long lastUpdate;
 
@@ -175,6 +178,16 @@ public final class AbbozzaMonitor extends JFrame {
 
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         GUITool.centerWindow(this);
+        
+        // Start WebSocketServer
+        int port = AbbozzaServer.getConfig().getServerPort() + 1;
+        try {
+            webSocketServer = new AbbozzaWebSocketServer(this,port);
+            webSocketServerThread = new Thread(webSocketServer);
+            webSocketServerThread.start();
+        } catch (Exception xe) {
+            AbbozzaLogger.err(xe.getLocalizedMessage());
+        }
     }
 
     /**
@@ -233,6 +246,11 @@ public final class AbbozzaMonitor extends JFrame {
      */
     public void close() throws Exception {
         AbbozzaLogger.debug("AbbozzaMonitor: Closing monitor");
+        
+        if ( (webSocketServerThread != null) && webSocketServerThread.isAlive() ) {
+            AbbozzaLogger.info("AbbozzaMonitor: Stopping WebSocket server");
+            webSocketServerThread.interrupt();
+        }
         if (clacksService != null) {
             clacksService.cancel(true);
         }
@@ -757,6 +775,14 @@ public final class AbbozzaMonitor extends JFrame {
 
     public ClacksService getClacksService() {
         return clacksService;
+    }
+    
+    
+    public InetSocketAddress getWebSocketAddress() {
+        if ( this.webSocketServer != null ) {
+            return this.webSocketServer.getAddress();
+        }
+        return null;
     }
 
 }

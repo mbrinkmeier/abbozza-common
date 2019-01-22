@@ -46,7 +46,17 @@ public class GUITool {
      */
     public static void bringToFront(JFrame frame) {
         if ( frame == null ) return;
-
+        
+        /*
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                frame.toFront();
+                frame.repaint();
+            }
+        });
+        */
+        
         // First iconify
         int state = frame.getExtendedState() | JFrame.ICONIFIED;
         frame.setExtendedState(state);
@@ -59,7 +69,7 @@ public class GUITool {
         frame.setVisible(true);
         frame.toFront();
         frame.requestFocus();
-        frame.setAlwaysOnTop(false);        
+        frame.setAlwaysOnTop(false);
     }
     
 }

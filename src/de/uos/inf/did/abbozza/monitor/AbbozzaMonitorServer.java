@@ -10,6 +10,7 @@ import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.core.AbbozzaServerException;
+import de.uos.inf.did.abbozza.core.AbbozzaSplashScreen;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
@@ -39,7 +40,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
 
     public static void main(String args[]) {
         AbbozzaMonitorServer server = new AbbozzaMonitorServer();
-        server.init("monitor");
+        server.init("monitor", args);
     }
 
     /**
@@ -47,76 +48,41 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
      *
      * @param system The id of the system type
      */
-    public void init(String system) {
-        // If there is already an Abbozza instance, silently die
-        if (instance != null) {
-            return;
-        }
-
-        // Set the system name
-        this.system = system;
-
-        // Initialize the logger
-        AbbozzaLogger.init();
-        AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
-        AbbozzaLogger.registerStream(System.out);
-
-        // Set static instance
-        instance = this;
-
-        AbbozzaLogger.out("Setting paths");
-        setPaths();
-
-        // Find Jars
-        jarHandler = new JarDirHandler();
-        findJarsAndDirs(jarHandler);
-
-        // Load plugins
-        pluginManager = new PluginManager(this);
-
-        /**
-         * Read the configuration from
-         * <user.home>/.abbozza/<system>/abbozza.cfg
-         */
-        // System.out.println("Reading config from " + configPath);
-        config = new AbbozzaConfig(configPath);
+    public void init(String system, String args[]) {
         
-        AbbozzaLogger.info("Setting locale");
-        
-        AbbozzaLocale.setLocale(config.getLocale());
-
-        AbbozzaLogger.out("Version " + AbbozzaServer.getInstance().getVersion(), AbbozzaLogger.INFO);
-
-        if (this.getConfiguration().getUpdate()) {
-            checkForUpdate(false);
-        }
-        
-        AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
-
-        // Try to start server on given port
-        int serverPort = config.getServerPort();
         try {
-          this.startServer(serverPort);
-        } catch (AbbozzaServerException ex) {
-          AbbozzaLogger.err(ex.getMessage());
-          JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("msg. already_running"),"",JOptionPane.ERROR_MESSAGE);
-          System.exit(1);
+            
+            super.init(system,args);
+            
+            // Try to start server on given port
+            int serverPort = config.getServerPort();
+            try {
+                this.startServer(serverPort);
+            } catch (AbbozzaServerException ex) {
+                AbbozzaLogger.err(ex.getMessage());
+                JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("msg.already_running"),"",JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
+            }
+            
+            monitor = new AbbozzaMonitor();
+            monitor.setDefaultCloseOperation(JDialog.EXIT_ON_CLOSE);
+            
+            initMenu();
+            
+            monitor.open();
+            monitor.setVisible(true);
+            
+            // String[] ports = SerialPortList.getPortNames();
+            
+            // if ((ports != null) && (ports.length>0)) {
+            //     monitor.setBoardPort(ports[0],115200);
+            // } else {
+            //     monitor.setRate(115200);
+            // }
+        } catch (Exception ex) {
+            AbbozzaLogger.err(ex.getLocalizedMessage());
+            System.exit(1);
         }
-
-        monitor = new AbbozzaMonitor();
-        monitor.setDefaultCloseOperation(JDialog.EXIT_ON_CLOSE);
-
-        initMenu();
-        
-        monitor.setVisible(true);
-
-        String[] ports = SerialPortList.getPortNames();
-        
-        if ((ports != null) && (ports.length>0)) {
-            monitor.setBoardPort(ports[0],115200);
-        } else {
-            monitor.setRate(115200);            
-        }        
     }
 
     private void initMenu() {

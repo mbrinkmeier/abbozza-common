@@ -314,8 +314,9 @@ Should I try it again?</msg>
         <msg id ="serial.READ_BYTE_USB">Read byte from USB</msg>
         <msg id ="serial.WRITE_INT_USB">Send integer to USB</msg>
         <msg id ="serial.READ_INT_USB">Read integer from USB</msg>
-                
-                
+        <msg id="SERIAL.OPEN">Open connection</msg>
+        <msg id="SERIAL.CLOSE">Close connection</msg>
+                                
         <msg id ="func.NAME">Name</msg>
         <msg id ="func.CALL">Call # </msg>
         <msg id ="func.RETURNS">Returns #</msg>
@@ -371,7 +372,7 @@ Should I try it again?</msg>
         <msg id="dev.MICROPHONE_GET">Microphone level</msg>
         <msg id="dev.SERIAL_WRITE_INT">Write integer to</msg>
         <msg id="dev.SERIAL_READ_INT">Read integer from</msg>
-        
+        <msg id="dev.SERIAL_READ_ALL">Read all characters</msg>        
         
         <msg id="AND">and</msg>
         <msg id="MILLIS">Time in milliseconds (ms)</msg>

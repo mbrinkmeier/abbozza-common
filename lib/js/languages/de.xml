@@ -301,19 +301,6 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id ="io.READAPIN">Analoger Wert von Pin</msg>
         <msg id ="io.SETAPIN">Setze Pin # auf analogen Wert</msg>
 		
-        <msg id ="serial.BEGINRATE">Setze USB-Datenrate auf # Baud</msg>
-        <msg id ="serial.END">Stoppe Kommunikation über USB</msg>
-        <msg id ="serial.PRINT">Sende # über USB</msg>-
-        <msg id ="serial.PRINTLN">Sende Zeile # über USB</msg>
-        <msg id ="serial.AVAILABLE">Zeichen über USB empfangen</msg>
-        <msg id ="serial.READLN">Lies Zeile über USB</msg>
-        <msg id ="serial.SENDVALUES">Sende Werte über USB</msg>
-        <msg id ="serial.CHANNEL">Kanal</msg>
-        <msg id ="serial.WRITE_BYTE_USB">Sende Byte über USB</msg>
-        <msg id ="serial.READ_BYTE_USB">Lies Byte von USB</msg>
-        <msg id ="serial.WRITE_INT_USB">Sende Zahl über USB</msg>
-        <msg id ="serial.READ_INT_USB">Lies Zahl von USB</msg>
-
         <msg id ="func.NAME">Name</msg>
         <msg id ="func.CALL">Führe # aus</msg>
         <msg id ="func.RETURNS">Antwort von #</msg>
@@ -369,6 +356,7 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="dev.MICROPHONE_GET">Mikrophon Lautstärke</msg>
         <msg id="dev.SERIAL_WRITE_INT">Sende Zahl über</msg>
         <msg id="dev.SERIAL_READ_INT">Lese Zahl von</msg>
+        <msg id="dev.SERIAL_READ_ALL">Lese alle Zeichen</msg>
         
         <msg id="dev.SPEAKER">Lautsprecher</msg>
         <msg id="dev.SPEAKER_MUTE">Lautsprecher # aus</msg>

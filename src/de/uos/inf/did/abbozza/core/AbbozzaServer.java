@@ -433,7 +433,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                 registerHandlers();
                 httpServer.setExecutor(Executors.newFixedThreadPool(50)); // ATTENTION
                 httpServer.start();
-                AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
+                AbbozzaLogger.out("Http-server started on " + httpServer.getAddress().toString() , AbbozzaLogger.INFO);
             } catch (Exception e) {
                 AbbozzaLogger.err(e.getLocalizedMessage());
                 AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
