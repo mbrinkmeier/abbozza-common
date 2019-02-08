@@ -67,6 +67,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.HttpsURLConnection;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -329,9 +330,12 @@ public class LoadHandler extends AbstractHandler {
      */
     private String getSketchFromFile(URI uri) throws FileNotFoundException, IOException {
         String result = "";
-        BufferedReader reader = new BufferedReader(new InputStreamReader(uri.toURL().openStream(), "utf-8"));
-        while (reader.ready()) {
-            result = result + reader.readLine() + '\n';
+        BufferedReader reader;
+        URLConnection conn = uri.toURL().openConnection();
+        reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));        
+        String line;
+        while ( (line = reader.readLine()) != null ) {
+            result = result + line + '\n';
         }
         reader.close();
         return result;

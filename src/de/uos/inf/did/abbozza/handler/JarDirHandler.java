@@ -37,6 +37,8 @@ public class JarDirHandler implements HttpHandler {
     // The vector of entries
     private Vector<URI> entries;
     private String sketch;
+    private int BUFSIZE = 10240;
+    // private byte buffer[] = new byte[BUFSIZE];
 
     /**
      * Initialize the JarDirHandler
@@ -243,14 +245,15 @@ public class JarDirHandler implements HttpHandler {
                     URLConnection conn = fileUrl.openConnection();
                     InputStream inStream = conn.getInputStream();
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    byte buf[] = new byte[1024];
+                    byte buf[] = new byte[BUFSIZE];
                     while(inStream.available() > 0 ){
-                        int count = inStream.read(buf,0,1024);
+                        int count = inStream.read(buf,0,BUFSIZE);
                         baos.write(buf,0,count); 
                     } 
                     bytearray = baos.toByteArray();   
                                         
                 } catch (IOException ex) {
+                    AbbozzaLogger.err(ex.getLocalizedMessage());
                     bytearray = null;
                 }
             }
