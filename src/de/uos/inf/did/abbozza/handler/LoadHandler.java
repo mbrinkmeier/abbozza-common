@@ -51,6 +51,7 @@ import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
@@ -213,6 +214,7 @@ public class LoadHandler extends AbstractHandler {
                 _abbozzaServer.setLastSketchFile(uri);
 
                 if ((!panel.getSystem().equals(this._abbozzaServer.getSystem())) && (!panel.getSystem().equals(""))) {
+                    _abbozzaServer.bringFrameToFront();
                     int option = JOptionPane.showConfirmDialog(null, AbbozzaLocale.entry("err.WRONG_SYSTEM", AbbozzaLocale.entry(panel.getSystem())),
                             AbbozzaLocale.entry("err.WRONG_SYSTEM_TITLE"), JOptionPane.YES_NO_OPTION);
                     if (option == JOptionPane.NO_OPTION) {
@@ -247,6 +249,7 @@ public class LoadHandler extends AbstractHandler {
                     String msg = ex.getLocalizedMessage();
                     AbbozzaLogger.err("LoadHandler: Error reading " + uri.toString());            
                     AbbozzaLogger.err("LoadHandler: " + ex.getLocalizedMessage());
+                    _abbozzaServer.bringFrameToFront();
                     JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("err.ERROR_LOADING_SKETCH") + "\n"
                         + uri.toString() + "\n" 
                         + ex.getLocalizedMessage() , AbbozzaLocale.entry("err.ERROR") , JOptionPane.ERROR_MESSAGE);
@@ -311,6 +314,7 @@ public class LoadHandler extends AbstractHandler {
             AbbozzaLogger.err("LoadHandler: Error reading " + path);            
             AbbozzaLogger.err("LoadHandler: Expanded to " + uri.toString() );            
             AbbozzaLogger.err("LoadHandler: " + ex.getLocalizedMessage());
+                    _abbozzaServer.bringFrameToFront();
             JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("err.ERROR_LOADING_SKETCH") + "\n"
                         + path + "\n" 
                         + ex.getLocalizedMessage() , AbbozzaLocale.entry("err.ERROR") , JOptionPane.ERROR_MESSAGE);
