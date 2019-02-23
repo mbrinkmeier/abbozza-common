@@ -225,35 +225,26 @@ public class LoadHandler extends AbstractHandler {
                 }
 
                 if (contentLocation == null) {
-                    // try {
-                    //     URI con = _abbozzaServer.getTaskContext();
-                    //     URL absolute = new URL(con.toURL(), uri.toString());
-                    //     URI conUri;
-                    //     URI abs = absolute.toURI();
-                        // contentLocation = con.relativize(abs).toString();
-                        contentLocation = uri.toString();
-                    // } catch (URISyntaxException | MalformedURLException ex) {
-                    //     contentLocation = uri.toString();
-                    // }
+                    contentLocation = uri.toString();
                 }
 
                 if (panel.applyOptions()) {
                     AbbozzaServer.getConfig().apply(panel.getOptions());
                 }
-                
-                if ( result != null ) {
+
+                if (result != null) {
                     _abbozzaServer.setLastSketchFile(uri);
                 }
-                
+
             } catch (IOException ex) {
-                    String msg = ex.getLocalizedMessage();
-                    AbbozzaLogger.err("LoadHandler: Error reading " + uri.toString());            
-                    AbbozzaLogger.err("LoadHandler: " + ex.getLocalizedMessage());
-                    _abbozzaServer.bringFrameToFront();
-                    JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("err.ERROR_LOADING_SKETCH") + "\n"
-                        + uri.toString() + "\n" 
-                        + ex.getLocalizedMessage() , AbbozzaLocale.entry("err.ERROR") , JOptionPane.ERROR_MESSAGE);
-                    result = null;
+                String msg = ex.getLocalizedMessage();
+                AbbozzaLogger.err("LoadHandler: Error reading " + uri.toString());
+                AbbozzaLogger.err("LoadHandler: " + ex.getLocalizedMessage());
+                _abbozzaServer.bringFrameToFront();
+                JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("err.ERROR_LOADING_SKETCH") + "\n"
+                        + uri.toString() + "\n"
+                        + ex.getLocalizedMessage(), AbbozzaLocale.entry("err.ERROR"), JOptionPane.ERROR_MESSAGE);
+                result = null;
             }
         }
         _abbozzaServer.setDialogOpen(false);
@@ -293,37 +284,28 @@ public class LoadHandler extends AbstractHandler {
             _abbozzaServer.setLastSketchFile(uri);
 
             if (contentLocation == null) {
-                // try {
-                    // URI con = _abbozzaServer.getTaskContext();
-                    // URL absolute = new URL(con.toURL(), uri.toString());
-                    // URI conUri;
-                    // URI abs = absolute.toURI();
-                    // contentLocation = con.relativize(abs).toString();
-                    contentLocation = uri.toString();
-                // } catch (URISyntaxException ex) {
-                //     contentLocation = uri.toString();
-                // }
+                contentLocation = uri.toString();
             }
 
-            if ( result != null ) {
+            if (result != null) {
                 _abbozzaServer.setLastSketchFile(uri);
             }
-            
+
         } catch (IOException ex) {
             String msg = ex.getLocalizedMessage();
-            AbbozzaLogger.err("LoadHandler: Error reading " + path);            
-            AbbozzaLogger.err("LoadHandler: Expanded to " + uri.toString() );            
+            AbbozzaLogger.err("LoadHandler: Error reading " + path);
+            AbbozzaLogger.err("LoadHandler: Expanded to " + uri.toString());
             AbbozzaLogger.err("LoadHandler: " + ex.getLocalizedMessage());
-                    _abbozzaServer.bringFrameToFront();
+            _abbozzaServer.bringFrameToFront();
             JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("err.ERROR_LOADING_SKETCH") + "\n"
-                        + path + "\n" 
-                        + ex.getLocalizedMessage() , AbbozzaLocale.entry("err.ERROR") , JOptionPane.ERROR_MESSAGE);
+                    + path + "\n"
+                    + ex.getLocalizedMessage(), AbbozzaLocale.entry("err.ERROR"), JOptionPane.ERROR_MESSAGE);
             result = null;
         }
 
         return result;
     }
-    
+
     /**
      * Read a Sketch from an URI.
      *
@@ -336,9 +318,9 @@ public class LoadHandler extends AbstractHandler {
         String result = "";
         BufferedReader reader;
         URLConnection conn = uri.toURL().openConnection();
-        reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));        
+        reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
         String line;
-        while ( (line = reader.readLine()) != null ) {
+        while ((line = reader.readLine()) != null) {
             result = result + line + '\n';
         }
         reader.close();
@@ -359,33 +341,4 @@ public class LoadHandler extends AbstractHandler {
         return getSketchFromFile(file.toURI());
     }
 
-    
-    /*
-    private String getStartFromAbj(URI abj) {
-        String result = "";
-        try {
-            URI uri = new URI("jar:" + abj.toString() + "!/start.abz");
-            AbbozzaLogger.out("LoadHandler: Open abj " + uri.toString(), AbbozzaLogger.DEBUG);
-            URLConnection conn = uri.toURL().openConnection();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-            while (reader.ready()) {
-                result = result + reader.readLine() + '\n';
-            }
-            reader.close();
-            contentLocation = uri.toString();
-            _abbozzaServer.setTaskContext(uri);
-        } catch (Exception ex) {
-            ex.printStackTrace(System.err);
-            AbbozzaLogger.err("LoadHandler: Could not open " + abj.toString());
-            return null;
-        }
-        return result;
-    }
-
-    private String getStartFromAbj(File file) {
-        return getStartFromAbj(file.toURI());
-    }
-    */
-
-    
 }
