@@ -1,0 +1,256 @@
+/*
+Copyright 2018 mbrinkmeier@uni-osnabrueck.de.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/* 
+    Created on : 01.12.2018, 06:20:06
+    Author     : mbrin
+*/
+
+.abzHeader {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+    height: 48px;
+    background-color: white;
+    border-bottom: 1px black solid;
+    box-shadow: 0px 5px 5px #d0d0d0;
+    z-index: 10;
+}
+
+.abzFooter {
+    position: fixed;
+    left: 0px;
+    width: 100%;
+    bottom: 0px;
+    height: 48px;
+    background-color: white;
+    z-index: 10;
+    border-top: 1px black solid;
+    box-shadow: 0px -2px 5px #d0d0d0;
+}
+
+.abzFooter .frameList {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    height: 24px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+}
+
+
+.abzFooter .iconList {
+    position: absolute;
+    right: 10px;
+    left: 60px;
+    bottom: 6px;
+    height: 36px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.abzFooter .iconList::-webkit-scrollbar {
+    height: 5px;
+}
+
+.abzFrameIcon {
+    float: left;
+    height: 20px;
+    border: outset 1px darkgrey;
+    border-radius: 4px;
+    padding: 6px;
+    margin-left: 4px;
+    box-shadow: 2px 2px 4px #d0d0d0;
+}
+
+.abzFrameIcon:hover {
+    background: darkgray;
+}
+
+.abzFrameIcon IMG {
+    height: 20px;
+    width: 20px;
+}
+
+.abzDesktop {
+    position: absolute;
+    background-color: white;
+    top: 50px;
+    left: 0px;
+    right: 0px;
+    bottom: 50px;
+    overflow: none;
+}
+
+.abzFrame {
+    position: absolute;
+    border: 1px black solid;
+    background: white;
+    overflow: none;
+    background-color: lightgray;
+    box-shadow: 5px 5px 10px #aaaaaa;
+}
+
+.abzFrame .titleBar {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 20px;
+    display: flex;
+}
+
+.titleLeft {
+    position: absolute;
+    left: 0px;
+    top:0px;
+    height: 20px;
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    align-items:center;
+}
+
+.titleRight {
+    position: absolute;
+    right: 0px;
+    top:0px;
+    height: 20px;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.titleText {
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    border: none;
+    margin: 0px;
+    margin-left: 5px;
+    padding: 2px;
+}
+
+.titleLeft IMG {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    margin: 2px;
+}
+
+
+.titleButton {
+    border: none;
+    width: 16px;
+    height: 16px;
+    margin: 0px 8px 2px 8px;
+}
+
+.abzFrame .titleBar .titleButton:hover {
+    background: darkgray;
+}
+
+
+.abzFrame .content {
+    position: absolute;
+    overflow: none;
+    left: 0px;
+    width: 100%;
+    top: 20px;
+    bottom: 0px;
+    background-color: white;    
+}
+
+.abzFrame .resizeHandle {
+    float: right;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    width: 19px;
+    height: 19px;
+    right: 0px;
+    bottom: 0px;
+}
+
+.abzFrameContent {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom : 0px;
+    overflow : hidden;
+    margin:5px;
+}
+
+.abzSceneList {
+    position: fixed;
+    left: 0px;
+    width: auto;
+    height: 48px;
+    bottom: 48px;
+    visibility: hidden;
+    background: lightgray;
+    padding: 6px;
+    border: outset;
+    box-shadow: 5px -5px 10px #aaaaaa;
+    z-index : 42;
+}
+
+.abzSceneList SPAN {
+    float: left;
+    height: 44px;
+    min-width: 44px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+    border: outset;
+    background-size: 32px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.abzFooter .sceneButton {
+    position: absolute;
+    left: 12px;
+    bottom: 8px;
+    height: 30px;
+    width: 30px;
+    border: outset;
+    background-size: 28px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.abzFooter .sceneButton:hover {
+    background-size: 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.frameDragView {
+   position: absolute;
+   border: 1px gray solid;
+   background-color: #f8f8f8;
+   opacity: 0.5;
+   z-index:  100;
+   visibility : hidden;
+}
