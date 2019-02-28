@@ -8,7 +8,6 @@ package de.uos.inf.did.abbozza.handler;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import java.io.ByteArrayOutputStream;
@@ -253,7 +252,7 @@ public class JarDirHandler implements HttpHandler {
                     bytearray = baos.toByteArray();   
                                         
                 } catch (IOException ex) {
-                    AbbozzaLogger.err(ex.getLocalizedMessage());
+                    AbbozzaLogger.info("JarDirHandler: " + ex.getLocalizedMessage());
                     bytearray = null;
                 }
             }
@@ -265,7 +264,7 @@ public class JarDirHandler implements HttpHandler {
         }
 
         if (bytearray == null) {
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.not_found",path),AbbozzaLogger.ERROR);
+            AbbozzaLogger.out("JarDirHandler: " + path + " not found",AbbozzaLogger.ERROR);
         }
         return bytearray;
     }
@@ -314,7 +313,7 @@ public class JarDirHandler implements HttpHandler {
         }
         
         if (inStream == null) {
-            AbbozzaLogger.err(AbbozzaLocale.entry("msg.not_found",path));            
+            AbbozzaLogger.err("JarDirHandler: " + path + " not found");            
         }
         
         return inStream;

@@ -21,11 +21,13 @@
  */
 package de.uos.inf.did.abbozza.core;
 
+import de.uos.inf.did.abbozza.tools.XMLTool;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
+import javax.swing.JOptionPane;
 import javax.xml.XMLConstants;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -49,6 +51,14 @@ public class AbbozzaLocale {
         localeXml = buildLocale();
         
         NodeList nodes = localeXml.getElementsByTagName("msg");
+ 
+        if ( nodes.getLength() == 0 ) {
+            AbbozzaLogger.err("AbbozzaLocale: Empty locale!");
+            AbbozzaSplashScreen.hideSplashScreen();            
+            JOptionPane.showMessageDialog(null, "Critical Error during start!\nCould not read locale!", "abbozza! Critical Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);            
+        }
+
         for (int i = 0; i < nodes.getLength(); i++ ) {
             Element node = (Element) nodes.item(i);
             String id = node.getAttribute("id").toLowerCase();
@@ -113,6 +123,8 @@ public class AbbozzaLocale {
                     root.appendChild(child);
                     child.setAttribute("id","global_" + locale);
                 }
+            } else {
+                AbbozzaLogger.err("AbbozzaLocale: Could not load global locale /js/languages/" + locale + ".xml");
             }
             
             Document systemLocale = fetchLocale("/js/abbozza/" + AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");
@@ -132,6 +144,8 @@ public class AbbozzaLocale {
                     root.appendChild(child);
                     child.setAttribute("id",AbbozzaServer.getInstance().getSystem() + "_" + locale);
                 }
+            } else {
+                AbbozzaLogger.err("/js/abbozza/" + AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");                
             }
 
             // Add server specific locales
@@ -270,9 +284,9 @@ public class AbbozzaLocale {
      * @return The value of the requested entry.
      */
     public static String entry(String key) {
-        key = key.toLowerCase();
         if ( localeXml == null ) return key;
-        Element el = localeXml.getElementById(key);
+        String lkey = key.toLowerCase();
+        Element el = localeXml.getElementById(lkey);
         if ( el == null ) return key;
         return el.getTextContent();
     }

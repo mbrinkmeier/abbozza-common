@@ -43,6 +43,7 @@ Trotzdem fortfahren?</msg>
         <msg id="MSG.DONT_ASK_AGAIN">Frag' nicht noch einmal</msg>
     </messages>
     <gui>
+        <msg id="gui.critical_error">Kritischer Fehler</msg>
         <msg id="gui.table">Tabelle</msg>
         <msg id="gui.graph">Graph</msg>
         <msg id="gui.level">Pegel</msg>

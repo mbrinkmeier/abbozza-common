@@ -43,6 +43,7 @@ Continuing?</msg>
         <msg id="MSG.DONT_ASK_AGAIN">Don't ask again!</msg>
     </messages>
     <gui>
+        <msg id="gui.critical_error">Critical Error</msg>
         <msg id="gui.table">Table</msg>
         <msg id="gui.graph">Graph</msg>
         <msg id="gui.level">Level</msg>
