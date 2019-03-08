@@ -26,7 +26,7 @@ import org.java_websocket.server.WebSocketServer;
 
 /**
  *
- * @author Michael Brinkmeier <michael.brinkmeier@uni-osnabrueck.de>
+ * @author Michael Brinkmeier (michael.brinkmeier@uni-osnabrueck.de)
  */
 public class AbbozzaWebSocketServer extends WebSocketServer implements ClacksSubscriber {
 

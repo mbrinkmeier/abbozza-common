@@ -1137,7 +1137,7 @@ public abstract class AbbozzaServer implements HttpHandler {
      * This operation provides a hook to register plugins or components.
      * In the default implementation it does nothing.
      * 
-     * @param plugin 
+     * @param plugin The plugin toi be registered.
      */
     public void registerPlugin(Plugin plugin) {}
 

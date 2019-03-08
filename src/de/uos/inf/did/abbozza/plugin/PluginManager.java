@@ -61,7 +61,7 @@ public class PluginManager implements HttpHandler {
     /**
      * Initialize a PluginMAnager and connect it to the Server.
      * 
-     * @param server 
+     * @param server The abbozza! server loading the plugin.
      */
     public PluginManager(AbbozzaServer server) {
         AbbozzaLogger.out("PluginManager: Started", AbbozzaLogger.INFO);
@@ -154,7 +154,7 @@ public class PluginManager implements HttpHandler {
     /**
      * Add a plugin from jar files.
      * 
-     * @param jars 
+     * @param jars A directory containing the plugin Jars.
      */
     protected void addJars(File jars[]) {
         Plugin plugin;

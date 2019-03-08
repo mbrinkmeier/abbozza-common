@@ -80,10 +80,10 @@ public class AbbozzaVersion {
     
     
     /**
-     * 
-     * @param major
-     * @param minor
-     * @param hotfix 
+     * Set the version of the common component.
+     * @param major The major number
+     * @param minor The minor number
+     * @param hotfix The hotfix number
      */
     public static void setCommonVersion(int major, int minor, int hotfix) {
         majorCommon = major;
@@ -92,10 +92,10 @@ public class AbbozzaVersion {
     }
     
     /**
-     * 
-     * @param major
-     * @param minor
-     * @param hotfix 
+     * Set the version of the system component.
+     * @param major The major number
+     * @param minor The minor number
+     * @param hotfix The hotfix number
      */
     public static void setSystemVersion(int major, int minor, int hotfix) {
         majorSystem = major;
@@ -104,26 +104,37 @@ public class AbbozzaVersion {
     }
     
     /**
-     * 
-     * @param systemname 
+     * Set the system name.
+     * @param systemname The new system name.
      */
     public static void setSystemName(String systemname) {
         systemName = systemname;
     }
 
     /**
-     * 
-     * @return 
+     * REturns the complewte version as String.
+     * @return The version
      */
     public static String asString() {
         return majorSystem + "." + minorSystem + "." + hotfixSystem + " (" +
                 majorCommon + "." + minorCommon + "." + hotfixCommon + " " + systemName + ")";
     }
     
+    
+    /**
+     * Returns the Common version as String
+     * 
+     * @return The version of the Common part
+     */
     public static String getCommonVersion() {
         return majorCommon + "." + minorCommon + "." + hotfixCommon;        
     }
     
+    /**
+     * Returns the System version as String
+     * 
+     * @return The version of the System
+     */
     public static String getSystemVersion() {
         return majorSystem + "." + minorSystem + "." + hotfixSystem + " (" + systemName+ ")";        
     }
@@ -131,10 +142,10 @@ public class AbbozzaVersion {
     /**
      * Checks if the version is newer than the one given as argument.
      * 
-     * @param major
-     * @param minor
-     * @param hotfix
-     * @return 
+     * @param major The major number
+     * @param minor The minor number
+     * @param hotfix The hotfix number
+     * @return true if the common version is newer as
      */
     public static boolean isCommonNewerAs(int major, int minor, int hotfix) {
        if ( majorCommon < major ) return false;
@@ -147,11 +158,11 @@ public class AbbozzaVersion {
     }
     
     /**
-     * 
-     * @param major
-     * @param minor
-     * @param hotfix
-     * @return 
+     * Check if the system is newer than the given version.
+     * @param major The major number
+     * @param minor The minor number
+     * @param hotfix The hotfix number
+     * @return  true if the system is newer as the given version
      */
     public static boolean isSystemNewerAs(int major, int minor, int hotfix) {
        if ( majorSystem < major ) return false;
