@@ -869,9 +869,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
                 // If successful, add the plugin trees
                 Node root = optionsXml.getElementsByTagName("options").item(0);
-                Enumeration<Plugin> plugins = this.pluginManager.plugins();
-                while (plugins.hasMoreElements()) {
-                    Plugin plugin = plugins.nextElement();
+                for ( Plugin plugin : this.pluginManager.plugins() ) {
                     Node pluginOpts = plugin.getOptions();
 
                     ((Element) pluginOpts).setAttribute("plugin", plugin.getId());

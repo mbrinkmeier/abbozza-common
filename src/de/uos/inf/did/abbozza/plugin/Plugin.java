@@ -33,7 +33,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -56,7 +56,7 @@ public class Plugin {
     private String _id;
     private String _name;
     private String _description;
-    private Vector<URL> _js;
+    private ArrayList<URL> _js;
     private Document _xml;
     private Node _options;
     private Node _feature;
@@ -82,7 +82,7 @@ public class Plugin {
         this._handler = null;
         this._url = url;
         this._id = null;
-        this._js = new Vector<URL>();
+        this._js = new ArrayList<URL>();
         
         /*
         this._fileHandler = new JarDirHandler();

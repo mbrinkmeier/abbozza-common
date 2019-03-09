@@ -149,10 +149,7 @@ public final class AbbozzaMonitor extends JFrame {
 
         // Look for plugin panels and listeners
         AbbozzaLogger.info("AbbozzaMonitor: Checking plugins ...");
-        Plugin plugin;
-        Enumeration<Plugin> plugins = AbbozzaServer.getPluginManager().plugins();
-        while (plugins.hasMoreElements()) {
-            plugin = plugins.nextElement();
+        for ( Plugin plugin : AbbozzaServer.getPluginManager().plugins() ) {
             AbbozzaLogger.info("AbbozzaMonitor: Checking plugin " + plugin.getId());
             this.addMonitorPanel(plugin.getMonitorPanel(), plugin.getMonitorPanelPrefix());
             this.addMonitorListener(plugin.getMonitorListener(), plugin.getMonitorListenerPrefix());
