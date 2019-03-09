@@ -50,7 +50,7 @@ public class AbbozzaLogger {
     }
     
     public static void init() {
-        level = 1;
+        level = 4;
         System.setErr(new PrintStream(errorLogger));
     }
     
@@ -146,7 +146,9 @@ public class AbbozzaLogger {
     public static void stackTrace(Exception ex) {
         if (level >= ERROR ) {
             write("[err] : Stack trace for exception");
-            ex.printStackTrace(System.out);
+            for (OutputStream stream : streams) {
+                ex.printStackTrace(new PrintStream(stream));
+            }
         }
     }
     
