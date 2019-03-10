@@ -28,11 +28,13 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
+import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -291,6 +293,7 @@ public class PluginManager implements HttpHandler {
     @Override
     public void handle(HttpExchange exchg) throws IOException {
         String response = "";
+        int status = 200;
         String path = exchg.getRequestURI().getPath();
         OutputStream os = exchg.getResponseBody();
         Headers responseHeaders = exchg.getResponseHeaders();
@@ -307,20 +310,21 @@ public class PluginManager implements HttpHandler {
             responseHeaders.set("Content-Type", "text/javascript");
 
         } else if (path.startsWith("/abbozza/plugins/")) {
-            // If the path is of the form /abbozz/plugins/<pluginid>/<path>
+            // If the path is of the form /abbozza/plugins/<pluginid>/<path>
             // get the requested content from the plugin
-            /*
             String remainder = path.substring(17);
             int idx = remainder.indexOf('/');
             String pluginId = remainder.substring(0,idx);
             String filePath = remainder.substring(idx);
             Plugin plugin = this.getPlugin(pluginId);
             AbbozzaLogger.info("PluginManager: Requested " + filePath + " from plugin " + pluginId );
-            if ( plugin != null)  {
-                JarDirHandler handler = plugin.getFileHandler();
-                handler.handle(exchg,filePath);
+            if ( plugin != null)  {                
+                plugin.getFileHandler().handlePath(exchg,filePath.substring(1));
+                return;
+            } else {
+                response = "Pluign " + pluginId + " not found!";
+                status= 400;
             }
-             */
         } else {
             // respond overview 
             response = "Found plugins:";
@@ -334,8 +338,10 @@ public class PluginManager implements HttpHandler {
             }
             responseHeaders.set("Content-Type", "text/plain");
         }
-        exchg.sendResponseHeaders(200, response.length());
-        os.write(response.getBytes());
+        if ( response != null ) {
+            exchg.sendResponseHeaders(status, response.length());
+            os.write(response.getBytes());
+        }
         os.close();
     }
 

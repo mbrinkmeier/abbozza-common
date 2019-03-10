@@ -34,8 +34,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -84,22 +82,24 @@ public class Plugin {
         this._id = null;
         this._js = new ArrayList<URL>();
         
-        /*
+        parseXML(xml);
+
+        // Initialize fileHandler
         this._fileHandler = new JarDirHandler();
         try {
             this._fileHandler.addURI(this._url.toURI());
         } catch (URISyntaxException ex) {
             AbbozzaLogger.err("Plugin " + this._id + ": malformed URL: " + this._url);
         }
-        */
-        
-        parseXML(xml);
-        
+
+        // Register plugin at global handler
+        /*
         try {
             AbbozzaServer.getInstance().getJarHandler().addURI(this._url.toURI());
         } catch (URISyntaxException ex) {
             Logger.getLogger(Plugin.class.getName()).log(Level.SEVERE, null, ex);
         }
+        */
         
         AbbozzaLogger.out("Plugin " + this._id + " (" + this._url + ") added", AbbozzaLogger.INFO);
     }
@@ -297,10 +297,33 @@ public class Plugin {
         return this._options.cloneNode(true);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public boolean isActivated() {
         return AbbozzaServer.getConfig().getOption(_id + ".enabled");
     }
 
+    /**
+     * 
+     */
+    public void activate() {
+        AbbozzaServer.getConfig().setOption(_id + ".enabled",true);
+    }
+    
+    /**
+     * 
+     */
+    public void deactivate() {
+        AbbozzaServer.getConfig().setOption(_id + ".enabled",false);
+    }
+
+
+    /**
+     * 
+     * @return 
+     */
     public Node getFeature() {
         if ( this._feature == null ) return null;
         return this._feature.cloneNode(true);

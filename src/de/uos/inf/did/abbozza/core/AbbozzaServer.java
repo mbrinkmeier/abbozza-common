@@ -136,7 +136,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     private DuplexPrintStream errStream;
     private DuplexPrintStream outStream;
     protected HttpServer httpServer;
-    private int serverPort;
+    // private int serverPort;
     public MonitorHandler monitorHandler;
     private URI _lastSketchFile = null;
     private URI _taskContext;
@@ -210,6 +210,12 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Setting paths
         setPaths();
 
+        /**
+         * Read the configuration from
+         * <user.home>/.abbozza/<system>/abbozza.cfg
+         */
+        config = new AbbozzaConfig(configPath);
+
         // Find Jars
         jarHandler = new JarDirHandler();
         jarHandler.clear();
@@ -223,12 +229,6 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Load plugins
         pluginManager = new PluginManager(this);
-
-        /**
-         * Read the configuration from
-         * <user.home>/.abbozza/<system>/abbozza.cfg
-         */
-        config = new AbbozzaConfig(configPath);
 
         AbbozzaLogger.setLevel(Integer.parseInt(config.getProperty("loglevel")));
 
@@ -458,9 +458,9 @@ public abstract class AbbozzaServer implements HttpHandler {
             }
             // }
 
-            this.serverPort = serverPort;
+            // this.serverPort = serverPort;
 
-            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(this.serverPort)), 4);
+            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(serverPort)), 4);
 
             String url = getRootURL() + getSystemPath();
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_reachable", url));
@@ -1279,11 +1279,16 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     public String getRootURL() {
-        String useIP = this.config.getProperty("useIP");
+        String useIP = "false";
+        if ( config == null ) {
+            AbbozzaLogger.err("AbbozzaServer.gerRootURL() : Config not yet loaded!");
+            return "";
+        }
+        useIP = config.getProperty("useIP");
         if ("true".equals(useIP)) {
-            return "http://127.0.0.1:" + serverPort + "/";
+            return "http://127.0.0.1:" + config.getServerPort() + "/";
         } else {
-            return "http://localhost:" + serverPort + "/";
+            return "http://localhost:" + config.getServerPort() + "/";
         }
     }
     

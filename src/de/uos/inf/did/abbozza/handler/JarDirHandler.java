@@ -122,9 +122,13 @@ public class JarDirHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-
         String path = exchg.getRequestURI().getPath();
         
+        handlePath(exchg,path);
+    }
+
+
+    public void handlePath(HttpExchange exchg, String path) throws IOException {
         OutputStream os = exchg.getResponseBody();
         
         byte[] bytearray = getBytes(path);
@@ -163,8 +167,9 @@ public class JarDirHandler implements HttpHandler {
         exchg.sendResponseHeaders(200, bytearray.length);
         os.write(bytearray, 0, bytearray.length);
         os.close();
+        
     }
-
+    
     /*
     public void handle(HttpExchange exchg, String path) throws IOException {
         
