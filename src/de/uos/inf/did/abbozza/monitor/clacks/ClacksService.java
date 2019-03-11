@@ -221,6 +221,7 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
      */
     public synchronized void sendBytes(byte[] buffer) {
         outgoing.add(new ClacksBytes(0, buffer));
+        // this.monitor.appendText(new String(buffer), "output");
     }
 
     /**
