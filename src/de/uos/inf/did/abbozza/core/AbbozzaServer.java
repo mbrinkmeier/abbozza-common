@@ -314,8 +314,13 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
         // The directory in which the executed jar resides is assumed to be
         // in a subdirectory lib of the abbozza path
-        jarPath = installFile.getParentFile().getAbsolutePath();
-        abbozzaPath = installFile.getParentFile().getParent();
+        if ( !installFile.isDirectory() ) {
+            jarPath = installFile.getParentFile().getAbsolutePath();
+            abbozzaPath = installFile.getParentFile().getParent();
+        } else {
+            jarPath = installFile.getAbsolutePath();
+            abbozzaPath = installFile.getParent();           
+        }
 
         AbbozzaLogger.info("jarPath " + jarPath);
         AbbozzaLogger.info("abbozzaPath " + abbozzaPath);
