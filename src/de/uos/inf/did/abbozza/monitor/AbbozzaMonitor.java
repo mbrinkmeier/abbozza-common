@@ -179,7 +179,8 @@ public final class AbbozzaMonitor extends JFrame {
         // Start WebSocketServer
         int port = AbbozzaServer.getConfig().getServerPort() + 1;
         try {
-            webSocketServer = new AbbozzaWebSocketServer(this,port);
+            InetSocketAddress socket = new InetSocketAddress("localhost",port);
+            webSocketServer = new AbbozzaWebSocketServer(this,socket);
             webSocketServerThread = new Thread(webSocketServer);
             webSocketServerThread.start();
         } catch (Exception xe) {

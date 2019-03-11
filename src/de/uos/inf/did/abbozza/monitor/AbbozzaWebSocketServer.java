@@ -40,11 +40,22 @@ public class AbbozzaWebSocketServer extends WebSocketServer implements ClacksSub
         AbbozzaLogger.info("Starting");     
     }
     
-    public AbbozzaWebSocketServer(AbbozzaMonitor monitor, int port) {
+    public AbbozzaWebSocketServer(AbbozzaMonitor monitor, int port) throws Exception {
         super(new InetSocketAddress("localhost",port));
         this.monitor = monitor;
         clacksService = this.monitor.getClacksService();
         AbbozzaLogger.info("AbbozzaWebSocketServer: Starting at address " + this.getAddress().toString() );
+    }
+    
+    public AbbozzaWebSocketServer(AbbozzaMonitor monitor,  InetSocketAddress socket) throws Exception {
+        super(socket);
+        AbbozzaLogger.info("B");
+        this.monitor = monitor;
+        AbbozzaLogger.info("C");
+        clacksService = this.monitor.getClacksService();
+        AbbozzaLogger.info("D");
+        AbbozzaLogger.info("AbbozzaWebSocketServer: Starting at address " + this.getAddress().toString() );
+        AbbozzaLogger.info("E");        
     }
     
     

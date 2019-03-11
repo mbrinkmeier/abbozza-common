@@ -55,10 +55,15 @@ public class MonitorHandler extends AbstractHandler {
             result = resume();
         }
         
+        AbbozzaLogger.info("Hier");
         if (result) {
-            String query = URLDecoder.decode(exchg.getRequestURI().getQuery(),"UTF-8");
+            String query = exchg.getRequestURI().getQuery();
+            AbbozzaLogger.info(query);
             if ( query != null ) {
+              query = URLDecoder.decode(query,"UTF-8");                
+              AbbozzaLogger.info(query);
               query = query.replace('&', '\n');
+              AbbozzaLogger.info(query);
               Properties props = new Properties();
               props.load(new StringReader(query));
               // sendMessage(props.getProperty("msg"));

@@ -299,21 +299,21 @@ public class Plugin {
     
     /**
      * 
-     * @return 
+     * @return true if the plugin is activated, false otherwise.
      */
     public boolean isActivated() {
         return AbbozzaServer.getConfig().getOption(_id + ".enabled");
     }
 
     /**
-     * 
+     * Activate the plugin.
      */
     public void activate() {
         AbbozzaServer.getConfig().setOption(_id + ".enabled",true);
     }
     
     /**
-     * 
+     * Deactivate the plugin.
      */
     public void deactivate() {
         AbbozzaServer.getConfig().setOption(_id + ".enabled",false);
@@ -322,7 +322,7 @@ public class Plugin {
 
     /**
      * 
-     * @return 
+     * @return The feature belonging to this plugin.
      */
     public Node getFeature() {
         if ( this._feature == null ) return null;
