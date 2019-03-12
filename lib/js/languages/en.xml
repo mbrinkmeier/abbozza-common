@@ -167,7 +167,13 @@ Should I try it again?</msg>
         <msg id="gui.queues">Queues</msg>
         <msg id="gui.lists">Lists</msg>
         <msg id="gui.bintrees">Binary trees</msg>
-        <msg id="gui.fontsize">Font size</msg>        
+        <msg id="gui.fontsize">Font size</msg>
+        <msg id="gui.disconnect">Disconnect</msg>          
+        <msg id="gui.activate_websocket">Activate WebSocket</msg>        
+        <msg id="gui.websocket_error">Couldn't start WebSocket on port #</msg>        
+        <msg id="gui.websocket_error_title">WebSocket Error</msg>        
+        <msg id="gui.websocket_connect">Client connected from #</msg>        
+        <msg id="gui.websocket_disconnect"># disconnected</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>

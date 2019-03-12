@@ -5,15 +5,12 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
-import de.uos.inf.did.abbozza.core.AbbozzaConfig;
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
 import de.uos.inf.did.abbozza.core.AbbozzaServerException;
-import de.uos.inf.did.abbozza.core.AbbozzaSplashScreen;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
-import de.uos.inf.did.abbozza.plugin.PluginManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -27,7 +24,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import jssc.SerialPortList;
 
 /**
  *

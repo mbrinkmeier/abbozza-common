@@ -168,6 +168,12 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="gui.lists">Listen</msg>
         <msg id="gui.bintrees">Binärbäume</msg>
         <msg id="gui.fontsize">Schriftgröße</msg>
+        <msg id="gui.disconnect">Trenne Verbindung</msg>
+        <msg id="gui.activate_websocket">Aktiviere WebSocket</msg>        
+        <msg id="gui.websocket_error">Konnte keinen WebSocket auf Port # starten!</msg>        
+        <msg id="gui.websocket_error_title">WebSocket Fehler</msg>        
+        <msg id="gui.websocket_connect">Klient # hat sich verbunden</msg>        
+        <msg id="gui.websocket_disconnect"># wurde getrennt</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

@@ -40,6 +40,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -49,6 +50,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
@@ -74,6 +76,8 @@ public final class AbbozzaMonitor extends JFrame {
     private HashMap<String, MonitorListener> listeners;
     private DefaultStyledDocument protocolDocument;
     protected ByteRingBuffer protocolUpdateBuffer;
+    
+    protected WebsocketPanel websocketPanel;
     protected AbbozzaWebSocketServer webSocketServer = null;
     protected Thread webSocketServerThread = null;
     
@@ -145,6 +149,9 @@ public final class AbbozzaMonitor extends JFrame {
         this.addMonitorPanel(new LevelMonitor(tableMonitor.getTableModel()), "level");
         this.addMonitorPanel(new OscillographMonitor(), null);
 
+        websocketPanel = new WebsocketPanel(this);
+        this.addMonitorPanel(websocketPanel,null);
+        
         listeners = new HashMap<>();
 
         // Look for plugin panels and listeners
@@ -176,16 +183,6 @@ public final class AbbozzaMonitor extends JFrame {
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         GUITool.centerWindow(this);
         
-        // Start WebSocketServer
-        int port = AbbozzaServer.getConfig().getServerPort() + 1;
-        try {
-            InetSocketAddress socket = new InetSocketAddress("localhost",port);
-            webSocketServer = new AbbozzaWebSocketServer(this,socket);
-            webSocketServerThread = new Thread(webSocketServer);
-            webSocketServerThread.start();
-        } catch (Exception xe) {
-            AbbozzaLogger.err(xe.getLocalizedMessage());
-        }
     }
 
     /**
@@ -244,11 +241,9 @@ public final class AbbozzaMonitor extends JFrame {
      */
     public void close() throws Exception {
         AbbozzaLogger.debug("AbbozzaMonitor: Closing monitor");
+
+        this.stopWebSocketServer();
         
-        if ( (webSocketServerThread != null) && webSocketServerThread.isAlive() ) {
-            AbbozzaLogger.info("AbbozzaMonitor: Stopping WebSocket server");
-            webSocketServerThread.interrupt();
-        }
         if (clacksService != null) {
             clacksService.cancel(true);
         }
@@ -775,6 +770,34 @@ public final class AbbozzaMonitor extends JFrame {
         return clacksService;
     }
     
+    
+    public void startWebSocketServer(int port) {
+        if ( webSocketServer != null ) return;
+        // Start WebSocketServer
+        // int port = AbbozzaServer.getConfig().getServerPort() + 1;
+        AbbozzaLogger.info("AbbozzaMonitor: Starting Websocket Server on port " + port);
+        try {
+            InetSocketAddress socket = new InetSocketAddress("localhost",port);
+            webSocketServer = new AbbozzaWebSocketServer(this,socket);
+            webSocketServerThread = new Thread(webSocketServer);
+            webSocketServerThread.start();
+        } catch (Exception xe) {
+            JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("gui.websocket_error", "" + port ), AbbozzaLocale.entry("gui.websocket_error_title"), JOptionPane.ERROR_MESSAGE);
+            AbbozzaLogger.err("AbbozzaMonitor: Couldn't start Websocket Server on port " + port);
+            AbbozzaLogger.err(xe.getLocalizedMessage());
+        }        
+    }
+    
+    
+    public void stopWebSocketServer () {
+        if ((webSocketServerThread != null) && (webSocketServerThread.isAlive()))  {
+            webSocketServerThread.interrupt();
+            AbbozzaLogger.info("AbbozzaMonitor: Stopping WebSocket server");
+            webSocketServer = null;
+        }
+        webSocketServer = null;
+    }
+  
     
     public InetSocketAddress getWebSocketAddress() {
         if ( this.webSocketServer != null ) {

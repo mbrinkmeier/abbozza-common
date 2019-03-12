@@ -15,11 +15,16 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
+import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.monitor.clacks.ClacksBytes;
 import de.uos.inf.did.abbozza.monitor.clacks.ClacksService;
 import de.uos.inf.did.abbozza.monitor.clacks.ClacksSubscriber;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import javax.swing.ListModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -28,11 +33,12 @@ import org.java_websocket.server.WebSocketServer;
  *
  * @author Michael Brinkmeier (michael.brinkmeier@uni-osnabrueck.de)
  */
-public class AbbozzaWebSocketServer extends WebSocketServer implements ClacksSubscriber {
+public class AbbozzaWebSocketServer extends WebSocketServer implements ClacksSubscriber, ListModel<WebSocket> {
 
     private AbbozzaMonitor monitor;
     private ClacksService clacksService;
     private WebSocket lastWebSocket = null;
+    private ArrayList<ListDataListener> listeners;
     
     public AbbozzaWebSocketServer(AbbozzaMonitor monitor) {
         this.monitor = monitor;
@@ -49,13 +55,9 @@ public class AbbozzaWebSocketServer extends WebSocketServer implements ClacksSub
     
     public AbbozzaWebSocketServer(AbbozzaMonitor monitor,  InetSocketAddress socket) throws Exception {
         super(socket);
-        AbbozzaLogger.info("B");
         this.monitor = monitor;
-        AbbozzaLogger.info("C");
         clacksService = this.monitor.getClacksService();
-        AbbozzaLogger.info("D");
         AbbozzaLogger.info("AbbozzaWebSocketServer: Starting at address " + this.getAddress().toString() );
-        AbbozzaLogger.info("E");        
     }
     
     
@@ -63,17 +65,28 @@ public class AbbozzaWebSocketServer extends WebSocketServer implements ClacksSub
     public void onOpen(WebSocket ws, ClientHandshake ch) {
         ws.send("[[ Connected to abbozza! serial stream at " + ws.getLocalSocketAddress().toString() + "]]");
         AbbozzaLogger.info("AbbozzaWebSocketServer: Client connected from " + ws.getRemoteSocketAddress().toString() );
+        monitor.websocketPanel.appendText( "[ " + AbbozzaLocale.entry("gui.websocket_connect", ws.getRemoteSocketAddress().toString()) + "  ]\n" , "info");
         lastWebSocket = ws;
+        for ( ListDataListener listener : listeners ) {
+            listener.contentsChanged(new ListDataEvent(this,ListDataEvent.INTERVAL_ADDED,0,0));
+        }
     }
 
     @Override
     public void onClose(WebSocket ws, int i, String string, boolean bln) {
         AbbozzaLogger.info("AbbozzaWebSocketServer: Connection to client " + ws.getRemoteSocketAddress().toString() + " closed");
+        monitor.websocketPanel.appendText( "[ " + AbbozzaLocale.entry("gui.websocket_disconnect", ws.getRemoteSocketAddress().toString()) + " ]\n" , "info");
+        for ( ListDataListener listener : listeners ) {
+            listener.contentsChanged(new ListDataEvent(this,ListDataEvent.INTERVAL_REMOVED,0,0));
+        }
     }
 
     @Override
     public void onMessage(WebSocket ws, String string) {
         clacksService.sendBytes(string.getBytes());
+        String host = ws.getRemoteSocketAddress().getAddress().getCanonicalHostName();
+        host = host + ":" + ws.getRemoteSocketAddress().getPort();
+        monitor.websocketPanel.appendText("[" + host + "] " + string +"\n" , "remote");
     }
 
     @Override
@@ -89,6 +102,41 @@ public class AbbozzaWebSocketServer extends WebSocketServer implements ClacksSub
 
     @Override
     public void process(ClacksBytes bytes) {
-        broadcast(new String(bytes.getBytes()));
+        String msg = new String(bytes.getBytes());
+        broadcast(msg);
+        monitor.websocketPanel.appendText( msg + "\n" , "output");
     }
+
+    public void process(String msg) {
+        broadcast(msg);
+        monitor.websocketPanel.appendText( msg + "\n" , "output");
+    }
+
+    @Override
+    public int getSize() {
+        return this.getConnections().size();
+    }
+
+    @Override
+    public WebSocket getElementAt(int index) {
+        WebSocket[] sockets = new WebSocket[this.getConnections().size()];
+        this.getConnections().toArray(sockets);
+        return sockets[index];
+    }
+
+    @Override
+    public void addListDataListener(ListDataListener l) {
+        if ( listeners == null ) {
+            listeners = new ArrayList<ListDataListener>();            
+        }
+        listeners.add(l);
+    }
+
+    @Override
+    public void removeListDataListener(ListDataListener l) {
+        if ( listeners != null ) {
+            listeners.remove(l);
+        }
+    }
+    
 }

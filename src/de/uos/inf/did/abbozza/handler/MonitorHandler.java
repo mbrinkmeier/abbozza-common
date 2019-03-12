@@ -51,11 +51,19 @@ public class MonitorHandler extends AbstractHandler {
         boolean result = false;
         if (path.endsWith("/monitor")) {
             result = open();
+        } else if ( "/monitor/websocket".equals(path)) {
+            result = false;
+            InetSocketAddress socket = this.monitor.getWebSocketAddress();
+            if ( socket != null ) {
+                sendResponse(exchg,200,"text/plain", "ws://" + socket.getHostString() + ":" + socket.getPort() );
+            } else {
+                sendResponse(exchg,440,"text/plain", "abbozza! websocket not reachable" );                
+            }
+            return;
         } else {
             result = resume();
         }
         
-        AbbozzaLogger.info("Hier");
         if (result) {
             String query = exchg.getRequestURI().getQuery();
             AbbozzaLogger.info(query);
