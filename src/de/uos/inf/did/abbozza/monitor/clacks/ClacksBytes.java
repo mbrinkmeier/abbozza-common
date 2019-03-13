@@ -15,10 +15,10 @@
  */
 package de.uos.inf.did.abbozza.monitor.clacks;
 
+import com.fazecast.jSerialComm.SerialPortIOException;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import java.util.Arrays;
-import jssc.SerialPortException;
 
 
 /**
@@ -72,10 +72,7 @@ public class ClacksBytes implements ClacksPacket {
     @Override
     public void process(ClacksSerialPort serialPort) {
         // Send the bytes
-        try {
-            serialPort.writeBytes(this.buffer);
-        } catch (SerialPortException ex) {
-            AbbozzaLogger.stackTrace(ex);
+        if ( serialPort.writeBytes(this.buffer)< 0 ) {
             AbbozzaLogger.err("ClacksSerialPort: Could not send bytes to port");
         }
     }

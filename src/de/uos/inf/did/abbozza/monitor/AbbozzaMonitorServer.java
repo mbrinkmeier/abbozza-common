@@ -5,6 +5,7 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
+import com.fazecast.jSerialComm.SerialPort;
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
@@ -172,7 +173,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
             }
         }
 
-        String port = this.getSerialPort();
+        SerialPort port = this.getSerialPort();
         int rate = this.getBaudRate();
 
         if (port != null) {

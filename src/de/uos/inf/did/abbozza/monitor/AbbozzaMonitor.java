@@ -23,6 +23,7 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
+import com.fazecast.jSerialComm.SerialPort;
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
@@ -40,9 +41,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,8 +57,6 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
-import jssc.SerialPortList;
-
 /**
  *
  * @author mbrinkmeier
@@ -68,7 +65,7 @@ public final class AbbozzaMonitor extends JFrame {
 
     private final int MAXLEN = 1024 * 32;
 
-    private String boardPort;
+    private SerialPort boardPort;
     private int baudRate = 115200;
     private boolean monitorEnabled;
     private boolean closed;
@@ -111,7 +108,7 @@ public final class AbbozzaMonitor extends JFrame {
         
         initProtocolDocument();
 
-        SerialPortList.getPortNames();
+        // SerialPort.getCommPorts();
         initComponents();
         
         // protocol = new StringBuffer();
@@ -221,7 +218,7 @@ public final class AbbozzaMonitor extends JFrame {
         closed = false;
 
         // Set the port
-        portBox.setModel(new DefaultComboBoxModel(SerialPortList.getPortNames()));
+        portBox.setModel(new DefaultComboBoxModel(SerialPort.getCommPorts()));
 
         this.setVisible(true);
 
@@ -270,7 +267,7 @@ public final class AbbozzaMonitor extends JFrame {
      */
     public void resume() throws Exception {
         // Enable the window
-        portBox.setModel(new DefaultComboBoxModel(SerialPortList.getPortNames()));
+        portBox.setModel(new DefaultComboBoxModel(SerialPort.getCommPorts()));
         enableWindow(true);
 
         clacksService.resumePort();
@@ -446,7 +443,7 @@ public final class AbbozzaMonitor extends JFrame {
         jLabel1.setAlignmentX(1.0F);
         logoPanel.add(jLabel1, java.awt.BorderLayout.EAST);
 
-        portBox.setModel(new DefaultComboBoxModel(SerialPortList.getPortNames()));
+        portBox.setModel(new DefaultComboBoxModel(SerialPort.getCommPorts()));
         portBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 portBoxActionPerformed(evt);
@@ -501,7 +498,7 @@ public final class AbbozzaMonitor extends JFrame {
      * @param evt
      */
     private void portBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portBoxActionPerformed
-        String port = (String) portBox.getSelectedItem();
+        SerialPort port = (SerialPort) portBox.getSelectedItem();
         try {
             if (port == null) {
                 return;
@@ -572,7 +569,7 @@ public final class AbbozzaMonitor extends JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPanel logoPanel;
-    private javax.swing.JComboBox<String> portBox;
+    private javax.swing.JComboBox<SerialPort> portBox;
     private javax.swing.JPopupMenu protocolPopUp;
     private javax.swing.JComboBox<String> rateBox;
     private javax.swing.JMenuItem resetItem;
@@ -696,7 +693,7 @@ public final class AbbozzaMonitor extends JFrame {
         }
     }
 
-    public void setBoardPort(String boardPort, int rate) {
+    public void setBoardPort(SerialPort boardPort, int rate) {
         setBoardPort(boardPort);
         setRate(rate);
     }
@@ -706,10 +703,10 @@ public final class AbbozzaMonitor extends JFrame {
      * 
      * @param port The selected port
      */
-    public void setBoardPort(String port) {
+    public void setBoardPort(SerialPort port) {
         this.boardPort = port;
         for (int i = 0; i < portBox.getItemCount(); i++) {
-            String p = portBox.getItemAt(i);
+            SerialPort p = portBox.getItemAt(i);
             if (p.equals(port)) {
                 portBox.setSelectedIndex(i);
                 return;

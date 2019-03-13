@@ -19,7 +19,6 @@
 package de.uos.inf.did.abbozza.monitor.clacks;
 
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
-import jssc.SerialPortException;
 
 /**
  *
@@ -57,10 +56,9 @@ public class ClacksMessage implements ClacksPacket {
     @Override
     public void process(ClacksSerialPort serialPort) {
         ClacksStatus status;
-        try {
-            serialPort.writeBytes(msg.getBytes());
+        if ( serialPort.writeBytes(msg.getBytes()) >= 0 ) {
             status = new ClacksStatus("-> " + msg,"output");
-        } catch (SerialPortException ex) {
+        } else {
             status = new ClacksStatus("Error writing to port","error");
         }
         serialPort.incoming.add(status);

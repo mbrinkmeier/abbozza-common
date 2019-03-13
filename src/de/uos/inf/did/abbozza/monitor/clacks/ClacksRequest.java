@@ -26,12 +26,7 @@ import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
-import de.uos.inf.did.abbozza.monitor.clacks.ClacksPacket;
-import de.uos.inf.did.abbozza.monitor.clacks.ClacksSerialPort;
-import de.uos.inf.did.abbozza.monitor.clacks.ClacksService;
-import de.uos.inf.did.abbozza.monitor.clacks.ClacksSubscriber;
 import java.io.IOException;
-import jssc.SerialPortException;
 
 /**
  *
@@ -163,10 +158,9 @@ public class ClacksRequest implements ClacksPacket {
     public void process(ClacksSerialPort serialPort) {
         ClacksStatus status;
         String msg = "[[" + _id + " " + _msg + "]]\n";
-        try {
-            serialPort.writeBytes(msg.getBytes());
+        if ( serialPort.writeBytes(msg.getBytes()) >= 0 ) {
             status = new ClacksStatus("-> " + msg,"output");
-        } catch (SerialPortException ex) {
+        } else {
             status = new ClacksStatus("Error writing to port","error");
         }
         serialPort.incoming.add(status);

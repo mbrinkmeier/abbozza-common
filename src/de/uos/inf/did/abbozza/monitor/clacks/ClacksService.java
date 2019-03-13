@@ -15,6 +15,7 @@
  */
 package de.uos.inf.did.abbozza.monitor.clacks;
 
+import com.fazecast.jSerialComm.SerialPort;
 import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.handler.SerialHandler;
@@ -52,7 +53,7 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
     protected Thread serialThread;
     protected ClacksPacketParser parser;
 
-    private String portName = null;
+    private SerialPort port = null;
     private int portRate = 0;
 
     private LinkedList<ClacksSubscriber> subscribers;
@@ -91,12 +92,12 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
         AbbozzaLogger.err("ClacksService starting");
 
         // Get port and rate if not known already
-        if (portName == null) {
-            portName = serialPort.getSerialPort();
+        if (port == null) {
+            port = serialPort.getSerialPort();
         }
 
         // No port found
-        if (portName == null) {
+        if (port == null) {
             publish(new ClacksStatus("No serial port found", "error"));
             AbbozzaLogger.err("ClacksService : No serial port found");
             return null;
@@ -106,10 +107,10 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
             portRate = serialPort.getBaudRate();
         }
 
-        monitor.setBoardPort(portName, portRate);
+        monitor.setBoardPort(port, portRate);
 
         // Open the port
-        serialPort.open(portName, portRate);
+        serialPort.open(port, portRate);
 
         // Start the thread
         serialThread = new Thread(serialPort);
@@ -174,13 +175,13 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
         }
     }
 
-    public void setPort(String port) {
-        portName = port;
+    public void setPort(SerialPort port) {
+        String portName = port.getSystemPortName();
         if (serialPort != null && serialPort.isOpen()) {
             serialPort.close();
         }
         if (serialPort != null) {
-            serialPort.open(portName, portRate);
+            serialPort.open(port, portRate);
         }
 
     }

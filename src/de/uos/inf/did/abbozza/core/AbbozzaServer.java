@@ -27,6 +27,7 @@
  */
 package de.uos.inf.did.abbozza.core;
 
+import com.fazecast.jSerialComm.SerialPort;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -89,8 +90,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import jssc.SerialPort;
-import jssc.SerialPortList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -1092,31 +1091,31 @@ public abstract class AbbozzaServer implements HttpHandler {
         return jarHandler;
     }
 
-    public String getSerialPort() {
+    public SerialPort getSerialPort() {
         AbbozzaLogger.out("Checking serial ports", AbbozzaLogger.INFO);
 
-        String[] portNames = SerialPortList.getPortNames();
+        SerialPort[] ports = SerialPort.getCommPorts();
 
         AbbozzaLogger.out("Fetched serial ports", AbbozzaLogger.INFO);
 
-        if (portNames.length == 0) {
+        if (ports.length == 0) {
             AbbozzaLogger.info("No serial ports found");
             return null;
-        } else if (portNames.length == 1) {
-            AbbozzaLogger.info("Unique port found: " + portNames[0]);
-            return portNames[0];
+        } else if (ports.length == 1) {
+            AbbozzaLogger.info("Unique port found: " + ports[0].getDescriptivePortName() + " ( " + ports[0].getSystemPortName() + " )");
+            return ports[0];
         } else {
             AbbozzaLogger.info("Several ports found:");
-            for (int i = 0; i < portNames.length; i++) {
-                AbbozzaLogger.info("\t" + portNames[i]);
+            for (int i = 0; i < ports.length; i++) {
+                AbbozzaLogger.info("\t" + ports[i].getSystemPortName());
             }
         }
 
-        return portNames[0];
+        return ports[0];
     }
 
     public int getBaudRate() {
-        return SerialPort.BAUDRATE_115200;
+        return 115200;
     }
 
     public static PluginManager getPluginManager() {
