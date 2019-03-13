@@ -63,10 +63,11 @@ public class MonitorHandler extends AbstractHandler {
               props.load(new StringReader(query));
               // sendMessage(props.getProperty("msg"));
             }
-            InetSocketAddress addr = monitor.getWebSocketAddress();
-            String adr = "";
-            if ( addr != null ) adr = addr.toString();
-            sendResponse(exchg, 200, "text/plain", adr);
+            // InetSocketAddress addr = monitor.getWebSocketAddress();
+            // String adr = "";
+            // if ( addr != null ) adr = addr.toString();
+            // sendResponse(exchg, 200, "text/plain", addr);
+            sendResponse(exchg, 200, "text/plain", "" );
         } else {
             sendResponse(exchg, 440, "text/plain", "");
         }
