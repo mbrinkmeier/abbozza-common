@@ -65,8 +65,13 @@ public class MonitorHandler extends AbstractHandler {
         }
         
         if (result) {
-            String query = exchg.getRequestURI().getQuery();
-            AbbozzaLogger.info(query);
+            
+            String query = null;
+            try {
+                query = URLDecoder.decode(exchg.getRequestURI().getQuery(),"UTF-8");
+            } catch (Exception ex) {
+                query = null;
+            }
             if ( query != null ) {
               query = URLDecoder.decode(query,"UTF-8");                
               AbbozzaLogger.info(query);
