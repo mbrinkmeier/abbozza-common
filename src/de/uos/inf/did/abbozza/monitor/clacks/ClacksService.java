@@ -109,7 +109,7 @@ public class ClacksService extends SwingWorker<List<ClacksPacket>, ClacksPacket>
         monitor.setBoardPort(portName, portRate);
 
         // Open the port
-        serialPort.open(portName, portRate);
+        if ( !serialPort.open(portName, portRate) ) return null;
 
         // Start the thread
         serialThread = new Thread(serialPort);

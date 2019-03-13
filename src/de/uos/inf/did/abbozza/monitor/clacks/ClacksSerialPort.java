@@ -75,6 +75,7 @@ public class ClacksSerialPort implements Runnable {
             int retries = MAX_RETRIES;
             while ((retry) && (retries > 0)) {
                 try {
+                    AbbozzaLogger.info("ClacksSerialPort: try " + retries);
                     serialPort.openPort();
                     // serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);                   
                     serialPort.setParams(rate,
@@ -114,6 +115,7 @@ public class ClacksSerialPort implements Runnable {
             return false;
         }
         ClacksStatus status = new ClacksStatus("Opened port " + port,"info");
+        AbbozzaLogger.info("ClacksSerialPort: Serial port " + port + " opened");
         incoming.add(status);                                
         return true;
     }
@@ -209,7 +211,7 @@ public class ClacksSerialPort implements Runnable {
                 int available = serialPort.getInputBufferBytesCount();
                 if ((available >= 32) || (currentTime - timeoutStart > TIMEOUT)) {
                     Thread.sleep(0, 100);
-                    if (serialPort.getInputBufferBytesCount() > 0) {
+                    if ( serialPort.getInputBufferBytesCount() > 0 ) {
                         ClacksBytes bytes = new ClacksBytes(currentTime, serialPort.readBytes(serialPort.getInputBufferBytesCount(),10));
                         timeoutStart = currentTime;
                         incoming.add(bytes);

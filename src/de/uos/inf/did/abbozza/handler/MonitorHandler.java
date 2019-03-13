@@ -30,6 +30,7 @@ import de.uos.inf.did.abbozza.tools.GUITool;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.InetSocketAddress;
+import java.net.URI;
 import java.net.URLDecoder;
 import java.util.Properties;
 
@@ -49,6 +50,7 @@ public class MonitorHandler extends AbstractHandler {
     protected void handleRequest(HttpExchange exchg) throws IOException {        
         String path = exchg.getRequestURI().getPath();
         boolean result = false;
+        
         if (path.endsWith("/monitor")) {
             result = open();
         } else {
@@ -56,7 +58,14 @@ public class MonitorHandler extends AbstractHandler {
         }
         
         if (result) {
-            String query = URLDecoder.decode(exchg.getRequestURI().getQuery(),"UTF-8");
+            String query = null;
+            try {
+                URI uri = exchg.getRequestURI();
+                query = uri.getQuery();
+                if ( query != null ) query = URLDecoder.decode(query,"UTF-8");
+            } catch (Exception ex) {
+                AbbozzaLogger.err(ex.getLocalizedMessage());
+            }
             if ( query != null ) {
               query = query.replace('&', '\n');
               Properties props = new Properties();
@@ -67,15 +76,15 @@ public class MonitorHandler extends AbstractHandler {
             // String adr = "";
             // if ( addr != null ) adr = addr.toString();
             // sendResponse(exchg, 200, "text/plain", addr);
-            sendResponse(exchg, 200, "text/plain", "" );
+            sendResponse(exchg, 200, "text/plain", "abbozza! Monitor opened" );
         } else {
-            sendResponse(exchg, 440, "text/plain", "");
+            sendResponse(exchg, 440, "text/plain", "Couldn't open abbozza! Monitor");
         }
     }
     
     
     public boolean open() {    
-        AbbozzaLogger.out("MonitorHandler: Open monitor", AbbozzaLogger.INFO );
+        AbbozzaLogger.err("MonitorHandler: Open monitor" );
         
         // String port = this._abbozzaServer.getSerialPort();
         // int rate = this._abbozzaServer.getBaudRate();
@@ -104,6 +113,8 @@ public class MonitorHandler extends AbstractHandler {
             
             // monitor.setAlwaysOnTop(true);
         } catch (Exception ex) {
+            AbbozzaLogger.info(ex.getLocalizedMessage());
+            AbbozzaLogger.stackTrace(ex);
             AbbozzaLogger.err(ex.getLocalizedMessage());
             return false;
         }

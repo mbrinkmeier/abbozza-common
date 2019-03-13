@@ -45,15 +45,27 @@ public class AbbozzaLogger {
     static private ByteArrayOutputStream errorLogger = new ByteArrayOutputStream();
     static private Vector<OutputStream> streams;
 
+    static private PrintStream originalErr;
+    
     static {
         streams = new Vector<OutputStream>();
     }
     
     public static void init() {
         level = 1;
+        originalErr = System.err;
         System.setErr(new PrintStream(errorLogger));
     }
     
+    public static void init(boolean duplex) {
+        if ( !duplex ) {
+            init();
+        } else {
+            level = 1;
+            originalErr = System.err;
+            System.setErr(new DuplexPrintStream(errorLogger,originalErr));
+        }
+    }
     
     public static void resetErr() {
         errorLogger.reset();
@@ -87,10 +99,12 @@ public class AbbozzaLogger {
         }
     }
     
+    
     public static void unregisterStream(OutputStream stream) {
         streams.removeElement(stream);
     }
 
+    
     public static void setLevel(int lvl) {
         level = lvl;
     }
