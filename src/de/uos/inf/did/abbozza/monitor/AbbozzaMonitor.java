@@ -668,7 +668,7 @@ public final class AbbozzaMonitor extends JFrame {
      */
     private void addMonitorPanel(MonitorPanel panel, String prefix) {
         if (panel != null) {
-            tabPanel.add(panel, 0);
+            tabPanel.add(panel);
             if (prefix != null) {
                 panels.put(prefix, panel);
                 AbbozzaLogger.info("AbbozzaMonitor: Panel for prefix " + prefix + " added");
