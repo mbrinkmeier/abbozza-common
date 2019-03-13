@@ -180,6 +180,7 @@ public final class AbbozzaMonitor extends JFrame {
         GUITool.centerWindow(this);
         
         // Start WebSocketServer
+        /*
         int port = AbbozzaServer.getConfig().getServerPort() + 1;
         try {
             webSocketServer = new AbbozzaWebSocketServer(this,port);
@@ -188,6 +189,7 @@ public final class AbbozzaMonitor extends JFrame {
         } catch (Exception xe) {
             AbbozzaLogger.err(xe.getLocalizedMessage());
         }
+        */
     }
 
     /**
