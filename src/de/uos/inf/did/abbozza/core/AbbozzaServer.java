@@ -114,7 +114,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     // Paths determined by the installation
     protected String abbozzaPath;       // The parent directory of jarPath, containig lib, plugins, bin ...
     protected String jarPath;           // The parent directory of the jar
-    protected String userPath;          // The path to the user directory
+    protected String userPath = null;   // The path to the user directory
     protected String configPath;        // The path to the config file
 
     // Configurable paths
@@ -273,8 +273,11 @@ public abstract class AbbozzaServer implements HttpHandler {
      */
     public void setPaths() {
         // Set user Path to $HOME/.abbozza/<system>
-        userPath = System.getProperty("user.home") + "/.abbozza/" + getSystem();
-
+        if (userPath == null ) {
+            userPath = System.getProperty("user.home") + "/.abbozza/" + getSystem();
+            AbbozzaLogger.info("Using User Path : " + userPath);            
+        }
+        
         // Check if the user directory exists
         File userDir = new File(userPath);
         if (!userDir.exists()) {
@@ -1325,6 +1328,9 @@ public abstract class AbbozzaServer implements HttpHandler {
             } catch (URISyntaxException ex) {
                 AbbozzaLogger.err("Malformed URI after -A : " + par);
             }
+        } else if (option.equals("-U") && (par != null)) {
+            userPath = par + "/.abbozza/" + getSystem();
+            AbbozzaLogger.info("Using User Path : " + userPath);
         }
     }
 

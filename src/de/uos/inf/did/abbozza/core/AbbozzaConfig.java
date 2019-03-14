@@ -197,6 +197,8 @@ public class AbbozzaConfig {
     public void setDefaultOptions() {
         Document optionXml = AbbozzaServer.getInstance().getOptionTree();
 
+        if ( optionXml == null ) return;                           
+        
         // Options
         NodeList items = optionXml.getElementsByTagName("item");
         for (int i = 0; i < items.getLength(); i++) {
