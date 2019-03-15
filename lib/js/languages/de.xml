@@ -307,6 +307,22 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id ="io.SETDPIN">Setze Pin # auf digitalen Wert</msg>
         <msg id ="io.READAPIN">Analoger Wert von Pin</msg>
         <msg id ="io.SETAPIN">Setze Pin # auf analogen Wert</msg>
+
+        <msg id ="serial.BEGINRATE">Setze USB-Rate auf # Baud</msg>
+        <msg id ="serial.END">Stoppe die Kommunikation über USB</msg>
+        <msg id ="serial.WRITEINT">Sende # über USB</msg>
+        <msg id ="serial.PRINT">Sende # über USB</msg>-
+        <msg id ="serial.PRINTLN">Sende Zeile # über USB</msg>
+        <msg id ="serial.AVAILABLE">Zeichen an USB verfügbar</msg>
+        <msg id ="serial.READLN">Lese Zeile von USB</msg>
+        <msg id ="serial.SENDVALUES">Sende Wert über USB</msg>
+        <msg id ="serial.CHANNEL">Kanal</msg>
+        <msg id ="serial.WRITE_BYTE_USB">Sende Byte über USB</msg>
+        <msg id ="serial.READ_BYTE_USB">Lese Byte von USB</msg>
+        <msg id ="serial.WRITE_INT_USB">Sende Zahl über USB</msg>
+        <msg id ="serial.READ_INT_USB">Lese Zahl von USB</msg>
+        <msg id="SERIAL.OPEN">Öffne Verbindung</msg>
+        <msg id="SERIAL.CLOSE">Schließe Verbindung</msg>
 		
         <msg id ="func.NAME">Name</msg>
         <msg id ="func.CALL">Führe # aus</msg>
