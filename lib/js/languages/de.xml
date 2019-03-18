@@ -54,6 +54,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.upload_button">Lade Code hoch</msg>
         <msg id="gui.new_button">Neuer Sketch</msg>
         <msg id="gui.load_button">Lade Sketch</msg>
+        <msg id="gui.import_button">Importiere Blöcke</msg>
         <msg id="gui.save_button">Speichere Sketch</msg>
         <msg id="gui.serial_button">Serieller Monitor</msg>
         <msg id="gui.connect_button">Verbinde zu Board</msg>
@@ -61,7 +62,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.info_button">Aufgaben und Informationen</msg>
         <msg id="gui.tutorial">Tutorial</msg>        
         <msg id="gui.homepage">abbozza! Homepage</msg>        
-        <msg id="gui.language">Sprache</msg>         
+        <msg id="gui.language">Sprache</msg>                 
         <msg id="gui.start_directly">Starte abbozza! sofort</msg>         
         <msg id="gui.start_browser">Den Browser beim Start öffnen</msg>         
         <msg id="gui.browser_path">Pfad zum Browser</msg>         
@@ -107,12 +108,14 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.task_path">Aufgaben Verzeichnis</msg>        
         <msg id="gui.task_tooltip_prevsketch">Vorherige Aufgabe</msg>        
         <msg id="gui.task_tooltip_prev">Vorherige Seite</msg>        
-        <msg id="gui.task_tooltip_main">Übersicht</msg>        
+        <msg id="gui.task_tooltip_main">Gehe zur Übersicht</msg>        
         <msg id="gui.task_tooltip_reload">Von vorne</msg>        
         <msg id="gui.task_tooltip_next">Nächste Seite</msg>        
         <msg id="gui.task_tooltip_nextsketch">Nächste Aufgabe</msg>        
         <msg id="gui.task_tooltip_zoomin">Vergrößern</msg>        
         <msg id="gui.task_tooltip_zoomout">Verkleinern</msg>        
+        <msg id="gui.task_tooltip_edit">Aufgabe bearbeiten</msg>        
+        <msg id="gui.task_tooltip_end_edit">Bearbeitung beenden</msg>        
         <msg id="gui.go_to_task_path">Zum Aufgaben Verzeichnis</msg>        
         <msg id="gui.go_to_sketchbook_path">Zum Sketchbook Verzeichnis</msg>        
         <msg id="gui.load_from_web">Lade aus dem WWW</msg>        
@@ -174,6 +177,11 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="gui.websocket_error_title">WebSocket Fehler</msg>        
         <msg id="gui.websocket_connect">Klient # hat sich verbunden</msg>        
         <msg id="gui.websocket_disconnect"># wurde getrennt</msg>        
+        <msg id="gui.copy_transfer">Kopiere Blöcke in anderen Sketch</msg>
+        <msg id="gui.paste_transfer">Füge Blöcke ein</msg>        
+        <msg id="gui.regular_mode">Normaler Modus (Normales Speichern; abbozza! merkt sich Veränderungen in Sketches bis zum Reload)</msg>        
+        <msg id="gui.workshop_mode">Workshop Modus (Speichern ohne Aufgaben; abbozza! merkt sich Veränderungen in Sketches bis zum Reload)</msg>        
+        <msg id="gui.authors_mode">Autoren Modus (Normales Speichern; abbozza! merkt sich keine Veränderungen in Sketches)</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
@@ -499,6 +507,7 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="err.ERROR_SAVING_SKETCH">Sketch konnte nicht gespeichert werden!</msg>
         <msg id="err.ERROR_LOADING_SKETCH">Sketch konnte nicht geladen werden!</msg>
         <msg id="err.ERROR">Fehler!</msg>
+        <msg id="err.not_unique">Darf nur einmal vorkommen!</msg>
     </errors>
     <names>
         <msg id="arduino">Arduino kompatible</msg>

@@ -6,6 +6,7 @@
 package de.uos.inf.did.abbozza.core;
 
 // import de.uos.inf.did.abbozza.arduino.Abbozza;
+import de.uos.inf.did.abbozza.tools.GUITool;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -55,6 +56,12 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         config.set(props);
 
         initComponents();
+    
+        if ( !AbbozzaServer.getInstance().canChangeSketchbookPath() ) {
+            this.sketchbookPathLabel.setEnabled(false);
+            this.sketchbookPathButton.setEnabled(false);
+            this.sketchbookPathField.setEnabled(false);
+        }
         
         loadConfiguration();
 
@@ -84,7 +91,18 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         localeComboBox.setSelectedIndex(i);
         updateBox.setSelected(config.getUpdate());
         updateUrlField.setText(config.getUpdateUrl());
+        sketchbookPathField.setText(new File(AbbozzaServer.getInstance().getSketchbookPath()).getAbsolutePath());
         
+        switch ( config.getEditMode() ) {
+            case AbbozzaServer.WORKSHOP_MODE:
+                workshopModeButton.setSelected(true);
+                break;
+            case AbbozzaServer.AUTHORS_MODE:
+                authorModeButton.setSelected(true);
+                break;
+            default:
+                regularModeButton.setSelected(true);
+        }
         buildOptionTree();
     }
 
@@ -109,7 +127,16 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         config.setUpdate(this.updateBox.isSelected());
         config.setUpdateUrl(this.updateUrlField.getText());
         config.setTaskPath(this.taskPathField.getText());
-        config.setTasksEditable(this.editableTasks.isSelected());
+        AbbozzaServer.getInstance().setSketchbookPath(this.sketchbookPathField.getText());
+        
+        if ( workshopModeButton.isSelected() ) {
+            config.setEditMode(AbbozzaServer.WORKSHOP_MODE);
+        } else if ( authorModeButton.isSelected() ) {
+            config.setEditMode(AbbozzaServer.AUTHORS_MODE);
+        } else {
+            config.setEditMode(AbbozzaServer.REGULAR_MODE);            
+        } 
+        // config.setTasksEditable(this.editableTasks.isSelected());
         
         storeOptions();
 
@@ -151,7 +178,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         return file.getAbsolutePath();
     }
 
-    public String chooseTaskPath() {
+    public String choosePath() {
         File file;
         JFileChooser chooser = new JFileChooser(AbbozzaServer.getConfig().getTaskPath());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -166,6 +193,8 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                 return "Select readable directory";
             }
         });
+        
+        
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
         } else {
@@ -190,6 +219,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        modeGroup = new javax.swing.ButtonGroup();
         buttonPanel = new javax.swing.JPanel();
         storeButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
@@ -204,7 +234,12 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         taskPathField = new javax.swing.JTextField();
         taskPathButton = new javax.swing.JButton();
-        editableTasks = new javax.swing.JCheckBox();
+        workshopModeButton = new javax.swing.JRadioButton();
+        regularModeButton = new javax.swing.JRadioButton();
+        authorModeButton = new javax.swing.JRadioButton();
+        sketchbookPathLabel = new javax.swing.JLabel();
+        sketchbookPathField = new javax.swing.JTextField();
+        sketchbookPathButton = new javax.swing.JButton();
         serverPanel = new javax.swing.JPanel();
         autoStartBox = new javax.swing.JCheckBox();
         browserStartBox = new javax.swing.JCheckBox();
@@ -301,11 +336,23 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
             }
         });
 
-        editableTasks.setSelected(config.areTasksEditable());
-        editableTasks.setText(AbbozzaLocale.entry("gui.tasks_editable"));
-        editableTasks.addActionListener(new java.awt.event.ActionListener() {
+        modeGroup.add(workshopModeButton);
+        workshopModeButton.setText(AbbozzaLocale.entry("gui.workshop_mode"));
+
+        modeGroup.add(regularModeButton);
+        regularModeButton.setText(AbbozzaLocale.entry("gui.regular_mode"));
+
+        modeGroup.add(authorModeButton);
+        authorModeButton.setText(AbbozzaLocale.entry("gui.authors_mode"));
+
+        sketchbookPathLabel.setText(AbbozzaLocale.entry("gui.sketchbook_path"));
+
+        sketchbookPathField.setText(config.getTaskPath());
+
+        sketchbookPathButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/uos/inf/did/abbozza/img/directory24.png"))); // NOI18N
+        sketchbookPathButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editableTasksActionPerformed(evt);
+                sketchbookPathButtonActionPerformed(evt);
             }
         });
 
@@ -313,32 +360,51 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         taskPanel.setLayout(taskPanelLayout);
         taskPanelLayout.setHorizontalGroup(
             taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, taskPanelLayout.createSequentialGroup()
+            .addGroup(taskPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(editableTasks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(taskPanelLayout.createSequentialGroup()
+                .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, taskPanelLayout.createSequentialGroup()
                         .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(sketchbookPathField)
+                            .addComponent(taskPathField, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(taskPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 117, Short.MAX_VALUE))
-                            .addComponent(taskPathField))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(taskPathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 117, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(taskPathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sketchbookPathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(taskPanelLayout.createSequentialGroup()
+                        .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(regularModeButton)
+                            .addComponent(sketchbookPathLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(authorModeButton)
+                            .addComponent(workshopModeButton))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         taskPanelLayout.setVerticalGroup(
             taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(taskPanelLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(sketchbookPathLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sketchbookPathField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sketchbookPathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(taskPathField)
-                    .addComponent(taskPathButton, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(editableTasks)
-                .addContainerGap(203, Short.MAX_VALUE))
+                .addGroup(taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(taskPathField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(taskPathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addComponent(regularModeButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(workshopModeButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(authorModeButton)
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab(AbbozzaLocale.entry("gui.tasks"), taskPanel);
@@ -469,16 +535,13 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                 .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(serverPortSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addGap(18, 20, Short.MAX_VALUE)
                 .addComponent(updateBox)
-                .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(serverPanelLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel4))
-                    .addGroup(serverPanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(updateUrlField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(50, 50, 50)
+                .addGap(6, 6, 6)
+                .addGroup(serverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(updateUrlField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(62, 62, 62)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -527,15 +590,18 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_updateActionPerformed
 
     private void taskPathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskPathButtonActionPerformed
-        String taskPath = chooseTaskPath();
+        String taskPath = choosePath();
         if (taskPath != null) {
             taskPathField.setText(taskPath);
         }
     }//GEN-LAST:event_taskPathButtonActionPerformed
 
-    private void editableTasksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editableTasksActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editableTasksActionPerformed
+    private void sketchbookPathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sketchbookPathButtonActionPerformed
+        String sbPath = choosePath();
+        if (sbPath != null) {
+            sketchbookPathField.setText(sbPath);
+        }
+    }//GEN-LAST:event_sketchbookPathButtonActionPerformed
 
     
     private void parseOptionNode(Node node, DefaultMutableTreeNode root, String prefix) {
@@ -659,6 +725,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton authorModeButton;
     private javax.swing.JCheckBox autoStartBox;
     private javax.swing.JButton browserButton;
     private javax.swing.JTextField browserPathField;
@@ -666,7 +733,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel contentPanel;
-    private javax.swing.JCheckBox editableTasks;
     private javax.swing.JTree featureTree;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -683,9 +749,14 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JComboBox localeComboBox;
     private javax.swing.JPanel logoPanel;
+    private javax.swing.ButtonGroup modeGroup;
+    private javax.swing.JRadioButton regularModeButton;
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JPanel serverPanel;
     private javax.swing.JSpinner serverPortSpinner;
+    private javax.swing.JButton sketchbookPathButton;
+    private javax.swing.JTextField sketchbookPathField;
+    private javax.swing.JLabel sketchbookPathLabel;
     private javax.swing.JButton storeButton;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JPanel taskPanel;
@@ -693,6 +764,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     private javax.swing.JTextField taskPathField;
     private javax.swing.JCheckBox updateBox;
     private javax.swing.JTextField updateUrlField;
+    private javax.swing.JRadioButton workshopModeButton;
     // End of variables declaration//GEN-END:variables
 
     public void addPanel(AbbozzaConfigPanel panel) {

@@ -35,6 +35,7 @@ import com.sun.net.httpserver.HttpServer;
 import de.uos.inf.did.abbozza.handler.CheckHandler;
 import de.uos.inf.did.abbozza.handler.ConfigDialogHandler;
 import de.uos.inf.did.abbozza.handler.ConfigHandler;
+import de.uos.inf.did.abbozza.handler.DiagnoseHandler;
 import de.uos.inf.did.abbozza.handler.FeatureHandler;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import de.uos.inf.did.abbozza.handler.LoadHandler;
@@ -107,6 +108,13 @@ import org.xml.sax.SAXException;
  */
 public abstract class AbbozzaServer implements HttpHandler {
 
+    // Constants
+    //
+    // The editing modes
+    public static final int REGULAR_MODE = 0;   // Regular load/save, caching
+    public static final int WORKSHOP_MODE = 1;  // save w/o task, caching
+    public static final int AUTHORS_MODE = 2;   // regular load/save, no caching
+
     // Instance
     protected static AbbozzaServer instance;
 
@@ -114,15 +122,16 @@ public abstract class AbbozzaServer implements HttpHandler {
     // Paths determined by the installation
     protected String abbozzaPath;       // The parent directory of jarPath, containig lib, plugins, bin ...
     protected String jarPath;           // The parent directory of the jar
-    protected String userPath = null;   // The path to the user directory
+    protected String userPath = null;   // The path to the user directory, defaults to %HOME%/.abbozza/<system>/
+
     protected String configPath;        // The path to the config file
 
     // Configurable paths
     protected String globalJarPath;     // The directory containing the global jar
     protected String localJarPath;      // The directory containig the local jar
-    protected String sketchbookPath;    // The default path fpr local Sketches
-    protected String globalPluginPath;
-    protected String localPluginPath;
+    protected String sketchbookPath;    // The default path for local Sketches
+    protected String globalPluginPath;  // The path for global plugins, is <abbozzaPath>/plugins/
+    protected String localPluginPath;   // The users path for plugins, usually <userPath>/plugins/
     protected ArrayList<URI> additionalURIs;
 
     // several attributes
@@ -155,7 +164,9 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     protected InetAddress ip4Address = null;
     protected InetAddress ip6Address = null;
-
+ 
+    private boolean workshopPreferred = false;
+    
     /**
      * The system independent initialization of the server
      *
@@ -329,11 +340,9 @@ public abstract class AbbozzaServer implements HttpHandler {
         globalJarPath = "";
         localJarPath = "";
         sketchbookPath = "";
-        globalPluginPath = "";
-        localPluginPath = "";
-    }
-
-    ;
+        globalPluginPath = abbozzaPath + "/plugins";
+        localPluginPath = userPath + "/plugins";
+    };
     
     
     
@@ -349,6 +358,11 @@ public abstract class AbbozzaServer implements HttpHandler {
         return sketchbookPath;
     }
 
+    public void setSketchbookPath(String path) {
+        if ( canChangeSketchbookPath() ) sketchbookPath = path;
+    }
+    
+    public abstract boolean canChangeSketchbookPath();
     
     /**
      * Get the global plugin path.
@@ -403,6 +417,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/abbozza/version", vHandler);
         httpServer.createContext("/abbozza/ip", vHandler);
         httpServer.createContext("/abbozza/ip6", vHandler);
+        httpServer.createContext("/abbozza/diagnose", new DiagnoseHandler(this));
 
         if (this.pluginManager != null) {
             httpServer.createContext("/abbozza/plugins", this.pluginManager);
@@ -601,62 +616,6 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
     }
 
-    /**
-     * Abstract system specific operations
-     */
-    /**
-     * This operation registers additional, system specific handlers, like the
-     * board handler.
-     *
-     */
-    public abstract void registerSystemHandlers();
-
-    /**
-     * This operation finds the jars and directories to be used by the server
-     * and adds them to the given jarHandler.
-     *
-     * @param jarHandler The jarHandler to which the jars and directories should
-     * be added.
-     */
-    public abstract void findJarsAndDirs(JarDirHandler jarHandler);
-
-    /**
-     * Abstract operations for Tool handling, compilation etc.
-     */
-    /**
-     * Moves the tool window to the back.
-     */
-    public abstract void toolToBack();
-
-    /**
-     * Sets the code in the tool window.
-     *
-     * @param code The generated code.
-     */
-    public abstract void toolSetCode(String code);
-
-    /**
-     * Iconifies the tool window.
-     */
-    public abstract void toolIconify();
-
-    /**
-     * Compiles the given code
-     *
-     * @param code The code to be compiled.
-     * @return The output produced by the compilation process. The result is
-     * empty, if the compilation was successful.
-     */
-    public abstract int compileCode(String code);
-
-    /**
-     * Compiles and uploads the code to the board.
-     *
-     * @param code The code to be compiled.
-     * @return The output produced by the compilation process. The result is
-     * empty, if the compilation was successful.
-     */
-    public abstract int uploadCode(String code);
 
     public String getCompileErrorMsg() {
         return compileErrorMsg;
@@ -1020,6 +979,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     public URI expandSketchURI(String path) {
         URI uri = null;
         String uriPath = "";
+        workshopPreferred = false;
         
         AbbozzaLogger.debug("AbbozzaServer: Expanding path " + path);
         
@@ -1028,6 +988,7 @@ public abstract class AbbozzaServer implements HttpHandler {
             try {
                 // Remove the exclamation mark and prepend the server root
                 uriPath = getRootURL() + path.substring(1);
+                workshopPreferred = true;
                 return new URI(uriPath);
             } catch (URISyntaxException ex) {
                 AbbozzaLogger.err("AbbozzaServer: Error during expansion of path " + path);
@@ -1076,6 +1037,7 @@ public abstract class AbbozzaServer implements HttpHandler {
             if ( p.endsWith("abj") || p.endsWith("jar") || p.endsWith("zip") ) {
                 String newpath = "jar:" + uri.toString() + "!/start.abz";
                 try { 
+                    workshopPreferred = true;
                     uri = new URI(newpath);
                 } catch (URISyntaxException ex) {
                     AbbozzaLogger.err("AbbozzaServer: Wrong syntax of URI " + url.toString());
@@ -1269,15 +1231,50 @@ public abstract class AbbozzaServer implements HttpHandler {
     public String getVersion() {
         return AbbozzaVersion.asString();        
     }
+        
+    public String getHostName() {
+        return this.httpServer.getAddress().getHostString();
+    }
 
+    public int getServerPort() {
+        return this.httpServer.getAddress().getPort();
+    }
+    
+    public String getUserPath() {
+        return userPath;
+    }
+
+    public String getJarPath() {
+        return jarPath;
+    }
+
+    public String getAbbozzaPath() {
+        return abbozzaPath;
+    }
+
+    public String getConfigPath() {
+        return configPath;
+    }
+    
     public abstract boolean installPluginFile(InputStream stream, String name);
 
     public abstract void installUpdate(String version, String updateUrl);
 
+    /**
+     * Indicates wether the abbozza! Server may be accesses by a remote host.
+     * 
+     * @return true if the access for remote hosts is denied. 
+     */
     public boolean isRemoteAccessDenied() {
         return denyRemoteAccess;
     }
 
+    /**
+     * Check if the given host is allowed to remotely access the abbboza! server.
+     * 
+     * @param host The name of the remote host
+     * @return 
+     */
     public boolean isHostAllowed(String host) {
         if (allowedHosts == null) {
             allowedHosts = "";
@@ -1285,6 +1282,11 @@ public abstract class AbbozzaServer implements HttpHandler {
         return allowedHosts.contains(host);
     }
 
+    /**
+     * Returns the root URL for the running abbozza! Server
+     * 
+     * @return The root URL
+     */
     public String getRootURL() {
         String useIP = "false";
         if ( config == null ) {
@@ -1300,11 +1302,20 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
     
     
+    /**
+     * Returns the system path.
+     * 
+     * @return 
+     */
     public String getSystemPath() {
         return this.system + ".html";
     }
     
-
+    /**
+     * Rrturn the IP4 address of the running server.
+     * 
+     * @return 
+     */
     public String getIp4Address() {
         if (this.ip4Address == null) {
             return "???";
@@ -1312,6 +1323,11 @@ public abstract class AbbozzaServer implements HttpHandler {
         return this.ip4Address.getHostAddress();
     }
 
+    /**
+     * Return the IP6 address of the running server.
+     * 
+     * @return 
+     */
     public String getIp6Address() {
         if (this.ip6Address == null) {
             return "???";
@@ -1372,6 +1388,83 @@ public abstract class AbbozzaServer implements HttpHandler {
                 }
             }
         }
+    };
+
+    /**
+     * This method returns true if the last opened file should be opened
+     * in Workshop mode.
+     * 
+     * @return true if the sketch should be opened in Workshop mode.
+     */
+    public boolean isWorkshopPreferred() {
+        return workshopPreferred;
     }
-;
+
+
+    /**
+     * Abstract system specific operations
+     */
+    /**
+     * This operation registers additional, system specific handlers, like the
+     * board handler.
+     *
+     */
+    public abstract void registerSystemHandlers();
+
+    /**
+     * This operation finds the jars and directories to be used by the server
+     * and adds them to the given jarHandler.
+     *
+     * @param jarHandler The jarHandler to which the jars and directories should
+     * be added.
+     */
+    public abstract void findJarsAndDirs(JarDirHandler jarHandler);
+
+    /**
+     * Abstract operations for Tool handling, compilation etc.
+     */
+    /**
+     * Moves the tool window to the back.
+     */
+    public abstract void toolToBack();
+
+    /**
+     * Sets the code in the tool window.
+     *
+     * @param code The generated code.
+     */
+    public abstract void toolSetCode(String code);
+
+    /**
+     * Iconifies the tool window.
+     */
+    public abstract void toolIconify();
+
+    /**
+     * Compiles the given code
+     *
+     * @param code The code to be compiled.
+     * @return The output produced by the compilation process. The result is
+     * empty, if the compilation was successful.
+     */
+    public abstract int compileCode(String code);
+
+    /**
+     * Compiles and uploads the code to the board.
+     *
+     * @param code The code to be compiled.
+     * @return The output produced by the compilation process. The result is
+     * empty, if the compilation was successful.
+     */
+    public abstract int uploadCode(String code);
+
+    /**
+     * Run the system specific diagnose. Return the result als HTML String
+     * 
+     * @return The result of the diagnose as HTML String
+     */
+    public String runSystemDiagnose(DiagnoseHandler handler) {
+        return "";
+    }
+    
 }

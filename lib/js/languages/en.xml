@@ -54,6 +54,7 @@ Continuing?</msg>
         <msg id="gui.upload_button">Upload Code to Board</msg>
         <msg id="gui.new_button">New Sketch</msg>
         <msg id="gui.load_button">Load Sketch</msg>
+        <msg id="gui.import_button">Import Blocks</msg>
         <msg id="gui.save_button">Save Sketch</msg>
         <msg id="gui.serial_button">Serial Monitor</msg>
         <msg id="gui.connect_button">Connect to board</msg>
@@ -106,13 +107,15 @@ Continuing?</msg>
         <msg id="gui.tasks">Tasks</msg>
         <msg id="gui.task_tooltip_prevsketch">Previous task</msg>        
         <msg id="gui.task_tooltip_prev">Previous page</msg>        
-        <msg id="gui.task_tooltip_main">Overview</msg>        
-        <msg id="gui.task_tooltip_reload">Restart</msg>        
+        <msg id="gui.task_tooltip_main">Go to Overview</msg>        
+        <msg id="gui.task_tooltip_reload">Restart task</msg>        
         <msg id="gui.task_tooltip_next">Next page</msg>        
         <msg id="gui.task_tooltip_nextsketch">Next task</msg>        
         <msg id="gui.task_tooltip_zoomin">Zoom in</msg>        
         <msg id="gui.task_tooltip_zoomout">Zoom out</msg>        
         <msg id="gui.task_path">Task directory</msg>
+        <msg id="gui.task_tooltip_end_edit">End editing task</msg>        
+        <msg id="gui.task_tooltip_edit">Edit task</msg>
         <msg id="gui.go_to_task_path">Go to the task directory</msg>        
         <msg id="gui.go_to_sketchbook_path">Go to the sketchbook directory</msg>        
         <msg id="gui.load_from_web">Load from Web</msg>        
@@ -174,6 +177,11 @@ Should I try it again?</msg>
         <msg id="gui.websocket_error_title">WebSocket Error</msg>        
         <msg id="gui.websocket_connect">Client connected from #</msg>        
         <msg id="gui.websocket_disconnect"># disconnected</msg>        
+        <msg id="gui.copy_transfer">Copy blocks to other sketch</msg>
+        <msg id="gui.paste_transfer">Paste blocks</msg>        
+        <msg id="gui.regular_mode">Regular mode (regular save; caching of sketches till reload)</msg>        
+        <msg id="gui.workshop_mode">Workshop mode (save without task; caching of sketches till reload)</msg>        
+        <msg id="gui.authors_mode">Authors mode (regular save; no caching of sketches)</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
@@ -496,6 +504,7 @@ Should I try it again?</msg>
         <msg id="err.ERROR_SAVING_SKETCH">Sketch could not be saved!</msg>
         <msg id="err.ERROR_Loading_SKETCH">Sketch could not be loaded!</msg>
         <msg id="err.ERROR">Error!</msg>
+        <msg id="err.not_unique">Not unique!</msg>
 </errors>
     <names>
         <msg id="arduino">Arduino compatible</msg>

@@ -69,6 +69,11 @@ limitations under the License.
     height: 5px;
 }
 
+.abzFooter .rightAligned {
+    float: right;
+    margin: 5px;
+}
+
 .abzFrameIcon {
     float: left;
     height: 20px;

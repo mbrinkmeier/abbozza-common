@@ -80,9 +80,10 @@ public class AbbozzaConfig {
     private String config_pluginUrl = "https://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/" + AbbozzaServer.getInstance().getSystem() + "/plugins.xml";
     private boolean config_update = false;
     private String config_taskPath = configPath;
-    private boolean config_tasksEditable = true;
+    // private boolean config_tasksEditable = true;
     private int config_timeout = 120000;
-
+    private int config_editMode;   // The current editing mode
+    
     /**
      * Reads the configuration from the given path.
      * The file is a standard properties file, consisting of
@@ -163,8 +164,12 @@ public class AbbozzaConfig {
         config_pluginUrl = "https://inf-didaktik.rz.uos.de/downloads/abbozza/plugins/" + AbbozzaServer.getInstance().getSystem() + "/plugins.xml";
         config_update = false;
         config_taskPath = System.getProperty("user.home");
-        config_tasksEditable = true;
+        // config_tasksEditable = true;
         config_timeout = 120000;
+        config_editMode = AbbozzaServer.REGULAR_MODE;
+        
+        AbbozzaServer.getInstance().setSketchbookPath("~");
+   
         storeProperties(config);
         
         setDefaultOptions();
@@ -206,7 +211,6 @@ public class AbbozzaConfig {
             String option = node.getAttributes().getNamedItem("option").getNodeValue();
             String def = node.getAttributes().getNamedItem("default").getNodeValue();
             setOption(option, def.equals("true"));
-            // AbbozzaLogger.out(option);
         }
 
         // Choices
@@ -216,7 +220,6 @@ public class AbbozzaConfig {
             String option = node.getAttributes().getNamedItem("option").getNodeValue();
             String def = node.getAttributes().getNamedItem("default").getNodeValue();
             setOption(option, def.equals("true"));
-            // AbbozzaLogger.out(option);
         }
     }
 
@@ -249,16 +252,26 @@ public class AbbozzaConfig {
         } else {
             config_taskPath = properties.getProperty("taskPath", "");
         }
-        config_tasksEditable = "true".equals(properties.getProperty("tasksEditable", "true"));
+        
+        AbbozzaServer.getInstance().setSketchbookPath(properties.getProperty("sketchbookPath"));
+        
         if (properties.getProperty("loglevel") != null) {
             AbbozzaLogger.setLevel(Integer.parseInt(properties.getProperty("loglevel", ""+AbbozzaLogger.NONE)));
         } else {
             AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         }
+
         if (properties.getProperty("timeout") != null) {
-            config_timeout=Integer.parseInt(properties.getProperty("timeout", ""+AbbozzaLogger.NONE));
+            config_timeout=Integer.parseInt(properties.getProperty("timeout", "" + AbbozzaLogger.NONE));
         } else {
             config_timeout=120000;
+        }
+
+        // config_tasksEditable = "true".equals(properties.getProperty("tasksEditable", "true"));
+        if (properties.getProperty("mode") != null) {
+            config_editMode = Integer.parseInt(properties.getProperty("mode", "" + AbbozzaServer.REGULAR_MODE));
+        } else {
+            config_editMode = AbbozzaServer.REGULAR_MODE;
         }
 
         write();        
@@ -314,8 +327,10 @@ public class AbbozzaConfig {
         props.setProperty("updateUrl", config_updateUrl);
         props.setProperty("update", config_update ? "true" : "false");
         props.setProperty("taskPath", config_taskPath);
-        props.setProperty("tasksEditable", config_tasksEditable ? "true" : "false");
         props.setProperty("timeout", Integer.toString(config_timeout));
+        // props.setProperty("tasksEditable", config_tasksEditable ? "true" : "false");
+        props.setProperty("mode", Integer.toString(config_editMode));
+        props.setProperty("sketchbookPath", AbbozzaServer.getInstance().getSketchbookPath());
     }
     
     /**
@@ -520,12 +535,34 @@ public class AbbozzaConfig {
         return path;
     }
     
-    public void setTasksEditable(boolean selected) {
+    /*
+    private void setTasksEditable(boolean selected) {
         config_tasksEditable = selected;
     }
-
+    */
+    
     public boolean areTasksEditable() {
-        return config_tasksEditable;
+        // Only in workshop mode, the tasks aren't editable
+        return (config_editMode != AbbozzaServer.WORKSHOP_MODE);
     }
     
+     
+    /**
+     * Get the current edit mode.
+     * 
+     * @return The editing mode
+     */
+    public int getEditMode() {
+        return config_editMode;
+    }
+
+    /**
+     * Set the current edit mode.
+     * 
+     * @param editMode The edit mode to be set. 
+     */
+    public void setEditMode(int editMode) {
+        this.config_editMode = editMode;
+    }
+
 }

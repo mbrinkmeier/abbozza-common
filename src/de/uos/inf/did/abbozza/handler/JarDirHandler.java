@@ -324,4 +324,8 @@ public class JarDirHandler implements HttpHandler {
         return inStream;
     }
     
+    
+    public Vector<URI> getEntries() {
+        return entries;
+    }
 }

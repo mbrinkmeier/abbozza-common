@@ -267,5 +267,10 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
     @Override
     public void installUpdate(String version, String updateUrl) {
     }
+
+    @Override
+    public boolean canChangeSketchbookPath() {
+        return false;
+    }
     
 }

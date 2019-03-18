@@ -47,11 +47,11 @@
  */
 package de.uos.inf.did.abbozza.handler;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.core.AbbozzaLocale;
 import de.uos.inf.did.abbozza.core.AbbozzaLogger;
 import de.uos.inf.did.abbozza.core.AbbozzaServer;
-import de.uos.inf.did.abbozza.tools.GUITool;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
@@ -60,15 +60,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.net.ssl.HttpsURLConnection;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -104,9 +99,15 @@ public class LoadHandler extends AbstractHandler {
                 // If the request has no query, open the "Open File" dialog
                 String sketch = loadSketch();
                 if (sketch != null) {
+                    if ( this._abbozzaServer.isWorkshopPreferred() && 
+                            ( this._abbozzaServer.getConfiguration().getEditMode() == AbbozzaServer.REGULAR_MODE ) ) {
+                        this._abbozzaServer.getConfiguration().setEditMode(AbbozzaServer.WORKSHOP_MODE);
+                        exchg.getResponseHeaders().add("X-Abbozza-Mode", "workshop");                        
+                    }
                     if (contentLocation != null) {
                         exchg.getResponseHeaders().add("Content-Location", contentLocation);
                     }
+                    Headers hdrs = exchg.getResponseHeaders();
                     this.sendResponse(exchg, 200, "text/xml; charset=utf-8", sketch);
                 } else {
                     this.sendResponse(exchg, 404, "", "");
@@ -204,7 +205,7 @@ public class LoadHandler extends AbstractHandler {
                 File file = chooser.getSelectedFile();
                 uri = file.toURI();
             }
-
+                        
             // Check the type of file
             contentLocation = null;
             uri = _abbozzaServer.expandSketchURI(uri.toString());
