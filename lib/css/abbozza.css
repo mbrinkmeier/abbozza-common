@@ -98,7 +98,7 @@ DIV.topButton {
     border-radius: 0px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    opacity: 0.4;
+    opacity: 1;
     z-index: 41;
     overflow: hidden;
 }
