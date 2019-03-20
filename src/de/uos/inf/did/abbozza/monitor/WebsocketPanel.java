@@ -52,6 +52,8 @@ public class WebsocketPanel extends MonitorPanel implements ListDataListener, Li
     
     /**
      * Creates new form WebsocketPanel
+     * 
+     * @param monitor
      */
     public WebsocketPanel(AbbozzaMonitor monitor) {
         this.monitor = monitor;

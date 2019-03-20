@@ -24,7 +24,7 @@ import java.net.URI;
 
 /**
  *
- * @author Michael Brinkmeier <michael.brinkmeier@uni-osnabrueck.de>
+ * @author Michael Brinkmeier  ( michael.brinkmeier@uni-osnabrueck.de ) 
  */
 public class DiagnoseHandler extends AbstractHandler {
 

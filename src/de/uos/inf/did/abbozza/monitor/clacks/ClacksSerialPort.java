@@ -256,8 +256,7 @@ public class ClacksSerialPort implements Runnable {
      * Write the bytes to the serial port.
      *
      * @param buffer The bytes to bewritten
-     * @return Ture if the write was succesfull
-     * @throws SerialPortException Thi exception is thrown if an error occured.
+     * @return The number of written bytes, &lt;0 if error occured.
      */
     public int writeBytes(byte[] buffer) {
         return serialPort.writeBytes(buffer,buffer.length);

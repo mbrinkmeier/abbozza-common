@@ -291,15 +291,23 @@ public abstract class AbbozzaServer implements HttpHandler {
         
         // Check if the user directory exists
         File userDir = new File(userPath);
-        if (!userDir.exists()) {
+        
+        if ( !userDir.exists() ) {
             // Create user dir if it oesn't exist
             try {
                 Files.createDirectories(userDir.toPath());
             } catch (IOException ex) {
                 // If creatiuon  of user ir not possible, terminate
-                AbbozzaLogger.err("[Fatal] Could not create: " + userPath);
+                AbbozzaLogger.err("[Fatal] Can't create: " + userPath);
+                JOptionPane.showMessageDialog(null, "Can't create " + userPath + " !","abbozza! Critical Error",JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
             }
+        }
+        
+        if ( !userDir.canWrite()) {
+                AbbozzaLogger.err("[Fatal] Can't write into " + userPath);
+                JOptionPane.showMessageDialog(null, "Can't write intocreate " + userPath + " !","abbozza! Critical Error",JOptionPane.ERROR_MESSAGE);
+                System.exit(1);            
         }
 
         // Set config path and read configuration
@@ -316,12 +324,12 @@ public abstract class AbbozzaServer implements HttpHandler {
         URI uri = null;
         File installFile = new File("/");
         try {
-            // uri = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation().toURI();
             uri = this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
             installFile = new File(uri);
         } catch (URISyntaxException ex) {
             JOptionPane.showMessageDialog(null, "Unexpected error: Malformed URL " + uri.toString()
                     + "Start installer from jar!", "abbozza! installation error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
         }
         // The directory in which the executed jar resides is assumed to be
         // in a subdirectory lib of the abbozza path
