@@ -99,6 +99,7 @@ public class FileTool {
             if ( target.getAbsolutePath().endsWith(".sh") || target.getAbsolutePath().endsWith(".bat")) {
                 target.setExecutable(true);
             }
+            target.setLastModified(entry.getTime());
             return true;
         } catch (IOException ex) {
             System.out.println(ex.getLocalizedMessage());
