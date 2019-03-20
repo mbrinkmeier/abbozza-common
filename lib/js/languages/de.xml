@@ -182,6 +182,7 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="gui.regular_mode">Normaler Modus (Normales Speichern; abbozza! merkt sich Veränderungen in Sketches bis zum Reload)</msg>        
         <msg id="gui.workshop_mode">Workshop Modus (Speichern ohne Aufgaben; abbozza! merkt sich Veränderungen in Sketches bis zum Reload)</msg>        
         <msg id="gui.authors_mode">Autoren Modus (Normales Speichern; abbozza! merkt sich keine Veränderungen in Sketches)</msg>        
+        <msg id="gui.sketchbook_path">Ordner für Sketches</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
