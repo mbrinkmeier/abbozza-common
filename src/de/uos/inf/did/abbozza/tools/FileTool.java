@@ -84,6 +84,7 @@ public class FileTool {
             if ( entry.isDirectory() ) {
                 File dir = new File(targetDir.getAbsolutePath()+"/"+entry.getName());
                 dir.mkdirs();
+                dir.setLastModified(entry.getTime());
             } else {
                 copyFromJar(zipFile,entry.getName(),targetDir.getAbsolutePath()+"/"+entry.getName());
             }
