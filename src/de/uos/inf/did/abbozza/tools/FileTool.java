@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -84,7 +85,6 @@ public class FileTool {
             if ( entry.isDirectory() ) {
                 File dir = new File(targetDir.getAbsolutePath()+"/"+entry.getName());
                 dir.mkdirs();
-                dir.setLastModified(entry.getTime());
             } else {
                 copyFromJar(zipFile,entry.getName(),targetDir.getAbsolutePath()+"/"+entry.getName());
             }
@@ -100,7 +100,10 @@ public class FileTool {
             if ( target.getAbsolutePath().endsWith(".sh") || target.getAbsolutePath().endsWith(".bat")) {
                 target.setExecutable(true);
             }
-            target.setLastModified(entry.getTime());
+            long time = System.currentTimeMillis();
+            if ( target.getName().endsWith(".o") ) {
+                target.setLastModified(time + 60000);
+            }
             return true;
         } catch (IOException ex) {
             System.out.println(ex.getLocalizedMessage());
