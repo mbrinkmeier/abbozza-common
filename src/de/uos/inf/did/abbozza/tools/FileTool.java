@@ -91,7 +91,21 @@ public class FileTool {
         }
     }
     
-    
+  public static void extractJarCorrectingTime(ZipFile zipFile, File targetDir) {
+        ZipEntry entry;
+        Enumeration<ZipEntry> entries = (Enumeration) zipFile.entries();
+        while ( entries.hasMoreElements() ) {
+            entry = entries.nextElement();
+            if ( entry.isDirectory() ) {
+                File dir = new File(targetDir.getAbsolutePath()+"/"+entry.getName());
+                dir.mkdirs();
+            } else {
+                copyFromJarCorrectingTime(zipFile,entry.getName(),targetDir.getAbsolutePath()+"/"+entry.getName());
+            }
+        }
+    }
+     
+ 
     public static boolean copyFromJar(ZipFile file, String fromEntry, String path) {
         try {
             ZipEntry entry = file.getEntry(fromEntry);
@@ -99,10 +113,6 @@ public class FileTool {
             Files.copy(file.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
             if ( target.getAbsolutePath().endsWith(".sh") || target.getAbsolutePath().endsWith(".bat")) {
                 target.setExecutable(true);
-            }
-            long time = System.currentTimeMillis();
-            if ( target.getName().endsWith(".o") ) {
-                target.setLastModified(time + 60000);
             }
             return true;
         } catch (IOException ex) {
@@ -112,4 +122,24 @@ public class FileTool {
         }
     }
 
+       public static boolean copyFromJarCorrectingTime(ZipFile file, String fromEntry, String path) {
+        try {
+            ZipEntry entry = file.getEntry(fromEntry);
+            File target = new File(path);
+            Files.copy(file.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            if ( target.getAbsolutePath().endsWith(".sh") || target.getAbsolutePath().endsWith(".bat")) {
+                target.setExecutable(true);
+            }
+            long time = System.currentTimeMillis();
+            if ( !target.getName().endsWith(".o") || target.getName().endsWith("abbozza.o")) {
+                target.setLastModified(time - 60000);
+            }
+            return true;
+        } catch (IOException ex) {
+            System.out.println(ex.getLocalizedMessage());
+            ex.printStackTrace(System.out);
+            return false;
+        }
+    }
+    
 }
