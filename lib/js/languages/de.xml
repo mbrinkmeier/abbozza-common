@@ -179,9 +179,9 @@ da es bereits sendet! Soll ich es nochmal versuchen?</msg>
         <msg id="gui.websocket_disconnect"># wurde getrennt</msg>        
         <msg id="gui.copy_transfer">Kopiere Blöcke in anderen Sketch</msg>
         <msg id="gui.paste_transfer">Füge Blöcke ein</msg>        
-        <msg id="gui.regular_mode">Normaler Modus (Normales Speichern; abbozza! merkt sich Veränderungen in Sketches bis zum Reload)</msg>        
-        <msg id="gui.workshop_mode">Workshop Modus (Speichern ohne Aufgaben; abbozza! merkt sich Veränderungen in Sketches bis zum Reload)</msg>        
-        <msg id="gui.authors_mode">Autoren Modus (Normales Speichern; abbozza! merkt sich keine Veränderungen in Sketches)</msg>        
+        <msg id="gui.regular_mode">Kreativmodus (Normales Speichern; abbozza! merkt sich Veränderungen in Sketches bis zum Reload)</msg>        
+        <msg id="gui.workshop_mode">Workshopmodus (Speichern ohne Aufgaben; abbozza! merkt sich Veränderungen in Sketches bis zum Reload)</msg>        
+        <msg id="gui.authors_mode">Autorenmodus (Normales Speichern; abbozza! merkt sich keine Veränderungen in Sketches)</msg>        
         <msg id="gui.sketchbook_path">Ordner für Sketches</msg>        
     </gui>
     <menu>

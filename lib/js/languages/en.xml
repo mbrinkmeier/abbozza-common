@@ -179,7 +179,7 @@ Should I try it again?</msg>
         <msg id="gui.websocket_disconnect"># disconnected</msg>        
         <msg id="gui.copy_transfer">Copy blocks to other sketch</msg>
         <msg id="gui.paste_transfer">Paste blocks</msg>        
-        <msg id="gui.regular_mode">Regular mode (regular save; caching of sketches till reload)</msg>        
+        <msg id="gui.regular_mode">Creative mode (regular save; caching of sketches till reload)</msg>        
         <msg id="gui.workshop_mode">Workshop mode (save without task; caching of sketches till reload)</msg>        
         <msg id="gui.authors_mode">Authors mode (regular save; no caching of sketches)</msg>        
         <msg id="gui.sketchbook_path">Ordner für Sketches</msg> 
