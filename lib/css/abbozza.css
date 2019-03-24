@@ -660,30 +660,6 @@ taskscript {
     display: none;
 }
 
-/**
- **  CKEditor
- **/
-.cke {
-    margin: 3px;
-    padding: 3px;
-    overflow: auto;
-    top: 30px;
-    bottom: 3px;
-    left: 6px;
-    right: 3px;
-    width: auto;
-    border-radius: 5px;
-    position: absolute;
-    background-color: #ffe0e0;
-    text-align: left;
-    font-size: 75%;
-    border-top: 2px #a0a0a0 solid;
-    border-left: 2px #a0a0a0 solid;
-    border-bottom: 2px #f0f0f0 solid;
-    border-right: 2px #f0f0f0 solid;    
-    cursor: text;    
-}
-
 
 @-webkit-keyframes fadeinout {
     0% {opacity: 0; visibility: visible;}
@@ -864,17 +840,18 @@ taskscript {
   width: 1em;
 }
 
+/**
+ **  CKEditor
+ **/
+/*
 .cke {
-    position: absolute;
-    margin: 0px;
-    padding: 0px;
+    margin: 3px;
+    padding: 3px;
     overflow: auto;
-    top: 0px;
-    bottom: 0px;
-    height : 100%;
-    left: 0px;
-    right: 0px;
+    top: 30px;
+    left: 6px;
     border-radius: 5px;
+    position: absolute;
     background-color: #ffe0e0;
     text-align: left;
     font-size: 75%;
@@ -884,3 +861,4 @@ taskscript {
     border-right: 2px #f0f0f0 solid;    
     cursor: text;    
 }
+*/
