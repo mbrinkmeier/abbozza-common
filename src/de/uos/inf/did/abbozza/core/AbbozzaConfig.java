@@ -82,7 +82,7 @@ public class AbbozzaConfig {
     private String config_taskPath = configPath;
     // private boolean config_tasksEditable = true;
     private int config_timeout = 120000;
-    private int config_editMode;   // The current editing mode
+    private int config_editMode = AbbozzaServer.REGULAR_MODE;   // The current editing mode
     
     /**
      * Reads the configuration from the given path.
@@ -330,7 +330,9 @@ public class AbbozzaConfig {
         props.setProperty("timeout", Integer.toString(config_timeout));
         // props.setProperty("tasksEditable", config_tasksEditable ? "true" : "false");
         props.setProperty("mode", Integer.toString(config_editMode));
-        props.setProperty("sketchbookPath", AbbozzaServer.getInstance().getSketchbookPath());
+        try {
+            props.setProperty("sketchbookPath", AbbozzaServer.getInstance().getSketchbookPath());
+        } catch (Exception e){}
     }
     
     /**
