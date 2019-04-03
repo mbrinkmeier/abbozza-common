@@ -63,7 +63,7 @@ public class AbbozzaWebSocketServer extends WebSocketServer implements ClacksSub
     
     @Override
     public void onOpen(WebSocket ws, ClientHandshake ch) {
-        ws.send("[[ Connected to abbozza! serial stream at " + ws.getLocalSocketAddress().toString() + "]]");
+        ws.send("[[ Connected to abbozza! serial stream at " + ws.getLocalSocketAddress().toString() + "]]\n");
         AbbozzaLogger.info("AbbozzaWebSocketServer: Client connected from " + ws.getRemoteSocketAddress().toString() );
         monitor.websocketPanel.appendText( "[ " + AbbozzaLocale.entry("gui.websocket_connect", ws.getRemoteSocketAddress().toString()) + "  ]\n" , "info");
         lastWebSocket = ws;
@@ -87,6 +87,13 @@ public class AbbozzaWebSocketServer extends WebSocketServer implements ClacksSub
         String host = ws.getRemoteSocketAddress().getAddress().getCanonicalHostName();
         host = host + ":" + ws.getRemoteSocketAddress().getPort();
         monitor.websocketPanel.appendText("[" + host + "] " + string +"\n" , "remote");
+        // Send to all other clients
+        for ( WebSocket client : this.getConnections() ) {
+            if ( (client != null) && ( client != ws)) {
+                client.send(string);
+            }
+        }
+        
     }
 
     @Override

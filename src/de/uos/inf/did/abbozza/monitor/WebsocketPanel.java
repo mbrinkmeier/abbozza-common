@@ -367,7 +367,7 @@ public class WebsocketPanel extends MonitorPanel implements ListDataListener, Li
     
     public void send() {
         String msg = sendField.getText();
-        monitor.webSocketServer.process(msg);
+        monitor.webSocketServer.process(msg+"\n");
     }
 
 }
