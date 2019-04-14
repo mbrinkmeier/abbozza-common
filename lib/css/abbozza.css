@@ -616,7 +616,7 @@ div[role="treeitem"]:hover {
     opacity: 0.95;
     background-color: #ffffff;
     display: none;
-    position: fixed;
+    position: absolute;
     top : 0px;
     left: 0px;
     z-index: 42;
@@ -632,11 +632,13 @@ div[role="treeitem"]:hover {
     transform: translateY(-50%);
     width: 100%;
     background-color : #f0f0f0;
-    padding: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
     text-align: center;
 }
 
 #overlay_err {
+    width: 100%;
     text-align: left;
     font-size: 80%;
     font: monospace;
