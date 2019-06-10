@@ -1,0 +1,7 @@
+CHANGES
+=======
+
+* Page and Task hooks are clled within try-catch to catch errors
+
+TODO
+====
