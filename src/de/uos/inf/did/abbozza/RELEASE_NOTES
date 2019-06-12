@@ -1,0 +1,10 @@
+CHANGES in 1.3.0
+============
+
+
+TODO
+====
+
+* Monitor does not reconnect after deletion of protocol
+* Open Standard serial connection for system (parameter)
+* Autoscroll enable/disable

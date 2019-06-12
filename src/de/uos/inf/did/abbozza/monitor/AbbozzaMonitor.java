@@ -80,6 +80,7 @@ public final class AbbozzaMonitor extends JFrame {
     
     private ClacksService clacksService;
     private long lastUpdate;
+    private boolean autoscrolling;
 
     /**
      * Creates new AbbozzaMonitor and asks for port
@@ -110,6 +111,8 @@ public final class AbbozzaMonitor extends JFrame {
 
         // SerialPort.getCommPorts();
         initComponents();
+        
+        autoscrolling = autoscrollBox.isSelected();
         
         // protocol = new StringBuffer();
         protocolUpdateBuffer = new ByteRingBuffer(1024 * 512);
@@ -353,6 +356,7 @@ public final class AbbozzaMonitor extends JFrame {
         jPanel2 = new javax.swing.JPanel();
         portBox = new javax.swing.JComboBox<>();
         rateBox = new javax.swing.JComboBox<>();
+        autoscrollBox = new javax.swing.JCheckBox();
 
         protocolPopUp.setToolTipText("");
 
@@ -459,6 +463,15 @@ public final class AbbozzaMonitor extends JFrame {
         });
         jPanel2.add(rateBox);
 
+        autoscrollBox.setSelected(true);
+        autoscrollBox.setText("Autoscroll");
+        autoscrollBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autoscrollBoxActionPerformed(evt);
+            }
+        });
+        jPanel2.add(autoscrollBox);
+
         logoPanel.add(jPanel2, java.awt.BorderLayout.WEST);
 
         getContentPane().add(logoPanel, java.awt.BorderLayout.SOUTH);
@@ -550,6 +563,10 @@ public final class AbbozzaMonitor extends JFrame {
         textArea.setFont(newfont);
     }//GEN-LAST:event_decFontSizeActionPerformed
 
+    private void autoscrollBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoscrollBoxActionPerformed
+        autoscrolling = autoscrollBox.isSelected();
+    }//GEN-LAST:event_autoscrollBoxActionPerformed
+
     private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
         String msg = evt.getActionCommand();
         if (msg != null && !msg.isEmpty()) {
@@ -562,6 +579,7 @@ public final class AbbozzaMonitor extends JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox autoscrollBox;
     private javax.swing.JMenuItem decFontSize;
     private javax.swing.JMenuItem incFontSize;
     private javax.swing.JLabel jLabel1;
@@ -651,6 +669,10 @@ public final class AbbozzaMonitor extends JFrame {
             int len = protocolDocument.getLength();
             if (len > 2 * MAXLEN) {
                 protocolDocument.remove(0, MAXLEN);
+            }
+            
+            if ( autoscrolling ) {
+                textArea.setCaretPosition(protocolDocument.getLength());
             }
         } catch (BadLocationException ex) {
             Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
