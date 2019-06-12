@@ -508,14 +508,20 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         if ( path == null )
             path = getSystemPath();
-        if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
+        
+        String browserPath = config.getBrowserPath();
+        if ( (browserPath == null) ||  config.getBrowserPath().equals("") ) {
+            browserPath = InstallTool.getInstallTool().checkBrowsers();
+        }
+        if ((browserPath != null) && (!browserPath.equals(""))) {
+            AbbozzaLogger.info("Using browser " + browserPath);
             String[] cmd;
             String line;
             // cmd[0] =  "\"" + config.getBrowserPath().replace("\"", "\\\"") + "\"";
             String opts = config.getProperty("browserOptions");
             if (opts == null) {
                 cmd = new String[2];
-                cmd[0] = expandPath(config.getBrowserPath());
+                cmd[0] = expandPath(browserPath);
                 cmd[1] = getRootURL() + path;
                 line = cmd[0] + " " + cmd[1];
             } else {
@@ -536,7 +542,9 @@ public abstract class AbbozzaServer implements HttpHandler {
         } else {
             AbbozzaSplashScreen.hideSplashScreen();
             Object[] options = {AbbozzaLocale.entry("msg.cancel"), AbbozzaLocale.entry("msg.open_standard_browser"), AbbozzaLocale.entry("msg.give_browser")};
-            Object selected = JOptionPane.showOptionDialog(null, AbbozzaLocale.entry("msg.no_browser_given"),
+            JDialog dummyDialog = new JDialog();
+            dummyDialog.setAlwaysOnTop(true);
+            Object selected = JOptionPane.showOptionDialog(dummyDialog, AbbozzaLocale.entry("msg.no_browser_given"),
                     AbbozzaLocale.entry("msg.no_browser_given"),
                     JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
                     null, options, options[0]);

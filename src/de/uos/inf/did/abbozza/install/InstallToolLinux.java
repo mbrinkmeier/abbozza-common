@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -111,4 +112,16 @@ public class InstallToolLinux extends InstallTool {
         }
     }
     
+    
+    public String checkBrowsers() {
+         String paths[] = {
+            "/usr/bin/chromium-browser",
+            "/usr/local/bin/chromium-browser",
+            "/usr/bin/google-chrome",
+            "/usr/local/bin/google-chrome",
+            "/usr/bin/firefox",
+            "/usr/local/bin/firefox"
+         };
+        return checkBrowsers(paths);
+    }
 }

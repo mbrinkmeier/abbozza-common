@@ -56,15 +56,18 @@ public class InstallToolMac extends InstallTool {
 
     @Override
     public String getInstallPath(boolean global, String system) {
-        if ( global ) {
-            return "/Applications/abbozza.app";            
+        if (global) {
+            return "/Applications/abbozza.app";
         } else {
             return System.getProperty("user.home") + "/Applications/abbozza" + system + ".app";
         }
     }
-    
+
     public File adaptUserInstallDir(File dir) {
-        return new File(dir,"Contents/Resources/");
+        return new File(dir, "Contents/Resources/");
     }
 
+    public String checkBrowsers() {
+        return "open";
+    }
 }

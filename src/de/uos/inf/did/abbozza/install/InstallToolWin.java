@@ -109,5 +109,12 @@ public class InstallToolWin extends InstallTool {
         }
     }
     
+    public String checkBrowsers() {
+        String paths[] = {
+            "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+            "C:\\Program Files\\Mozilla Firefox\\firefox.exe"
+        };
+        return checkBrowsers(paths);
+    }
     
 }
