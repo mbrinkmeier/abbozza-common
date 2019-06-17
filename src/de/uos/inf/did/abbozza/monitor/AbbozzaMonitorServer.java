@@ -56,7 +56,7 @@ public class AbbozzaMonitorServer extends AbbozzaServer implements ActionListene
             try {
                 this.startServer(serverPort);
             } catch (AbbozzaServerException ex) {
-                AbbozzaLogger.err(ex.getMessage());
+                AbbozzaLogger.err(ex.getLocalizedMessage());
                 JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("msg.already_running"),"",JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
             }

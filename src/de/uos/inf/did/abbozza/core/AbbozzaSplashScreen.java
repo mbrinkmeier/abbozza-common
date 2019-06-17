@@ -93,6 +93,7 @@ public class AbbozzaSplashScreen extends javax.swing.JDialog implements Runnable
     }
 
     public static void hideSplashScreen() {
+        if ( splashThread  == null ) return;
         splashThread.interrupt();
         splashScreen.setVisible(false);
     }
